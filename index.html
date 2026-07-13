@@ -205,35 +205,6 @@
     font-family:var(--mono); font-size:0.78rem; color:var(--ocean); font-weight:700;
     margin-bottom:24px;
   }
-
-  /* ---------- FEATURES ---------- */
-  .features{ background:var(--paper); }
-  .bed-grid{
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
-    gap:24px;
-  }
-  .bed{
-    background:#fff;
-    border:3px solid var(--ink);
-    border-radius:16px;
-    padding:28px 26px;
-    box-shadow:6px 6px 0 var(--ink);
-    transition:transform .18s ease, box-shadow .18s ease;
-  }
-  .bed:hover{ transform:translate(-3px,-3px); box-shadow:9px 9px 0 var(--ink); }
-  .bed:nth-child(1) .icon{ background:var(--coral); }
-  .bed:nth-child(2) .icon{ background:var(--sunbeam); }
-  .bed:nth-child(3) .icon{ background:var(--ocean); }
-  .bed .icon{
-    width:46px; height:46px; margin-bottom:16px;
-    display:flex; align-items:center; justify-content:center;
-    border-radius:12px; border:3px solid var(--ink);
-  }
-  .bed h3{
-    font-family:var(--display); font-weight:400; font-size:1.05rem; margin-bottom:10px;
-  }
-  .bed p{ font-size:0.92rem; color:#4A4F58; }
-
   /* ---------- VIDEOS ---------- */
   .videos{ background:#fff; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); }
   .video-grid{
@@ -317,7 +288,6 @@
     <a class="brand" href="#top">Australian<span class="dot">.</span>Jeevitham</a>
     <ul class="nav-links">
       <li><a href="#about">Our Story</a></li>
-      <li><a href="#features">Features</a></li>
       <li><a href="#videos">Videos</a></li>
       <li><a class="nav-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">▶ Subscribe</a></li>
     </ul>
@@ -366,51 +336,6 @@
         <img src="australian-jeevitham-farming-photo.jpg" alt="Australian Jeevitham Binu with a bread-fruit in his farm">
         <span class="tag">Backyard harvest day</span>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ FEATURES ============ -->
-<section class="features section" id="features">
-  <div class="wrap">
-    <div class="section-head">
-      <div class="kicker">What We Feature</div>
-      <h2>Three threads, one journey</h2>
-    </div>
-    <div class="bed-grid">
-
-      <article class="bed">
-        <div class="icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="2">
-            <path d="M12 21c-4-2-7-6-7-10a7 7 0 0 1 14 0c0 4-3 8-7 10Z"/>
-            <circle cx="12" cy="11" r="2.4"/>
-          </svg>
-        </div>
-        <h3>Life &amp; Culture</h3>
-        <p>Honest, relatable, and lighthearted vlogs exploring daily life, work, and community in Australia.</p>
-      </article>
-
-      <article class="bed">
-        <div class="icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="2">
-            <path d="M4 20c4-8 8-8 8-16 0 8 4 8 8 16"/>
-            <path d="M4 20h16"/>
-          </svg>
-        </div>
-        <h3>Backyard Farming &amp; Sustainability</h3>
-        <p>Hands-on experiences in home gardening, cultivating tropical fruits, and sustainable living abroad.</p>
-      </article>
-
-      <article class="bed">
-        <div class="icon" aria-hidden="true">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#14171F" stroke-width="2">
-            <path d="M3 18l6-11 4 7 3-5 5 9H3Z"/>
-          </svg>
-        </div>
-        <h3>Travel &amp; Exploration</h3>
-        <p>Journeying through Australia's iconic natural wonders, wildlife encounters, and hidden gems.</p>
-      </article>
-
     </div>
   </div>
 </section>
