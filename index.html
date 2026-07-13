@@ -177,6 +177,29 @@
   }
   .about-body{ max-width:62ch; color:#3A3F4A; }
   .about-body p{ margin-bottom:16px; }
+  .about-grid{
+  display:grid; grid-template-columns:1.1fr 0.9fr;
+  gap:48px; align-items:center;
+}
+.about-photo{
+  position:relative;
+  border-radius:18px;
+  border:4px solid var(--ink);
+  overflow:hidden;
+  transform:rotate(2deg);
+  box-shadow:8px 8px 0 var(--sunbeam);
+}
+.about-photo img{ width:100%; aspect-ratio:4/5; object-fit:cover; display:block; }
+.about-photo .tag{
+  position:absolute; bottom:12px; left:12px;
+  font-family:var(--mono); font-size:0.68rem; letter-spacing:0.06em;
+  text-transform:uppercase; color:#fff;
+  background:rgba(20,23,31,0.72); padding:6px 12px; border-radius:999px;
+}
+@media (max-width:800px){
+  .about-grid{ grid-template-columns:1fr; }
+  .about-photo{ max-width:360px; margin:0 auto; order:-1; }
+}
   .locale-pin{
     display:inline-flex; align-items:center; gap:8px;
     font-family:var(--mono); font-size:0.78rem; color:var(--ocean); font-weight:700;
@@ -327,14 +350,22 @@
 <!-- ============ ABOUT ============ -->
 <section class="about section" id="about">
   <div class="wrap">
-    <span class="locale-pin">● FILMED IN QUEENSLAND, AUSTRALIA</span>
-    <div class="section-head" style="margin-bottom:28px;">
-      <div class="kicker">Our Story</div>
-      <h2>What is it really like to build a life on the other side of the ocean?</h2>
-    </div>
-    <p class="about-lede">Australian Jeevitham <span class="mal">(ഓസ്‌ട്രേലിയൻ ജീവിതം)</span> was created to answer that exact question.</p>
-    <div class="about-body">
-      <p>Based in sunny Queensland, Australia, this channel offers a front-row seat to the beautiful, humorous, and sometimes challenging realities of navigating a malayali life. From the peaceful rhythm of backyard farming and growing familiar crops in tropical soil, to exploring breathtaking Australian landscapes and wild terrains, the series brings a piece of Australia straight to the global Malayalam-speaking community.</p>
+    <div class="about-grid">
+      <div>
+        <span class="locale-pin">● FILMED IN QUEENSLAND, AUSTRALIA</span>
+        <div class="section-head" style="margin-bottom:28px;">
+          <div class="kicker">Our Story</div>
+          <h2>What is it really like to build a life on the other side of the ocean?</h2>
+        </div>
+        <p class="about-lede">Australian Jeevitham <span class="mal">(ഓസ്‌ട്രേലിയൻ ജീവിതം)</span> was created to answer that exact question.</p>
+        <div class="about-body">
+          <p>Based in sunny Queensland, Australia, this channel offers a front-row seat to the beautiful, humorous, and sometimes challenging realities of navigating an immigrant life. From the peaceful rhythm of backyard farming and growing familiar crops in tropical soil, to exploring breathtaking Australian landscapes and wild terrains, the series brings a piece of Australia straight to the global Malayalam-speaking community.</p>
+        </div>
+      </div>
+      <div class="about-photo">
+        <img src="australian-jeevitham-farming-photo.jpg" alt="Australian Jeevitham Binu with a bread-fruit in his farm">
+        <span class="tag">Backyard harvest day</span>
+      </div>
     </div>
   </div>
 </section>
