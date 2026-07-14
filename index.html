@@ -229,6 +229,80 @@
     font-family:var(--mono); font-size:0.78rem; color:var(--ocean); margin-top:22px;
   }
 
+/* ---------- RESOURCES (TABS) ---------- */
+.resources{ background:var(--paper); }
+.tabs{ position:relative; }
+.tabs input[type="radio"]{
+  position:absolute; opacity:0; pointer-events:none;
+}
+.tab-list{
+  display:flex; flex-wrap:wrap; gap:12px; margin-bottom:32px;
+}
+.tab-list label{
+  display:inline-flex; align-items:center; gap:8px;
+  font-weight:700; font-size:0.92rem; color:var(--ink);
+  background:#fff; border:3px solid var(--ink); border-radius:999px;
+  padding:12px 22px; cursor:pointer;
+  box-shadow:4px 4px 0 var(--ink);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
+}
+.tab-list label:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink); }
+
+.tab-panel{ display:none; }
+#tab-jobs:checked ~ .tab-panels .panel-jobs{ display:block; }
+#tab-migrate:checked ~ .tab-panels .panel-migrate{ display:block; }
+#tab-explore:checked ~ .tab-panels .panel-explore{ display:block; }
+
+#tab-jobs:checked ~ .tab-list label[for="tab-jobs"],
+#tab-migrate:checked ~ .tab-list label[for="tab-migrate"],
+#tab-explore:checked ~ .tab-list label[for="tab-explore"]{
+  background:var(--coral); color:#fff; box-shadow:6px 6px 0 var(--ink);
+}
+
+.tab-panels{
+  background:#fff; border:3px solid var(--ink); border-radius:18px;
+  padding:36px 32px; box-shadow:8px 8px 0 var(--sunbeam);
+}
+.tab-panel p.tab-desc{ max-width:68ch; color:#3A3F4A; margin-bottom:24px; }
+
+.resource-links{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+  gap:14px;
+}
+.resource-link{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  border:2px solid var(--ink); border-radius:10px;
+  padding:12px 16px; text-decoration:none; color:var(--ink);
+  font-weight:600; font-size:0.9rem;
+  background:var(--paper);
+  transition:background .15s ease, transform .15s ease;
+}
+.resource-link:hover, .resource-link:focus-visible{
+  background:var(--sunbeam); transform:translateY(-2px);
+}
+.resource-link .arrow{ font-family:var(--mono); }
+
+.disclaimer{
+  display:flex; gap:14px; align-items:flex-start;
+  background:#FFF4E0; border:2px dashed var(--terracotta, var(--coral));
+  border-radius:12px; padding:18px 20px; margin-bottom:28px;
+}
+.disclaimer .icon{ font-size:1.3rem; line-height:1; }
+.disclaimer p{ font-size:0.92rem; color:#3A3F4A; }
+.disclaimer a{ color:var(--ocean); font-weight:700; text-decoration:underline; }
+
+.tab-video-frame{
+  position:relative; width:100%; max-width:640px; padding-top:36%;
+  border:3px solid var(--ink); border-radius:14px; overflow:hidden;
+  background:var(--ink);
+}
+.tab-video-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+
+@media (max-width:700px){
+  .tab-panels{ padding:26px 20px; }
+  .tab-list label{ padding:10px 16px; font-size:0.85rem; }
+}
+  
   /* ---------- FOOTER / CONNECT ---------- */
   footer{ background:var(--ink); color:var(--paper); padding:72px 0 40px; }
   footer .section-head{ text-align:center; margin:0 auto 40px; max-width:560px; }
@@ -287,6 +361,7 @@
     <ul class="nav-links">
       <li><a href="#about">Our Story</a></li>
       <li><a href="#videos">Videos</a></li>
+      <li><a href="#resources">Resources</a></li>
       <li><a class="nav-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">▶ Subscribe</a></li>
     </ul>
   </div>
@@ -394,6 +469,75 @@
   </div>
 </section>
 
+ <!-- ============ RESOURCES (TABS) ============ -->
+<section class="resources section" id="resources">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Resources</div>
+      <h2>Jobs, migration &amp; travel — all in one place</h2>
+    </div>
+
+    <div class="tabs">
+      <input type="radio" name="restab" id="tab-jobs" checked>
+      <input type="radio" name="restab" id="tab-migrate">
+      <input type="radio" name="restab" id="tab-explore">
+
+      <div class="tab-list">
+        <label for="tab-jobs">💼 Find Jobs In Australia</label>
+        <label for="tab-migrate">🛂 How To Migrate Australia</label>
+        <label for="tab-explore">🗺️ Explore Australia</label>
+      </div>
+
+      <div class="tab-panels">
+
+        <!-- JOBS -->
+        <div class="tab-panel panel-jobs">
+          <p class="tab-desc"> <span class="mal">ഓസ്‌ട്രേലിയയിൽ ജോലി കിട്ടുമോ എന്ന് പലരും എന്നോട് ചോദിക്കാറുണ്ട്. ഓസ്‌ട്രേലിയയയിൽ ജോലി ചെയ്യാനുള്ള രെജിസ്ട്രേഷൻ (ഉദാഹരണത്തിന് മെഡിക്കൽ ഫീൽഡിൽ വർക്ക് ചെയ്യാൻ AHPRA രെജിസ്ട്രേഷൻ  വേണം) ഉണ്ടെങ്കിൽ താഴെ കൊടുക്കുന്ന വെബ്സൈറ്റുകൾ സന്ദർശിക്കുക.ി</span> Looking for work/jobs after you land? Every Australian state and territory runs its own government job board for public-sector roles, and SEEK is the go-to site for jobs across the private sector. Start here.</p>
+          <div class="resource-links">
+            <a class="resource-link" href="https://www.seek.com.au/" target="_blank" rel="noopener">Apply via SEEK Australia <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://iworkfor.nsw.gov.au/" target="_blank" rel="noopener">View NSW Government Jobs <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://careers.vic.gov.au/" target="_blank" rel="noopener">Victoria State Government Jobs <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://smartjobs.qld.gov.au/" target="_blank" rel="noopener">Queensland Government Jobs site <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://jobs.wa.gov.au/" target="_blank" rel="noopener">Western Australia Gov careers <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://iworkfor.sa.gov.au/" target="_blank" rel="noopener">Check South Australia Gov Jobs <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://www.jobs.tas.gov.au/" target="_blank" rel="noopener">Tasmania Government Jobs <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://jobs.nt.gov.au/" target="_blank" rel="noopener">Northern Territory Gov Jobs <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://www.jobs.act.gov.au/" target="_blank" rel="noopener">ACT Government Jobs <span class="arrow">→</span></a>
+          </div>
+        </div>
+
+        <!-- MIGRATE -->
+        <div class="tab-panel panel-migrate">
+          <div class="disclaimer">
+            <span class="icon">⚠️</span>
+            <p>Australian Jeevitham shares personal experiences only and is <strong>not a registered migration agent</strong>. Migration law changes often and every case is different — always get advice from a MARA-registered migration agent before making decisions about your visa. You can find or verify a registered agent through the <a href="https://www.mara.gov.au/" target="_blank" rel="noopener">Office of the Migration Agents Registration Authority (OMARA)</a>.</p>
+          </div>
+          <p class="tab-desc"><span class="mal">എങ്ങനെയൊക്ക ആളുകൾക്ക് ഓസ്ട്രേലിയയിലേക്കു വരാൻ പറ്റും എന്നാണ് ഈ വിഡിയോയിൽ പറയുന്നത്. ഓസ്‌ട്രേലിയയിൽ ഡയറക്റ്റ് ആയി ജോലി കിട്ടി വരാനും പറ്റും, പിന്നെ സ്വന്തമായി വിസ അപ്ലൈ ചെയ്തു വരുവാനും പറ്റും. വീഡിയോ മൊത്തം കാണുക. </span></p>
+          <div class="tab-video-frame">
+            <iframe src="https://www.youtube.com/embed/dGInE5JrVWA?si=FoUA0qKA8ZDyVA-m"
+              title="How To Migrate Australia — Australian Jeevitham"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
+          </div>
+        </div>
+
+        <!-- EXPLORE -->
+        <div class="tab-panel panel-explore">
+          <p class="tab-desc"><span class="mal">ഓസ്ട്രേലിയ ചുമ്മാ ഒന്ന് വന്നു കാണുവാൻ നോക്കുന്നവർക്ക് ഈ വെബ്സൈറ്റുകൾ സന്ദർശിക്കുക.</span> Australia's beauty runs from the reef to the outback — the technicolour Great Barrier Reef, the red heart of Uluru, the rainforests of the Daintree, and endless white-sand coastline in between. Wherever you land, there's always somewhere new nearby worth exploring on a weekend off.</p>
+          <div class="resource-links">
+            <a class="resource-link" href="https://www.australia.com/" target="_blank" rel="noopener">Tourism Australia <span class="arrow">→</span></a>
+            <a class="resource-link" href="https://www.queensland.com/" target="_blank" rel="noopener">Queensland Tourism <span class="arrow">→</span></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section> 
+  
+  
 <!-- ============ FOOTER / CONNECT ============ -->
 <footer id="connect">
   <div class="wrap">
