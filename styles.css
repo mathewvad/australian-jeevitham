@@ -311,6 +311,89 @@ h1.subhero-title .hl{
 .crosslink-card h3{ font-family:var(--display); font-weight:400; font-size:1.15rem; margin-bottom:6px; }
 .crosslink-card p{ font-size:0.88rem; color:#5A5F68; }
 
+/* ---------- LINK-IN-BIO PAGE ---------- */
+.biolink{
+  position:relative;
+  min-height:calc(100vh - 72px);
+  padding:56px 0 70px;
+  overflow:hidden;
+  display:flex; align-items:flex-start; justify-content:center;
+}
+.biolink-card{
+  position:relative; z-index:1;
+  width:100%; max-width:440px; margin:0 auto;
+  text-align:center;
+}
+.biolink-avatar{
+  width:112px; height:112px; margin:0 auto 18px;
+  border-radius:50%; overflow:hidden;
+  border:4px solid var(--ink);
+  box-shadow:6px 6px 0 var(--sunbeam);
+}
+.biolink-avatar img{ width:100%; height:100%; object-fit:cover; }
+.biolink-card h1{
+  font-family:var(--display); font-weight:400;
+  font-size:1.5rem; letter-spacing:-0.01em; margin-bottom:6px;
+}
+.biolink-role{
+  font-family:var(--mono); font-size:0.78rem; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--ocean); font-weight:700; margin-bottom:6px;
+}
+.biolink-tag{ font-size:0.92rem; color:#3A3F4A; max-width:38ch; margin:0 auto 22px; }
+.biolink-tag .mal{ display:block; margin-top:6px; color:var(--ink); font-size:1rem; }
+
+.social-row{
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  margin-bottom:30px;
+}
+.icon-circle{
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid var(--ink); background:#fff;
+  font-family:var(--mono); font-weight:700; font-size:0.78rem;
+  text-decoration:none; color:var(--ink);
+  transition:transform .15s ease, background .15s ease, color .15s ease;
+}
+.icon-circle:hover, .icon-circle:focus-visible{
+  background:var(--ink); color:var(--paper); transform:translateY(-3px);
+}
+
+.link-stack{ display:flex; flex-direction:column; gap:14px; text-align:left; }
+.link-pill{
+  display:flex; align-items:center; gap:14px;
+  background:#fff; border:3px solid var(--ink); border-radius:16px;
+  padding:16px 18px; text-decoration:none; color:var(--ink);
+  box-shadow:5px 5px 0 var(--ink);
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.link-pill:hover, .link-pill:focus-visible{
+  transform:translate(-3px,-3px); box-shadow:8px 8px 0 var(--ink); background:var(--sunbeam);
+}
+.link-pill .glyph{
+  width:38px; height:38px; border-radius:10px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--paper); border:2px solid var(--ink); font-size:1.1rem;
+}
+.link-pill .text{ flex:1; }
+.link-pill .text .label{ font-weight:700; font-size:0.95rem; display:block; }
+.link-pill .text .sub{ font-family:var(--mono); font-size:0.7rem; color:#5A5F68; }
+.link-pill .arrow{ font-family:var(--mono); color:var(--ink); }
+.link-pill.featured{ background:var(--ink); color:var(--paper); }
+.link-pill.featured .glyph{ background:var(--coral); border-color:var(--ink); color:#fff; }
+.link-pill.featured .text .sub{ color:rgba(251,251,246,0.6); }
+.link-pill.featured .arrow{ color:var(--sunbeam); }
+.link-pill.featured:hover, .link-pill.featured:focus-visible{ background:var(--coral); }
+
+.biolink-footer{
+  margin-top:34px; text-align:center;
+  font-family:var(--mono); font-size:0.76rem; color:#5A5F68;
+}
+.biolink-footer a{ color:var(--ocean); font-weight:700; text-decoration:underline; }
+
+@media (max-width:480px){
+  .biolink{ padding:40px 0 50px; }
+}
+
 /* ---------- FOOTER / CONNECT ---------- */
 footer{ background:var(--ink); color:var(--paper); padding:72px 0 40px; }
 footer .section-head{ text-align:center; margin:0 auto 40px; max-width:560px; }
