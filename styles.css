@@ -58,6 +58,15 @@ nav .wrap{ display:flex; align-items:center; justify-content:space-between; heig
 }
 .nav-cta:hover{ background:var(--coral) !important; }
 
+.nav-toggle-input{ display:none; }
+.nav-toggle-btn{
+  display:none;
+  width:42px; height:42px; flex-shrink:0;
+  align-items:center; justify-content:center;
+  border:2px solid var(--ink); border-radius:10px;
+  font-size:1.3rem; line-height:1; cursor:pointer; background:#fff;
+}
+
 /* ---------- HERO (homepage) ---------- */
 .hero{
   position:relative;
@@ -444,7 +453,28 @@ a:focus-visible, button:focus-visible{ outline:3px solid var(--ocean); outline-o
   .hero .wrap, .subhero .wrap{ grid-template-columns:1fr; }
   .hero-photo-wrap{ order:-1; margin-bottom:20px; }
   .info-card{ order:-1; margin:0 auto; max-width:360px; }
-  .nav-links a:not(.nav-cta){ display:none; }
+
+  .brand{ font-size:0.88rem; gap:8px; }
+  .brand img{ height:30px; width:30px; }
+  .brand .mal{ display:none; }
+
+  .nav-toggle-btn{ display:flex; }
+  .nav-links{
+    position:absolute; top:100%; left:0; right:0; z-index:60;
+    flex-direction:column; align-items:stretch; gap:0;
+    background:var(--paper); border-bottom:3px solid var(--ink);
+    padding:0 24px; margin:0;
+    max-height:0; overflow:hidden;
+    transition:max-height .25s ease, padding .25s ease;
+  }
+  .nav-links a:not(.nav-cta){
+    display:block; width:100%; padding:14px 0;
+    border-bottom:1px solid rgba(20,23,31,0.1);
+  }
+  .nav-links li{ width:100%; }
+  .nav-links .nav-cta{ display:inline-flex; margin:16px 0; }
+  .nav-toggle-input:checked ~ .nav-links{ max-height:420px; padding:4px 24px 8px; }
+
   .section{ padding:60px 0; }
   .about-grid{ grid-template-columns:1fr; }
   .about-photo{ max-width:360px; margin:0 auto; order:-1; }
