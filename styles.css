@@ -142,6 +142,17 @@ h1.hero-title .hl{
   border:3px solid var(--ink); line-height:1.2;
 }
 
+/* Custom highlight for the brand name in headings */
+.hl-brand {
+  position: relative;
+  color: var(--coral); /* Uses your bold coral/orange accent color */
+  font-weight: 800;
+  white-space: nowrap;
+  /* Adds a hand-drawn marker look underline */
+  border-bottom: 4px solid var(--sunbeam); 
+  padding-bottom: 2px;
+}
+
 /* ---------- SUBHERO (jobs / migrate / explore pages) ---------- */
 .subhero{
   position:relative;
