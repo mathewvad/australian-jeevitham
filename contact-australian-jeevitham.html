@@ -36,7 +36,7 @@
     <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
     <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu">☰</label>
     <ul class="nav-links">
-      <li><a href="index.html#about">Our Story</a></li>
+      <li><a href="about-australian-jeevitham.html">Our Story</a></li>
       <li><a href="index.html#videos">Videos</a></li>
       <li><a href="index.html#resources">Resources</a></li>
       <li><a href="creator-australian-jeevitham.html">Creator</a></li>
@@ -61,7 +61,11 @@
     <div class="info-card">
       <span class="stat">✉</span>
       <span class="stat-label">Email</span>
-      <p><a href="mailto:australianjeevitham@gmail.com" style="color:var(--ocean); font-weight:700; text-decoration:underline; word-break:break-all;">australianjeevitham@gmail.com</a></p>
+      <p id="header-email-container">
+        <button type="button" class="show-email-btn" onclick="revealEmail('header-email-container')">
+          Click to reveal email
+        </button>
+      </p>
     </div>
   </div>
 </header>
@@ -78,9 +82,11 @@
         The fastest way to reach us is by email. For quick messages or DMs, our social channels are checked regularly too.
       </p>
       <div class="resource-links">
-        <a class="resource-link" href="mailto:australianjeevitham@gmail.com">
-          <span>✉ Email us</span><span class="arrow">→</span>
-        </a>
+        <div id="resource-email-container" style="display:inline-block;">
+          <button type="button" class="show-email-btn" onclick="revealEmail('resource-email-container', true)">
+            <span>✉ Click to reveal email</span> <span class="arrow">→</span>
+          </button>
+        </div>
         <a class="resource-link" href="https://www.instagram.com/australianjeevitham/" target="_blank" rel="noopener">
           <span>📸 Instagram DM</span><span class="arrow">→</span>
         </a>
@@ -119,10 +125,10 @@
         <span class="glyph">TT</span>
         <span><span class="label">TikTok</span><span class="handle">@australianjeevitham</span></span>
       </a>
-      <a class="connect-link" href="mailto:australianjeevitham@gmail.com">
+      <div id="footer-email-container" class="connect-link" style="cursor:pointer;" onclick="revealEmail('footer-email-container', false, true)">
         <span class="glyph">✉</span>
-        <span><span class="label">Email</span><span class="handle">australianjeevitham@gmail.com</span></span>
-      </a>
+        <span><span class="label">Email</span><span class="handle">Click to reveal</span></span>
+      </div>
     </div>
 
     <p class="records">
@@ -138,35 +144,112 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ContactPage",
-  "url": "https://www.australianjeevitham.com/contact-australian-jeevitham.html",
-  "name": "Contact Australian Jeevitham",
-  "mainEntity": {
-    "@type": "Organization",
-    "name": "Australian Jeevitham",
-    "email": "australianjeevitham@gmail.com",
-    "sameAs": [
-      "https://www.youtube.com/@AustralianJeevitham",
-      "https://www.instagram.com/australianjeevitham/",
-      "https://www.facebook.com/Australian.Jeevitham"
-    ]
-  }
-}
-</script>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.australianjeevitham.com/"},
-    {"@type": "ListItem", "position": 2, "name": "Contact", "item": "https://www.australianjeevitham.com/contact-australian-jeevitham.html"}
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "@id": "https://www.australianjeevitham.com/contact-australian-jeevitham.html",
+      "url": "https://www.australianjeevitham.com/contact-australian-jeevitham.html",
+      "name": "Contact Australian Jeevitham",
+      "description": "Get in touch with Australian Jeevitham — email or connect on social media with Binu Vadakkedath.",
+      "inLanguage": ["en-AU", "ml"],
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://www.australianjeevitham.com/#website",
+        "url": "https://www.australianjeevitham.com/",
+        "name": "Australian Jeevitham"
+      },
+      "mainEntity": {
+        "@id": "https://www.australianjeevitham.com/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.australianjeevitham.com/contact-australian-jeevitham.html#breadcrumb"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.australianjeevitham.com/#organization",
+      "name": "Australian Jeevitham",
+      "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "url": "https://www.australianjeevitham.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/logo.png"
+      },
+      "image": "https://www.australianjeevitham.com/images/binu-australian-jeevitham.webp",
+      "description": "ഓസ്‌ട്രേലിയൻ ജീവിതം brings you the journey of a Malayali vlogger in Australia. Discover beautiful places, local news, and job opportunities for Malayalis.",
+      "founder": {
+        "@id": "https://www.australianjeevitham.com/#founder"
+      },
+      "location": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Queensland",
+          "addressCountry": "AU"
+        }
+      },
+      "sameAs": [
+        "https://www.youtube.com/@AustralianJeevitham",
+        "https://www.facebook.com/Australian.Jeevitham",
+        "https://www.instagram.com/australianjeevitham/",
+        "https://www.tiktok.com/@australianjeevitham",
+        "https://www.threads.com/@australianjeevitham",
+        "https://au.pinterest.com/australianjeevitham/",
+        "https://vimeo.com/australianjeevitham",
+        "https://www.reddit.com/user/AustralianJeevitham/",
+        "https://australianjeevitham.blogspot.com/",
+        "https://www.wikidata.org/wiki/Q140357652",
+        "https://www.imdb.com/title/tt43669114"
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.australianjeevitham.com/#founder",
+      "name": "Binu Vadakkedath",
+      "jobTitle": "Creator & Vlogger",
+      "worksFor": {
+        "@id": "https://www.australianjeevitham.com/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.australianjeevitham.com/contact-australian-jeevitham.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.australianjeevitham.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Contact",
+          "item": "https://www.australianjeevitham.com/contact-australian-jeevitham.html"
+        }
+      ]
+    }
   ]
 }
 </script>
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  function revealEmail(containerId, isResourceLink = false, isFooterGrid = false) {
+    const user = "australianjeevitham";
+    const domain = "gmail.com";
+    const email = user + "@" + domain;
+    const container = document.getElementById(containerId);
+
+    if (isResourceLink) {
+      container.innerHTML = `<a class="resource-link" href="mailto:${email}"><span>✉ ${email}</span><span class="arrow">→</span></a>`;
+    } else if (isFooterGrid) {
+      container.outerHTML = `<a class="connect-link" href="mailto:${email}"><span class="glyph">✉</span><span><span class="label">Email</span><span class="handle">${email}</span></span></a>`;
+    } else {
+      container.innerHTML = `<a href="mailto:${email}" class="email-highlight">${email}</a>`;
+    }
+  }
 </script>
 
 </body>
