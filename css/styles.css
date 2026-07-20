@@ -510,3 +510,18 @@ a:focus-visible, button:focus-visible{ outline:3px solid var(--ocean); outline-o
 @media (max-width:700px){
   .panel{ padding:26px 20px; }
 }
+.show-email-btn {
+  background: transparent;
+  border: 1px solid var(--ocean, #0077cc);
+  color: var(--ocean, #0077cc);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.show-email-btn:hover {
+  background: var(--ocean, #0077cc);
+  color: #fff;
+}
