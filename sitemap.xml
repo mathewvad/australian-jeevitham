@@ -1,35 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.australianjeevitham.com/index.html</loc>
+    <loc>https://www.australianjeevitham.com/</loc>
+    <lastmod>2026-07-20</lastmod>
     <priority>1.00</priority>
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/creator-australian-jeevitham.html</loc>
+    <lastmod>2026-07-20</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/about-australian-jeevitham.html</loc>
+    <lastmod>2026-07-20</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/jobs-in-australia.html</loc>
+    <lastmod>2026-07-20</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/how-to-migrate.html</loc>
+    <lastmod>2026-07-20</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/explore-australia.html</loc>
+    <lastmod>2026-07-20</lastmod>
     <priority>0.80</priority>
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/contact-australian-jeevitham.html</loc>
+    <lastmod>2026-07-20</lastmod>
     <priority>0.60</priority>
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/bio.html</loc>
+    <lastmod>2026-07-20</lastmod>
     <priority>0.50</priority>
   </url>
 </urlset>
