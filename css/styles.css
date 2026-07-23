@@ -494,6 +494,13 @@ h1.subhero-title .hl{
   .link-pill .text .sub{ font-size:0.65rem; }
 }
 
+.last-updated {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-top: 8px;
+  color: inherit;
+}
+
 /* ---------- FOOTER / CONNECT ---------- */
 footer{ background:var(--ink); color:var(--paper); padding:72px 0 40px; }
 footer .section-head{ text-align:center; margin:0 auto 40px; max-width:560px; }
