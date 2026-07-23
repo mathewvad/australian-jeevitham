@@ -25,7 +25,14 @@ body{
 a{ color:inherit; }
 img,svg{ display:block; max-width:100%; }
 .wrap{ max-width:1120px; margin:0 auto; padding:0 24px; }
-.mal{ font-family:var(--mal); font-weight:600; }
+/* Ensure both .mal class and lang="ml" attribute use Baloo Chettan 2 with proper spacing */
+.mal,
+[lang="ml"],
+:lang(ml) { 
+  font-family: var(--mal); 
+  font-weight: 600;
+  line-height: 1.6;
+}
 
 /* ---------- NAV ---------- */
 nav{
