@@ -290,7 +290,27 @@ h1.subhero-title .hl{
   background:#fff; border:3px solid var(--ink); border-radius:18px;
   padding:36px 32px; box-shadow:8px 8px 0 var(--sunbeam);
 }
-.panel p.panel-desc{ max-width:68ch; color:#3A3F4A; margin-bottom:24px; }
+/* Specificity fix for Malayalam text inside panel descriptions */
+.panel p.panel-desc { 
+  max-width: 68ch; 
+  color: #3A3F4A; 
+  margin-bottom: 24px; 
+}
+
+/* Force Baloo Chettan 2 on ALL Malayalam elements, even inside panels */
+.mal,
+[lang="ml"],
+.panel .mal,
+.panel [lang="ml"],
+p .mal,
+p [lang="ml"] {
+  font-family: var(--mal) !important;
+  font-weight: 600 !important;
+  line-height: 1.8 !important;
+  display: block !important;
+  margin-top: 6px;
+  overflow: visible !important;
+}
 
 .resource-links{
   display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
