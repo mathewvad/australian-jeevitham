@@ -81,14 +81,20 @@
       <p class="panel-desc">
         <span class="mal">എങ്ങനെയൊക്ക ആളുകൾക്ക് ഓസ്ട്രേലിയയിലേക്കു വരാൻ പറ്റും എന്നാണ് ഈ വിഡിയോയിൽ പറയുന്നത്. ഓസ്‌ട്രേലിയയിൽ ഡയറക്റ്റ് ആയി ജോലി കിട്ടി വരാനും പറ്റും, പിന്നെ സ്വന്തമായി വിസ അപ്ലൈ ചെയ്തു വരുവാനും പറ്റും. വീഡിയോ മൊത്തം കാണുക.</span>
       </p>
-      <div class="wide-video-frame">
-        <iframe src="https://www.youtube.com/embed/dGInE5JrVWA?si=FoUA0qKA8ZDyVA-m"
-          title="How To Migrate Australia — Australian Jeevitham"
-          loading="lazy"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allowfullscreen></iframe>
-      </div>
+<div class="wide-video-frame">
+  <div class="youtube-facade" id="video-dGInE5JrVWA"
+       role="button" tabindex="0"
+       aria-label="Play video: How To Migrate Australia"
+       onclick="loadYouTubeIframe('video-dGInE5JrVWA', 'dGInE5JrVWA')"
+       onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();loadYouTubeIframe('video-dGInE5JrVWA', 'dGInE5JrVWA');}">
+    <img src="https://img.youtube.com/vi/dGInE5JrVWA/maxresdefault.jpg"
+         onerror="this.onerror=null;this.src='https://img.youtube.com/vi/dGInE5JrVWA/hqdefault.jpg'"
+         alt="How To Migrate Australia — Australian Jeevitham"
+         width="1280" height="720"
+         loading="lazy" decoding="async">
+    <button type="button" class="play-btn" aria-label="Play Video" tabindex="-1">▶</button>
+  </div>
+</div>
     </div>
   </div>
 </section>
@@ -243,6 +249,27 @@
 }
 </script>
 
+  <script>
+  function loadYouTubeIframe(containerId, videoId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    const img = container.querySelector('img');
+    const title = img ? img.alt : 'YouTube video';
+
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
+    iframe.title = title;
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+
+    container.innerHTML = '';
+    container.appendChild(iframe);
+  }
+</script>
+
+  
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
