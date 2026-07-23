@@ -335,6 +335,65 @@ h1.subhero-title .hl{
 .crosslink-card h3{ font-family:var(--display); font-weight:400; font-size:1.15rem; margin-bottom:6px; }
 .crosslink-card p{ font-size:0.88rem; color:#5A5F68; }
 
+.youtube-facade {
+  position: relative;
+  cursor: pointer;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  overflow: hidden;
+  border-radius: inherit; /* matches whatever radius wide-video-frame already uses */
+  background: #000;
+}
+
+.youtube-facade img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+.youtube-facade:hover img {
+  opacity: 0.85;
+}
+
+.youtube-facade .play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.youtube-facade:hover .play-btn {
+  background: rgba(200, 0, 0, 0.85);
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.youtube-facade:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -3px;
+}
+
+.youtube-facade iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
 /* ---------- LINK-IN-BIO PAGE ---------- */
 .biolink{
   position:relative;
