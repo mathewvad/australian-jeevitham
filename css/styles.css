@@ -25,13 +25,16 @@ body{
 a{ color:inherit; }
 img,svg{ display:block; max-width:100%; }
 .wrap{ max-width:1120px; margin:0 auto; padding:0 24px; }
-/* Ensure both .mal class and lang="ml" attribute use Baloo Chettan 2 with proper spacing */
+/* Force Baloo Chettan 2 & prevent clipping on all Malayalam text */
 .mal,
 [lang="ml"],
-:lang(ml) { 
-  font-family: var(--mal); 
-  font-weight: 600;
-  line-height: 1.6;
+span[lang="ml"],
+p[lang="ml"] { 
+  font-family: "Baloo Chettan 2", "Inter", sans-serif !important; 
+  font-weight: 600 !important;
+  line-height: 1.8 !important;      /* Stops top/bottom character loops from clipping */
+  display: inline-block !important;  /* Creates proper box height for Malayalam glyphs */
+  margin-bottom: 4px;
 }
 
 /* ---------- NAV ---------- */
