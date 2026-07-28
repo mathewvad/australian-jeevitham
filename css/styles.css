@@ -668,3 +668,45 @@ a:focus-visible, button:focus-visible{ outline:3px solid var(--ocean); outline-o
 @media (max-width:700px){
   .kit-stats-grid, .media-grid, .kit-audience-grid{ grid-template-columns:1fr; }
 }
+
+/* ---------- SOCIAL PROOF (Instagram / Facebook / YouTube Shorts) ---------- */
+.social-proof{ background:#fff; border-top:3px solid var(--ink); border-bottom:3px solid var(--ink); }
+.social-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr));
+  gap:30px; align-items:start;
+}
+.social-card{
+  background:var(--paper); border:3px solid var(--ink); border-radius:14px;
+  padding:22px; box-shadow:6px 6px 0 var(--sunbeam);
+}
+.social-card h3{
+  font-family:var(--display); font-weight:400; font-size:1rem;
+  display:flex; align-items:center; gap:10px; margin-bottom:16px;
+}
+.platform-glyph{
+  width:30px; height:30px; border-radius:8px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-weight:700; font-size:0.7rem;
+  border:2px solid var(--ink);
+}
+.social-embed-wrap{ display:flex; justify-content:center; }
+.short-frame{
+  position:relative; width:100%; max-width:280px; margin:0 auto;
+  padding-top:177.77%; border:3px solid var(--ink); border-radius:14px;
+  overflow:hidden; background:var(--ink);
+}
+.short-frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.short-stats{
+  display:flex; gap:18px; justify-content:center;
+  margin-top:16px; font-family:var(--mono); font-size:0.76rem; text-align:center;
+}
+.short-stats span{ display:flex; flex-direction:column; align-items:center; gap:2px; }
+.short-stats strong{ font-family:var(--display); font-weight:400; font-size:1.15rem; color:var(--coral); }
+.short-stats-note{
+  font-family:var(--mono); font-size:0.68rem; color:#5A5F68;
+  text-align:center; margin-top:8px;
+}
+.short-stats-note a{ color:var(--ocean); font-weight:700; }
+@media (max-width:480px){
+  .social-card{ padding:16px; }
+}
