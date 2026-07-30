@@ -1,13 +1,3 @@
-/* =========================================================
-   Australian Jeevitham — Design System v2
-   Restyled after aliabdaal.com: warm cream background, soft
-   rounded cards with gentle shadows (no hard offsets), pill
-   buttons, big friendly photography. Signature motif carried
-   over in spirit only — small pill "eyebrow" tags replace the
-   rotated passport stamps, and photos now sit in soft, large-
-   radius frames instead of hard-shadow postcards.
-   ========================================================= */
-
 :root{
   /* ---- Brand palette (warm, personal-creator-brand) ---- */
   --coral:   #FF5B3D;
