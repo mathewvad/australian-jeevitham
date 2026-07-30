@@ -10,7 +10,7 @@
   --paper:   #FDF8EE;
   --paper-dim: #F5EBD8;
   --line:    #1A1712;
-  --cream:   #FDF8EE; /* constant — for text/icons sitting on an --ink fill, in either theme */
+  --cream:   #FDF8EE; /* constant — for text/icons sitting on an --ink fill */
 
   /* ---- Semantic tokens (light) ---- */
   --bg: var(--paper);
@@ -33,35 +33,6 @@
   --radius: 24px;
   --radius-sm: 14px;
   --container: 1160px;
-}
-
-/* ---- Dark mode ---- */
-:root[data-theme="dark"]{
-  --bg: #17140F;
-  --bg-alt: #1F1B14;
-  --fg: #F5EFE2;
-  --fg-muted: #B8AE9C;
-  --card-bg: #221D16;
-  --border: rgba(245,239,226,0.12);
-  --paper: #17140F;
-  --shadow-offset: 0 18px 40px rgba(0,0,0,0.35);
-  --shadow-offset-sm: 0 8px 22px rgba(0,0,0,0.3);
-  --shadow-hover: 0 24px 48px rgba(0,0,0,0.4);
-}
-
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg: #17140F;
-    --bg-alt: #1F1B14;
-    --fg: #F5EFE2;
-    --fg-muted: #B8AE9C;
-    --card-bg: #221D16;
-    --border: rgba(245,239,226,0.12);
-    --paper: #17140F;
-    --shadow-offset: 0 18px 40px rgba(0,0,0,0.35);
-    --shadow-offset-sm: 0 8px 22px rgba(0,0,0,0.3);
-    --shadow-hover: 0 24px 48px rgba(0,0,0,0.4);
-  }
 }
 
 /* ---- Reset ---- */
@@ -182,14 +153,6 @@ nav .wrap{ display:flex; align-items:center; justify-content:space-between; heig
 }
 .nav-cta:hover{ transform:translateY(-2px); box-shadow:var(--shadow-offset-sm); background:var(--coral-dim); }
 
-.theme-toggle{
-  border:1px solid var(--border); background:var(--card-bg); color:var(--fg);
-  width:40px; height:40px; border-radius:999px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center; font-size:1rem;
-  flex-shrink:0; transition:background .18s ease, color .18s ease;
-}
-.theme-toggle:hover{ background:var(--ocean); color:#fff; border-color:var(--ocean); }
-
 .nav-toggle-input{ display:none; }
 .nav-toggle-btn{
   display:none; font-size:1.5rem; cursor:pointer; line-height:1;
@@ -199,7 +162,6 @@ nav .wrap{ display:flex; align-items:center; justify-content:space-between; heig
 
 @media (max-width: 860px){
   .nav-toggle-btn{ display:block; order:3; }
-  .theme-toggle{ order:2; }
   .nav-links{
     position:fixed; inset:76px 0 auto 0;
     flex-direction:column; align-items:flex-start;
