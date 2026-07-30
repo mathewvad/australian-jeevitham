@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -32,20 +32,81 @@
 <meta name="twitter:description" content="Why Binu Vadakkedath started Australian Jeevitham — real, first-hand Australian life for the global Malayali community.">
 <meta name="twitter:image" content="https://www.australianjeevitham.com/images/binu-australian-jeevitham.webp">
 
+<meta name="theme-color" content="#FBFBF6">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<script>
+  (function(){try{var t=localStorage.getItem('aj-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#webpage",
+      "url": "https://www.australianjeevitham.com/about-australian-jeevitham.html",
+      "name": "About Australian Jeevitham | ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "description": "The story behind Australian Jeevitham — why Binu Vadakkedath started sharing real, first-hand Australian life, migration and job insights with the global Malayali community.",
+      "inLanguage": ["en", "ml"],
+      "isPartOf": { "@id": "https://www.australianjeevitham.com/#website" },
+      "breadcrumb": { "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#breadcrumb" },
+      "about": { "@id": "https://www.australianjeevitham.com/#binu" },
+      "mainEntity": { "@id": "https://www.australianjeevitham.com/#binu" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.australianjeevitham.com/" },
+        { "@type": "ListItem", "position": 2, "name": "About Our Story", "item": "https://www.australianjeevitham.com/about-australian-jeevitham.html" }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.australianjeevitham.com/#binu",
+      "name": "Binu Vadakkedath",
+      "alternateName": "Australian Jeevitham",
+      "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
+      "sameAs": [
+        "https://www.youtube.com/@AustralianJeevitham",
+        "https://www.facebook.com/Australian.Jeevitham",
+        "https://www.instagram.com/australianjeevitham/",
+        "https://www.tiktok.com/@australianjeevitham",
+        "https://www.threads.com/@australianjeevitham",
+        "https://au.pinterest.com/australianjeevitham/",
+        "https://vimeo.com/australianjeevitham",
+        "https://www.reddit.com/user/AustralianJeevitham/",
+        "https://www.wikidata.org/wiki/Q140357652",
+        "https://www.imdb.com/title/tt43669114"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.australianjeevitham.com/#website",
+      "name": "Australian Jeevitham",
+      "url": "https://www.australianjeevitham.com/",
+      "inLanguage": ["en", "ml"],
+      "publisher": { "@id": "https://www.australianjeevitham.com/#binu" }
+    }
+  ]
+}
+</script>
 </head>
 <body>
-
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="images/logo.png" alt="Australian Jeevitham logo" width="34" height="34" loading="eager" decoding="async">Australian Jeevitham | <span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></a>
+    <a class="brand" href="index.html"><img src="images/logo.png" alt="Australian Jeevitham logo" width="36" height="36" loading="eager" decoding="async">
+      <span>Australian Jeevitham<br><span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></span>
+    </a>
     <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
-    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu">☰</label>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">☾</button>
+    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu" aria-expanded="false">☰</label>
     <ul class="nav-links">
-      <li><a href="about-australian-jeevitham.html" class="current">Our Story</a></li>
+      <li><a href="about-australian-jeevitham.html" aria-current="page">Our Story</a></li>
       <li><a href="australian-malayalam-videos.html">Videos</a></li>
       <li><a href="australian-malayalam-resources.html">Resources</a></li>
       <li><a href="creator-australian-jeevitham.html">Creator</a></li>
@@ -56,7 +117,6 @@
 </nav>
 
 <header class="subhero">
-  <div class="blob blob-2" aria-hidden="true" style="opacity:0.35; top:-100px; right:-60px; left:auto;"></div>
   <div class="wrap">
     <div>
       <a class="breadcrumb" href="index.html">← Back to Home</a>
@@ -80,8 +140,8 @@
     <div class="about-grid">
       <div>
         <div class="section-head" style="margin-bottom:28px;">
-          <div class="kicker">Why This Channel Exists</div>
-          <h2>Started by accident, continued on purpose.</h2>
+          <span class="stamp coral">Why This Channel Exists</span>
+          <h2 style="margin-top:16px;">Started by accident, continued on purpose.</h2>
         </div>
         <div class="about-body">
           <p>Australian Jeevitham (<span class="mal" lang="ml">ഓസ്‌ട്രേലിയൻ ജീവിതം</span>) began almost by accident. What kept it going is simple: countless Malayalis will never get the chance to visit Australia themselves, and this channel gives them a direct, honest window into what life here actually looks like.</p>
@@ -97,11 +157,11 @@
   </div>
 </section>
 
-<section class="resources section">
+<section class="resources section" style="background:var(--bg-alt); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">What We Stand For</div>
-      <h2>Three things every piece of content follows</h2>
+      <span class="stamp grape">What We Stand For</span>
+      <h2 style="margin-top:16px;">Three things every piece of content follows</h2>
     </div>
     <div class="crosslink-grid">
       <div class="crosslink-card" style="cursor:default;">
@@ -123,11 +183,11 @@
   </div>
 </section>
 
-<section class="resources section" style="background:#fff; border-top:3px solid var(--ink);">
+<section class="resources section">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Explore</div>
-      <h2>Start with a topic, or meet the person behind it</h2>
+      <span class="stamp sun">Explore</span>
+      <h2 style="margin-top:16px;">Start with a topic, or meet the person behind it</h2>
     </div>
     <div class="crosslink-grid">
       <a class="crosslink-card" href="creator-australian-jeevitham.html">
@@ -152,8 +212,8 @@
 <footer id="connect">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Connect With Us</div>
-      <h2>Stay updated and join our growing global community</h2>
+      <span class="stamp">Connect With Us</span>
+      <h2 style="margin-top:16px;">Stay updated and join our growing global community</h2>
     </div>
 
     <div class="connect-grid">
@@ -173,6 +233,10 @@
         <span class="glyph">TT</span>
         <span><span class="label">TikTok</span><span class="handle">@australianjeevitham</span></span>
       </a>
+      <a class="connect-link" href="https://www.threads.com/@australianjeevitham" target="_blank" rel="noopener">
+        <span class="glyph">@</span>
+        <span><span class="label">Threads</span><span class="handle">@australianjeevitham</span></span>
+      </a>
       <a class="connect-link" href="contact-australian-jeevitham.html">
         <span class="glyph">✉</span>
         <span><span class="label">Contact</span><span class="handle">Get in touch</span></span>
@@ -180,109 +244,12 @@
     </div>
 
 <p class="records">
-  About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener">IMDb</a> & <a href="https://www.wikidata.org/wiki/Q140357652" target="_blank" rel="noopener">Wikidata</a>)
+  About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener">IMDb</a> &amp; <a href="https://www.wikidata.org/wiki/Q140357652" target="_blank" rel="noopener">Wikidata</a>)
 </p>
     <p class="copyright">© <span id="year"></span> Australian Jeevitham. All rights reserved.</p>
   </div>
 </footer>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "AboutPage",
-      "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#webpage",
-      "url": "https://www.australianjeevitham.com/about-australian-jeevitham.html",
-      "name": "About Australian Jeevitham | ഓസ്‌ട്രേലിയൻ ജീവിതം",
-      "description": "The story behind Australian Jeevitham — why Binu Vadakkedath started sharing real, first-hand Australian life, migration and job insights with the global Malayali community.",
-      "inLanguage": ["en", "ml"],
-      "isPartOf": {
-        "@id": "https://www.australianjeevitham.com/#website"
-      },
-      "breadcrumb": {
-        "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#breadcrumb"
-      },
-      "about": {
-        "@id": "https://www.australianjeevitham.com/#binu"
-      },
-      "mainEntity": {
-        "@id": "https://www.australianjeevitham.com/#binu"
-      }
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#breadcrumb",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://www.australianjeevitham.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "About Our Story",
-          "item": "https://www.australianjeevitham.com/about-australian-jeevitham.html"
-        }
-      ]
-    },
-    {
-      "@type": "Person",
-      "@id": "https://www.australianjeevitham.com/#binu",
-      "name": "Binu Vadakkedath",
-      "alternateName": "Australian Jeevitham",
-      "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
-      "image": "https://www.australianjeevitham.com/images/binu-australian-jeevitham.webp",
-      "jobTitle": "Content Creator",
-      "homeLocation": {
-        "@type": "Place",
-        "address": {
-          "@type": "PostalAddress",
-          "addressRegion": "Queensland",
-          "addressCountry": "AU"
-        }
-      },
-      "knowsAbout": [
-        "Australia Migration Pathways",
-        "Skilled Visa Guidance",
-        "Queensland Regional Travel",
-        "Kerala-Style Gardening in Australia",
-        "Malayali Community Life in Australia",
-        "Jobs in Australia"
-      ],
-      "knowsLanguage": ["ml", "en"],
-      "sameAs": [
-        "https://www.youtube.com/@AustralianJeevitham",
-        "https://www.facebook.com/Australian.Jeevitham",
-        "https://www.instagram.com/australianjeevitham/",
-        "https://www.tiktok.com/@australianjeevitham",
-        "https://www.threads.com/@australianjeevitham",
-        "https://au.pinterest.com/australianjeevitham/",
-        "https://vimeo.com/australianjeevitham",
-        "https://www.reddit.com/user/AustralianJeevitham/",
-        "https://www.wikidata.org/wiki/Q140357652",
-        "https://www.imdb.com/title/tt43669114"
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://www.australianjeevitham.com/#website",
-      "name": "Australian Jeevitham",
-      "url": "https://www.australianjeevitham.com/",
-      "inLanguage": ["en", "ml"],
-      "description": "Australian Jeevitham is the official digital hub of Binu Vadakkedath, documenting Australian life, skilled migration, jobs, regional travel and community for the global Malayali community.",
-      "publisher": {
-        "@id": "https://www.australianjeevitham.com/#binu"
-      }
-    }
-  ]
-}
-</script>
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

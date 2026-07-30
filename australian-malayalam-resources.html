@@ -32,22 +32,39 @@
 <meta name="twitter:description" content="Jobs, migration, and travel resources for Malayalis in Australia — government job boards, visa guidance, and where to find MARA-registered migration agents.">
 <meta name="twitter:image" content="https://www.australianjeevitham.com/images/binu-australian-jeevitham.webp">
 
+<meta name="theme-color" content="#FBFBF6">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<script>
+  (function(){try{var t=localStorage.getItem('aj-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Australian Jeevitham Resources",
+  "url": "https://www.australianjeevitham.com/australian-malayalam-resources.html",
+  "description": "Jobs, migration, and travel resources for Malayalis in Australia — government job boards, visa guidance, and where to find MARA-registered migration agents.",
+  "isPartOf": { "@id": "https://www.australianjeevitham.com/#website" }
+}
+</script>
 </head>
 <body>
-
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="images/logo.png" alt="Australian Jeevitham logo" width="34" height="34" loading="eager" decoding="async">Australian Jeevitham | <span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></a>
+    <a class="brand" href="index.html"><img src="images/logo.png" alt="Australian Jeevitham logo" width="36" height="36" loading="eager" decoding="async">
+      <span>Australian Jeevitham<br><span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></span>
+    </a>
     <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
-    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu">☰</label>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">☾</button>
+    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu" aria-expanded="false">☰</label>
     <ul class="nav-links">
       <li><a href="about-australian-jeevitham.html">Our Story</a></li>
       <li><a href="australian-malayalam-videos.html">Videos</a></li>
-      <li><a href="australian-malayalam-resources.html" class="current">Resources</a></li>
+      <li><a href="australian-malayalam-resources.html" aria-current="page">Resources</a></li>
       <li><a href="creator-australian-jeevitham.html">Creator</a></li>
       <li><a href="bio.html">Bio</a></li>
       <li><a class="nav-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">▶ Subscribe</a></li>
@@ -55,10 +72,7 @@
   </div>
 </nav>
 
-<!-- ============ SUBHERO ============ -->
 <header class="subhero">
-  <div class="blob blob-1" aria-hidden="true"></div>
-  <div class="blob blob-2" aria-hidden="true"></div>
   <div class="wrap">
     <div>
       <a class="breadcrumb" href="index.html">← Back to Home</a>
@@ -81,12 +95,11 @@
   </div>
 </header>
 
-<!-- ============ GUIDES ============ -->
 <section class="resources section" id="guides">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Guides</div>
-      <h2>Pick a topic to go deeper</h2>
+      <span class="stamp">Guides</span>
+      <h2 style="margin-top:16px;">Pick a topic to go deeper</h2>
       <p><span class="mal">ഓരോ വിഷയത്തിനും വിശദമായ ഗൈഡ് ഇവിടെ കാണാം.</span></p>
     </div>
 
@@ -110,12 +123,11 @@
   </div>
 </section>
 
-<!-- ============ QUICK LINKS ============ -->
-<section class="resources section" style="border-top:3px solid var(--ink);">
+<section class="resources section" style="background:var(--bg-alt); border-top:3px solid var(--border);">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Quick Links</div>
-      <h2>Official sources worth bookmarking</h2>
+      <span class="stamp coral">Quick Links</span>
+      <h2 style="margin-top:16px;">Official sources worth bookmarking</h2>
     </div>
 
     <div class="disclaimer">
@@ -126,35 +138,22 @@
     <div class="panel">
       <p class="panel-desc">Start here for anything to do with visas, jobs, pay, or settling in.</p>
       <div class="resource-links">
-        <a class="resource-link" href="https://immi.homeaffairs.gov.au/" target="_blank" rel="noopener">
-          Department of Home Affairs <span class="arrow">↗</span>
-        </a>
-        <a class="resource-link" href="https://www.fairwork.gov.au/" target="_blank" rel="noopener">
-          Fair Work Ombudsman <span class="arrow">↗</span>
-        </a>
-        <a class="resource-link" href="https://www.seek.com.au/" target="_blank" rel="noopener">
-          SEEK Job Search <span class="arrow">↗</span>
-        </a>
-        <a class="resource-link" href="https://www.servicesaustralia.gov.au/" target="_blank" rel="noopener">
-          Services Australia <span class="arrow">↗</span>
-        </a>
-        <a class="resource-link" href="https://www.mara.gov.au/" target="_blank" rel="noopener">
-          Find a Registered Migration Agent <span class="arrow">↗</span>
-        </a>
-        <a class="resource-link" href="https://www.australia.gov.au/" target="_blank" rel="noopener">
-          Australia.gov.au <span class="arrow">↗</span>
-        </a>
+        <a class="resource-link" href="https://immi.homeaffairs.gov.au/" target="_blank" rel="noopener">Department of Home Affairs <span class="arrow">↗</span></a>
+        <a class="resource-link" href="https://www.fairwork.gov.au/" target="_blank" rel="noopener">Fair Work Ombudsman <span class="arrow">↗</span></a>
+        <a class="resource-link" href="https://www.seek.com.au/" target="_blank" rel="noopener">SEEK Job Search <span class="arrow">↗</span></a>
+        <a class="resource-link" href="https://www.servicesaustralia.gov.au/" target="_blank" rel="noopener">Services Australia <span class="arrow">↗</span></a>
+        <a class="resource-link" href="https://www.mara.gov.au/" target="_blank" rel="noopener">Find a Registered Migration Agent <span class="arrow">↗</span></a>
+        <a class="resource-link" href="https://www.australia.gov.au/" target="_blank" rel="noopener">Australia.gov.au <span class="arrow">↗</span></a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ============ CROSS-LINKS ============ -->
 <section class="crosslinks section">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Keep Exploring</div>
-      <h2>Want to watch instead of read?</h2>
+      <span class="stamp grape">Keep Exploring</span>
+      <h2 style="margin-top:16px;">Want to watch instead of read?</h2>
     </div>
     <div class="crosslink-grid">
       <a class="crosslink-card" href="australian-malayalam-videos.html">
@@ -176,81 +175,47 @@
   </div>
 </section>
 
-<!-- ============ FOOTER / CONNECT ============ -->
 <footer id="connect">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Connect With Us</div>
-      <h2>Stay updated and join our growing global community</h2>
+      <span class="stamp">Connect With Us</span>
+      <h2 style="margin-top:16px;">Stay updated and join our growing global community</h2>
     </div>
 
     <div class="connect-grid">
       <a class="connect-link" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">
         <span class="glyph">YT</span>
-        <span>
-          <span class="label">YouTube</span>
-          <span class="handle">@AustralianJeevitham</span>
-        </span>
+        <span><span class="label">YouTube</span><span class="handle">@AustralianJeevitham</span></span>
       </a>
       <a class="connect-link" href="https://www.facebook.com/Australian.Jeevitham" target="_blank" rel="noopener">
         <span class="glyph">FB</span>
-        <span>
-          <span class="label">Facebook</span>
-          <span class="handle">Australian Jeevitham</span>
-        </span>
+        <span><span class="label">Facebook</span><span class="handle">Australian Jeevitham</span></span>
       </a>
       <a class="connect-link" href="https://www.instagram.com/australianjeevitham/" target="_blank" rel="noopener">
         <span class="glyph">IG</span>
-        <span>
-          <span class="label">Instagram</span>
-          <span class="handle">@australianjeevitham</span>
-        </span>
+        <span><span class="label">Instagram</span><span class="handle">@australianjeevitham</span></span>
       </a>
       <a class="connect-link" href="https://www.tiktok.com/@australianjeevitham" target="_blank" rel="noopener">
         <span class="glyph">TT</span>
-        <span>
-          <span class="label">TikTok</span>
-          <span class="handle">@australianjeevitham</span>
-        </span>
+        <span><span class="label">TikTok</span><span class="handle">@australianjeevitham</span></span>
       </a>
       <a class="connect-link" href="https://www.threads.com/@australianjeevitham" target="_blank" rel="noopener">
         <span class="glyph">@</span>
-        <span>
-          <span class="label">Threads</span>
-          <span class="handle">@australianjeevitham</span>
-        </span>
+        <span><span class="label">Threads</span><span class="handle">@australianjeevitham</span></span>
       </a>
       <a class="connect-link" href="contact-australian-jeevitham.html">
         <span class="glyph">✉</span>
-        <span>
-          <span class="label">Contact</span>
-          <span class="handle">Get in touch</span>
-        </span>
+        <span><span class="label">Contact</span><span class="handle">Get in touch</span></span>
       </a>
     </div>
 
 <p class="records">
-  About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener">IMDb</a> & <a href="https://www.wikidata.org/wiki/Q140357652" target="_blank" rel="noopener">Wikidata</a>)
+  About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener">IMDb</a> &amp; <a href="https://www.wikidata.org/wiki/Q140357652" target="_blank" rel="noopener">Wikidata</a>)
 </p>
     <p class="copyright">© <span id="year"></span> Australian Jeevitham. All rights reserved.</p>
   </div>
 </footer>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "name": "Australian Jeevitham Resources",
-  "url": "https://www.australianjeevitham.com/australian-malayalam-resources.html",
-  "description": "Jobs, migration, and travel resources for Malayalis in Australia — government job boards, visa guidance, and where to find MARA-registered migration agents.",
-  "isPartOf": {
-    "@id": "https://www.australianjeevitham.com/#website"
-  }
-}
-</script>
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

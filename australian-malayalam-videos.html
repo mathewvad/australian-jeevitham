@@ -32,23 +32,40 @@
 <meta name="twitter:description" content="Watch every Australian Jeevitham video in one place — Malayalam vlogs on life in Australia, Kerala-style gardening, jobs, and travel around Queensland.">
 <meta name="twitter:image" content="https://www.australianjeevitham.com/images/binu-australian-jeevitham.webp">
 
+<meta name="theme-color" content="#FBFBF6">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<script>
+  (function(){try{var t=localStorage.getItem('aj-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Australian Jeevitham Videos",
+  "url": "https://www.australianjeevitham.com/australian-malayalam-videos.html",
+  "description": "Watch every Australian Jeevitham video in one place — Malayalam vlogs on life in Australia, Kerala-style gardening, jobs, and travel around Queensland.",
+  "isPartOf": { "@type": "WebSite", "@id": "https://www.australianjeevitham.com/#website", "name": "Australian Jeevitham" }
+}
+</script>
 </head>
 <body>
 
 <div id="fb-root"></div>
-
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="images/logo.png" alt="Australian Jeevitham logo" width="34" height="34" loading="eager" decoding="async">Australian Jeevitham | <span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></a>
+    <a class="brand" href="index.html"><img src="images/logo.png" alt="Australian Jeevitham logo" width="36" height="36" loading="eager" decoding="async">
+      <span>Australian Jeevitham<br><span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></span>
+    </a>
     <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
-    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu">☰</label>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">☾</button>
+    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu" aria-expanded="false">☰</label>
     <ul class="nav-links">
       <li><a href="about-australian-jeevitham.html">Our Story</a></li>
-      <li><a href="australian-malayalam-videos.html" class="current">Videos</a></li>
+      <li><a href="australian-malayalam-videos.html" aria-current="page">Videos</a></li>
       <li><a href="australian-malayalam-resources.html">Resources</a></li>
       <li><a href="creator-australian-jeevitham.html">Creator</a></li>
       <li><a href="bio.html">Bio</a></li>
@@ -57,10 +74,7 @@
   </div>
 </nav>
 
-<!-- ============ SUBHERO ============ -->
 <header class="subhero">
-  <div class="blob blob-1" aria-hidden="true"></div>
-  <div class="blob blob-2" aria-hidden="true"></div>
   <div class="wrap">
     <div>
       <a class="breadcrumb" href="index.html">← Back to Home</a>
@@ -84,12 +98,11 @@
   </div>
 </header>
 
-<!-- ============ TRENDING ACROSS PLATFORMS ============ -->
 <section class="social-proof section" id="trending">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Trending Across Platforms</div>
-      <h2>Our most-watched moments right now</h2>
+      <span class="stamp">Trending Across Platforms</span>
+      <h2 style="margin-top:16px;">Our most-watched moments right now</h2>
     </div>
 
     <div class="social-grid">
@@ -114,7 +127,7 @@
       </div>
 
       <div class="social-card">
-        <h3><span class="platform-glyph" style="background:var(--ink); color:var(--paper);">▶</span>YouTube Shorts</h3>
+        <h3><span class="platform-glyph" style="background:var(--ink); color:var(--cream);">▶</span>YouTube Shorts</h3>
         <div class="short-frame">
           <iframe src="https://www.youtube.com/embed/eJQX8GbthDc"
             title="Australian Jeevitham top performing malayalam short video"
@@ -133,12 +146,11 @@
   </div>
 </section>
 
-<!-- ============ VIDEOS ============ -->
 <section class="videos section" id="videos">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Watch</div>
-      <h2>Catch up on the latest stories, vlogs, and adventures</h2>
+      <span class="stamp coral">Watch</span>
+      <h2 style="margin-top:16px;">Catch up on the latest stories, vlogs, and adventures</h2>
     </div>
 
     <div class="video-grid">
@@ -185,18 +197,19 @@
     </div>
 
     <p class="video-note">Want more? The full library — including older uploads and Shorts — lives on our YouTube channel.</p>
-    <a class="hero-cta" style="margin-top:14px;" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">▶ Watch all videos on YouTube</a>
-    <a class="hero-cta" style="margin-top:14px;" href="https://www.facebook.com/Australian.Jeevitham" target="_blank" rel="noopener">▶ Australian Jeevitham Facebook</a>
-    <a class="hero-cta" style="margin-top:14px;" href="https://www.instagram.com/australianjeevitham/" target="_blank" rel="noopener">▶ Australian Jeevitham Instagram</a>
+    <div class="hero-ctas" style="margin-top:14px;">
+      <a class="hero-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">▶ Watch all videos on YouTube</a>
+      <a class="hero-cta alt" href="https://www.facebook.com/Australian.Jeevitham" target="_blank" rel="noopener">▶ Australian Jeevitham Facebook</a>
+      <a class="hero-cta alt" href="https://www.instagram.com/australianjeevitham/" target="_blank" rel="noopener">▶ Australian Jeevitham Instagram</a>
+    </div>
   </div>
 </section>
 
-<!-- ============ CROSS-LINKS ============ -->
 <section class="crosslinks section">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Keep Exploring</div>
-      <h2>Looking for jobs, migration, or travel info instead?</h2>
+      <span class="stamp grape">Keep Exploring</span>
+      <h2 style="margin-top:16px;">Looking for jobs, migration, or travel info instead?</h2>
     </div>
     <div class="crosslink-grid">
       <a class="crosslink-card" href="australian-malayalam-resources.html">
@@ -218,89 +231,53 @@
   </div>
 </section>
 
-<!-- ============ FOOTER / CONNECT ============ -->
 <footer id="connect">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Connect With Us</div>
-      <h2>Stay updated and join our growing global community</h2>
+      <span class="stamp">Connect With Us</span>
+      <h2 style="margin-top:16px;">Stay updated and join our growing global community</h2>
     </div>
 
     <div class="connect-grid">
       <a class="connect-link" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">
         <span class="glyph">YT</span>
-        <span>
-          <span class="label">YouTube</span>
-          <span class="handle">@AustralianJeevitham</span>
-        </span>
+        <span><span class="label">YouTube</span><span class="handle">@AustralianJeevitham</span></span>
       </a>
       <a class="connect-link" href="https://www.facebook.com/Australian.Jeevitham" target="_blank" rel="noopener">
         <span class="glyph">FB</span>
-        <span>
-          <span class="label">Facebook</span>
-          <span class="handle">Australian Jeevitham</span>
-        </span>
+        <span><span class="label">Facebook</span><span class="handle">Australian Jeevitham</span></span>
       </a>
       <a class="connect-link" href="https://www.instagram.com/australianjeevitham/" target="_blank" rel="noopener">
         <span class="glyph">IG</span>
-        <span>
-          <span class="label">Instagram</span>
-          <span class="handle">@australianjeevitham</span>
-        </span>
+        <span><span class="label">Instagram</span><span class="handle">@australianjeevitham</span></span>
       </a>
       <a class="connect-link" href="https://www.tiktok.com/@australianjeevitham" target="_blank" rel="noopener">
         <span class="glyph">TT</span>
-        <span>
-          <span class="label">TikTok</span>
-          <span class="handle">@australianjeevitham</span>
-        </span>
+        <span><span class="label">TikTok</span><span class="handle">@australianjeevitham</span></span>
       </a>
       <a class="connect-link" href="https://www.threads.com/@australianjeevitham" target="_blank" rel="noopener">
         <span class="glyph">@</span>
-        <span>
-          <span class="label">Threads</span>
-          <span class="handle">@australianjeevitham</span>
-        </span>
+        <span><span class="label">Threads</span><span class="handle">@australianjeevitham</span></span>
       </a>
       <a class="connect-link" href="contact-australian-jeevitham.html">
         <span class="glyph">✉</span>
-        <span>
-          <span class="label">Contact</span>
-          <span class="handle">Get in touch</span>
-        </span>
+        <span><span class="label">Contact</span><span class="handle">Get in touch</span></span>
       </a>
     </div>
 
 <p class="records">
-  About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener">IMDb</a> & <a href="https://www.wikidata.org/wiki/Q140357652" target="_blank" rel="noopener">Wikidata</a>)
+  About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener">IMDb</a> &amp; <a href="https://www.wikidata.org/wiki/Q140357652" target="_blank" rel="noopener">Wikidata</a>)
 </p>
     <p class="copyright">© <span id="year"></span> Australian Jeevitham. All rights reserved.</p>
   </div>
 </footer>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "name": "Australian Jeevitham Videos",
-  "url": "https://www.australianjeevitham.com/australian-malayalam-videos.html",
-  "description": "Watch every Australian Jeevitham video in one place — Malayalam vlogs on life in Australia, Kerala-style gardening, jobs, and travel around Queensland.",
-  "isPartOf": {
-    "@type": "WebSite",
-    "@id": "https://www.australianjeevitham.com/#website",
-    "name": "Australian Jeevitham"
-  }
-}
-</script>
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
-
 <!-- Instagram embed widget (renders the post + its live like/comment count) -->
 <script async src="//www.instagram.com/embed.js"></script>
 
 <!-- Facebook SDK (renders the reel + its live reactions/comments) -->
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v19.0"></script>
+
+<script src="js/main.js"></script>
 
 </body>
 </html>
