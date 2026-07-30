@@ -32,18 +32,27 @@
 <meta name="twitter:description" content="ഓസ്‌ട്രേലിയൻ ജീവിതം brings you the journey of a Malayali vlogger in Australia. Discover beautiful places, news, and job opportunities for Malayalis.">
 <meta name="twitter:image" content="https://www.australianjeevitham.com/images/binu-australian-jeevitham.webp">
 
+<meta name="theme-color" content="#FBFBF6">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<script>
+  /* Set theme before paint to avoid a light/dark flash */
+  (function(){try{var t=localStorage.getItem('aj-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
+</script>
 </head>
 <body>
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html"><img src="images/logo.png" alt="Australian Jeevitham logo" width="34" height="34" loading="eager" decoding="async">Australian Jeevitham | <span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></a>
+    <a class="brand" href="index.html"><img src="images/logo.png" alt="Australian Jeevitham logo" width="36" height="36" loading="eager" decoding="async">
+      <span>Australian Jeevitham<br><span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></span>
+    </a>
     <input type="checkbox" id="nav-toggle" class="nav-toggle-input">
-    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu">☰</label>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark mode">☾</button>
+    <label for="nav-toggle" class="nav-toggle-btn" aria-label="Toggle menu" aria-expanded="false">☰</label>
     <ul class="nav-links">
       <li><a href="about-australian-jeevitham.html">Our Story</a></li>
       <li><a href="australian-malayalam-videos.html">Videos</a></li>
@@ -57,46 +66,47 @@
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
-  <div class="blob blob-1" aria-hidden="true"></div>
-  <div class="blob blob-2" aria-hidden="true"></div>
   <div class="wrap">
     <div>
-      <span class="eyebrow">📍 Queensland, Australia</span>
-      <h1 class="hero-title">Life, Culture, and <span class="hl">Adventures</span> from the Land Down Under.</h1>
+      <span class="stamp">📍 Queensland, Australia</span>
+      <h1 class="hero-title">Life, culture, and <span class="hl">adventures</span> from the land Down Under.</h1>
       <p class="hero-tag">
        Welcome to Australian Jeevitham — the journey of a Malayali vlogger in Australia. Join us as we explore beautiful places, share local news, and discuss job opportunities, everyday life, and culture for Malayalis Down Under.
         <span class="mal">ഓസ്‌ട്രേലിയയിലെ ഒരു സാദാരണ മലയാളിയുടെ ജീവിതം എന്താണ് എന്ന് ഈ ചാനലിലൂടെ നിങ്ങൾക്ക് കാണിച്ചു തരുന്നു. കൃഷിയെ ഇഷ്ടപെടുന്ന ഞാൻ എൻ്റെ ജോലി സമയം കഴിഞ്ഞു ഉണ്ടാക്കിയ ചെറിയ ഒരു അടുക്കള തോട്ടം ആണ് എൻ്റെ വീഡിയോയുടെ ഉള്ളടക്കം. പിന്നെ ഓസ്‌ട്രേലിയയിലെ ജോലികളെപ്പറ്റിയും, എങ്ങനെ ഓസ്‌ട്രേലിയയിൽ വരാൻ സാധിക്കും എന്നതിനെപ്പറ്റിയും ഇടക്കിടക്ക് വീഡിയോ ഇടാറുണ്ട്.</span>
       </p>
-      <a class="hero-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">▶ Watch on YouTube</a>
-      <a class="hero-cta" href="https://www.instagram.com/australianjeevitham" target="_blank" rel="noopener">▶ Watch on Instagram</a>
-    </div>
-    <div class="hero-photo-wrap">
-      <div class="hero-photo">
-        <img src="images/binu-australian-jeevitham.webp" alt="Binu Vadakkedath, creator of Australian Jeevitham, standing in his backyard garden in Queensland, Australia" width="460" height="818" loading="eager" decoding="async">
+      <div class="hero-ctas">
+        <a class="hero-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+        <a class="hero-cta alt" href="https://www.instagram.com/australianjeevitham" target="_blank" rel="noopener">▶ Watch on Instagram</a>
       </div>
-      <span class="sticker">NEW EPS BIWEEKLY</span>
+    </div>
+    <div class="hero-photo-order">
+      <div class="postcard">
+        <img src="images/binu-australian-jeevitham.webp" alt="Binu Vadakkedath, creator of Australian Jeevitham, standing in his backyard garden in Queensland, Australia" width="460" height="818" loading="eager" decoding="async" fetchpriority="high">
+        <span class="corner-stamp">NEW<br>EPS<br>BIWEEKLY</span>
+      </div>
     </div>
   </div>
 </header>
+
+<div class="ticket-divider" aria-hidden="true"></div>
 
 <!-- ============ ABOUT ============ -->
 <section class="about section" id="about">
   <div class="wrap">
     <div class="about-grid">
       <div>
-        <span class="locale-pin">● FILMED IN QUEENSLAND, AUSTRALIA</span>
-        <div class="section-head" style="margin-bottom:28px;">
-          <div class="kicker">Our Story</div>
-          <h2><span class="mal">എന്തുകൊണ്ട്‌ <span class="hl-brand">ഓസ്‌ട്രേലിയൻ ജീവിതം</span> എന്ന ഈ ചാനെൽ ഞാൻ തുടങ്ങി.</span></h2>
+        <span class="stamp coral">Filmed in Queensland, Australia</span>
+        <div class="section-head" style="margin-top:20px; margin-bottom:28px;">
+          <div class="kicker"><span style="font-family:var(--mono); font-size:0.78rem; color:var(--fg-muted); text-transform:uppercase; letter-spacing:0.08em;">Our Story</span></div>
+          <h2><span class="mal">എന്തുകൊണ്ട്‌ <span style="color:var(--coral);">ഓസ്‌ട്രേലിയൻ ജീവിതം</span> എന്ന ഈ ചാനെൽ ഞാൻ തുടങ്ങി.</span></h2>
         </div>
         <p class="about-lede"><span class="mal">ആകസ്മികമായി തുടങ്ങി, പക്ഷെ...</span></p>
         <div class="about-body">
           <p><span class="mal">ഓസ്‌ട്രേലിയൻ ജീവിതം എന്ന സോഷ്യൽ മീഡിയ ചാനൽ തുടങ്ങിയത് ആകസ്മികമായിട്ടാണെങ്കിലും, പിന്നീട് അത് തുടരാൻ എന്നെ പ്രേരിപ്പിച്ച കാരണം ഇതാണ്: ഒരിക്കലും ഓസ്‌ട്രേലിയയിൽ വരാൻ സാധിക്കാത്ത അനവധി മലയാളികൾക്ക് ഇവിടുത്തെ വിശേഷങ്ങൾ നേരിട്ട് കാണുവാനുള്ള ഒരു അവസരമൊരുക്കുക. അതോടൊപ്പം, ഓസ്‌ട്രേലിയയിലെ യഥാർത്ഥ ജോലിസാധ്യതകളെക്കുറിച്ചും മറ്റ് പ്രധാന കാര്യങ്ങളെക്കുറിച്ചും തികച്ചും വിശ്വസനീയമായ (genuine) വിവരങ്ങൾ പങ്കുവെക്കുക.</span></p>
         </div>
-        <p style="margin-top:6px;">
-          <a href="about-australian-jeevitham.html" style="font-weight:700; color:var(--ocean); text-decoration:underline;">Read our full story →</a>
-          &nbsp;·&nbsp;
-          <a href="creator-australian-jeevitham.html" style="font-weight:700; color:var(--ocean); text-decoration:underline;">Meet Binu, the creator →</a>
+        <p class="link-row">
+          <a href="about-australian-jeevitham.html">Read our full story →</a>
+          <a href="creator-australian-jeevitham.html">Meet Binu, the creator →</a>
         </p>
       </div>
       <div class="about-photo">
@@ -107,11 +117,11 @@
 </section>
 
 <!-- ============ VIDEOS ============ -->
-<section class="videos section" id="videos">
+<section class="videos section" id="videos" style="background:var(--bg-alt); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Featured Content</div>
-      <h2>Catch up on the latest stories, vlogs, and adventures</h2>
+      <span class="stamp grape">Featured Content</span>
+      <h2 style="margin-top:16px;">Catch up on the latest stories, vlogs, and adventures</h2>
     </div>
 
     <div class="video-grid">
@@ -157,8 +167,8 @@
 
     </div>
 
-    <p style="margin-top:26px;">
-      <a href="australian-malayalam-videos.html" style="font-weight:700; color:var(--ocean); text-decoration:underline;">Watch all videos →</a>
+    <p class="link-row" style="margin-top:36px;">
+      <a href="australian-malayalam-videos.html">Watch all videos →</a>
     </p>
   </div>
 </section>
@@ -167,8 +177,8 @@
 <section class="resources section" id="resources">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Resources</div>
-      <h2>Jobs, migration &amp; travel — each with its own guide</h2>
+      <span class="stamp sun">Resources</span>
+      <h2 style="margin-top:16px;">Jobs, migration &amp; travel — each with its own guide</h2>
       <p><span class="mal">ഓസ്‌ട്രേലിയയിലെ ജോലി സാധ്യതകളും എങ്ങനെ ഇങ്ങോട്ടു വരാം എന്നതിനെപ്പറ്റിയുള്ള വിവരങ്ങൾ</span></p>
     </div>
 
@@ -190,8 +200,8 @@
       </a>
     </div>
 
-    <p style="margin-top:26px;">
-      <a href="australian-malayalam-resources.html" style="font-weight:700; color:var(--ocean); text-decoration:underline;">See all resources →</a>
+    <p class="link-row" style="margin-top:36px;">
+      <a href="australian-malayalam-resources.html">See all resources →</a>
     </p>
   </div>
 </section>
@@ -200,8 +210,8 @@
 <footer id="connect">
   <div class="wrap">
     <div class="section-head">
-      <div class="kicker">Connect With Us</div>
-      <h2>Stay updated and join our growing global community</h2>
+      <span class="stamp">Connect With Us</span>
+      <h2 style="margin-top:16px;">Stay updated and join our growing global community</h2>
     </div>
 
     <div class="connect-grid">
@@ -250,7 +260,7 @@
     </div>
 
 <p class="records">
-  About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener">IMDb</a> & <a href="https://www.wikidata.org/wiki/Q140357652" target="_blank" rel="noopener">Wikidata</a>)
+  About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener">IMDb</a> &amp; <a href="https://www.wikidata.org/wiki/Q140357652" target="_blank" rel="noopener">Wikidata</a>)
 </p>
     <p class="copyright">© <span id="year"></span> Australian Jeevitham. All rights reserved.</p>
   </div>
@@ -346,9 +356,7 @@
   ]
 }
 </script>
-<script>
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+<script src="js/main.js"></script>
 
 </body>
 </html>
