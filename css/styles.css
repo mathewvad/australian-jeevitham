@@ -498,31 +498,70 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 .kit-stat-card{
   background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius);
   padding:30px; text-align:center; box-shadow:var(--shadow-offset-sm);
+  transition:transform .18s ease, box-shadow .18s ease;
 }
-.kit-stat-num{ font-family:var(--display); font-weight:700; font-size:2.2rem; color:var(--coral); }
+.kit-stat-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-hover); }
+.kit-stat-num{ font-family:var(--display); font-weight:700; font-size:2.2rem; color:var(--coral); font-variant-numeric:tabular-nums; }
 .kit-stat-label{ display:block; margin-top:6px; color:var(--fg-muted); font-size:0.88rem; }
 .media-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:20px; }
 .media-card{
   background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius);
   padding:26px; box-shadow:var(--shadow-offset-sm);
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
+.media-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-hover); border-color:color-mix(in srgb, var(--accent) 30%, var(--border)); }
 .media-head{ display:flex; align-items:center; gap:12px; margin-bottom:4px; }
 .media-glyph{
   width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center;
   font-family:var(--body); font-size:0.68rem; font-weight:700; color:#fff;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
 }
+.media-card:hover .media-glyph{ transform:scale(1.12) rotate(-6deg); }
 .media-glyph.gy{ background:#FF0000; } .media-glyph.gf{ background:#1877F2; }
 .media-glyph.gi{ background:#E1306C; } .media-glyph.gt{ background:#000; }
 .media-name{ font-weight:700; font-size:1.05rem; }
 .media-handle{ display:block; color:var(--fg-muted); font-size:0.85rem; margin-bottom:16px; }
 .media-stat{ display:flex; justify-content:space-between; padding:8px 0; border-top:1px solid var(--border); }
 .media-stat-label{ color:var(--fg-muted); font-size:0.88rem; }
-.media-stat-value{ font-weight:700; font-family:var(--mono); }
+.media-stat-value{ font-weight:700; font-family:var(--mono); font-variant-numeric:tabular-nums; }
 .media-note{ margin-top:14px; color:var(--fg-muted); font-size:0.85rem; }
 .kit-audience-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; }
-.kit-audience-card{ background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow-offset-sm); }
+.kit-audience-card{
+  background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow-offset-sm);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.kit-audience-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-hover); }
 .kit-audience-label{ font-family:var(--body); font-weight:700; font-size:0.76rem; color:var(--fg-muted); margin-bottom:8px; }
 .kit-audience-value{ font-weight:700; font-size:1.05rem; }
+
+/* ---------- SCROLL-REVEAL ANIMATION ---------- */
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);
+  transition-delay:var(--reveal-delay, 0s);
+}
+.reveal.in-view{ opacity:1; transform:translateY(0); }
+/* If JS hasn't attached the observer yet, don't leave content permanently hidden */
+.no-js .reveal{ opacity:1; transform:none; }
+
+/* Above-the-fold content: animate in on page load, no scroll-trigger needed */
+@keyframes load-in-up{
+  from{ opacity:0; transform:translateY(18px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+.load-in{
+  animation:load-in-up .7s cubic-bezier(.22,.61,.36,1) both;
+  animation-delay:var(--load-delay, 0s);
+}
+
+/* Gentle emphasis pulse for the top hero stat, drawing the eye once on load */
+@keyframes stat-pop{
+  0%{ transform:scale(0.85); opacity:0; }
+  60%{ transform:scale(1.04); opacity:1; }
+  100%{ transform:scale(1); opacity:1; }
+}
+.kit-stat-num.pop-in{ animation:stat-pop .55s cubic-bezier(.22,.61,.36,1) both; }
 
 /* ---------- CONTACT: reveal-email button ---------- */
 .show-email-btn{
