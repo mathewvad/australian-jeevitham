@@ -61,12 +61,12 @@ ul{ list-style:none; }
 }
 :focus-visible{ outline:3px solid var(--grape); outline-offset:3px; }
 
-/* Malayalam text: prevent clipping of matras/loops */
+/* Malayalam text: proper font stack, line-height, and ligature support */
 .mal, [lang="ml"]{
-  font-family:var(--mal) !important;
-  font-weight:600 !important;
-  line-height:1.85 !important;
-  display:inline-block;
+  font-family: var(--mal) !important;
+  font-weight: 500 !important;
+  line-height: 1.8 !important;
+  display: inline; /* Changed from inline-block to prevent rendering glitches */
 }
 
 /* =========================================================
