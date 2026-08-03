@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
+  <script>document.documentElement.classList.remove('no-js');</script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
   <script>
@@ -116,13 +117,13 @@
 
 <header class="subhero">
   <div class="wrap">
-    <div>
+    <div class="load-in" style="--load-delay:0s">
       <a class="breadcrumb" href="index.html">← Back to Home</a>
       <span class="eyebrow">📍 Queensland, Australia</span>
       <h1 class="subhero-title">Media Kit</h1>
       <p class="subhero-tag">Documenting Malayali life in Australia &mdash; travel, migration, jobs and everyday culture for a global Malayali audience.</p>
     </div>
-    <div class="info-card">
+    <div class="info-card load-in" style="--load-delay:.15s">
       <span class="stat">🤝</span>
       <span class="stat-label">Work With Me</span>
       <p>Rates and past collaboration examples available on request — see contact details below.</p>
@@ -132,21 +133,21 @@
 
 <section class="section">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="stamp">At a Glance</span>
       <h2 style="margin-top:16px;">Combined reach across channels</h2>
     </div>
     <div class="kit-stats-grid">
-      <div class="kit-stat-card">
-        <div class="kit-stat-num" id="total-followers">544,000</div>
+      <div class="kit-stat-card reveal" style="--reveal-delay:0s">
+        <div class="kit-stat-num" id="total-followers" data-count-to="544000">0</div>
         <span class="kit-stat-label">Combined followers</span>
       </div>
-      <div class="kit-stat-card">
-        <div class="kit-stat-num" id="total-monthly-views">6,000,000</div>
+      <div class="kit-stat-card reveal" style="--reveal-delay:.12s">
+        <div class="kit-stat-num" id="total-monthly-views" data-count-to="6000000">0</div>
         <span class="kit-stat-label">Total views, last month</span>
       </div>
-      <div class="kit-stat-card">
-        <div class="kit-stat-num">4</div>
+      <div class="kit-stat-card reveal" style="--reveal-delay:.24s">
+        <div class="kit-stat-num" data-count-to="4">0</div>
         <span class="kit-stat-label">Active platforms</span>
       </div>
     </div>
@@ -155,13 +156,13 @@
 
 <section class="section" style="background:var(--bg-alt); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="stamp coral">Channels</span>
       <h2 style="margin-top:16px;">Where the audience lives</h2>
     </div>
     <div class="media-grid">
 
-      <div class="media-card" data-platform="youtube">
+      <div class="media-card reveal" style="--reveal-delay:0s" data-platform="youtube">
         <div class="media-head">
           <span class="media-glyph gy">YT</span>
           <span class="media-name">YouTube</span>
@@ -169,20 +170,20 @@
         <span class="media-handle">@AustralianJeevitham</span>
         <div class="media-stat">
           <span class="media-stat-label">Subscribers</span>
-          <span class="media-stat-value kit-number">131,000</span>
+          <span class="media-stat-value kit-number" data-count-to="131000">0</span>
         </div>
         <div class="media-stat">
           <span class="media-stat-label">Views, last month</span>
-          <span class="media-stat-value kit-number kit-monthly">1,600,000</span>
+          <span class="media-stat-value kit-number kit-monthly" data-count-to="1600000">0</span>
         </div>
         <div class="media-stat">
           <span class="media-stat-label">Top video views</span>
-          <span class="media-stat-value kit-number">4,600,000</span>
+          <span class="media-stat-value kit-number" data-count-to="4600000">0</span>
         </div>
         <p class="media-note">Best-performing content: migration guides and Kerala-style farming vlogs.</p>
       </div>
 
-      <div class="media-card" data-platform="facebook">
+      <div class="media-card reveal" style="--reveal-delay:.08s" data-platform="facebook">
         <div class="media-head">
           <span class="media-glyph gf">FB</span>
           <span class="media-name">Facebook</span>
@@ -190,20 +191,20 @@
         <span class="media-handle">Australian Jeevitham</span>
         <div class="media-stat">
           <span class="media-stat-label">Page followers</span>
-          <span class="media-stat-value kit-number">258,000</span>
+          <span class="media-stat-value kit-number" data-count-to="258000">0</span>
         </div>
         <div class="media-stat">
           <span class="media-stat-label">Views, last month</span>
-          <span class="media-stat-value kit-number kit-monthly">2,800,000</span>
+          <span class="media-stat-value kit-number kit-monthly" data-count-to="2800000">0</span>
         </div>
         <div class="media-stat">
           <span class="media-stat-label">Top video views</span>
-          <span class="media-stat-value kit-number">5,700,000</span>
+          <span class="media-stat-value kit-number" data-count-to="5700000">0</span>
         </div>
         <p class="media-note">Best-performing content: news updates and community discussions.</p>
       </div>
 
-      <div class="media-card" data-platform="instagram">
+      <div class="media-card reveal" style="--reveal-delay:.16s" data-platform="instagram">
         <div class="media-head">
           <span class="media-glyph gi">IG</span>
           <span class="media-name">Instagram</span>
@@ -211,20 +212,20 @@
         <span class="media-handle">@australianjeevitham</span>
         <div class="media-stat">
           <span class="media-stat-label">Followers</span>
-          <span class="media-stat-value kit-number">121,000</span>
+          <span class="media-stat-value kit-number" data-count-to="121000">0</span>
         </div>
         <div class="media-stat">
           <span class="media-stat-label">Views, last month</span>
-          <span class="media-stat-value kit-number kit-monthly">1,200,000</span>
+          <span class="media-stat-value kit-number kit-monthly" data-count-to="1200000">0</span>
         </div>
         <div class="media-stat">
           <span class="media-stat-label">Top video views</span>
-          <span class="media-stat-value kit-number">6,000,000</span>
+          <span class="media-stat-value kit-number" data-count-to="6000000">0</span>
         </div>
         <p class="media-note">Best-performing content: reels from travel spots and garden updates.</p>
       </div>
 
-      <div class="media-card" data-platform="tiktok">
+      <div class="media-card reveal" style="--reveal-delay:.24s" data-platform="tiktok">
         <div class="media-head">
           <span class="media-glyph gt">TT</span>
           <span class="media-name">TikTok</span>
@@ -232,15 +233,15 @@
         <span class="media-handle">@australianjeevitham</span>
         <div class="media-stat">
           <span class="media-stat-label">Followers</span>
-          <span class="media-stat-value kit-number">34,000</span>
+          <span class="media-stat-value kit-number" data-count-to="34000">0</span>
         </div>
         <div class="media-stat">
           <span class="media-stat-label">Views, last month</span>
-          <span class="media-stat-value kit-number kit-monthly">800,000</span>
+          <span class="media-stat-value kit-number kit-monthly" data-count-to="800000">0</span>
         </div>
         <div class="media-stat">
           <span class="media-stat-label">Top video views</span>
-          <span class="media-stat-value kit-number">580,000</span>
+          <span class="media-stat-value kit-number" data-count-to="580000">0</span>
         </div>
         <p class="media-note">Best-performing content: short clips on daily life and job tips.</p>
       </div>
@@ -251,20 +252,20 @@
 
 <section class="section">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="stamp grape">Audience</span>
       <h2 style="margin-top:16px;">Who's watching</h2>
     </div>
     <div class="kit-audience-grid">
-      <div class="kit-audience-card">
+      <div class="kit-audience-card reveal" style="--reveal-delay:0s">
         <div class="kit-audience-label">Age range</div>
         <div class="kit-audience-value">35&ndash;44, largest group</div>
       </div>
-      <div class="kit-audience-card">
+      <div class="kit-audience-card reveal" style="--reveal-delay:.1s">
         <div class="kit-audience-label">Gender split</div>
         <div class="kit-audience-value">69% men, 31% women</div>
       </div>
-      <div class="kit-audience-card">
+      <div class="kit-audience-card reveal" style="--reveal-delay:.2s">
         <div class="kit-audience-label">Top locations</div>
         <div class="kit-audience-value">Kerala, Australia, Gulf</div>
       </div>
@@ -274,7 +275,7 @@
 
 <footer id="connect">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="stamp">Work with me</span>
       <h2 style="margin-top:16px;">Let's collaborate</h2>
     </div>
