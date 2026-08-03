@@ -644,3 +644,10 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   .connect-grid{ grid-template-columns:1fr; }
   .wrap{ padding:0 18px; }
 }
+
+/* Social icon image overrides */
+.icon-circle img { width: 26px; height: 26px; object-fit: contain; display: block; flex-shrink: 0; }
+.icon-circle.icon-threads { background: #000; }
+.link-pill .glyph img { width: 24px; height: 24px; object-fit: contain; display: block; flex-shrink: 0; }
+.link-pill .glyph.icon-threads-pill { background: #000; border-radius: 50%; padding: 4px; }
+
