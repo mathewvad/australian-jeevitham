@@ -61,25 +61,27 @@ ul{ list-style:none; }
 }
 :focus-visible{ outline:3px solid var(--grape); outline-offset:3px; }
 
-/* Malayalam text: crisp rendering, proper ligatures, and matra shaping */
+/* ---- Malayalam Font Variable ---- */
+--mal: "Noto Sans Malayalam", "Baloo Chettan 2", sans-serif;
+
+/* ---- Malayalam Global Rule ---- */
 .mal, [lang="ml"] {
-  font-family: 'Baloo Chettan 2', 'Noto Sans Malayalam', sans-serif !important;
+  font-family: var(--mal) !important;
+  display: inline; /* DO NOT use inline-block - breaks ligatures */
   line-height: 1.8 !important;
-  display: inline-block;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
   font-feature-settings: "kern" 1, "liga" 1;
 }
 
-/* Ensure paragraph Malayalam text stays clear and readable */
-.vcard p .mal, p .mal {
-  font-weight: 500;
+/* Fix paragraph text size and weight */
+p .mal, .vcard p .mal {
+  font-weight: 400 !important;
   font-size: 0.95rem;
 }
 
-/* Ensure heading Malayalam text stays bold and well-spaced */
-.vcard h3 .mal, h1 .mal, h2 .mal, h3 .mal {
-  font-weight: 700;
+/* Fix heading text weight */
+h1 .mal, h2 .mal, h3 .mal, .vcard h3 .mal {
+  font-weight: 600 !important;
 }
 
 /* =========================================================
