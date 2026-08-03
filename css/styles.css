@@ -61,12 +61,25 @@ ul{ list-style:none; }
 }
 :focus-visible{ outline:3px solid var(--grape); outline-offset:3px; }
 
-/* Malayalam text: proper font stack, line-height, and ligature support */
-.mal, [lang="ml"]{
-  font-family: var(--mal) !important;
-  font-weight: 500 !important;
+/* Malayalam text: crisp rendering, proper ligatures, and matra shaping */
+.mal, [lang="ml"] {
+  font-family: 'Baloo Chettan 2', 'Noto Sans Malayalam', sans-serif !important;
   line-height: 1.8 !important;
-  display: inline; /* Changed from inline-block to prevent rendering glitches */
+  display: inline-block;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1;
+}
+
+/* Ensure paragraph Malayalam text stays clear and readable */
+.vcard p .mal, p .mal {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Ensure heading Malayalam text stays bold and well-spaced */
+.vcard h3 .mal, h1 .mal, h2 .mal, h3 .mal {
+  font-weight: 700;
 }
 
 /* =========================================================
