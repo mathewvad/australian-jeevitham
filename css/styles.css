@@ -168,7 +168,6 @@ nav .wrap{ display:flex; align-items:center; justify-content:space-between; heig
 }
 .nav-cta:hover{ transform:translateY(-2px); box-shadow:var(--shadow-offset-sm); background:var(--coral-dim); }
 
-.nav-toggle-input{ display:none; }
 .nav-toggle-btn{
   display:none; font-size:1.5rem; cursor:pointer; line-height:1;
   border:1px solid var(--border); border-radius:var(--radius-sm);
@@ -185,7 +184,7 @@ nav .wrap{ display:flex; align-items:center; justify-content:space-between; heig
     padding:18px 24px 26px; gap:16px;
     transform:translateY(-120%); transition:transform .25s ease;
   }
-  .nav-toggle-input:checked ~ .nav-links{ transform:translateY(0); }
+  .nav-links.is-open{ transform:translateY(0); }
   .nav-cta{ width:100%; text-align:center; }
 }
 
