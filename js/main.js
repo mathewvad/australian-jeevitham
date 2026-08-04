@@ -3,15 +3,15 @@
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Mobile nav: keep aria-expanded in sync with the checkbox hack
-  var toggle = document.getElementById('nav-toggle');
+  // Mobile nav: accessible button toggle (real <button>, not the old checkbox hack —
+  // aria-expanded isn't valid on a <label>, and labels aren't keyboard-focusable anyway)
   var toggleBtn = document.querySelector('.nav-toggle-btn');
-  if (toggle && toggleBtn) {
-    var sync = function () {
-      toggleBtn.setAttribute('aria-expanded', toggle.checked ? 'true' : 'false');
-    };
-    toggle.addEventListener('change', sync);
-    sync();
+  var navLinks = document.getElementById('nav-links');
+  if (toggleBtn && navLinks) {
+    toggleBtn.addEventListener('click', function () {
+      var isOpen = navLinks.classList.toggle('is-open');
+      toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
   }
 
   var prefersReducedMotion = window.matchMedia &&
