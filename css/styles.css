@@ -651,6 +651,9 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 .link-pill .glyph img { width: 24px; height: 24px; object-fit: contain; display: block; flex-shrink: 0; }
 .link-pill .glyph.icon-threads-pill { background: #000; border-radius: 50%; padding: 4px; }
 
+.connect-link .glyph img{ width:24px; height:24px; object-fit:contain; display:block; }
+.connect-link .glyph.icon-threads{ background:#000; }
+
 .share-btn img{ width:20px; height:20px; object-fit:contain; display:block; }
 .share-btn.wa, .share-btn.tw{ background:#fff; }
   
