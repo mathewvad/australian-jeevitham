@@ -27,6 +27,7 @@
 
   --display: "Poppins", "Inter", sans-serif;
   --body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mal: "Baloo Chettan 2", "Inter", sans-serif;
   --mono: "Space Mono", monospace;
 
   --radius: 24px;
@@ -237,7 +238,7 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
   max-width:420px;
   margin:0 auto;
 }
-.postcard img{ border-radius:calc(var(--radius) - 6px); width:100%; height:auto; aspect-ratio:460/818; object-fit:cover; }
+.postcard img{ border-radius:calc(var(--radius) - 6px); width:100%; height:auto; aspect-ratio:920/1347; object-fit:cover; }
 .postcard .corner-stamp{
   position:absolute; top:-14px; right:-14px;
   width:64px; height:64px; border-radius:50%;
