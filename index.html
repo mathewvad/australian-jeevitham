@@ -126,39 +126,30 @@
     <div class="video-grid">
 
       <article class="vcard">
-        <div class="video-frame">
+        <div class="video-frame youtube-facade" data-video-id="EnzjzCUiq1s" role="button" tabindex="0" aria-label="Play video: ഓസ്‌ട്രേലിയയിൽ മുരിങ്ങ നിരോധിച്ചതിൻ്റെ കാരണം അറിയണോ?">
           <span class="video-badge">New</span>
-          <iframe src="https://www.youtube.com/embed/EnzjzCUiq1s?si=l_8V9j_QesBRs_kj"
-            title="Australian Jeevitham video"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+          <img src="https://i.ytimg.com/vi/EnzjzCUiq1s/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+          <span class="play-btn" aria-hidden="true">▶</span>
         </div>
         <h3><span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിൽ മുരിങ്ങ നിരോധിച്ചതിൻ്റെ കാരണം അറിയണോ?</span></h3>
         <p><span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിൽ ഇനി മുതൽ മുരിങ്ങ പ്രോഡക്ട്‌സുകൾ ഫുഡ് ഐറ്റം ആയോ ഫുഡ് ingredient ആയോ വിൽക്കാൻ സാധിക്കുകയില്ല.</span></p>
       </article>
 
       <article class="vcard">
-        <div class="video-frame">
+        <div class="video-frame youtube-facade" data-video-id="62dW6eBRutw" role="button" tabindex="0" aria-label="Play video: ഈ കൃഷി കാണാതെ പോകരുത്">
           <span class="video-badge">Popular</span>
-          <iframe src="https://www.youtube.com/embed/62dW6eBRutw?si=ZIioX8b8ec2haNJ4"
-            title="Australian Jeevitham video"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+          <img src="https://i.ytimg.com/vi/62dW6eBRutw/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+          <span class="play-btn" aria-hidden="true">▶</span>
         </div>
         <h3><span class="mal" lang="ml">ഈ കൃഷി കാണാതെ പോകരുത്</span></h3>
         <p><span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിലെ കേരള സ്റ്റൈൽ കൃഷിത്തോട്ടം</span></p>
       </article>
 
       <article class="vcard">
-        <div class="video-frame">
+        <div class="video-frame youtube-facade" data-video-id="3280tnrmrxM" role="button" tabindex="0" aria-label="Play video: കള്ളുചെത്തൽ ഇവിടെയും തുടങ്ങി">
           <span class="video-badge">Interesting</span>
-          <iframe src="https://www.youtube.com/embed/3280tnrmrxM?si=sswPQX5XO2kAoGUw"
-            title="Australian Jeevitham video"
-            loading="lazy"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+          <img src="https://i.ytimg.com/vi/3280tnrmrxM/hqdefault.jpg" alt="" loading="lazy" decoding="async">
+          <span class="play-btn" aria-hidden="true">▶</span>
         </div>
         <h3><span class="mal" lang="ml">കള്ളുചെത്തൽ ഇവിടെയും തുടങ്ങി</span></h3>
         <p><span class="mal" lang="ml">വെറുതെ ഒരു രസത്തിനു ട്രൈ ചെയ്തതാണ്.</span></p>
@@ -354,6 +345,38 @@
     }
   ]
 }
+</script>
+<script>
+  // Click-to-load YouTube facades: only inject the real iframe when the user
+  // actually wants to watch, instead of loading 3 YouTube players on page load.
+  (function(){
+    function playVideo(frame){
+      var id = frame.getAttribute('data-video-id');
+      if(!id) return;
+      var iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      iframe.title = 'Australian Jeevitham video';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      frame.innerHTML = '';
+      frame.appendChild(iframe);
+      frame.removeAttribute('role');
+      frame.removeAttribute('tabindex');
+      frame.removeAttribute('aria-label');
+    }
+    document.querySelectorAll('.video-frame[data-video-id]').forEach(function(frame){
+      frame.addEventListener('click', function(){ playVideo(frame); });
+      frame.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          playVideo(frame);
+        }
+      });
+    });
+  })();
 </script>
 <script src="js/main.js"></script>
 
