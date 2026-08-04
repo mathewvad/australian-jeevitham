@@ -254,7 +254,7 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 .about-body p{ color:var(--fg-muted); margin-bottom:14px; }
 .about-photo img{
   border-radius:var(--radius); border:none;
-  box-shadow:var(--shadow-offset); aspect-ratio:500/625; object-fit:cover;
+  box-shadow:var(--shadow-offset); aspect-ratio:630/904; object-fit:cover;
 }
 .link-row{ margin-top:22px; display:flex; flex-wrap:wrap; gap:8px 18px; }
 .link-row a{ font-weight:700; color:var(--ocean); text-decoration:underline; text-underline-offset:3px; }
