@@ -44,12 +44,32 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "Australian Jeevitham Resources",
-    "url": "https://www.australianjeevitham.com/australian-malayalam-resources.html",
-    "description": "Jobs, migration, nursing registration, and travel resources for Malayalis in Australia — government job boards, AHPRA nursing registration, visa guidance, and where to find MARA-registered migration agents.",
-    "inLanguage": ["en", "ml"],
-    "isPartOf": { "@id": "https://www.australianjeevitham.com/#website" }
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "@id": "https://www.australianjeevitham.com/australian-malayalam-resources.html#webpage",
+        "name": "Australian Jeevitham Resources",
+        "url": "https://www.australianjeevitham.com/australian-malayalam-resources.html",
+        "description": "Jobs, migration, nursing registration, and travel resources for Malayalis in Australia — government job boards, AHPRA nursing registration, visa guidance, and where to find MARA-registered migration agents.",
+        "inLanguage": ["en", "ml"],
+        "isPartOf": { "@id": "https://www.australianjeevitham.com/#website" },
+        "publisher": { "@id": "https://www.australianjeevitham.com/#binu" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/#binu",
+        "name": "Binu Vadakkedath",
+        "alternateName": "Australian Jeevitham",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
+        "sameAs": [
+          "https://www.youtube.com/@AustralianJeevitham", "https://www.facebook.com/Australian.Jeevitham",
+          "https://www.instagram.com/australianjeevitham/", "https://www.tiktok.com/@australianjeevitham",
+          "https://www.threads.com/@australianjeevitham", "https://au.pinterest.com/australianjeevitham/",
+          "https://vimeo.com/australianjeevitham", "https://www.reddit.com/user/AustralianJeevitham/",
+          "https://www.imdb.com/title/tt43669114"
+        ]
+      }
+    ]
   }
   </script>
 </head>
@@ -83,14 +103,15 @@
       </p>
     </div>
     <div class="info-card">
-      <span class="stat">5</span>
+      <span class="stat">6</span>
       <span class="stat-label">Guides Covered</span>
-      <p>Jobs, migration, choosing an agent, nursing registration, and travel — each with its own deep-dive page.</p>
+      <p>Jobs, migration, choosing an agent, nursing registration, driving licence conversion, and travel — each with its own deep-dive page.</p>
       <ul class="badge-list">
         <li>Jobs</li>
         <li>Visas</li>
         <li>Agents</li>
         <li>Nursing</li>
+        <li>Driving</li>
         <li>Travel</li>
       </ul>
     </div>
@@ -130,6 +151,11 @@
         <div class="glyph">⚖️</div>
         <h3>Choose a Migration Agent</h3>
         <p>RMA vs immigration lawyer, OMARA/MARN verification, disciplinary checks, trust accounts, Form 956, and how to spot visa scams.</p>
+      </a>
+      <a class="crosslink-card" href="kerala-driving-licence-conversion-australia.html">
+        <div class="glyph">🚗</div>
+        <h3>Driving Licence Conversion</h3>
+        <p>State-by-state rules for converting a Kerala/Indian licence — deadlines, NAATI translation, tests, and common fail points.</p>
       </a>
     </div>
   </div>
