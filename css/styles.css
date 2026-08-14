@@ -302,6 +302,7 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 .crosslink-card.tint-grape{ --card-accent:var(--grape); --card-accent-soft:rgba(108,76,224,0.14); }
 .crosslink-card.tint-sunbeam{ --card-accent:var(--sunbeam); --card-accent-soft:rgba(245,185,66,0.18); }
 .crosslink-card.tint-rust{ --card-accent:var(--coral-dim); --card-accent-soft:rgba(232,71,31,0.14); }
+.crosslink-card.tint-moss{ --card-accent:#4C8C5C; --card-accent-soft:rgba(76,140,92,0.14); }
 /* ---------- GENERIC CONTENT PAGES ---------- */
 .page-hero{
   padding:56px 0 40px; border-bottom:1px solid var(--border);
