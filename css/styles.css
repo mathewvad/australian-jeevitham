@@ -284,6 +284,7 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 .crosslink-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
 .crosslink-card{
   display:block; background:var(--card-bg); border:1px solid var(--border);
+  border-top:4px solid var(--card-accent, var(--accent));
   border-radius:var(--radius); padding:28px; text-decoration:none; color:var(--fg);
   box-shadow:var(--shadow-offset-sm);
   transition:transform .18s ease, box-shadow .18s ease;
@@ -291,10 +292,14 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 .crosslink-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-hover); }
 .crosslink-card .glyph{
   font-size:1.5rem; margin-bottom:16px; width:52px; height:52px; border-radius:16px;
-  background:var(--bg-alt); display:flex; align-items:center; justify-content:center;
+  background:var(--card-accent-soft, var(--bg-alt)); display:flex; align-items:center; justify-content:center;
 }
 .crosslink-card h3{ font-size:1.1rem; margin-bottom:8px; }
 .crosslink-card p{ color:var(--fg-muted); font-size:0.94rem; }
+
+.crosslink-card.tint-coral{ --card-accent:var(--coral); --card-accent-soft:rgba(255,91,61,0.14); }
+.crosslink-card.tint-ocean{ --card-accent:var(--ocean); --card-accent-soft:rgba(18,130,124,0.14); }
+.crosslink-card.tint-grape{ --card-accent:var(--grape); --card-accent-soft:rgba(108,76,224,0.14); }
 
 /* ---------- GENERIC CONTENT PAGES ---------- */
 .page-hero{
