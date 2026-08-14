@@ -300,7 +300,8 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 .crosslink-card.tint-coral{ --card-accent:var(--coral); --card-accent-soft:rgba(255,91,61,0.14); }
 .crosslink-card.tint-ocean{ --card-accent:var(--ocean); --card-accent-soft:rgba(18,130,124,0.14); }
 .crosslink-card.tint-grape{ --card-accent:var(--grape); --card-accent-soft:rgba(108,76,224,0.14); }
-
+.crosslink-card.tint-sunbeam{ --card-accent:var(--sunbeam); --card-accent-soft:rgba(245,185,66,0.18); }
+.crosslink-card.tint-rust{ --card-accent:var(--coral-dim); --card-accent-soft:rgba(232,71,31,0.14); }
 /* ---------- GENERIC CONTENT PAGES ---------- */
 .page-hero{
   padding:56px 0 40px; border-bottom:1px solid var(--border);
