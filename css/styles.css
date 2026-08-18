@@ -717,3 +717,88 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 
 .share-btn img{ width:20px; height:20px; object-fit:contain; display:block; }
 .share-btn.wa, .share-btn.tw{ background:#fff; }
+
+/* ============================================================
+   RESOURCES PAGE — icon-free layout, animated hero SVG,
+   and category description copy (added August 2026)
+   ============================================================ */
+
+/* --- Hero illustration --- */
+.res-hero{
+  position:relative;
+  display:flex; justify-content:center;
+  margin:0 0 48px;
+  padding:20px 0;
+}
+.res-hero::before{
+  content:"";
+  position:absolute; top:50%; left:50%;
+  width:420px; height:420px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, color-mix(in srgb, var(--ocean) 16%, transparent), transparent 70%);
+  z-index:0;
+  pointer-events:none;
+}
+.res-hero img{
+  width:100%; max-width:360px; height:auto;
+  position:relative; z-index:1;
+  animation:res-hero-float 5s ease-in-out infinite;
+}
+@keyframes res-hero-float{
+  0%,100%{ transform:translateY(0px); }
+  50%{ transform:translateY(-14px); }
+}
+@media (prefers-reduced-motion: reduce){
+  .res-hero img{ animation:none; }
+}
+
+/* --- Category blocks (no icons; descriptive copy for SEO) --- */
+.res-category{ margin-bottom:44px; }
+.res-category:last-child{ margin-bottom:0; }
+.res-category-title{
+  font-family:var(--display); font-size:1.3rem; font-weight:800;
+  margin-bottom:8px;
+}
+.res-category-desc{
+  color:var(--fg-muted); font-size:0.95rem; line-height:1.55;
+  max-width:640px; margin-bottom:20px;
+}
+.res-category-desc .mal{ display:block; margin-top:4px; }
+
+.res-list{ display:flex; flex-direction:column; gap:10px; }
+.res-link{
+  --row-accent: var(--ocean);
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  background:var(--card-bg); border:1px solid var(--border);
+  border-left:4px solid var(--row-accent);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  text-decoration:none; color:var(--fg);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.res-link:hover{ transform:translateX(4px); box-shadow:var(--shadow-offset-sm); }
+.res-link .res-link-text{ min-width:0; }
+.res-link h4{ font-family:var(--display); font-size:1rem; font-weight:700; margin-bottom:3px; }
+.res-link p{ font-size:0.86rem; color:var(--fg-muted); line-height:1.4; }
+.res-link .arrow{ color:var(--fg-muted); flex-shrink:0; font-weight:700; opacity:0.55; font-size:1.1rem; }
+
+.res-link.tint-coral{ --row-accent:var(--coral); }
+.res-link.tint-ocean{ --row-accent:var(--ocean); }
+.res-link.tint-grape{ --row-accent:var(--grape); }
+.res-link.tint-sunbeam{ --row-accent:var(--sunbeam); }
+.res-link.tint-rust{ --row-accent:var(--coral-dim); }
+.res-link.tint-moss{ --row-accent:#4C8C5C; }
+
+.res-link.coming-soon{
+  cursor:default; opacity:0.5; border-left-color:var(--border);
+}
+.res-soon-badge{
+  font-family:var(--body); font-weight:700; font-size:0.66rem;
+  color:var(--fg-muted); background:var(--bg-alt); border-radius:999px;
+  padding:3px 9px; flex-shrink:0; white-space:nowrap;
+}
+
+@media (max-width: 700px){
+  .res-link{ flex-direction:row; align-items:flex-start; }
+  .res-hero img{ max-width:280px; }
+}
