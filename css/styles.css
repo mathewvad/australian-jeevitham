@@ -607,13 +607,13 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   width:420px; height:420px;
   top:-120px; left:-100px;
   background:color-mix(in srgb, var(--sunbeam) 38%, transparent);
-  animation:biolink-float-a 22s ease-in-out infinite;
+  animation:biolink-float-a 10s ease-in-out infinite;
 }
 .biolink::after{
   width:480px; height:480px;
   bottom:-160px; right:-120px;
   background:color-mix(in srgb, var(--ocean) 30%, transparent);
-  animation:biolink-float-b 26s ease-in-out infinite;
+  animation:biolink-float-b 12s ease-in-out infinite;
 }
 .biolink-bg-blob{
   position:absolute;
@@ -626,7 +626,7 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   top:38%; left:50%;
   margin-left:-180px;
   background:color-mix(in srgb, var(--grape) 26%, transparent);
-  animation:biolink-float-c 30s ease-in-out infinite;
+  animation:biolink-float-c 14s ease-in-out infinite;
 }
 @keyframes biolink-float-a{
   0%,100%{ transform:translate(0,0) scale(1); }
