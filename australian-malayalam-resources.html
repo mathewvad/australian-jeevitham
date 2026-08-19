@@ -37,10 +37,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&family=Baloo+Chettan+2:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="css/styles.css">
   <link rel="stylesheet" href="css/styles.css">
-  <script>
-    (function(){try{var t=localStorage.getItem('aj-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
-  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -210,14 +208,21 @@
     <div class="res-category">
       <h3 class="res-category-title">Healthcare Registration</h3>
       <p class="res-category-desc">
-        A complete AHPRA nursing registration roadmap for Kerala and India-trained nurses — covering Fast-Track Pathway 2, Stream B (OBA), NCLEX-RN, the OSCE practical exam, English test score requirements, and ANMAC skills assessment for migration.
-        <span class="mal" lang="ml">കേരളത്തിൽ നിന്നുള്ള നഴ്‌സുമാർക്കായുള്ള AHPRA രജിസ്‌ട്രേഷൻ വിവരങ്ങൾ.</span>
+        Complete AHPRA registration roadmaps for Kerala and India-trained healthcare professionals — nursing (Fast-Track Pathway 2, Stream B, NCLEX-RN, OSCE) and pharmacy (APC Knowledge/Competency Stream, OPRA exam, 1,575-hour internship), plus English test score requirements and visa options for both.
+        <span class="mal" lang="ml">കേരളത്തിൽ നിന്നുള്ള നഴ്‌സുമാർക്കും ഫാർമസിസ്റ്റുകൾക്കുമായുള്ള AHPRA രജിസ്‌ട്രേഷൻ വിവരങ്ങൾ.</span>
       </p>
       <div class="res-list">
         <a class="res-link tint-sunbeam" href="ahpra-nursing-registration-guide-kerala.html">
           <div class="res-link-text">
             <h4>AHPRA Nursing Registration</h4>
             <p>Fast-Track Pathway 2, Stream B (OBA), NCLEX-RN &amp; OSCE, English test scores, and visa options.</p>
+          </div>
+          <span class="arrow">→</span>
+        </a>
+        <a class="res-link tint-ocean" href="ahpra-pharmacist-registration-guide-kerala.html">
+          <div class="res-link-text">
+            <h4>AHPRA &amp; APC Pharmacist Registration</h4>
+            <p>Knowledge Stream (OPRA exam), Competency Stream (CAOP), 1,575-hour internship, English test scores, and visa options.</p>
           </div>
           <span class="arrow">→</span>
         </a>
@@ -423,7 +428,7 @@
   </div>
 </footer>
 
-<script src="js/main.js"></script>
+<script src="js/main.js" defer></script>
 
 </body>
 </html>
