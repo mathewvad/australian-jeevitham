@@ -829,3 +829,18 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 @media (prefers-reduced-motion: reduce){
   .stat-squiggle path{ animation:none; stroke-dashoffset:0; }
 }
+
+/* --- Illustration badge overlapping the top of the info-card --- */
+.info-card{ position:relative; overflow:visible; }
+.info-card-badge{
+  position:absolute;
+  top:-38px; right:18px;
+  width:90px; height:auto;
+  transform:rotate(6deg);
+  filter:drop-shadow(0 6px 14px rgba(0,0,0,0.15));
+  pointer-events:none;
+  z-index:2;
+}
+@media (max-width: 700px){
+  .info-card-badge{ width:64px; top:-26px; right:14px; }
+}
