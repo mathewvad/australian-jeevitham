@@ -832,3 +832,36 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   .info-card-wrap{ padding-top:160px; }
   .info-card-illustration{ width:170px; right:0; left:0; margin:0 auto; }
 }
+
+/* ============================================================
+   DATA TABLES — used for state bond authority / glossary tables
+   (added August 2026, moved out of page-level inline <style>)
+   ============================================================ */
+.table-wrap{
+  overflow-x:auto;
+  margin:20px 0;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  background:var(--card-bg);
+  box-shadow:var(--shadow-offset-sm);
+}
+.data-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.92rem;
+  text-align:left;
+}
+.data-table th, .data-table td{
+  padding:14px 18px;
+  border-bottom:1px solid var(--border);
+  vertical-align:top;
+}
+.data-table th{
+  background:var(--bg-alt);
+  font-family:var(--display);
+  font-weight:700;
+  color:var(--fg);
+}
+.data-table tr:last-child td{
+  border-bottom:none;
+}
