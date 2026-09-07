@@ -387,6 +387,15 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius);
   padding:28px; box-shadow:var(--shadow-offset-sm);
 }
+.info-card--brand{ text-align:center; }
+.info-card-logo{
+  display:block; width:100%; max-width:320px; height:auto;
+  margin:0 auto 22px; border-radius:50%;
+}
+.info-card--brand .stat-label{ margin-left:auto; margin-right:auto; }
+@media (max-width:520px){
+  .info-card-logo{ max-width:220px; }
+}
 .info-card .stat{ font-family:var(--display); font-weight:700; font-size:1.8rem; display:block; }
 .info-card .stat-label{
   display:block; font-family:var(--body); font-weight:700; font-size:0.78rem;
