@@ -274,15 +274,132 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebSite",
+      "@id": "https://www.australianjeevitham.com/#website",
+      "name": "Australian Jeevitham",
+      "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "url": "https://www.australianjeevitham.com/",
+      "description": "Australian Jeevitham is a bilingual Malayalam-English website sharing information and stories about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "inLanguage": ["en", "ml"],
+      "publisher": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "creator": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "about": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "mainEntity": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "copyrightHolder": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.australianjeevitham.com/#brand",
+      "name": "Australian Jeevitham",
+      "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "url": "https://www.australianjeevitham.com/",
+      "description": "Australian Jeevitham is the personal content brand of Malayalam social media influencer and content creator Binu Vadakkedath, based in Queensland, Australia. The brand shares videos and general information about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "slogan": "Australian life through a Malayali lens.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "creator": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "founder": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "location": {
+        "@type": "Place",
+        "name": "Queensland, Australia",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Queensland",
+          "addressCountry": "AU"
+        }
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "australianjeevitham@gmail.com"
+      },
+      "knowsAbout": [
+        "Australian life",
+        "Australian travel",
+        "Australian culture",
+        "Australian jobs and employment",
+        "Australian migration and settlement",
+        "Gardening and backyard farming",
+        "Malayali life in Australia"
+      ],
+      "sameAs": [
+        "https://www.youtube.com/@AustralianJeevitham",
+        "https://www.facebook.com/Australian.Jeevitham",
+        "https://www.instagram.com/australianjeevitham/",
+        "https://www.tiktok.com/@australianjeevitham",
+        "https://www.threads.com/@australianjeevitham",
+        "https://x.com/AusJeevitham",
+        "https://www.imdb.com/title/tt43669114",
+        "https://australianjeevitham.blogspot.com/"
+      ]
+    },
+    {
       "@type": "Person",
-      "@id": "https://www.australianjeevitham.com/#binu",
+      "@id": "https://www.australianjeevitham.com/#person",
       "name": "Binu Vadakkedath",
-      "alternateName": "Australian Jeevitham",
+      "givenName": "Binu",
+      "familyName": "Vadakkedath",
+      "description": "Binu Vadakkedath is a Malayalam social media influencer and content creator based in Queensland, Australia.",
       "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
-      "image": "https://www.australianjeevitham.com/images/binu-australian-jeevitham.webp",
-      "jobTitle": "Content Creator & Founder",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/australian-jeevitham-binu-holding-youtube-100k-award.webp"
+      },
+      "jobTitle": "Software Engineer & Content Creator",
+      "hasOccupation": [
+        {
+          "@type": "Occupation",
+          "name": "Software Engineer"
+        },
+        {
+          "@type": "Occupation",
+          "name": "Social Media Influencer and Content Creator"
+        }
+      ],
       "worksFor": {
-        "@id": "https://www.australianjeevitham.com/#organization"
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "knowsAbout": [
+        "Australian life",
+        "Australian travel",
+        "Australian culture",
+        "Australian jobs and employment",
+        "Australian migration and settlement",
+        "Gardening and backyard farming",
+        "Malayali life in Australia"
+      ],
+      "knowsLanguage": [
+        "Malayalam",
+        "English"
+      ],
+      "award": "YouTube Silver Creator Award for reaching 100,000 subscribers",
+      "birthPlace": {
+        "@type": "Place",
+        "name": "Kerala, India"
       },
       "homeLocation": {
         "@type": "Place",
@@ -292,123 +409,103 @@
           "addressCountry": "AU"
         }
       },
-      "knowsAbout": [
-        "Australia Migration Pathways",
-        "Skilled Visa Guidance",
-        "Queensland Regional Travel",
-        "Kerala-Style Gardening in Australia",
-        "Malayali Community Life in Australia",
-        "Jobs in Australia"
-      ],
-      "knowsLanguage": ["ml", "en"],
+      "mainEntityOfPage": {
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
+      },
       "sameAs": [
         "https://www.youtube.com/@AustralianJeevitham",
         "https://www.facebook.com/Australian.Jeevitham",
         "https://www.instagram.com/australianjeevitham/",
         "https://www.tiktok.com/@australianjeevitham",
         "https://www.threads.com/@australianjeevitham",
-        "https://au.pinterest.com/australianjeevitham/",
-        "https://vimeo.com/australianjeevitham",
-        "https://www.reddit.com/user/AustralianJeevitham/",
+        "https://x.com/AusJeevitham",
         "https://www.imdb.com/title/tt43669114"
       ]
     },
     {
-      "@type": "Organization",
-      "@id": "https://www.australianjeevitham.com/#organization",
-      "name": "Australian Jeevitham",
-      "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "@type": "WebPage",
+      "@id": "https://www.australianjeevitham.com/#webpage",
+      "name": "Australian Jeevitham | Australia Malayali Vlogger",
       "url": "https://www.australianjeevitham.com/",
-      "logo": "https://www.australianjeevitham.com/images/logo.webp",
-      "description": "ഓസ്‌ട്രേലിയൻ ജീവിതം brings you the journey of a Malayali vlogger in Australia. Discover beautiful places, local news, and job opportunities for Malayalis.",
-      "founder": {
-        "@id": "https://www.australianjeevitham.com/#binu"
+      "description": "Australian Jeevitham shares Malayalam-English stories and information about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "isPartOf": {
+        "@id": "https://www.australianjeevitham.com/#website"
       },
-      "location": {
-        "@type": "Place",
-        "address": {
-          "@type": "PostalAddress",
-          "addressRegion": "Queensland",
-          "addressCountry": "AU"
-        }
+      "about": {
+        "@id": "https://www.australianjeevitham.com/#brand"
       },
-      "sameAs": [
-        "https://www.youtube.com/@AustralianJeevitham",
-        "https://www.facebook.com/Australian.Jeevitham",
-        "https://www.instagram.com/australianjeevitham/",
-        "https://www.tiktok.com/@australianjeevitham",
-        "https://www.threads.com/@australianjeevitham",
-        "https://au.pinterest.com/australianjeevitham/",
-        "https://vimeo.com/australianjeevitham",
-        "https://www.reddit.com/user/AustralianJeevitham/",
-        "https://australianjeevitham.blogspot.com/"
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://www.australianjeevitham.com/#website",
-      "name": "Australian Jeevitham",
-      "url": "https://www.australianjeevitham.com/",
       "inLanguage": ["en", "ml"],
-      "description": "Australian Jeevitham is the official digital hub of Binu Vadakkedath, documenting Australian life, skilled migration, jobs, regional travel and community for the global Malayali community.",
       "publisher": {
-        "@id": "https://www.australianjeevitham.com/#binu"
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "author": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "creator": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/australian-jeevitham-binu-holding-youtube-100k-award.webp"
+      },
+      "copyrightHolder": {
+        "@id": "https://www.australianjeevitham.com/#brand"
       }
     },
     {
       "@type": "VideoObject",
       "@id": "https://www.australianjeevitham.com/#video-EnzjzCUiq1s",
-      "name": "ഓസ്‌ട്രേലിയയിൽ മുരിങ്ങ നിരോധിച്ചതിൻ്റെ കാരണം അറിയണോ?",
-      "description": "ഓസ്‌ട്രേലിയയിൽ ഇനി മുതൽ മുരിങ്ങ പ്രോഡക്ട്‌സുകൾ ഫുഡ് ഐറ്റം ആയോ ഫുഡ് ingredient ആയോ വിൽക്കാൻ സാധിക്കുകയില്ല.",
+      "name": "ഓസ്‌ട്രേലിയയിൽ മുരിങ്ങയ്ക്ക് വിലക്കോ? പ്രവാസികൾ അറിയേണ്ട കാര്യങ്ങൾ",
+      "description": "ഓസ്‌ട്രേലിയയിൽ ഇനി മുതൽ മുരിങ്ങ പ്രോഡക്ട്‌സുകൾ ഫുഡ് ഐറ്റം ആയോ ഫുഡ് ingredient ആയോ വിൽക്കാൻ സാധിക്കുകയില്ല. പ്രവാസികൾ അറിയേണ്ട കാര്യങ്ങൾ.",
       "thumbnailUrl": [
         "https://i.ytimg.com/vi/EnzjzCUiq1s/hqdefault.jpg"
       ],
-      "uploadDate": "2024-01-01T08:00:00+10:00",
+      "uploadDate": "2026-05-26T08:00:00+10:00",
       "contentUrl": "https://www.youtube.com/watch?v=EnzjzCUiq1s",
       "embedUrl": "https://www.youtube-nocookie.com/embed/EnzjzCUiq1s",
       "author": {
-        "@id": "https://www.australianjeevitham.com/#binu"
+        "@id": "https://www.australianjeevitham.com/#person"
       },
       "publisher": {
-        "@id": "https://www.australianjeevitham.com/#organization"
+        "@id": "https://www.australianjeevitham.com/#brand"
       },
       "inLanguage": "ml"
     },
     {
       "@type": "VideoObject",
       "@id": "https://www.australianjeevitham.com/#video-62dW6eBRutw",
-      "name": "ഈ കൃഷി കാണാതെ പോകരുത്",
+      "name": "ഓസ്ട്രേലിയയിൽ ഇതൊക്കെ വിളയുമോ? എൻ്റെ അധ്വാനത്തിൻ്റെ ഫലം!",
       "description": "ഓസ്‌ട്രേലിയയിലെ കേരള സ്റ്റൈൽ കൃഷിത്തോട്ടം - Backyard farming in Australia.",
       "thumbnailUrl": [
         "https://i.ytimg.com/vi/62dW6eBRutw/hqdefault.jpg"
       ],
-      "uploadDate": "2023-06-01T08:00:00+10:00",
+      "uploadDate": "2023-05-09T08:00:00+10:00",
       "contentUrl": "https://www.youtube.com/watch?v=62dW6eBRutw",
       "embedUrl": "https://www.youtube-nocookie.com/embed/62dW6eBRutw",
       "author": {
-        "@id": "https://www.australianjeevitham.com/#binu"
+        "@id": "https://www.australianjeevitham.com/#person"
       },
       "publisher": {
-        "@id": "https://www.australianjeevitham.com/#organization"
+        "@id": "https://www.australianjeevitham.com/#brand"
       },
       "inLanguage": "ml"
     },
     {
       "@type": "VideoObject",
       "@id": "https://www.australianjeevitham.com/#video-3280tnrmrxM",
-      "name": "കള്ളുചെത്തൽ ഇവിടെയും തുടങ്ങി",
+      "name": "ഓസ്‌ട്രേലിയയിൽ സ്വന്തമായി കള്ളു ചെത്തി നോക്കി 😀",
       "description": "വെറുതെ ഒരു രസത്തിനു ട്രൈ ചെയ്തതാണ്. Kerala life and experience in Queensland, Australia.",
       "thumbnailUrl": [
         "https://i.ytimg.com/vi/3280tnrmrxM/hqdefault.jpg"
       ],
-      "uploadDate": "2023-03-01T08:00:00+10:00",
+      "uploadDate": "2025-12-01T08:00:00+10:00",
       "contentUrl": "https://www.youtube.com/watch?v=3280tnrmrxM",
       "embedUrl": "https://www.youtube-nocookie.com/embed/3280tnrmrxM",
       "author": {
-        "@id": "https://www.australianjeevitham.com/#binu"
+        "@id": "https://www.australianjeevitham.com/#person"
       },
       "publisher": {
-        "@id": "https://www.australianjeevitham.com/#organization"
+        "@id": "https://www.australianjeevitham.com/#brand"
       },
       "inLanguage": "ml"
     }
