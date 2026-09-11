@@ -42,58 +42,207 @@
     (function(){try{var t=localStorage.getItem('aj-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
   </script>
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "AboutPage",
-        "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#webpage",
-        "url": "https://www.australianjeevitham.com/about-australian-jeevitham.html",
-        "name": "About Australian Jeevitham | ഓസ്‌ട്രേലിയൻ ജീവിതം",
-        "description": "The story behind Australian Jeevitham — why Binu Vadakkedath started sharing real, first-hand Australian life, migration and job insights with the global Malayali community.",
-        "inLanguage": ["en", "ml"],
-        "isPartOf": { "@id": "https://www.australianjeevitham.com/#website" },
-        "breadcrumb": { "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#breadcrumb" },
-        "about": { "@id": "https://www.australianjeevitham.com/#binu" },
-        "mainEntity": { "@id": "https://www.australianjeevitham.com/#binu" }
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.australianjeevitham.com/#website",
+      "name": "Australian Jeevitham",
+      "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "url": "https://www.australianjeevitham.com/",
+      "description": "Australian Jeevitham is a bilingual Malayalam-English website sharing information and stories about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "inLanguage": ["en", "ml"],
+      "publisher": {
+        "@id": "https://www.australianjeevitham.com/#brand"
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#breadcrumb",
-        "itemListElement": [
-          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.australianjeevitham.com/" },
-          { "@type": "ListItem", "position": 2, "name": "About Our Story", "item": "https://www.australianjeevitham.com/about-australian-jeevitham.html" }
-        ]
+      "creator": {
+        "@id": "https://www.australianjeevitham.com/#person"
       },
-      {
-        "@type": "Person",
-        "@id": "https://www.australianjeevitham.com/#binu",
-        "name": "Binu Vadakkedath",
-        "alternateName": "Australian Jeevitham",
-        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
-        "sameAs": [
-          "https://www.youtube.com/@AustralianJeevitham",
-          "https://www.facebook.com/Australian.Jeevitham",
-          "https://www.instagram.com/australianjeevitham/",
-          "https://www.tiktok.com/@australianjeevitham",
-          "https://www.threads.com/@australianjeevitham",
-          "https://au.pinterest.com/australianjeevitham/",
-          "https://vimeo.com/australianjeevitham",
-          "https://www.reddit.com/user/AustralianJeevitham/",
-          "https://www.imdb.com/title/tt43669114"
-        ]
+      "about": {
+        "@id": "https://www.australianjeevitham.com/#brand"
       },
-      {
-        "@type": "WebSite",
-        "@id": "https://www.australianjeevitham.com/#website",
-        "name": "Australian Jeevitham",
-        "url": "https://www.australianjeevitham.com/",
-        "inLanguage": ["en", "ml"],
-        "publisher": { "@id": "https://www.australianjeevitham.com/#binu" }
+      "mainEntity": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "copyrightHolder": {
+        "@id": "https://www.australianjeevitham.com/#brand"
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.australianjeevitham.com/#brand",
+      "name": "Australian Jeevitham",
+      "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "description": "Australian Jeevitham is the personal content brand of Malayalam social media influencer and content creator Binu Vadakkedath, based in Queensland, Australia. The brand shares videos and general information about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "slogan": "Australian life through a Malayali lens.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "creator": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "founder": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "location": {
+        "@type": "Place",
+        "name": "Queensland, Australia",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Queensland",
+          "addressCountry": "AU"
+        }
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "australianjeevitham@gmail.com"
+      },
+      "knowsAbout": [
+        "Australian life",
+        "Australian travel",
+        "Australian culture",
+        "Australian jobs and employment",
+        "Australian migration and settlement",
+        "Gardening and backyard farming",
+        "Malayali life in Australia"
+      ],
+      "sameAs": [
+        "https://www.youtube.com/@AustralianJeevitham",
+        "https://www.facebook.com/Australian.Jeevitham",
+        "https://www.instagram.com/australianjeevitham/",
+        "https://www.tiktok.com/@australianjeevitham",
+        "https://www.threads.com/@australianjeevitham",
+        "https://x.com/AusJeevitham",
+        "https://www.imdb.com/title/tt43669114",
+        "https://australianjeevitham.blogspot.com/"
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.australianjeevitham.com/#person",
+      "name": "Binu Vadakkedath",
+      "givenName": "Binu",
+      "familyName": "Vadakkedath",
+      "description": "Binu Vadakkedath is a Malayalam social media influencer and content creator based in Queensland, Australia.",
+      "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/australian-jeevitham-binu-holding-youtube-100k-award.webp"
+      },
+      "jobTitle": "Software Engineer & Content Creator",
+      "hasOccupation": [
+        {
+          "@type": "Occupation",
+          "name": "Software Engineer"
+        },
+        {
+          "@type": "Occupation",
+          "name": "Social Media Influencer and Content Creator"
+        }
+      ],
+      "worksFor": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "knowsAbout": [
+        "Australian life",
+        "Australian travel",
+        "Australian culture",
+        "Australian jobs and employment",
+        "Australian migration and settlement",
+        "Gardening and backyard farming",
+        "Malayali life in Australia"
+      ],
+      "knowsLanguage": ["Malayalam", "English"],
+      "award": "YouTube Silver Creator Award for reaching 100,000 subscribers",
+      "birthPlace": {
+        "@type": "Place",
+        "name": "Kerala, India"
+      },
+      "homeLocation": {
+        "@type": "Place",
+        "name": "Queensland, Australia",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Queensland",
+          "addressCountry": "AU"
+        }
+      },
+      "mainEntityOfPage": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
+      "sameAs": [
+        "https://www.youtube.com/@AustralianJeevitham",
+        "https://www.facebook.com/Australian.Jeevitham",
+        "https://www.instagram.com/australianjeevitham/",
+        "https://www.tiktok.com/@australianjeevitham",
+        "https://www.threads.com/@australianjeevitham",
+        "https://x.com/AusJeevitham",
+        "https://www.imdb.com/title/tt43669114"
+      ]
+    },
+    {
+      "@type": "AboutPage",
+      "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#webpage",
+      "url": "https://www.australianjeevitham.com/about-australian-jeevitham.html",
+      "name": "About Australian Jeevitham | ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "description": "The story behind Australian Jeevitham — why Binu Vadakkedath started sharing real, first-hand Australian life, migration and job insights with the global Malayali community.",
+      "headline": "About Australian Jeevitham",
+      "inLanguage": ["en", "ml"],
+      "isPartOf": {
+        "@id": "https://www.australianjeevitham.com/#website"
+      },
+      "about": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "mainEntity": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "author": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "creator": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "publisher": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "copyrightHolder": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "breadcrumb": {
+        "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.australianjeevitham.com/about-australian-jeevitham.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.australianjeevitham.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About Our Story",
+          "item": "https://www.australianjeevitham.com/about-australian-jeevitham.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <nav>
