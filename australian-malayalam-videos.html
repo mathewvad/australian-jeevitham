@@ -907,6 +907,38 @@
   </div>
 </footer>
 
+<script>
+  // Click-to-load YouTube facades: only inject the real iframe when the user
+  // actually wants to watch, instead of loading multiple YouTube players on page load.
+  (function(){
+    function playVideo(frame){
+      var id = frame.getAttribute('data-video-id');
+      if(!id) return;
+      var iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      iframe.title = 'Australian Jeevitham video';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      frame.innerHTML = '';
+      frame.appendChild(iframe);
+      frame.removeAttribute('role');
+      frame.removeAttribute('tabindex');
+      frame.removeAttribute('aria-label');
+    }
+    document.querySelectorAll('.video-frame[data-video-id]').forEach(function(frame){
+      frame.addEventListener('click', function(){ playVideo(frame); });
+      frame.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          playVideo(frame);
+        }
+      });
+    });
+  })();
+</script>
 <script src="js/main.js"></script>
 
 </body>
