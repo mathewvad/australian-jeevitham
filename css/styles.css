@@ -86,6 +86,12 @@ h1 .mal, h2 .mal, h3 .mal, .vcard h3 .mal {
   font-weight: 600 !important;
 }
 
+/* Fix heading line-height — 1.8 is right for paragraphs but far
+   too loose for large multi-line headings, causing big vertical gaps */
+h1 .mal, h2 .mal, h3 .mal, .vcard h3 .mal {
+  line-height: 1.2 !important;
+}
+
 /* =========================================================
    SIGNATURE: passport-stamp badge
    Used as section eyebrows / category tags — a small flat pill
