@@ -62,7 +62,9 @@ ul{ list-style:none; }
 :focus-visible{ outline:3px solid var(--grape); outline-offset:3px; }
 
 /* ---- Malayalam Font Variable ---- */
---mal: "Noto Sans Malayalam", "Baloo Chettan 2", sans-serif;
+:root {
+  --mal: "Noto Sans Malayalam", "Baloo Chettan 2", sans-serif;
+}
 
 /* ---- Malayalam Global Rule ---- */
 .mal, [lang="ml"] {
