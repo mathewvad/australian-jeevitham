@@ -130,19 +130,6 @@ h1 .mal, h2 .mal, h3 .mal, .vcard h3 .mal {
 .ticket-divider::before,
 .ticket-divider::after{ content:none; }
 
-/* ---------- BRAND BANNER (OG image showcase) ---------- */
-.brand-banner{
-  width:100%;
-  overflow:hidden;
-}
-.brand-banner img{
-  width:100%;
-  height:auto;
-  aspect-ratio:1200/630;
-  object-fit:cover;
-  display:block;
-}
-
 /* ---------- NAV ---------- */
 nav{
   position:sticky; top:0; z-index:50;
@@ -299,6 +286,17 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 }
 .link-row{ margin-top:22px; display:flex; flex-wrap:wrap; gap:8px 18px; }
 .link-row a{ font-weight:700; color:var(--ocean); text-decoration:underline; text-underline-offset:3px; }
+
+/* ---------- BRAND FEATURE (card left, text right) ---------- */
+.brand-feature-grid{
+  display:grid;
+  grid-template-columns:0.9fr 1.1fr;
+  gap:56px;
+  align-items:center;
+}
+@media (max-width:860px){
+  .brand-feature-grid{ grid-template-columns:1fr; }
+}
 
 /* ---------- VIDEOS ---------- */
 .video-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:28px; }
