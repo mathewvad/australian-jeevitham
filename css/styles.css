@@ -208,7 +208,6 @@ nav .wrap{ display:flex; align-items:center; justify-content:space-between; heig
 
 /* ---------- SECTIONS ---------- */
 .section{ padding:88px 0; }
-.section + .section{ padding-top:0; }
 .section-head{ max-width:640px; margin-bottom:44px; }
 .kicker{ margin-bottom:14px; }
 h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
