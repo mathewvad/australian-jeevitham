@@ -196,6 +196,16 @@ nav .wrap{ display:flex; align-items:center; justify-content:space-between; heig
   .nav-cta{ width:100%; text-align:center; }
 }
 
+.panel ul, .panel ol{
+  margin: 0 0 4px 22px;
+  color: var(--fg-muted);
+  list-style: disc;
+}
+.panel ol{ list-style: decimal; }
+.panel li{ margin-bottom: 10px; }
+.panel li:last-child{ margin-bottom: 0; }
+
+
 /* ---------- SECTIONS ---------- */
 .section{ padding:88px 0; }
 .section-head{ max-width:640px; margin-bottom:44px; }
