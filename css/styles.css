@@ -213,6 +213,7 @@ nav .wrap{ display:flex; align-items:center; justify-content:space-between; heig
 h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 .section-head h2{ font-size:clamp(1.8rem, 3.4vw, 2.6rem); line-height:1.15; margin-bottom:10px; }
 .section-head p{ color:var(--fg-muted); font-size:1.05rem; }
+.section--tight-top{ padding-top:0; }
 
 /* ---------- HERO ---------- */
 .hero{
