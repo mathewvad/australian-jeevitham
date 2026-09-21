@@ -967,3 +967,18 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   font-size:0.92rem;
   color:var(--fg-muted);
 }
+
+/* --- Clickable Info Card Variant for Topics --- */
+.crosslink-card.info-card-style {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--fg);
+}
+
+.crosslink-card.info-card-style p {
+  color: var(--fg-muted);
+  font-size: 0.94rem;
+  margin: 12px 0 16px;
+}
