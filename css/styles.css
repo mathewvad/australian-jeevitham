@@ -934,7 +934,7 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
    bio and milestone photo sections (added September 2026)
    ============================================================ */
 .quote-band{
-  padding:80px 0;
+  padding:30px 0;
 }
 .pullquote{
   max-width:760px;
@@ -954,10 +954,10 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   font-family:var(--display);
   font-weight:700;
   font-size:clamp(1.35rem, 3vw, 2rem);
-  line-height:1.4;
+  line-height:1;
   letter-spacing:-0.01em;
   color:var(--fg);
-  margin-bottom:22px;
+  margin-bottom:12px;
 }
 .pullquote cite{
   display:block;
