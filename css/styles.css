@@ -928,3 +928,54 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 .data-table tr:last-child td{
   border-bottom:none;
 }
+
+/* ============================================================
+   QUOTE / TESTIMONIAL PULL-OUT — full-bleed band between the
+   bio and milestone photo sections (added September 2026)
+   ============================================================ */
+.quote-band{
+  position:relative;
+  padding:80px 0;
+  background:var(--ink);
+  color:var(--cream);
+  overflow:hidden;
+}
+.quote-band::before{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 90% 10%, color-mix(in srgb, var(--coral) 32%, transparent), transparent 55%),
+    radial-gradient(circle at 6% 95%, color-mix(in srgb, var(--ocean) 28%, transparent), transparent 55%);
+  pointer-events:none;
+}
+.pullquote{
+  position:relative;
+  max-width:760px;
+  margin:0 auto;
+  text-align:center;
+}
+.pullquote-mark{
+  display:block;
+  font-family:var(--display);
+  font-weight:800;
+  font-size:4.2rem;
+  line-height:1;
+  color:var(--sunbeam);
+  margin-bottom:4px;
+}
+.pullquote p{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(1.35rem, 3vw, 2rem);
+  line-height:1.4;
+  letter-spacing:-0.01em;
+  margin-bottom:22px;
+}
+.pullquote cite{
+  display:block;
+  font-style:normal;
+  font-family:var(--body);
+  font-weight:600;
+  font-size:0.92rem;
+  color:color-mix(in srgb, var(--cream) 68%, transparent);
+}
