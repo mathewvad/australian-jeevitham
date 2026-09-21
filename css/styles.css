@@ -937,7 +937,7 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   padding:30px 0;
 }
 .pullquote{
-  max-width:760px;
+  max-width:860px;
   margin:0 auto;
   text-align:center;
 }
