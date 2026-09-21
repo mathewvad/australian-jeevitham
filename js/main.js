@@ -32,21 +32,37 @@
     }
 
     var duration = 1400;
+    var fadeMs = 180;
     var startTime = null;
 
-    function step(timestamp) {
-      if (startTime === null) startTime = timestamp;
-      var progress = Math.min((timestamp - startTime) / duration, 1);
-      // ease-out-cubic for a natural deceleration
-      var eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = formatNumber(target * eased);
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        el.textContent = formatNumber(target);
+    function runCountUp() {
+      function step(timestamp) {
+        if (startTime === null) startTime = timestamp;
+        var progress = Math.min((timestamp - startTime) / duration, 1);
+        // ease-out-cubic for a natural deceleration
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = formatNumber(target * eased);
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = formatNumber(target);
+        }
       }
+      requestAnimationFrame(step);
     }
-    requestAnimationFrame(step);
+
+    // The element's static markup already shows the real number (so it's
+    // correct for crawlers/no-JS before this runs). Rather than snapping
+    // straight to "0" — a hard, jarring cut — fade it out, reset, and fade
+    // back in before the count-up starts.
+    el.style.transition = 'opacity ' + fadeMs + 'ms ease';
+    el.style.opacity = '0';
+
+    setTimeout(function () {
+      el.textContent = formatNumber(0);
+      el.style.opacity = '1';
+      runCountUp();
+    }, fadeMs);
   }
 
   // ---- Scroll-triggered reveal (fade + rise into view) ----
