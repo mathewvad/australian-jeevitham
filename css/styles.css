@@ -95,7 +95,9 @@ h1 .mal, h2 .mal, h3 .mal, .vcard h3 .mal {
 /* Also fix line-height when lang="ml" sits directly on the heading tag,
    not just on a nested .mal span */
 h1[lang="ml"], h2[lang="ml"], h3[lang="ml"],
-.vcard h3[lang="ml"] {
+.vcard h3[lang="ml"],
+h1 [lang="ml"], h2 [lang="ml"], h3 [lang="ml"],
+.vcard h3 [lang="ml"] {
   line-height: 1.2 !important;
 }
 
