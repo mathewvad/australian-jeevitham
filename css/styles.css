@@ -92,6 +92,13 @@ h1 .mal, h2 .mal, h3 .mal, .vcard h3 .mal {
   line-height: 1.2 !important;
 }
 
+/* Also fix line-height when lang="ml" sits directly on the heading tag,
+   not just on a nested .mal span */
+h1[lang="ml"], h2[lang="ml"], h3[lang="ml"],
+.vcard h3[lang="ml"] {
+  line-height: 1.2 !important;
+}
+
 /* =========================================================
    SIGNATURE: passport-stamp badge
    Used as section eyebrows / category tags — a small flat pill
