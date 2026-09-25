@@ -93,7 +93,9 @@
       "url": "https://www.australianjeevitham.com/",
       "description": "Australian Jeevitham is a bilingual Malayalam-English website sharing information and stories about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
       "inLanguage": ["en", "ml"],
-      "publisher": { "@id": "https://www.australianjeevitham.com/#brand" }
+      "publisher": { 
+        "@id": "https://www.australianjeevitham.com/#brand" 
+      }
     },
     {
       "@type": "Organization",
@@ -101,15 +103,74 @@
       "name": "Australian Jeevitham",
       "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
       "url": "https://www.australianjeevitham.com/",
-      "logo": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png",
-      "founder": { "@id": "https://www.australianjeevitham.com/#person" }
+      "description": "Australian Jeevitham is the personal content brand of Malayalam social media influencer and content creator Binu Vadakkedath, based in Queensland, Australia. The brand shares videos and general information about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "slogan": "Australian life through a Malayali lens.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "creator": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "founder": {
+        "@id": "https://www.australianjeevitham.com/#person"
+      },
+      "location": {
+        "@type": "Place",
+        "name": "Queensland, Australia",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Queensland",
+          "addressCountry": "AU"
+        }
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "url": "https://www.australianjeevitham.com/contact-australian-jeevitham.html",
+        "availableLanguage": ["en", "ml"]
+      },
+      "knowsAbout": [
+        "Australian life",
+        "Australian travel",
+        "Australian culture",
+        "Australian jobs and employment",
+        "Australian migration and settlement",
+        "Gardening and backyard farming",
+        "Malayali life in Australia"
+      ],
+      "sameAs": [
+        "https://www.youtube.com/@AustralianJeevitham",
+        "https://www.facebook.com/Australian.Jeevitham",
+        "https://www.instagram.com/australianjeevitham/",
+        "https://www.tiktok.com/@australianjeevitham",
+        "https://www.threads.com/@australianjeevitham",
+        "https://australianjeevitham.blogspot.com/"
+      ]
     },
     {
       "@type": "Person",
       "@id": "https://www.australianjeevitham.com/#person",
       "name": "Binu Vadakkedath",
       "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
-      "jobTitle": "Software Engineer & Content Creator"
+      "jobTitle": "Software Engineer & Content Creator",
+      "nationality": "Indian",
+      "knowsLanguage": ["Malayalam", "English"],
+      "owns": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/australian-jeevitham-binu-holding-youtube-100k-award.webp"
+      },
+      "sameAs": [
+        "https://x.com/AusJeevitham",
+        "https://www.imdb.com/title/tt43669114"
+      ]
     },
     {
       "@type": "CollectionPage",
@@ -118,38 +179,84 @@
       "name": "News Coverage | Australian Jeevitham in the Media",
       "description": "Fact-checks and features from India Today Malayalam and Manorama Online covering Australian Jeevitham's backyard farming, toddy-tapping, and life in Townsville.",
       "inLanguage": ["en", "ml"],
-      "isPartOf": { "@id": "https://www.australianjeevitham.com/#website" },
-      "about": { "@id": "https://www.australianjeevitham.com/#brand" },
-      "author": { "@id": "https://www.australianjeevitham.com/#person" },
-      "publisher": { "@id": "https://www.australianjeevitham.com/#brand" },
+      "isPartOf": { 
+        "@id": "https://www.australianjeevitham.com/#website" 
+      },
+      "about": { 
+        "@id": "https://www.australianjeevitham.com/#brand" 
+      },
+      "author": { 
+        "@id": "https://www.australianjeevitham.com/#person" 
+      },
+      "publisher": { 
+        "@id": "https://www.australianjeevitham.com/#brand" 
+      },
       "primaryImageOfPage": {
         "@type": "ImageObject",
         "url": "https://www.australianjeevitham.com/images/og/australian-jeevitham-news-coverage.webp"
       },
       "dateModified": "2026-09-25",
-      "breadcrumb": { "@id": "https://www.australianjeevitham.com/australian-jeevitham-news-coverage.html#breadcrumb" },
+      "breadcrumb": { 
+        "@id": "https://www.australianjeevitham.com/australian-jeevitham-news-coverage.html#breadcrumb" 
+      },
       "mainEntity": {
         "@type": "ItemList",
         "itemListElement": [
           {
             "@type": "ListItem",
             "position": 1,
-            "url": "https://malayalam.indiatoday.in/fact-check/story/fact-check-kangaroo-video-post-not-kerala-482254-2022-12-12"
+            "item": {
+              "@type": "NewsArticle",
+              "headline": "ഫാക്ട് ചെക്ക്: മാവേലിക്കരയിൽ കങ്കാരു എത്തിയോ? സത്യമിതാണ്",
+              "url": "https://malayalam.indiatoday.in/fact-check/story/fact-check-kangaroo-video-post-not-kerala-482254-2022-12-12",
+              "datePublished": "2022-12-12",
+              "publisher": {
+                "@type": "NewsMediaOrganization",
+                "name": "India Today Malayalam"
+              }
+            }
           },
           {
             "@type": "ListItem",
             "position": 2,
-            "url": "https://www.manoramaonline.com/karshakasree/farm-management/2023/10/21/coconut-toddy-production-in-australia.html"
+            "item": {
+              "@type": "NewsArticle",
+              "headline": "വീട്ടുമുറ്റത്ത് തെങ്ങുണ്ടെങ്കിൽ കള്ളുണ്ടാക്കാം: ഇത് ഓസ്‌ട്രേലിയയിലെ കള്ളുചെത്ത്",
+              "url": "https://www.manoramaonline.com/karshakasree/farm-management/2023/10/21/coconut-toddy-production-in-australia.html",
+              "datePublished": "2023-10-21",
+              "publisher": {
+                "@type": "NewsMediaOrganization",
+                "name": "Manorama Online"
+              }
+            }
           },
           {
             "@type": "ListItem",
             "position": 3,
-            "url": "https://www.manoramaonline.com/karshakasree/home-garden/2023/11/08/kangaroos-destroy-crops.html"
+            "item": {
+              "@type": "NewsArticle",
+              "headline": "ഇവിടെ കാട്ടുപന്നിയെങ്കിൽ അവിടെ കങ്കാരു; വാഴയുൾപ്പെടെ തിന്നുതീർക്കുന്നു",
+              "url": "https://www.manoramaonline.com/karshakasree/home-garden/2023/11/08/kangaroos-destroy-crops.html",
+              "datePublished": "2023-11-08",
+              "publisher": {
+                "@type": "NewsMediaOrganization",
+                "name": "Manorama Online"
+              }
+            }
           },
           {
             "@type": "ListItem",
             "position": 4,
-            "url": "https://www.manoramaonline.com/global-malayali/other-countries/2025/12/11/pravasi-malayali-toddy-tapping-australia.html"
+            "item": {
+              "@type": "NewsArticle",
+              "headline": "ഓസ്‌ട്രേലിയയിൽ വിസ്മയമായി പ്രവാസി മലയാളിയുടെ 'കള്ള് ചെത്ത്'",
+              "url": "https://www.manoramaonline.com/global-malayali/other-countries/2025/12/11/pravasi-malayali-toddy-tapping-australia.html",
+              "datePublished": "2025-12-11",
+              "publisher": {
+                "@type": "NewsMediaOrganization",
+                "name": "Manorama Online"
+              }
+            }
           }
         ]
       }
@@ -158,8 +265,18 @@
       "@type": "BreadcrumbList",
       "@id": "https://www.australianjeevitham.com/australian-jeevitham-news-coverage.html#breadcrumb",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.australianjeevitham.com/" },
-        { "@type": "ListItem", "position": 2, "name": "News Coverage", "item": "https://www.australianjeevitham.com/australian-jeevitham-news-coverage.html" }
+        { 
+          "@type": "ListItem", 
+          "position": 1, 
+          "name": "Home", 
+          "item": "https://www.australianjeevitham.com/" 
+        },
+        { 
+          "@type": "ListItem", 
+          "position": 2, 
+          "name": "News Coverage", 
+          "item": "https://www.australianjeevitham.com/australian-jeevitham-news-coverage.html" 
+        }
       ]
     }
   ]
