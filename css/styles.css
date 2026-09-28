@@ -1110,6 +1110,10 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; margin-top:48px;
 }
 .quick-facts-lead{ margin:0; color:var(--fg); font-weight:600; font-size:1.05rem; line-height:1.7; }
+.quick-facts-lead + .quick-facts-lead{ margin-top:14px; }
+/* Malayalam summary matches the weight/size of the English one
+   (the global "p .mal" rule would otherwise make it light and small) */
+.quick-facts-lead .mal{ font-weight:600 !important; font-size:1rem; color:var(--fg); }
 .quick-facts{
   display:grid; grid-template-columns:auto 1fr; gap:10px 20px; margin:0;
   padding:20px 22px; background:var(--card-bg); border:1px solid var(--border);
