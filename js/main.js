@@ -3,7 +3,7 @@
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Mobile nav: accessible button toggle (real <button>, not the old checkbox hack —
+  // Mobile nav: accessible button toggle (real <button>, not the old checkbox hack -
   // aria-expanded isn't valid on a <label>, and labels aren't keyboard-focusable anyway)
   var toggleBtn = document.querySelector('.nav-toggle-btn');
   var navLinks = document.getElementById('nav-links');
@@ -53,7 +53,7 @@
 
     // The element's static markup already shows the real number (so it's
     // correct for crawlers/no-JS before this runs). Rather than snapping
-    // straight to "0" — a hard, jarring cut — fade it out, reset, and fade
+    // straight to "0" - a hard, jarring cut - fade it out, reset, and fade
     // back in before the count-up starts.
     el.style.transition = 'opacity ' + fadeMs + 'ms ease';
     el.style.opacity = '0';
