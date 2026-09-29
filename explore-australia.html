@@ -38,7 +38,7 @@
 
   <meta name="theme-color" content="#FBFBF6">
 
-  <!-- Lean Font Loading (Stripped Baloo Chettan 2 & Unused Weights) -->
+  <!-- Lean Font Loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
@@ -67,7 +67,7 @@
         "@id": "https://www.australianjeevitham.com/#brand"
       },
       "creator": {
-        "@id": "https://www.australianjeevitham.com/#person"
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person"
       }
     },
     {
@@ -78,7 +78,7 @@
       "url": "https://www.australianjeevitham.com/",
       "logo": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png",
       "founder": {
-        "@id": "https://www.australianjeevitham.com/#person"
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person"
       },
       "contactPoint": {
         "@type": "ContactPoint",
@@ -101,27 +101,6 @@
       ]
     },
     {
-      "@type": "Person",
-      "@id": "https://www.australianjeevitham.com/#person",
-      "name": "Binu Vadakkedath",
-      "alternateName": "Binu Mathew",
-      "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
-      "jobTitle": "Software Engineer and Content Creator",
-      "image": {
-        "@type": "ImageObject",
-        "url": "https://www.australianjeevitham.com/images/australian-jeevitham-binu-holding-youtube-100k-award.webp"
-      },
-      "sameAs": [
-        "https://www.youtube.com/@AustralianJeevitham",
-        "https://www.facebook.com/Australian.Jeevitham",
-        "https://www.instagram.com/australianjeevitham/",
-        "https://www.tiktok.com/@australianjeevitham",
-        "https://www.threads.com/@australianjeevitham",
-        "https://x.com/AusJeevitham",
-        "https://www.imdb.com/title/tt43669114"
-      ]
-    },
-    {
       "@type": "CollectionPage",
       "@id": "https://www.australianjeevitham.com/explore-australia.html#webpage",
       "url": "https://www.australianjeevitham.com/explore-australia.html",
@@ -139,7 +118,10 @@
         "name": "Australia"
       },
       "author": {
-        "@id": "https://www.australianjeevitham.com/#person"
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
       },
       "publisher": {
         "@id": "https://www.australianjeevitham.com/#brand"
@@ -152,7 +134,7 @@
         "@id": "https://www.australianjeevitham.com/explore-australia.html#breadcrumb"
       },
       "datePublished": "2026-08-15",
-      "dateModified": "2026-09-29"
+      "dateModified": "2026-09-30"
     },
     {
       "@type": "BreadcrumbList",
@@ -183,6 +165,7 @@
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
 <nav>
   <div class="wrap">
     <a class="brand" href="/"><img src="images/logo.webp" alt="Australian Jeevitham logo" width="36" height="36" loading="eager" decoding="async">
@@ -252,6 +235,10 @@
         <a class="resource-link" href="https://www.visitnsw.com/" target="_blank" rel="noopener noreferrer">Visit NSW (Sydney &amp; Regional) <span class="arrow">→</span></a>
         <a class="resource-link" href="https://www.visitvictoria.com/" target="_blank" rel="noopener noreferrer">Visit Victoria (Melbourne &amp; Regional) <span class="arrow">→</span></a>
         <a class="resource-link" href="https://www.westernaustralia.com/" target="_blank" rel="noopener noreferrer">Tourism Western Australia <span class="arrow">→</span></a>
+        <a class="resource-link" href="https://southaustralia.com/" target="_blank" rel="noopener noreferrer">South Australia Tourism <span class="arrow">→</span></a>
+        <a class="resource-link" href="https://www.discovertasmania.com.au/" target="_blank" rel="noopener noreferrer">Discover Tasmania <span class="arrow">→</span></a>
+        <a class="resource-link" href="https://northernterritory.com/" target="_blank" rel="noopener noreferrer">Northern Territory Tourism <span class="arrow">→</span></a>
+        <a class="resource-link" href="https://visitcanberra.com.au/" target="_blank" rel="noopener noreferrer">Visit Canberra and the ACT <span class="arrow">→</span></a>
       </div>
      <p class="records">
   By <a href="creator-australian-jeevitham.html">Binu Vadakkedath</a><br>
@@ -277,8 +264,8 @@
       </div>
       <div class="crosslink-card tint-coral">
         <div class="glyph">🪨</div>
-        <h3>Uluru &amp; the Red Centre</h3>
-        <p>Uluru-Kata Tjuta National Park is one of Australia's best-known cultural and natural destinations. Visitors should respect the continuing cultural significance of the area to Anangu Traditional Owners.</p>
+        <h3>Uluṟu &amp; the Red Centre</h3>
+        <p>Uluṟu-Kata Tjuṯa National Park is one of Australia's best-known cultural and natural destinations. Visitors should respect the continuing cultural significance of the area to Aṉangu Traditional Owners. A park pass is required, and visitors should check current opening, closure and heat-safety information before travelling.</p>
       </div>
       <div class="crosslink-card tint-ocean">
         <div class="glyph">🏙️</div>
@@ -293,14 +280,25 @@
       <div class="crosslink-card tint-sunbeam">
         <div class="glyph">🏖️</div>
         <h3>Beaches, Islands &amp; National Parks</h3>
-        <p>Australia's coastlines, islands, and national parks vary greatly by season and region. Check official park, marine, and local tourism information for access, permits, and safety notices.</p>
+        <p>Australia's coastlines, islands, and national parks vary greatly by season and region. At the beach, choose a patrolled location, swim between the red-and-yellow flags and follow local safety signs. Check official park, marine, and local tourism information for access, permits, and safety notices.</p>
       </div>
     </div>
 
     <div class="panel" style="margin-top:32px;">
       <h3 style="font-size:1.25rem; font-family:var(--display); margin-bottom:10px;">Plan for Australia's size and changing conditions</h3>
       <p>Distances that look small on a map can involve many hours of driving or a flight. Weather also varies dramatically between tropical northern Australia, the southern states, alpine regions, and the interior.</p>
-      <p>Before travelling, check current weather forecasts, road conditions, park or marine closures, bushfire or cyclone warnings where relevant, and any permit requirements. For remote trips, plan fuel, water, and communications carefully.</p>
+      <p>Before travelling, check current weather forecasts, road conditions, park or marine closures, bushfire or cyclone warnings where relevant, and any permit requirements. Road closures are published by the relevant state or territory road authority rather than through one national road-closure service. For remote trips, plan fuel, water, and communications carefully.</p>
+    </div>
+
+    <div class="panel" style="margin-top:24px;">
+      <h3 style="font-size:1.25rem; font-family:var(--display); margin-bottom:10px;">Official travel and safety checks</h3>
+      <p>Conditions can change after an itinerary is planned. Recheck official warnings, park access and local safety advice shortly before departure and while travelling. In a life-threatening or time-critical emergency in Australia, call Triple Zero (000).</p>
+      <div class="resource-links" style="margin-top:16px;">
+        <a class="resource-link" href="https://www.bom.gov.au/weather-and-climate/warnings-and-alerts" target="_blank" rel="noopener noreferrer">Bureau of Meteorology warnings and alerts <span class="arrow">→</span></a>
+        <a class="resource-link" href="https://www.beachsafe.org.au/" target="_blank" rel="noopener noreferrer">Beachsafe patrols, hazards and beach advice <span class="arrow">→</span></a>
+        <a class="resource-link" href="https://parksaustralia.gov.au/about/buy-park-pass/" target="_blank" rel="noopener noreferrer">Parks Australia passes for Uluṟu, Kakadu and Booderee <span class="arrow">→</span></a>
+        <a class="resource-link" href="https://www.triplezero.gov.au/" target="_blank" rel="noopener noreferrer">Triple Zero emergency information <span class="arrow">→</span></a>
+      </div>
     </div>
 
     <div class="panel" style="margin-top:24px;">
@@ -333,7 +331,7 @@
           <div class="info-card-image-fade"></div>
         </div>
         <h3>Watch the Videos</h3>
-        <p>Malayalam vlogs on everyday life, culture and adventures in Australia — from Kerala-style gardening to jobs and migration information.</p>
+        <p>Malayalam vlogs on everyday life, culture and adventures in Australia, from Kerala-style gardening to jobs and migration information.</p>
         <ul class="badge-list" style="margin-top:auto;">
           <li>YouTube</li>
           <li>Vlogs</li>
@@ -347,7 +345,7 @@
           <div class="info-card-image-fade"></div>
         </div>
         <h3>Meet the Creator</h3>
-        <p>A Malayali living in Queensland documenting real Australian life — gardening, jobs, migration, and everyday moments.</p>
+        <p>A Malayali living in Queensland documenting real Australian life, including gardening, jobs, migration, and everyday moments.</p>
         <ul class="badge-list" style="margin-top:auto;">
           <li>130K+ Subscribers</li>
           <li>Silver Creator Award</li>

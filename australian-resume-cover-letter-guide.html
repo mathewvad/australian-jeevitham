@@ -47,22 +47,6 @@
 
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- Skip link: kept off-screen until keyboard focus, then brought into view -->
-  <style>
-    .skip-link{
-      position:absolute;
-      left:-9999px;
-      top:0;
-      z-index:999;
-      padding:1em;
-      background:#000;
-      color:#fff;
-    }
-    .skip-link:focus{
-      left:0;
-    }
-  </style>
-
   <script>
     (function(){try{var t=localStorage.getItem('aj-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();
   </script>
@@ -91,7 +75,7 @@
           "@type": "ImageObject",
           "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
         },
-        "founder": {"@id": "https://www.australianjeevitham.com/#person"},
+        "founder": {"@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person"},
         "contactPoint": {
           "@type": "ContactPoint",
           "contactType": "general enquiries",
@@ -107,27 +91,6 @@
           "https://x.com/AusJeevitham",
           "https://www.imdb.com/title/tt43669114",
           "https://australianjeevitham.blogspot.com/"
-        ]
-      },
-      {
-        "@type": "Person",
-        "@id": "https://www.australianjeevitham.com/#person",
-        "name": "Binu Vadakkedath",
-        "alternateName": "Binu Mathew",
-        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html",
-        "jobTitle": "Software Engineer and Content Creator",
-        "image": {
-          "@type": "ImageObject",
-          "url": "https://www.australianjeevitham.com/images/australian-jeevitham-binu-holding-youtube-100k-award.webp"
-        },
-        "sameAs": [
-          "https://www.youtube.com/@AustralianJeevitham",
-          "https://www.facebook.com/Australian.Jeevitham",
-          "https://www.instagram.com/australianjeevitham/",
-          "https://www.tiktok.com/@australianjeevitham",
-          "https://www.threads.com/@australianjeevitham",
-          "https://x.com/AusJeevitham",
-          "https://www.imdb.com/title/tt43669114"
         ]
       },
       {
@@ -156,8 +119,8 @@
         "inLanguage": ["en", "ml"],
         "image": "https://www.australianjeevitham.com/images/og/australian-resume-cover-letter-guide.webp",
         "datePublished": "2026-09-15",
-        "dateModified": "2026-09-29",
-        "author": {"@id": "https://www.australianjeevitham.com/#person"},
+        "dateModified": "2026-09-30",
+        "author": {"@type": "Person", "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person", "name": "Binu Vadakkedath", "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"},
         "publisher": {"@id": "https://www.australianjeevitham.com/#brand"},
         "mainEntityOfPage": {"@id": "https://www.australianjeevitham.com/australian-resume-cover-letter-guide.html#webpage"}
       },
@@ -311,6 +274,7 @@
   <div class="wrap prose reveal">
     <span class="stamp">Start Here</span>
     <h2 style="margin-top:16px;">1. <span lang="ml">Resume എഴുതുന്നതിന് മുമ്പ് job advertisement വായിക്കുക</span></h2>
+    <p>There is no single mandatory Australian resume format. The employer's advertisement, information pack and application portal instructions take priority over general resume advice.</p>
     <p><span class="mal" lang="ml">Resume format തിരഞ്ഞെടുക്കുന്നതിന് മുമ്പ് employer എന്താണ് ആവശ്യപ്പെടുന്നത് എന്ന് വേർതിരിച്ചെടുക്കുക: essential criteria, desirable criteria, licence, registration, work rights, location, shifts, closing date, file type, page limit എന്നിവ.</span></p>
     <p>Make a short evidence map before writing. Put each important requirement in one column and one genuine example from your experience beside it. This prevents a common problem: a polished resume that never answers what the employer is actually looking for.</p>
     <div class="panel" style="margin-top:24px;">
@@ -342,7 +306,7 @@
     <div class="section-head">
       <span class="stamp coral">ATS-Friendly Formatting</span>
       <h2 style="margin-top:16px;">2. Keep the document easy for people and systems to read</h2>
-      <p><span class="mal" lang="ml">ATS എന്നത് ഒരു magic keyword machine അല്ല. Employers വ്യത്യസ്ത സസോഫ്റ്റുവെയറുകളും screening methods-ഉം ഉപയോഗിക്കുന്നു. അതുകൊണ്ട് universal guarantee ആർക്കും നൽകാനാവില്ല.</span></p>
+      <p><span class="mal" lang="ml">ATS എന്നത് ഒരു magic keyword machine അല്ല. Employers വ്യത്യസ്ത സോഫ്റ്റ്‌വെയറുകളും screening methods-ഉം ഉപയോഗിക്കുന്നു. അതുകൊണ്ട് universal guarantee ആർക്കും നൽകാനാവില്ല.</span></p>
     </div>
     <div class="crosslink-grid">
       <div class="crosslink-card tint-ocean">
@@ -405,6 +369,7 @@
       <div>
         <p><strong>Personal information: include only what the application genuinely needs.</strong></p>
         <p><span class="mal" lang="ml">Indian റെസ്യുമുകളിൽ സാധാരണ കാണുന്ന photo, date of birth, marital status, religion, passport number, Aadhaar number തുടങ്ങിയ വിവരങ്ങൾ Australian resume-ൽ സാധാരണയായി ആവശ്യമില്ല. Employer വ്യക്തമായി ആവശ്യപ്പെടാത്ത sensitive identity documents ആദ്യ application-ൽ അയക്കരുത്.</span></p>
+        <p>Scamwatch advises job seekers to be careful about including personal information such as a full physical address or date of birth in a resume.</p>
         <p>If work rights are relevant, describe your status accurately and briefly. Do not upload identity or banking documents to an unverified employer or recruiter.</p>
       </div>
     </div>
@@ -415,7 +380,7 @@
   <div class="wrap prose reveal">
     <span class="stamp coral">Cover Letter</span>
     <h2 style="margin-top:16px;">4. Write a short letter that connects you to this role</h2>
-    <p>Queensland Government guidance recommends a tailored one-page cover letter that introduces you, identifies the position, highlights your strongest qualities and encourages the reader to continue to your resume. It should not simply repeat the resume.</p>
+    <p>Queensland Government guidance recommends a tailored one-page cover letter that introduces you, identifies the position, highlights your strongest qualities and encourages the reader to continue to your resume. It should not simply repeat the resume. If the advertisement requests a different length or format, follow that instruction instead.</p>
     <p><span class="mal" lang="ml">Company name മാത്രം മാറ്റിയ generic letter recruiters-ന് എളുപ്പം തിരിച്ചറിയാം. എന്തുകൊണ്ട് ഈ role, എന്തുകൊണ്ട് ഈ organisation, എന്ത് relevant evidence നിങ്ങൾക്കുണ്ട് എന്നീ മൂന്ന് കാര്യങ്ങൾ വ്യക്തമായി പറയുക.</span></p>
     <ol>
       <li><strong>Opening:</strong> Name the role and explain why it genuinely interests you.</li>
@@ -503,7 +468,7 @@
       <span class="icon" aria-hidden="true">🤖</span>
       <div>
         <p><strong>Using AI responsibly in a job application</strong></p>
-        <p>AI can help you organise notes, shorten sentences, check grammar or compare your draft with the advertisement. You remain responsible for every claim. Never let a tool invent achievements, qualifications, registrations, employers, dates or selection-criteria examples. Read the final application aloud and rewrite anything that does not sound like you.</p>
+        <p>AI can help you organise notes, shorten sentences, check grammar or compare your draft with the advertisement. You remain responsible for every claim. Never let a tool invent achievements, qualifications, registrations, employers, dates or selection-criteria examples. Follow any employer-specific restriction on AI use and disclose your use if the application instructions require it. Read the final application aloud, personalise it and rewrite anything that does not sound like you.</p>
       </div>
     </div>
   </div>
@@ -561,7 +526,8 @@
         <a class="resource-link" href="https://www.workforceaustralia.gov.au/individuals/coaching/job-applications/cover-letters" target="_blank" rel="noopener noreferrer"><span>Workforce Australia - Write a Cover Letter</span><span class="arrow" aria-hidden="true">→</span></a>
         <a class="resource-link" href="https://www.workforceaustralia.gov.au/individuals/coaching/job-applications/job-application-tips" target="_blank" rel="noopener noreferrer"><span>Workforce Australia - Job Application Tips</span><span class="arrow" aria-hidden="true">→</span></a>
         <a class="resource-link" href="https://www.qld.gov.au/jobs/finding/resume" target="_blank" rel="noopener noreferrer"><span>Queensland Government - Resume, Cover Letter and Selection Criteria</span><span class="arrow" aria-hidden="true">→</span></a>
-        <a class="resource-link" href="https://www.apsc.gov.au/working-aps/joining-aps/cracking-code" target="_blank" rel="noopener noreferrer"><span>Australian Public Service Commission - Cracking the Code</span><span class="arrow" aria-hidden="true">→</span></a>
+        <a class="resource-link" href="https://www.apsc.gov.au/working-aps/joining-aps/cracking-code/3-applying-aps-job-cracking-code" target="_blank" rel="noopener noreferrer"><span>Australian Public Service Commission - Applying for an APS Job</span><span class="arrow" aria-hidden="true">→</span></a>
+        <a class="resource-link" href="https://www.apsc.gov.au/sites/default/files/2026-04/Principles%20for%20candidate%20use%20of%20AI%20in%20recruitment_accessible.pdf" target="_blank" rel="noopener noreferrer"><span>Australian Public Service Commission - Candidate Use of AI</span><span class="arrow" aria-hidden="true">→</span></a>
         <a class="resource-link" href="https://www.scamwatch.gov.au/types-of-scams/jobs-and-employment-scams" target="_blank" rel="noopener noreferrer"><span>Scamwatch - Jobs and Employment Scams</span><span class="arrow" aria-hidden="true">→</span></a>
       </div>
     </div>
