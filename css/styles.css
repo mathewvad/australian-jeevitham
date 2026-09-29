@@ -10,7 +10,7 @@
   --paper:   #FDF8EE;
   --paper-dim: #F5EBD8;
   --line:    #1A1712;
-  --cream:   #FDF8EE; /* constant — for text/icons sitting on an --ink fill */
+  --cream:   #FDF8EE; /* constant - for text/icons sitting on an --ink fill */
 
   /* ---- Semantic tokens (light) ---- */
   --bg: var(--paper);
@@ -27,7 +27,7 @@
 
   --display: "Poppins", "Inter", sans-serif;
   --body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  --mal: "Baloo Chettan 2", "Inter", sans-serif;
+  --mal: "Noto Sans Malayalam", "Inter", sans-serif;
   --mono: "Space Mono", monospace;
 
   --radius: 24px;
@@ -61,9 +61,19 @@ ul{ list-style:none; }
 }
 :focus-visible{ outline:3px solid var(--grape); outline-offset:3px; }
 
+.skip-link{
+  position:fixed; top:12px; left:12px; z-index:10000;
+  padding:10px 14px; border:2px solid var(--cream); border-radius:8px;
+  background:var(--ink); color:var(--cream); font-family:var(--body);
+  font-weight:700; text-decoration:none;
+  transform:translateY(calc(-100% - 24px));
+  transition:transform .15s ease;
+}
+.skip-link:focus{ transform:translateY(0); }
+
 /* ---- Malayalam Font Variable ---- */
 :root {
-  --mal: "Noto Sans Malayalam", "Baloo Chettan 2", sans-serif;
+  --mal: "Noto Sans Malayalam", sans-serif;
 }
 
 /* ---- Malayalam Global Rule ---- */
@@ -86,7 +96,7 @@ h1 .mal, h2 .mal, h3 .mal, .vcard h3 .mal {
   font-weight: 600 !important;
 }
 
-/* Fix heading line-height — 1.8 is right for paragraphs but far
+/* Fix heading line-height - 1.8 is right for paragraphs but far
    too loose for large multi-line headings, causing big vertical gaps */
 h1 .mal, h2 .mal, h3 .mal, .vcard h3 .mal {
   line-height: 1.2 !important;
@@ -103,7 +113,7 @@ h1 [lang="ml"], h2 [lang="ml"], h3 [lang="ml"],
 
 /* =========================================================
    SIGNATURE: passport-stamp badge
-   Used as section eyebrows / category tags — a small flat pill
+   Used as section eyebrows / category tags - a small flat pill
    with a soft tinted fill, in the spirit of a friendly badge.
    ========================================================= */
 .stamp{
@@ -132,7 +142,7 @@ h1 [lang="ml"], h2 [lang="ml"], h3 [lang="ml"],
 .stamp.sun{ --stamp-color:#B8860B; }
 
 /* =========================================================
-   Section divider — a simple soft hairline, used between major
+   Section divider - a simple soft hairline, used between major
    sections in place of a hard rule.
    ========================================================= */
 .ticket-divider{
@@ -255,7 +265,7 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 .hero-cta.instagram{ background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); color:#fff; }
 .hero-cta:hover{ transform:translateY(-3px); box-shadow:var(--shadow-hover); }
 
-/* Photo frame — big soft-shadow rounded frame for the
+/* Photo frame - big soft-shadow rounded frame for the
    creator's photography (no rotation, no hard edges) */
 .postcard{
   position:relative;
@@ -424,7 +434,7 @@ footer .records a{ text-decoration:underline; }
 footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 
 /* =========================================================
-   INNER-PAGE HERO (subhero) — used on every page except home
+   INNER-PAGE HERO (subhero) - used on every page except home
    ========================================================= */
 .subhero{
   position:relative; overflow:hidden;
@@ -656,7 +666,7 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 .email-highlight{ font-family:var(--mono); font-weight:700; color:var(--ocean); text-decoration:underline; }
 
 /* =========================================================
-   BIOLINK PAGE (bio.html) — a self-contained linktree layout
+   BIOLINK PAGE (bio.html) - a self-contained linktree layout
    ========================================================= */
 .biolink{
   min-height:calc(100vh - 76px);
@@ -791,7 +801,7 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 .share-btn.wa, .share-btn.tw{ background:#fff; }
 
 /* ============================================================
-   RESOURCES PAGE — icon-free layout, animated hero SVG,
+   RESOURCES PAGE - icon-free layout, animated hero SVG,
    and category description copy (added August 2026)
    ============================================================ */
 
@@ -906,7 +916,7 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 }
 
 /* ============================================================
-   DATA TABLES — used for state bond authority / glossary tables
+   DATA TABLES - used for state bond authority / glossary tables
    (added August 2026, moved out of page-level inline <style>)
    ============================================================ */
 .table-wrap{
@@ -939,7 +949,7 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 }
 
 /* ============================================================
-   QUOTE / TESTIMONIAL PULL-OUT — light band between the
+   QUOTE / TESTIMONIAL PULL-OUT - light band between the
    bio and milestone photo sections (added September 2026)
    ============================================================ */
 .quote-band{
