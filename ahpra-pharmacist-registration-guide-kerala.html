@@ -624,15 +624,15 @@
       "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
       "url": "https://www.australianjeevitham.com/",
       "description": "Australian Jeevitham is a bilingual Malayalam-English website sharing information and stories about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
-      "inLanguage": [
-        "en",
-        "ml"
-      ],
+      "inLanguage": ["en", "ml"],
       "publisher": {
         "@id": "https://www.australianjeevitham.com/#brand"
       },
       "creator": {
-        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person"
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
       },
       "about": {
         "@id": "https://www.australianjeevitham.com/#brand"
@@ -640,12 +640,12 @@
       "mainEntity": {
         "@id": "https://www.australianjeevitham.com/#brand"
       },
+      "copyrightHolder": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
       "image": {
         "@type": "ImageObject",
         "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
-      },
-      "copyrightHolder": {
-        "@id": "https://www.australianjeevitham.com/#brand"
       }
     },
     {
@@ -664,11 +664,17 @@
         "@type": "ImageObject",
         "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
       },
-      "founder": {
-        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person"
-      },
       "creator": {
-        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person"
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
+      },
+      "founder": {
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
       },
       "location": {
         "@type": "Place",
@@ -683,10 +689,7 @@
         "@type": "ContactPoint",
         "contactType": "general enquiries",
         "url": "https://www.australianjeevitham.com/contact-australian-jeevitham.html",
-        "availableLanguage": [
-          "en",
-          "ml"
-        ]
+        "availableLanguage": ["en", "ml"]
       },
       "knowsAbout": [
         "Australian life",
@@ -706,6 +709,40 @@
         "https://x.com/AusJeevitham",
         "https://www.imdb.com/title/tt43669114",
         "https://australianjeevitham.blogspot.com/"
+      ],
+      "subjectOf": [
+        {
+          "@type": "Article",
+          "url": "https://www.manoramaonline.com/global-malayali/other-countries/2025/12/11/pravasi-malayali-toddy-tapping-australia.html",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Manorama Online"
+          }
+        },
+        {
+          "@type": "Article",
+          "url": "https://malayalam.indiatoday.in/fact-check/story/fact-check-kangaroo-video-post-not-kerala-482254-2022-12-12",
+          "publisher": {
+            "@type": "Organization",
+            "name": "India Today"
+          }
+        },
+        {
+          "@type": "Article",
+          "url": "https://www.manoramaonline.com/karshakasree/farm-management/2023/10/21/coconut-toddy-production-in-australia.html",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Manorama Online"
+          }
+        },
+        {
+          "@type": "Article",
+          "url": "https://www.manoramaonline.com/karshakasree/home-garden/2023/11/08/kangaroos-destroy-crops.html",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Manorama Online"
+          }
+        }
       ]
     },
     {
@@ -730,7 +767,10 @@
         "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
       },
       "creator": {
-        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person"
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
       },
       "publisher": {
         "@id": "https://www.australianjeevitham.com/#brand"
@@ -776,7 +816,10 @@
         "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
       },
       "creator": {
-        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person"
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
       },
       "publisher": {
         "@id": "https://www.australianjeevitham.com/#brand"
@@ -824,42 +867,58 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "എനിക്ക് ഇന്ത്യയിൽ നിന്നുള്ള B.Pharm / Pharm.D ബിരുദം വെച്ച് നേരിട്ട് രജിസ്ട്രേഷൻ ലഭിക്കുമോ?",
+          "name": "കേരളത്തിൽ നിന്നുള്ള ബി.ഫാം / ഫാം.ഡി യോഗ്യത വെച്ച് നേരിട്ട് ഓസ്‌ട്രേലിയൻ രജിസ്ട്രേഷൻ ലഭിക്കുമോ?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "ഇല്ല. ഇന്ത്യൻ ഫാർമസിസ്റ്റുകൾ ആദ്യം APC വഴി യോഗ്യതാ പരിശോധന (Eligibility Check) നടത്തുകയും തുടർന്ന് OPRA പരീക്ഷ പാസാകുകയും വേണം. അതിനുശേഷം ഓസ്‌ട്രേലിയയിൽ വന്ന് 1,575 മണിക്കൂർ സൂപ്പർവൈസ്ഡ് ഇന്റേൺഷിപ്പും ഫാർമസി ബോർഡ് പരീക്ഷകളും പൂർത്തിയാക്കിയാൽ മാത്രമേ പൂർണ്ണ ജനറൽ രജിസ്‌ട്രേഷൻ ലഭിക്കൂ."
+            "text": "സാധാരണയായി ഇല്ല. Kerala-trained applicants ആദ്യം APC Knowledge Stream eligibility പരിശോധിക്കണം. Qualification APCയുടെ academic-equivalence criteria പാലിച്ചാൽ OPRA വഴി അടുത്ത ഘട്ടത്തിലേക്ക് പോകാം. OPRA വിജയിച്ചതിന് ശേഷം provisional registration, approved supervised practice, ITP and intern examinations ഉൾപ്പെടുന്ന Pharmacy Board requirements പൂർത്തിയാക്കണം."
           }
         },
         {
           "@type": "Question",
-          "name": "പഴയ KAPS പരീക്ഷയും പുതിയ OPRA പരീക്ഷയും തമ്മിലുള്ള വ്യത്യാസം എന്താണ്?",
+          "name": "APC Knowledge Stream-ന് കെ.എസ്.പി.സി (KSPC) രജിസ്ട്രേഷൻ നിർബന്ധമാണോ?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "മുമ്പ് രണ്ട് പേപ്പറുകളായി നടന്നിരുന്ന KAPS പരീക്ഷയ്ക്ക് പകരമായി നിലവിൽ വന്നതാണ് OPRA പരീക്ഷ. ഇത് 150 മിനിറ്റ് ദൈർഘ്യമുള്ള 120 മൾട്ടിപ്പിൾ ചോയ്‌സ് ചോദ്യങ്ങൾ മാത്രമുള്ള ഒറ്റ പരീക്ഷയാണ്. ഇതിൽ ക്ലിനിക്കൽ തെറാപ്യൂട്ടിക്സിനും പേഷ്യന്റ് കെയറിനും (45%) കൂടുതൽ ഊന്നൽ നൽകിയിരിക്കുന്നു."
+            "text": "Knowledge Stream eligibility തെളിയിക്കാൻ pharmacist registration evidence APC നിർബന്ധമാക്കുന്നില്ല. KSPC registration ഉണ്ടെങ്കിൽ അത് സൂക്ഷിക്കുക, കാരണം registration history പിന്നീട് Ahpra/Pharmacy Board ഘട്ടങ്ങളിൽ പ്രസക്തമാകാം. എന്നാൽ “KSPC registration ഇല്ലെങ്കിൽ APC Eligibility Check ചെയ്യാനാകില്ല” എന്ന് കരുതരുത്."
           }
         },
         {
           "@type": "Question",
-          "name": "ഞാൻ OPRA പരീക്ഷ എഴുതാൻ ഓസ്‌ട്രേലിയയിലേക്ക് യാത്ര ചെയ്യേണ്ടതുണ്ടോ?",
+          "name": "OPRA പരീക്ഷ എന്താണ്?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "ഇല്ല. OPRA പരീക്ഷ പിയേഴ്സൺ വി.യു.ഇ (Pearson VUE) വഴിയാണ് നടത്തപ്പെടുന്നത്. ഇന്ത്യയിലെ പ്രമുഖ നഗരങ്ങളിലുള്ള ടെസ്റ്റ് സെന്ററുകളിൽ ഇരുന്ന് തന്നെ പരീക്ഷ എഴുതാവുന്നതാണ്."
+            "text": "OPRA (Overseas Pharmacist Readiness Assessment) ആണ് Knowledge Stream-ൽ പഴയ KAPS പരീക്ഷയ്ക്ക് പകരം വന്നത്. ഇത് 150 മിനിറ്റിൽ 120 multiple-choice questions ഉള്ള computer-based exam ആണ്. Biomedical sciences, medicinal chemistry/biopharmaceutics, pharmacokinetics/pharmacodynamics, pharmacology/toxicology, therapeutics and patient care എന്നിവയാണ് പ്രധാന മേഖലകൾ."
           }
         },
         {
           "@type": "Question",
-          "name": "ഇന്റേൺഷിപ്പ് കാലയളവിൽ ശമ്പളം ലഭിക്കുമോ?",
+          "name": "OPRA എഴുതാൻ ഓസ്‌ട്രേലിയയിലേക്ക് യാത്ര ചെയ്യേണ്ടതുണ്ടോ?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "അതെ. ഓസ്‌ട്രേലിയയിലെ ഫെയർ വർക്ക് ഓംബുഡ്‌സ്മാൻ (Fair Work Ombudsman) നിയമപ്രകാരം Pharmacy Industry Award അനുസരിച്ച് ഇന്റേൺ ഫാർമസിസ്റ്റുകൾക്ക് നിയമാനുസൃതമായ മിനിമം വേതനവും സൂപ്പർആനുവേഷനും ലഭിക്കാൻ അർഹതയുണ്ട്."
+            "text": "അവശ്യമായില്ല. OPRA Pearson VUE വഴി നടത്തുന്നതിനാൽ India ഉൾപ്പെടെ authorised international test centres ലഭ്യമായേക്കാം. Booking സമയത്ത് available centre/location നേരിട്ട് പരിശോധിക്കുക."
           }
         },
         {
           "@type": "Question",
-          "name": "രണ്ട് വർഷത്തെ D.Pharm (Diploma) ഉള്ളവർക്ക് ഈ വഴിയിൽ അപേക്ഷിക്കാമോ?",
+          "name": "Knowledge Stream ഇന്റേൺഷിപ്പിൽ എത്ര സൂപ്പർവൈസ്ഡ് മണിക്കൂറുകൾ വേണം?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "ഇല്ല. APC നിയമപ്രകാരം മിനിമം 4 വർഷത്തെ ബി.ഫാം അല്ലെങ്കിൽ അംഗീകൃത ഫാം.ഡി ബിരുദമുള്ളവർക്ക് മാത്രമേ നോളജ് സ്ട്രീമിൽ സ്കിൽ അസസ്‌മെന്റിന് അപേക്ഷിക്കാൻ യോഗ്യതയുള്ളൂ."
+            "text": "നിലവിലെ standard internship requirement 1,575 മണിക്കൂർ approved supervised practice ആണ്. Pharmacy Board oral exam eligibility-ക്ക് സാധാരണയായി അതിന്റെ 75% ആയ 1,181 മണിക്കൂർ പൂർത്തിയാക്കിയിരിക്കണം, കൂടാതെ Boardയുടെ മറ്റ് exam requirements പാലിക്കണം."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "കേരളത്തിലെ ഫാർമസിസ്റ്റുകൾക്ക് CAOP പാത ഉപയോഗിക്കാമോ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Kerala qualification മാത്രം ഉള്ളതുകൊണ്ട് CAOP ലഭിക്കില്ല. APC Competency Stream-ന് Canada, Ireland, UK അല്ലെങ്കിൽ USA എന്നിവിടങ്ങളിലെ qualifying education/adjudication plus current pharmacist registration സംബന്ധിച്ച specific criteria പാലിക്കണം."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "ഡിപ്ലോമ (D.Pharm) മാത്രമുള്ളവർക്ക് നോളജ് സ്ട്രീമിൽ അപേക്ഷിക്കാമോ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "APC qualification-equivalence criteria ആണ് നിർണ്ണായകം. 1 സ്ഥാപനം അല്ലെങ്കിൽ 1 January 2006-ന് ശേഷം പൂർത്തിയാക്കിയ qualification സാധാരണയായി കുറഞ്ഞത് 4 വർഷത്തെ full-time academic study-നോട് comparable ആയിരിക്കണം. അതുകൊണ്ട് 2-year D.Pharm മാത്രം സാധാരണയായി ഈ academic threshold പാലിക്കില്ല."
           }
         },
         {
@@ -867,7 +926,15 @@
           "name": "2026 ഏപ്രിലിലെ ഇംഗ്ലീഷ് സ്കോർ മാറ്റം എന്നെ ബാധിക്കുമോ?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "23 ഏപ്രിൽ 2026-നോ അതിന് ശേഷമോ ടെസ്റ്റ് എഴുതുന്നവർക്ക് പുതിയ സ്കോർ ടേബിൾ ബാധകമാണ് - പ്രത്യേകിച്ച് PTE Speaking (76) ഉം OET-യുടെ അക്ക സ്കോറും (350/360) ശ്രദ്ധിക്കുക. 22 ഏപ്രിൽ 2026-നോ അതിന് മുൻപോ എടുത്ത ടെസ്റ്റ് ഫലങ്ങൾ പഴയ മാനദണ്ഡപ്രകാരം (സാധുതയുള്ള കാലയളവിനുള്ളിൽ) തുടർന്നും അംഗീകരിക്കപ്പെടും."
+            "text": "23 April 2026-നോ അതിന് ശേഷമോ test എഴുതിയാൽ പുതിയ score table ബാധകമാണ്. 22 April 2026-നോ അതിന് മുൻപോ എടുത്ത results transition/previous table പ്രകാരം വിലയിരുത്തപ്പെടാം. Test date അനുസരിച്ച് Ahpraയുടെ official score table പരിശോധിക്കുക."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "APC സ്കിൽ അസസ്‌മെന്റ് ഔട്ട്‌കോം എത്രകാലം സാധുവാണ്?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Migration-purpose Skills Assessment Outcome സാധാരണയായി issue date മുതൽ 3 വർഷം valid ആണ്. 1 July 2026 മുതൽ eligible pharmacists-ക്ക് renewed outcome request ചെയ്യാനുള്ള updated APC process ലഭ്യമാണ്."
           }
         }
       ]
