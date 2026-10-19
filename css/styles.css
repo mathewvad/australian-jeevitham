@@ -355,6 +355,7 @@ h1,h2,h3{ font-family:var(--display); letter-spacing:-0.01em; }
 
 /* ---------- RESOURCES ---------- */
 .crosslink-grid{ display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+.crosslink-grid.two-col{ grid-template-columns:repeat(2, 1fr); }
 .crosslink-card{
   display:block; background:var(--card-bg); border:1px solid var(--border);
   border-top:4px solid var(--card-accent, var(--accent));
@@ -771,7 +772,7 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
   .about-grid{ grid-template-columns:1fr; }
   .about-photo{ order:-1; max-width:360px; margin:0 auto; }
   .video-grid{ grid-template-columns:1fr; }
-  .crosslink-grid{ grid-template-columns:1fr; }
+  .crosslink-grid, .crosslink-grid.two-col{ grid-template-columns:1fr; }
   .connect-grid{ grid-template-columns:1fr 1fr; }
   .section{ padding:64px 0; }
   .subhero .wrap{ grid-template-columns:1fr; gap:28px; }
