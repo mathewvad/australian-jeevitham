@@ -282,69 +282,99 @@
   function micButton(id){ return '<button class="mic" id="' + id + '" type="button" aria-label="Tap to speak">' + I.mic + '</button>'; }
 
   /* ---------- Sound-by-sound pronunciation (Microsoft Azure) ---------- */
-  // The app asks the server for a 10-minute Azure token, then scores speech in the browser.
-  // Sound names only exist in Azure's American English model; the sounds the drills train are the
-  // same in Australian English. Without Azure (not set up, offline) the free word check is used.
-  var AZURE_SDK = 'https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@1.52.0/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js';
-  var az = { token: null, region: null, exp: 0, off: false, sdk: null };
-  function loadAzureSdk(){
-    if (az.sdk) return az.sdk;
-    az.sdk = new Promise(function(res, rej){
-      if (window.SpeechSDK) return res(window.SpeechSDK);
-      var s = document.createElement('script');
-      s.src = AZURE_SDK; s.onload = function(){ res(window.SpeechSDK); }; s.onerror = function(){ az.sdk = null; rej(new Error('sdk')); };
-      document.head.appendChild(s);
+  // The app records the microphone itself, starting inside the tap (Chrome on Android gives a
+  // silent microphone to recording that starts later), stops after a short silence, and posts a
+  // 16 kHz WAV to the server, which scores it with Azure Speech. Sound names only exist in Azure's
+  // American English model; the sounds the drills train are the same in Australian English.
+  // Without Azure (not set up, offline) the free word check is used instead.
+  var az = { off: false };
+
+  // Starts recording now. Calls opts.level(0..1) while recording, and resolves with a WAV Blob
+  // (or null if nothing was said). Returns { done: Promise, stop() }.
+  function recordWav(opts){
+    var AC = window.AudioContext || window.webkitAudioContext;
+    var ctx = new AC(), chunks = [], stream = null, proc = null, src = null, finished = false;
+    if (ctx.resume) ctx.resume();
+    var started = Date.now(), lastVoice = 0, heardVoice = false, noise = 0.004, frames = 0, resolveFn;
+    var done = new Promise(function(res){ resolveFn = res; });
+    function finish(){
+      if (finished) return;
+      finished = true;
+      try { proc && proc.disconnect(); src && src.disconnect(); } catch(e) {}
+      if (stream) stream.getTracks().forEach(function(t){ t.stop(); });
+      var rate = ctx.sampleRate;
+      try { ctx.close(); } catch(e) {}
+      resolveFn(heardVoice ? toWav(chunks, rate) : null);
+    }
+    navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } })
+      .then(function(s){
+        if (finished) { s.getTracks().forEach(function(t){ t.stop(); }); return; }
+        stream = s;
+        src = ctx.createMediaStreamSource(s);
+        proc = ctx.createScriptProcessor(4096, 1, 1);
+        proc.onaudioprocess = function(e){
+          if (finished) return;
+          var d = e.inputBuffer.getChannelData(0), sum = 0;
+          chunks.push(new Float32Array(d));
+          for (var i = 0; i < d.length; i++) sum += d[i] * d[i];
+          var rms = Math.sqrt(sum / d.length), now = Date.now();
+          frames++;
+          if (frames <= 3) noise = Math.max(noise, rms);          // measure the room for the first moment
+          var loud = rms > Math.max(0.012, noise * 2.5);
+          if (loud) { heardVoice = true; lastVoice = now; }
+          if (opts.level) opts.level(Math.min(1, rms * 12));
+          // Stop after a short silence once they've spoken, after 7 s of nothing, or after 20 s.
+          if ((heardVoice && now - lastVoice > (opts.pauseMs || 1300)) || (!heardVoice && now - started > 7000) || now - started > 20000) finish();
+        };
+        src.connect(proc); proc.connect(ctx.destination);
+      })
+      .catch(function(err){ if (opts.error) opts.error(err && err.name); heardVoice = false; finish(); });
+    return { done: done, stop: finish };
+  }
+  // Float chunks at the device rate -> 16 kHz 16-bit mono WAV.
+  function toWav(chunks, rate){
+    var total = chunks.reduce(function(a, c){ return a + c.length; }, 0), ratio = rate / 16000;
+    var n = Math.floor(total / ratio), pcm = new Int16Array(n), all = new Float32Array(total), o = 0;
+    chunks.forEach(function(c){ all.set(c, o); o += c.length; });
+    for (var i = 0; i < n; i++) {
+      var a = Math.floor(i * ratio), b = Math.min(total, Math.floor((i + 1) * ratio)), s = 0;
+      for (var k = a; k < b; k++) s += all[k];
+      var v = b > a ? s / (b - a) : all[a];
+      pcm[i] = Math.max(-1, Math.min(1, v)) * 0x7fff;
+    }
+    var buf = new ArrayBuffer(44 + pcm.length * 2), dv = new DataView(buf);
+    function str(p, t){ for (var j = 0; j < t.length; j++) dv.setUint8(p + j, t.charCodeAt(j)); }
+    str(0, 'RIFF'); dv.setUint32(4, 36 + pcm.length * 2, true); str(8, 'WAVE'); str(12, 'fmt ');
+    dv.setUint32(16, 16, true); dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, 16000, true);
+    dv.setUint32(28, 32000, true); dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); str(36, 'data'); dv.setUint32(40, pcm.length * 2, true);
+    new Int16Array(buf, 44).set(pcm);
+    return new Blob([buf], { type: 'audio/wav' });
+  }
+  // Sends a recording to the server for scoring against the reference text.
+  function scoreWav(wav, ref){
+    var refB64 = btoa(unescape(encodeURIComponent(ref)));
+    return fetch(TALK_API.replace(/\/$/, '') + '/pron', {
+      method: 'POST', headers: { 'Content-Type': 'audio/wav', 'X-Access-Code': getCode(), 'X-Reference': refB64 }, body: wav
+    }).then(function(r){ return r.json(); }).then(function(j){
+      if (j.error) { if (j.error === 'no_azure') az.off = true; throw new Error(j.error); }
+      return parseAzure(j);
     });
-    return az.sdk;
   }
-  function azureToken(){
-    if (az.token && Date.now() < az.exp) return Promise.resolve(az);
-    return fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ azureToken: true }) })
-      .then(function(r){ return r.json(); })
-      .then(function(d){
-        if (!d.token) { if (d.error === 'no_azure') az.off = true; throw new Error(d.error || 'azure'); }
-        az.token = d.token; az.region = d.region; az.exp = Date.now() + 9 * 60 * 1000;
-        return az;
-      });
-  }
-  // Records one utterance and scores it against the reference text.
-  function assessAzure(ref){
-    return Promise.all([loadAzureSdk(), azureToken()]).then(function(v){
-      var sdk = v[0], a = v[1];
-      return new Promise(function(resolve, reject){
-        var sc = sdk.SpeechConfig.fromAuthorizationToken(a.token, a.region);
-        sc.speechRecognitionLanguage = 'en-US';
-        var pc = new sdk.PronunciationAssessmentConfig(ref, sdk.PronunciationAssessmentGradingSystem.HundredMark, sdk.PronunciationAssessmentGranularity.Phoneme, true);
-        pc.phonemeAlphabet = 'IPA';
-        pc.nbestPhonemeCount = 5;
-        pc.enableProsodyAssessment = true;
-        var audio = sdk.AudioConfig.fromDefaultMicrophoneInput();
-        var rec = new sdk.SpeechRecognizer(sc, audio);
-        pc.applyTo(rec);
-        // Close the recogniser AND the microphone input: on Android only one thing can use the
-        // mic at a time, so a mic left open blocks the next listening session.
-        function release(){ try { rec.close(); } catch(e) {} try { audio.close(); } catch(e) {} }
-        rec.recognizeOnceAsync(function(result){
-          var raw = result.properties.getProperty(sdk.PropertyId.SpeechServiceResponse_JsonResult);
-          release();
-          try { resolve(parseAzure(JSON.parse(raw || '{}'))); } catch(e) { resolve(null); }
-        }, function(err){ release(); reject(err); });
-      });
-    });
-  }
+  // Azure's result: scores either flat on each item or inside "PronunciationAssessment".
   function parseAzure(j){
     var nb = j.NBest && j.NBest[0];
-    if (!nb || !nb.PronunciationAssessment) return null;
-    var pa = nb.PronunciationAssessment;
+    if (!nb) return null;
+    var pa = nb.PronunciationAssessment || nb;
+    if (pa.AccuracyScore == null) return null;
     return {
-      pron: Math.round(pa.PronScore || 0), accuracy: Math.round(pa.AccuracyScore || 0), fluency: Math.round(pa.FluencyScore || 0),
+      pron: Math.round(pa.PronScore || pa.AccuracyScore || 0), accuracy: Math.round(pa.AccuracyScore || 0), fluency: pa.FluencyScore == null ? null : Math.round(pa.FluencyScore),
       completeness: Math.round(pa.CompletenessScore || 0), prosody: pa.ProsodyScore == null ? null : Math.round(pa.ProsodyScore),
       heard: nb.Display || '', secs: (j.Duration || 0) / 1e7,
       words: (nb.Words || []).map(function(w){
-        var wp = w.PronunciationAssessment || {};
+        var wp = w.PronunciationAssessment || w;
         return { word: w.Word, score: Math.round(wp.AccuracyScore || 0), error: wp.ErrorType || 'None',
           phonemes: (w.Phonemes || []).map(function(p){
-            var pp = p.PronunciationAssessment || {}, best = (pp.NBestPhonemes || [])[0];
+            var pp = p.PronunciationAssessment || p, best = (pp.NBestPhonemes || [])[0];
             return { ipa: p.Phoneme, score: Math.round(pp.AccuracyScore || 0), heard: best ? best.Phoneme : null };
           }) };
       })
@@ -355,7 +385,7 @@
 
   // Adds the day's pronunciation numbers and which drill sounds were weak.
   function logAzure(res){
-    logDay({ paN: 1, paPron: res.pron, paAcc: res.accuracy, paFlu: res.fluency, paPros: res.prosody == null ? res.pron : res.prosody,
+    logDay({ paN: 1, paPron: res.pron, paAcc: res.accuracy, paFlu: res.fluency == null ? res.pron : res.fluency, paPros: res.prosody == null ? res.pron : res.prosody,
              pronSum: res.pron, pronN: 1, speakSec: Math.round(res.secs) });
     state.sounds = state.sounds || {};
     res.words.forEach(function(w){ w.phonemes.forEach(function(p){
@@ -403,9 +433,10 @@
   // A practise-this panel: big mic, then Azure sound-by-sound results (or the free word check).
   // getRef() returns the sentence to say at the moment the mic is tapped.
   function practiceCard(el, getRef, onDone){
-    el.innerHTML = (SR || window.MediaRecorder ? micButton('pmic') : '') +
+    var canRecord = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && (window.AudioContext || window.webkitAudioContext));
+    el.innerHTML = (SR || canRecord ? micButton('pmic') : '') +
       '<span class="mic-label" id="plabel">Tap and say it</span><div class="result" id="presult"></div>';
-    var mic = el.querySelector('#pmic'), label = el.querySelector('#plabel'), out = el.querySelector('#presult'), rec = null, busy = false;
+    var mic = el.querySelector('#pmic'), label = el.querySelector('#plabel'), out = el.querySelector('#presult'), rec = null, busy = false, recording = null;
     if (!mic) { label.textContent = 'Speaking practice needs Chrome or Safari.'; return; }
     function browserCheck(ref){
       if (!SR) { label.textContent = 'Speaking practice works in Chrome.'; return; }
@@ -429,22 +460,33 @@
       });
     }
     mic.onclick = function(){
+      if (recording) { recording.stop(); return; }   // tap again to finish early
       if (busy) return;
       if (rec) { rec.stop(); return; }
       var ref = (getRef() || '').trim();
       if (!ref) { label.textContent = 'Type a sentence first'; return; }
       if (canSpeak) speechSynthesis.cancel();
-      if (az.off || !TALK_API || !getCode()) return browserCheck(ref);
-      busy = true; mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… speak now';
-      assessAzure(ref).then(function(res){
-        busy = false; mic.classList.remove('live');
-        if (!res) { label.textContent = 'Didn\'t catch that - tap and try again'; return; }
-        label.textContent = 'Tap to try again';
-        renderAzure(out, res); logAzure(res);
-        if (onDone) onDone(res);
+      if (az.off || !canRecord || !TALK_API || !getCode()) return browserCheck(ref);
+      // Start recording right here, inside the tap.
+      mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… speak now';
+      recording = recordWav({
+        level: function(v){ mic.style.transform = 'scale(' + (1 + v * 0.18).toFixed(3) + ')'; },
+        error: function(name){ if (name === 'NotAllowedError') out.innerHTML = '<p class="heard">Microphone is blocked. Please allow it for this site.</p>'; }
+      });
+      recording.done.then(function(wav){
+        recording = null; mic.classList.remove('live'); mic.style.transform = '';
+        if (!wav) { label.textContent = 'Didn\'t catch that - tap and try again'; return; }
+        busy = true; mic.classList.add('busy'); mic.innerHTML = I.spinner; label.textContent = 'Scoring…';
+        return scoreWav(wav, ref).then(function(res){
+          busy = false; mic.classList.remove('busy'); mic.innerHTML = I.mic;
+          if (!res) { label.textContent = 'Didn\'t catch that - tap and try again'; return; }
+          label.textContent = 'Tap to try again';
+          renderAzure(out, res); logAzure(res);
+          if (onDone) onDone(res);
+        });
       }).catch(function(){
-        busy = false; mic.classList.remove('live');
-        browserCheck(ref);   // Azure not available right now: use the free check instead.
+        recording = null; busy = false; mic.classList.remove('live', 'busy'); mic.innerHTML = I.mic; mic.style.transform = '';
+        label.textContent = az.off ? 'Tap to try again' : 'Couldn\'t score that - check your internet and tap to try again';
       });
     };
   }
