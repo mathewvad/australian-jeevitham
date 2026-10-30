@@ -148,9 +148,10 @@
   if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
   function hasAussieVoice(){ return !!voice && /en[-_]AU/i.test(voice.lang); }
 
-  function speak(text, slow){
+  // queue: add after whatever is already being spoken (used to read a reply sentence by sentence).
+  function speak(text, slow, queue){
     if (!canSpeak || !text) return;
-    speechSynthesis.cancel();
+    if (!queue) speechSynthesis.cancel();
     // Voices read "G'day" letter by letter; "Gidday" sounds right.
     var u = new SpeechSynthesisUtterance(text.replace(/\bg['’]day\b/gi, 'Gidday'));
     if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = 'en-AU'; }
@@ -227,8 +228,10 @@
   }
 
   // One listening session. Calls back with interim text, then final alternatives.
+  // pauseMs: stop as soon as the speaker has paused this long, instead of waiting for the
+  // browser's own (slower) end-of-speech detection.
   function listen(opts){
-    var r = new SR(), started = Date.now(), finalAlts = [], got = false;
+    var r = new SR(), started = Date.now(), finalAlts = [], got = false, lastText = '', timer = null;
     r.lang = 'en-AU'; r.interimResults = !!opts.interim; r.maxAlternatives = 3; r.continuous = false;
     r.onresult = function(e){
       var text = '';
@@ -240,10 +243,19 @@
           for (var k = 0; k < e.results[i].length; k++) finalAlts.push(e.results[i][k].transcript);
         }
       }
+      lastText = text;
       if (opts.interim) opts.interim(text);
+      if (opts.pauseMs && !got) {
+        clearTimeout(timer);
+        timer = setTimeout(function(){ try { r.stop(); } catch(err) {} }, opts.pauseMs);
+      }
     };
     r.onerror = function(e){ if (opts.error) opts.error(e.error); };
-    r.onend = function(){ opts.end(got ? finalAlts : [], (Date.now() - started) / 1000); };
+    r.onend = function(){
+      clearTimeout(timer);
+      // If we stopped early and no final result came, use what was heard so far.
+      opts.end(got ? finalAlts : lastText.trim() ? [lastText] : [], (Date.now() - started) / 1000);
+    };
     try { r.start(); } catch(err) { opts.end([], 0); }
     return r;
   }
@@ -677,8 +689,17 @@
         if (!r.body || (r.headers.get('Content-Type') || '').indexOf('ndjson') < 0) {
           return r.json().catch(function(){ return { error: 'ai_error' }; });
         }
-        // Streamed answer: show the reply word by word, and start speaking it as soon as it's complete.
-        var reader = r.body.getReader(), dec = new TextDecoder(), pending = '', raw = '', live = null, spoken = false, final = null;
+        // Streamed answer: show the reply word by word, and speak each sentence as soon as it's written.
+        var reader = r.body.getReader(), dec = new TextDecoder(), pending = '', raw = '', live = null, spoken = false, final = null, said = 0;
+        function speakReady(text, complete){
+          var rest = text.slice(said), end = -1, m, re = /[.!?](\s|$)/g;
+          while ((m = re.exec(rest))) { if (m.index + 1 < rest.length || complete) end = m.index + 1; }
+          if (complete) end = rest.length;
+          if (end <= 0) return;
+          var chunk = rest.slice(0, end).trim();
+          if (chunk) { speak(chunk, false, spoken); spoken = true; }
+          said += end;
+        }
         function pump(){
           return reader.read().then(function(res){
             if (res.done) return final || { error: 'ai_error' };
@@ -694,7 +715,7 @@
               if (!rep) return;
               if (!live) { dots.remove(); live = add(el('msg ai', '<p></p>')); }
               live.querySelector('p').textContent = rep.text; down();
-              if (rep.complete && !spoken) { spoken = true; speak(rep.text); }
+              if (said < rep.text.length) speakReady(rep.text, rep.complete);
             });
             return pump();
           });
@@ -745,6 +766,7 @@
       var live = meMsg('…', true);
       mic.classList.add('live'); micLabel.innerHTML = waveHtml() + 'Listening… tap to stop';
       rec = listen({
+        pauseMs: 1100,
         interim: function(t){ live.querySelector('p').textContent = t || '…'; down(); },
         error: function(err){ if (err === 'not-allowed' || err === 'service-not-allowed') note.textContent = 'Microphone is blocked - please allow it for this site.'; },
         end: function(alts, secs){

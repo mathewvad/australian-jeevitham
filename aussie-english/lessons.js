@@ -142,7 +142,7 @@ const LESSONS = [
    the id and opening line here must match it. Scenes without a level are "everyday" scenes,
    kept for the beginner and intermediate tiers. */
 const SCENES = [
-  { id: 'general', level: 'leadership', icon: '☕', title: 'General conversation - talk about anything', ml: 'ഏത് വിഷയത്തെക്കുറിച്ചും സംസാരിക്കാം', who: 'Alex, your mentor',
+  { id: 'general', level: 'leadership', icon: '☕', title: 'General conversation - talk about anything', ml: 'ഏത് വിഷയത്തെക്കുറിച്ചും സംസാരിക്കാം', who: 'Alex, a friendly local',
     opening: "G'day! Grab a seat. So, what's on your mind today? We can chat about anything you like.",
     say: "Gidday! Grab a seat. So, what's on your mind today? We can chat about anything you like.",
     opening_ml: 'ഹലോ! ഇരിക്കൂ. ഇന്ന് എന്താണ് മനസ്സിൽ? എന്തിനെക്കുറിച്ചും നമുക്ക് സംസാരിക്കാം.' },
