@@ -385,3 +385,20 @@ body.in-chat .tabbar, body.in-chat .top{ display:none; }
 .faq details[open] summary::after{ content:"–"; }
 .faq .a{ padding:0 16px 14px; color:var(--muted); font-size:.93rem; }
 .faq .a b{ color:var(--text); }
+
+/* ===== Vocabulary ===== */
+.vocab{ display:grid; gap:10px; margin-top:18px; align-items:start; }
+@media (min-width:640px){ .vocab{ grid-template-columns:1fr 1fr; } }
+.vw{ padding:14px 16px; cursor:pointer; border:1.5px solid var(--border); }
+.vw.sel{ border-color:var(--accent); }
+.vw-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.vw-top b{ font-size:1.05rem; }
+.vw.learnt .vw-top b::after{ content:" ✓"; color:var(--good); }
+.vw .say{ width:34px; height:34px; border-radius:10px; display:inline-grid; place-items:center; background:var(--surface-2); color:var(--muted); flex:none; vertical-align:middle; }
+.vw .say svg{ width:16px; height:16px; }
+.vw-back{ display:none; margin-top:8px; font-size:.92rem; }
+.vw.open .vw-back{ display:block; }
+.vw-back p{ margin-top:4px; }
+.vw-back .mal{ font-weight:600; }
+.vw-back .ex{ color:var(--muted); font-style:italic; }
+.vw-back .btn{ margin-top:10px; }

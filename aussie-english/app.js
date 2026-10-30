@@ -645,6 +645,7 @@
       '<h1 class="title">Learn</h1>' +
       '<div class="list two">' +
         '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
+        '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
         '<a class="card item" href="#/test"><span class="num">' + I.check + '</span><span class="t"><h2>Speaking level test</h2><span class="sub">' + (state.test ? 'Your level: ' + esc(state.test.cefr) + ' · IELTS ~' + state.test.ielts : 'Find your level in about 4 minutes') + '</span></span></a>' +
       '</div>' +
@@ -767,40 +768,115 @@
     practiceCard(document.getElementById('practice'), function(){ return items[cur]; }, function(){ logDay({ drills: 1 }); });
   }
 
+  /* ---------- Vocabulary ---------- */
+  function learntIn(t){ return t.words.filter(function(w, i){ return (state.learnt || {})[t.id + ':' + i]; }).length; }
+  function vocab(){
+    setTab('learn');
+    var total = VOCAB.reduce(function(a, t){ return a + t.words.length; }, 0), got = VOCAB.reduce(function(a, t){ return a + learntIn(t); }, 0);
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">Vocabulary · ' + got + ' of ' + total + ' learnt</span>' +
+      '<h1 class="title">Words for work and life</h1>' +
+      '<p class="lede">Healthcare, leadership and everyday words, each with a meaning, an example and Malayalam. Hear them, say them, and mark them as learnt.</p>' +
+      '<div class="list two">' + VOCAB.map(function(t, i){
+        var n = learntIn(t);
+        return '<a class="card item" href="#/words/' + t.id + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(t.title) + '</h2>' +
+          '<span class="sub">' + t.words.slice(0, 3).map(function(w){ return esc(w.w); }).join(' · ') + '</span>' +
+          '<span class="meta"><span class="mini-bar"><i style="width:' + Math.round(n / t.words.length * 100) + '%"></i></span>' + n + '/' + t.words.length + '</span></span></a>';
+      }).join('') + '</div>'
+    );
+  }
+  function words(id){
+    var t = VOCAB.find(function(x){ return x.id === id; });
+    if (!t) return vocab();
+    setTab('learn');
+    var cur = 0;
+    render(
+      '<a class="back" href="#/vocab">' + I.back + 'Vocabulary</a>' +
+      '<span class="eyebrow">Vocabulary</span>' +
+      '<h1 class="title">' + esc(t.title) + '</h1>' +
+      '<p class="lede">Tap a word to see what it means. Then say it below.</p>' +
+      '<div class="vocab">' + t.words.map(function(w, i){
+        var learnt = (state.learnt || {})[t.id + ':' + i];
+        return '<div class="card vw' + (learnt ? ' learnt' : '') + '" data-i="' + i + '" role="button" tabindex="0" aria-expanded="false">' +
+          '<div class="vw-top"><b>' + esc(w.w) + '</b><button class="say" type="button" data-say="' + esc(w.w) + '" aria-label="Listen">' + I.speaker + '</button></div>' +
+          '<div class="vw-back"><p>' + esc(w.m) + '</p><p class="mal" lang="ml">' + esc(w.ml) + '</p><p class="ex">“' + esc(w.ex) + '” <button class="say" type="button" data-say="' + esc(w.ex) + '" aria-label="Listen to the example">' + I.speaker + '</button></p>' +
+          '<button class="btn sm ' + (learnt ? 'primary' : 'ghost') + '" type="button" data-learn="' + i + '">' + (learnt ? I.check + 'Learnt' : 'Mark as learnt') + '</button></div></div>';
+      }).join('') + '</div>' +
+      '<div class="card pad drill-say"><span class="count">Now say the example:</span><p class="phrase-en" id="target"></p><div class="speak-zone" id="practice"></div></div>'
+    );
+    function pick(i){
+      cur = i;
+      document.getElementById('target').textContent = t.words[i].ex;
+      app.querySelectorAll('.vw').forEach(function(c){ c.classList.toggle('sel', +c.dataset.i === i); });
+    }
+    app.querySelectorAll('.vw').forEach(function(c){
+      function open(){
+        var o = c.classList.toggle('open'); c.setAttribute('aria-expanded', o);
+        if (o) { pick(+c.dataset.i); speak(t.words[+c.dataset.i].w); }
+      }
+      c.onclick = function(e){ if (e.target.closest('button')) return; open(); };
+      c.onkeydown = function(e){ if (e.target === c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); open(); } };
+    });
+    app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation(); speak(b.dataset.say); }; });
+    app.querySelectorAll('[data-learn]').forEach(function(b){
+      b.onclick = function(e){
+        e.stopPropagation();
+        var k = t.id + ':' + b.dataset.learn;
+        state.learnt = state.learnt || {};
+        if (state.learnt[k]) delete state.learnt[k]; else { state.learnt[k] = 1; markActive(); }
+        save();
+        var on = !!state.learnt[k], card = b.closest('.vw');
+        card.classList.toggle('learnt', on);
+        b.className = 'btn sm ' + (on ? 'primary' : 'ghost');
+        b.innerHTML = on ? I.check + 'Learnt' : 'Mark as learnt';
+      };
+    });
+    pick(0);
+    practiceCard(document.getElementById('practice'), function(){ return t.words[cur].ex; });
+  }
+
   /* ---------- Speaking level test ---------- */
   function levelTest(){
     setTab('learn');
     var step = 0, reads = [], answers = [];
+    // Pick a version not taken yet; once all ten are done, reuse the one taken longest ago.
+    var done = state.testsDone || [];
+    var testNo = LEVEL_TESTS.findIndex(function(t, i){ return done.indexOf(i) < 0; });
+    if (testNo < 0) testNo = done[0] || 0;
+    var TEST = LEVEL_TESTS[testNo];
     function header(n, of){ return '<a class="back" href="#/learn">' + I.back + 'Learn</a><span class="eyebrow">Speaking level test · ' + n + ' of ' + of + '</span><div class="progress"><i style="width:' + Math.round(n / of * 100) + '%"></i></div>'; }
     function intro(){
       render(
         '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
-        '<span class="eyebrow">About 4 minutes</span>' +
+        '<span class="eyebrow">Version ' + (testNo + 1) + ' of ' + LEVEL_TESTS.length + ' · About 4 minutes</span>' +
         '<h1 class="title">Speaking level test</h1>' +
         '<p class="lede">Read three sentences aloud, then answer three questions as you would in a conversation. You\'ll get your level (A1 to C2), an estimated IELTS speaking band, and what to work on.</p>' +
-        (state.test ? '<div class="notice">Last result: <b>' + esc(state.test.cefr) + '</b> · IELTS ~' + state.test.ielts + ' (' + esc(state.test.date) + ')</div>' : '') +
-        '<div class="row" style="margin-top:18px"><button class="btn primary" id="start">Start the test' + I.chev + '</button></div>'
+        '<div class="row" style="margin-top:18px"><button class="btn primary" id="start">Start the test' + I.chev + '</button></div>' +
+        ((state.tests || []).length ? '<h2 class="section-title">Your results</h2><div class="phrase-list">' + state.tests.slice().reverse().map(function(t){
+          return '<div class="card phrase"><div><b>' + esc(t.cefr) + ' · IELTS ~' + esc(String(t.ielts)) + '</b><span>' + esc(t.date) + ' · version ' + t.version + '</span></div></div>';
+        }).join('') + '</div>' : state.test ? '<div class="notice">Last result: <b>' + esc(state.test.cefr) + '</b> · IELTS ~' + state.test.ielts + ' (' + esc(state.test.date) + ')</div>' : '')
       );
       document.getElementById('start').onclick = function(){ step = 0; readStep(); };
     }
     function readStep(){
-      var t = LEVEL_TEST.read[step];
+      var t = TEST.read[step];
       render(header(step + 1, 6) +
         '<article class="card pad"><span class="count">Read this aloud</span><p class="phrase-en">' + esc(t) + '</p>' +
         '<div class="speak-zone" id="practice"></div>' +
         '<div class="nav"><span></span><button class="btn primary" id="next" disabled>Next' + I.chev + '</button></div></article>');
       var next = document.getElementById('next');
       practiceCard(document.getElementById('practice'), function(){ return t; }, function(res){ reads[step] = res; next.disabled = false; });
-      next.onclick = function(){ step++; step < LEVEL_TEST.read.length ? readStep() : (step = 0, askStep()); };
+      next.onclick = function(){ step++; step < TEST.read.length ? readStep() : (step = 0, askStep()); };
     }
     function askStep(){
-      var q = LEVEL_TEST.questions[step], rec = null, text = '', secs = 0;
-      render(header(LEVEL_TEST.read.length + step + 1, 6) +
+      var q = TEST.questions[step], rec = null, text = '', secs = 0;
+      render(header(TEST.read.length + step + 1, 6) +
         '<article class="card pad"><span class="count">Answer in English - aim for 30 to 60 seconds</span><p class="q-prompt">' + esc(q) + '</p>' +
         '<div class="listen-row" style="margin:0 0 6px"><button class="btn" id="play">' + I.speaker + 'Hear the question</button></div>' +
         '<div class="speak-zone">' + (SR ? micButton('amic') + '<span class="mic-label" id="alabel">Tap and start speaking</span>' : '') +
         '<textarea id="ans" class="ref" rows="4" placeholder="' + (SR ? 'Your words appear here. You can also type.' : 'Type your answer') + '"></textarea></div>' +
-        '<div class="nav"><span></span><button class="btn primary" id="next">' + (step === LEVEL_TEST.questions.length - 1 ? 'Finish' : 'Next') + I.chev + '</button></div></article>');
+        '<div class="nav"><span></span><button class="btn primary" id="next">' + (step === TEST.questions.length - 1 ? 'Finish' : 'Next') + I.chev + '</button></div></article>');
       var ans = document.getElementById('ans'), mic = document.getElementById('amic'), label = document.getElementById('alabel');
       document.getElementById('play').onclick = function(){ speak(q); };
       speak(q);
@@ -838,7 +914,7 @@
         answers[step] = { q: q, a: text, secs: secs };
         logDay({ speakSec: Math.round(secs) }); addVocab(text);
         step++;
-        step < LEVEL_TEST.questions.length ? askStep() : grade_();
+        step < TEST.questions.length ? askStep() : grade_();
       };
     }
     function grade_(){
@@ -852,7 +928,9 @@
         .then(function(r){ return r.json(); })
         .then(function(d){
           if (d.error || !d.cefr) throw new Error(d.error || 'assess');
-          state.test = Object.assign({ date: new Date().toLocaleDateString('en-AU'), pron: pron.overall, fluency: pron.fluency, prosody: pron.prosody }, d);
+          state.test = Object.assign({ date: new Date().toLocaleDateString('en-AU'), pron: pron.overall, fluency: pron.fluency, prosody: pron.prosody, version: testNo + 1 }, d);
+          state.testsDone = (state.testsDone || []).filter(function(i){ return i !== testNo; }).concat([testNo]);
+          state.tests = (state.tests || []).concat([{ date: state.test.date, cefr: d.cefr, ielts: d.ielts, version: testNo + 1 }]).slice(-20);
           save(); markActive();
           result(state.test);
         })
@@ -1332,6 +1410,8 @@
     else if (parts[0] === 'lesson') lesson(parts[1], parseInt(parts[2], 10) || 0);
     else if (parts[0] === 'practise') practise();
     else if (parts[0] === 'help') help();
+    else if (parts[0] === 'vocab') vocab();
+    else if (parts[0] === 'words') words(parts[1]);
     else if (parts[0] === 'sounds') sounds();
     else if (parts[0] === 'sound') sound(parts[1]);
     else if (parts[0] === 'test') levelTest();

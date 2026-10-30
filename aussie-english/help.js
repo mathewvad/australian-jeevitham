@@ -25,8 +25,9 @@ const HELP = [
   ] },
   { title: 'Learn', items: [
     { q: 'Sound drills', a: 'Eight drills for the sounds Malayalis find hardest: V and W, the two TH sounds, Z, F and P, short "i" and long "ee", the "a" in "bad", and word endings. Read the tip, listen to the word pairs (like <i>thin / tin</i>), tap one, then tap the microphone and say it.' },
+    { q: 'Vocabulary', a: '96 words and phrases in 8 themes: on the ward, medications, aged care, body and symptoms, leading a team, empathy and difficult talks, phone and admin, and everyday life in Australia. Tap a word to see its meaning, Malayalam and an example; tap the speaker to hear it, say the example with the microphone below, and tap <b>Mark as learnt</b>.' },
     { q: 'Practise any sentence', a: 'Type or paste anything - something you say at work, or a word you find hard. Tap <b>Listen</b> to hear it in an Australian voice, then tap the microphone and say it.' },
-    { q: 'Speaking level test', a: 'About 4 minutes. Read three sentences aloud, then answer three questions as you would in a real conversation. Speak for 30 to 60 seconds per answer; the microphone stops by itself after a few seconds of silence, or tap it when you have finished. You get your level (A1 to C2), an estimated IELTS speaking band, your strengths and what to work on.' },
+    { q: 'Speaking level test', a: 'About 4 minutes. Read three sentences aloud, then answer three questions as you would in a real conversation. Speak for 30 to 60 seconds per answer; the microphone stops by itself after a few seconds of silence, or tap it when you have finished. You get your level (A1 to C2), an estimated IELTS speaking band, your strengths and what to work on. There are 10 different versions, so each time you take the test you get new sentences and questions; your past results are listed on the test screen.' },
     { q: 'Everyday lessons and quizzes', a: 'Eight lessons of everyday Australian English with Malayalam meanings. Listen to each phrase, say it, then take the quiz at the end.' }
   ] },
   { title: 'Reading your pronunciation scores', items: [
@@ -42,7 +43,7 @@ const HELP = [
     { q: 'Start again', a: 'Tap the circular arrow at the top right of a conversation to start it over.' }
   ] },
   { title: 'Slang and Tips', items: [
-    { q: 'Slang', a: 'Words Australians use every day. Tap a card to see its meaning, an example and a Malayalam translation; tap the speaker to hear it.' },
+    { q: 'Slang', a: 'About 70 words Australians use every day, from "arvo" to "ambo". Tap a card to see its meaning, an example and a Malayalam translation; tap the speaker to hear it.' },
     { q: 'Tips', a: 'The unwritten rules of Australian life and work, such as calling your boss by their first name and what "bring a plate" means.' }
   ] },
   { title: 'Getting the best results', items: [
