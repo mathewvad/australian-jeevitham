@@ -318,13 +318,17 @@
         pc.phonemeAlphabet = 'IPA';
         pc.nbestPhonemeCount = 5;
         pc.enableProsodyAssessment = true;
-        var rec = new sdk.SpeechRecognizer(sc, sdk.AudioConfig.fromDefaultMicrophoneInput());
+        var audio = sdk.AudioConfig.fromDefaultMicrophoneInput();
+        var rec = new sdk.SpeechRecognizer(sc, audio);
         pc.applyTo(rec);
+        // Close the recogniser AND the microphone input: on Android only one thing can use the
+        // mic at a time, so a mic left open blocks the next listening session.
+        function release(){ try { rec.close(); } catch(e) {} try { audio.close(); } catch(e) {} }
         rec.recognizeOnceAsync(function(result){
           var raw = result.properties.getProperty(sdk.PropertyId.SpeechServiceResponse_JsonResult);
-          rec.close();
+          release();
           try { resolve(parseAzure(JSON.parse(raw || '{}'))); } catch(e) { resolve(null); }
-        }, function(err){ rec.close(); reject(err); });
+        }, function(err){ release(); reject(err); });
       });
     });
   }
@@ -709,22 +713,34 @@
       var ans = document.getElementById('ans'), mic = document.getElementById('amic'), label = document.getElementById('alabel');
       document.getElementById('play').onclick = function(){ speak(q); };
       speak(q);
-      if (mic) mic.onclick = function(){
-        if (rec) { rec.stop(); return; }
-        if (canSpeak) speechSynthesis.cancel();
-        var before = ans.value ? ans.value + ' ' : '';
-        mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap when you\'ve finished';
+      // Long answers: Chrome on Android is unreliable in "continuous" mode, so listen in short
+      // sessions and start the next one straight away while the learner keeps talking. Stop after
+      // about 4 seconds of silence, or when they tap the mic again.
+      var recording = false, quietSince = 0;
+      function stopUI(msg){ recording = false; mic.classList.remove('live'); label.textContent = msg || 'Tap to add more'; }
+      function chunk(){
+        var before = ans.value.trim() ? ans.value.trim() + ' ' : '';
         rec = listen({
-          continuous: true, pauseMs: 4000,
           interim: function(t){ ans.value = before + t; },
+          error: function(err){ if (err === 'not-allowed' || err === 'service-not-allowed') stopUI('Microphone is blocked - please allow it for this site.'); },
           end: function(alts, total, speaking){
-            rec = null; mic.classList.remove('live'); label.textContent = 'Tap to add more';
-            if (alts[0]) ans.value = before + alts[0];
-            secs += speaking;
+            rec = null;
+            if (alts[0]) { ans.value = before + alts[0]; secs += speaking; quietSince = 0; }
+            else if (!quietSince) quietSince = Date.now();
+            if (recording && (!quietSince || Date.now() - quietSince < 4000)) { chunk(); return; }
+            if (recording) stopUI();
           }
         });
+      }
+      if (mic) mic.onclick = function(){
+        if (recording) { recording = false; if (rec) rec.stop(); stopUI(); return; }
+        if (canSpeak) speechSynthesis.cancel();
+        recording = true; quietSince = 0;
+        mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap when you\'ve finished';
+        chunk();
       };
       document.getElementById('next').onclick = function(){
+        recording = false;
         if (rec) rec.stop();
         text = ans.value.trim();
         if (!text) { if (label) label.textContent = 'Please answer the question first'; return; }
