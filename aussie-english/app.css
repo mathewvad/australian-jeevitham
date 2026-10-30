@@ -51,6 +51,18 @@ svg{ display:block; }
 .top-row{ display:flex; align-items:center; justify-content:space-between; height:60px; }
 .brand{ display:flex; align-items:center; gap:10px; }
 .brand img{ border-radius:50%; }
+.top{ padding-top:env(safe-area-inset-top); }
+
+/* ---- Install card ---- */
+.install{ display:flex; align-items:center; gap:12px; padding:14px; margin-top:16px; }
+.install img{ border-radius:50%; flex:none; }
+.install .t{ flex:1; min-width:0; line-height:1.35; }
+.install b{ display:block; }
+.install span{ font-size:.85rem; color:var(--muted); }
+.install .acts{ display:flex; align-items:center; gap:2px; }
+.steps{ margin:12px 0 4px 20px; display:grid; gap:10px; }
+.share-ic{ display:inline-grid; vertical-align:middle; color:var(--info); }
+.share-ic svg{ width:18px; height:18px; }
 .brand-text{ display:flex; flex-direction:column; line-height:1.15; }
 .brand-text b{ font-size:.95rem; font-weight:700; }
 .brand-text small{ font-size:.74rem; color:var(--muted); }

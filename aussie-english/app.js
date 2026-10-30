@@ -61,6 +61,46 @@
   };
   showTheme();
 
+  /* ---------- Installable app ---------- */
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
+  var installPrompt = null;   // Chrome / Edge / Android: the browser's own install dialog
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); installPrompt = e;
+    if (location.hash === '' || location.hash === '#/') route();
+  });
+  window.addEventListener('appinstalled', function(){ installPrompt = null; });
+  function isInstalled(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
+  function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+  function installCard(){
+    if (isInstalled() || prefs.installHidden || !(installPrompt || isIOS())) return '';
+    return '<div class="card install"><img src="icons/icon-192.png" alt="" width="48" height="48">' +
+      '<div class="t"><b>Install the app</b><span>Open it full screen from your home screen, like any other app.</span></div>' +
+      '<div class="acts"><button class="btn primary sm" id="installBtn" type="button">Install</button>' +
+      '<button class="icon-btn" id="installHide" type="button" aria-label="Not now">' + I.x + '</button></div></div>';
+  }
+  function bindInstall(){
+    var b = document.getElementById('installBtn');
+    if (!b) return;
+    b.onclick = function(){
+      if (installPrompt) {
+        installPrompt.prompt();
+        installPrompt.userChoice.then(function(){ installPrompt = null; route(); });
+        return;
+      }
+      // iPhone and iPad: Safari has no install button, so show the steps.
+      var bg = document.createElement('div');
+      bg.className = 'sheet-bg';
+      bg.innerHTML = '<div class="sheet" role="dialog" aria-label="Install on iPhone"><div class="grab"></div>' +
+        '<h2 style="font-size:1.1rem">Add to your Home Screen</h2>' +
+        '<ol class="steps"><li>Tap the <b>Share</b> button <span class="share-ic">' + svg('<path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 12v8h14v-8"/>') + '</span> at the bottom of Safari.</li>' +
+        '<li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. Then open <b>Aussie English</b> from your Home Screen.</li></ol>' +
+        '<div class="row"><button class="btn primary" type="button" data-a="close">Got it</button></div></div>';
+      document.body.appendChild(bg);
+      bg.onclick = function(e){ if (e.target === bg || e.target.dataset.a === 'close') bg.remove(); };
+    };
+    document.getElementById('installHide').onclick = function(){ prefs.installHidden = true; savePrefs(); route(); };
+  }
+
   /* ---------- Progress (saved on this device) ---------- */
   var KEY = 'aj-english-v1';
   var state = { done:{}, best:{}, seen:{}, streak:0, lastDay:null, days:{}, vocab:{}, phrases:[] };
@@ -261,7 +301,7 @@
       '<span class="eyebrow">Australian Jeevitham Aussie English Coach</span>' +
       '<h1 class="title">' + (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening') + '</h1>' +
       '<p class="lede">Speak the English Australian healthcare leaders use, with a coach that listens and gives you feedback.</p>' +
-      notice +
+      installCard() + notice +
       '<div class="stats">' +
         tile('Day streak', currentStreak(), currentStreak() === 1 ? 'day' : 'days', 'Practise daily to keep it') +
         tile('Speaking time', speakMin, 'min', 'Last 7 days') +
@@ -281,6 +321,7 @@
     );
     app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
     app.querySelectorAll('[data-del]').forEach(function(b){ b.onclick = function(){ state.phrases.splice(+b.dataset.del, 1); save(); home(); }; });
+    bindInstall();
   }
 
   /* ---------- Learn ---------- */
@@ -497,7 +538,15 @@
     function add(el){ chat.appendChild(el); down(); return el; }
     function el(cls, html){ var d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
 
-    function aiMsg(text, ml, spoken, phrase){
+    // Reads the "reply" field out of a partly-received JSON answer.
+    function partialReply(buf){
+      var m = buf.match(/"reply"\s*:\s*"((?:[^"\\]|\\.)*)("?)/);
+      if (!m) return null;
+      var body = m[1].replace(/\\u[0-9a-fA-F]{0,3}$|\\$/, '');
+      try { return { text: JSON.parse('"' + body + '"'), complete: m[2] === '"' }; } catch(e) { return null; }
+    }
+
+    function aiMsg(text, ml, spoken, phrase, quiet){
       var b = add(el('msg ai', '<p>' + esc(text) + '</p>' +
         '<div class="msg-tools"><button type="button" data-a="say">' + I.speaker + 'Play</button><button type="button" data-a="slow">Slow</button>' +
         (ml ? '<button type="button" data-a="ml">മലയാളം</button>' : '') + '</div>' +
@@ -521,7 +570,7 @@
         };
       }
       lastReply = spoken || text;
-      speak(lastReply);
+      if (!quiet) speak(lastReply);
     }
 
     function meMsg(text, live){
@@ -625,7 +674,32 @@
         headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
         body: JSON.stringify({ level: LEVEL, scene: s.id, messages: history })
       }).then(function(r){
-        return r.json().catch(function(){ return { error: 'ai_error' }; });
+        if (!r.body || (r.headers.get('Content-Type') || '').indexOf('ndjson') < 0) {
+          return r.json().catch(function(){ return { error: 'ai_error' }; });
+        }
+        // Streamed answer: show the reply word by word, and start speaking it as soon as it's complete.
+        var reader = r.body.getReader(), dec = new TextDecoder(), pending = '', raw = '', live = null, spoken = false, final = null;
+        function pump(){
+          return reader.read().then(function(res){
+            if (res.done) return final || { error: 'ai_error' };
+            pending += dec.decode(res.value, { stream: true });
+            var lines = pending.split('\n');
+            pending = lines.pop();
+            lines.forEach(function(line){
+              if (!line) return;
+              var o; try { o = JSON.parse(line); } catch(e) { return; }
+              if (o.t !== 'delta') { final = o; return; }
+              raw += o.text;
+              var rep = partialReply(raw);
+              if (!rep) return;
+              if (!live) { dots.remove(); live = add(el('msg ai', '<p></p>')); }
+              live.querySelector('p').textContent = rep.text; down();
+              if (rep.complete && !spoken) { spoken = true; speak(rep.text); }
+            });
+            return pump();
+          });
+        }
+        return pump().then(function(d){ if (live) live.remove(); d.spoken = spoken; return d; });
       }).then(function(d){
         dots.remove(); setBusy(false);
         if (d.error === 'access_code') { failed(b, 'Access code needed.'); askCode(text, b); return; }
@@ -634,7 +708,7 @@
         if (d.error || !d.reply) { failed(b, 'Couldn\'t reach your coach. Please try again.'); input.value = text; return; }
         feedback(b, text, d);
         history.push({ role: 'assistant', content: d.raw });
-        aiMsg(d.reply, LEVEL_MALAYALAM ? d.reply_ml : '', null, d.power_phrase);
+        aiMsg(d.reply, LEVEL_MALAYALAM ? d.reply_ml : '', null, d.power_phrase, d.spoken);
         showChips(d.suggestions);
         if (typeof d.remaining === 'number') note.textContent = d.remaining + ' messages left today';
         var st = (d.feedback || {}).status;
@@ -691,6 +765,16 @@
     document.getElementById('restart').onclick = function(){ if (rec) rec.abort(); talk(id); };
 
     aiMsg(s.opening, LEVEL_MALAYALAM ? s.opening_ml : '', s.say);
+
+    // Load this scene into the server's cache while the learner reads the opening line,
+    // so their first reply comes back as quickly as later ones.
+    if (TALK_API && getCode()) {
+      fetch(TALK_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+        body: JSON.stringify({ warm: true, level: LEVEL, scene: s.id })
+      }).catch(function(){});
+    }
   }
 
   /* ---------- Slang ---------- */
