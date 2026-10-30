@@ -464,6 +464,53 @@
     return out + '</svg>';
   }
 
+  /* ---------- Start here (new users) and Help ---------- */
+  function startStatus(){
+    var turns = Object.keys(state.days).reduce(function(a, k){ return a + (state.days[k].turns || 0); }, 0);
+    return {
+      installed: isInstalled(),
+      code: !!getCode(),
+      test: !!state.test,
+      drill: Object.keys(state.sounds || {}).length > 0,
+      talk: turns >= 5,
+      plan: currentStreak() >= 3
+    };
+  }
+  function stepRow(s, i, done, isNext){
+    return '<div class="step' + (done ? ' done' : '') + (isNext ? ' next' : '') + '">' +
+      '<span class="tick">' + (done ? I.check : (i + 1)) + '</span>' +
+      '<div class="t"><b class="st">' + esc(s.title) + '</b>' + (isNext || !done ? '<p>' + s.text + '</p>' : '') +
+      (isNext && s.href ? '<a class="btn primary sm" href="' + s.href + '">' + esc(s.go) + I.chev + '</a>' : '') + '</div></div>';
+  }
+  // Shown on Home until the first steps are done: what to do first, and what comes next.
+  function startCard(){
+    var st = startStatus();
+    var core = HELP_STEPS.filter(function(s){ return s.check !== 'installed' && s.check !== 'plan'; });
+    if (prefs.startHidden || core.every(function(s){ return st[s.check]; })) return '';
+    var next = HELP_STEPS.findIndex(function(s){ return !st[s.check] && !(s.check === 'installed' && (prefs.installHidden || !(installPrompt || isIOS()))); });
+    var done = HELP_STEPS.filter(function(s){ return st[s.check]; }).length;
+    return '<div class="card pad home-card start"><div class="chart-head"><b>Start here</b><span>' + done + ' of ' + HELP_STEPS.length + ' done</span></div>' +
+      HELP_STEPS.map(function(s, i){ return stepRow(s, i, st[s.check], i === next); }).join('') +
+      '<div class="row" style="margin-top:10px"><a class="btn ghost sm" href="#/help">Full guide</a><button class="btn ghost sm" id="startHide" type="button">Hide</button></div></div>';
+  }
+  function help(){
+    setTab('');
+    var st = startStatus();
+    var next = HELP_STEPS.findIndex(function(s){ return !st[s.check]; });
+    render(
+      '<span class="eyebrow">Help</span>' +
+      '<h1 class="title">How to use the app</h1>' +
+      '<p class="lede">New here? Follow these steps in order. Each one ticks itself off when you have done it.</p>' +
+      '<div class="card pad start" style="margin-top:16px">' + HELP_STEPS.map(function(s, i){ return stepRow(s, i, st[s.check], i === next); }).join('') + '</div>' +
+      HELP.map(function(sec){
+        return '<h2 class="section-title">' + esc(sec.title) + '</h2><div class="faq">' + sec.items.map(function(it){
+          return '<details class="card"><summary>' + esc(it.q) + '</summary><div class="a">' + it.a + '</div></details>';
+        }).join('') + '</div>';
+      }).join('') +
+      '<p class="heard" style="margin-top:24px">Still stuck? Message Australian Jeevitham on Facebook or YouTube.</p>'
+    );
+  }
+
   // Skill scores: practice from the last 14 days, falling back to the latest level test.
   function skills(){
     var d = lastDays(14), t = state.test || {};
@@ -525,7 +572,7 @@
       '<span class="eyebrow">Australian Jeevitham Aussie English Coach</span>' +
       '<h1 class="title">' + (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening') + '</h1>' +
       '<p class="lede">Speak the English Australian healthcare leaders use, with a coach that listens and gives you feedback.</p>' +
-      installCard() + notice +
+      installCard() + notice + startCard() +
       planCard() + levelCard() + skillsCard() +
       '<div class="stats">' +
         tile('Day streak', currentStreak(), currentStreak() === 1 ? 'day' : 'days', 'Practise daily to keep it') +
@@ -544,6 +591,8 @@
     app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
     app.querySelectorAll('[data-del]').forEach(function(b){ b.onclick = function(){ state.phrases.splice(+b.dataset.del, 1); save(); home(); }; });
     bindInstall();
+    var sh = document.getElementById('startHide');
+    if (sh) sh.onclick = function(){ prefs.startHidden = true; savePrefs(); home(); };
   }
 
   /* ---------- Learn ---------- */
@@ -1240,6 +1289,7 @@
     if (parts[0] === 'learn') learn();
     else if (parts[0] === 'lesson') lesson(parts[1], parseInt(parts[2], 10) || 0);
     else if (parts[0] === 'practise') practise();
+    else if (parts[0] === 'help') help();
     else if (parts[0] === 'sounds') sounds();
     else if (parts[0] === 'sound') sound(parts[1]);
     else if (parts[0] === 'test') levelTest();

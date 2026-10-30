@@ -363,3 +363,25 @@ body.in-chat .tabbar, body.in-chat .top{ display:none; }
 .pace{ display:flex; gap:8px; align-items:flex-start; margin-top:8px; font-size:.8rem; color:var(--muted); }
 .pace svg{ width:14px; height:14px; flex:none; margin-top:2px; }
 .pace b{ color:var(--text); }
+
+/* ===== Start here and Help ===== */
+.step{ display:flex; gap:12px; padding:12px 0; border-top:1px solid var(--border); }
+.start .step:first-of-type{ border-top:0; }
+.start.home-card .step:first-of-type{ margin-top:6px; border-top:1px solid var(--border); }
+.step .tick{ font-size:.8rem; font-weight:700; color:var(--muted); }
+.step.next .tick{ border-color:var(--accent); color:var(--accent); }
+.step.done .tick{ background:var(--good); border-color:var(--good); color:var(--on-accent); }
+.step .t{ flex:1; min-width:0; }
+.step .t .st{ display:block; font-size:.95rem; }
+.step.done .t .st{ color:var(--muted); text-decoration:line-through; }
+.step .t p{ font-size:.88rem; color:var(--muted); margin-top:3px; }
+.step.next .t p{ color:var(--text); }
+.step .btn{ margin-top:10px; }
+.faq{ display:grid; gap:8px; }
+.faq details{ padding:0; }
+.faq summary{ cursor:pointer; padding:14px 16px; font-weight:600; list-style:none; display:flex; justify-content:space-between; gap:10px; }
+.faq summary::-webkit-details-marker{ display:none; }
+.faq summary::after{ content:"+"; color:var(--muted); font-weight:700; }
+.faq details[open] summary::after{ content:"–"; }
+.faq .a{ padding:0 16px 14px; color:var(--muted); font-size:.93rem; }
+.faq .a b{ color:var(--text); }
