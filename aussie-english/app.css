@@ -306,3 +306,60 @@ body.in-chat .tabbar, body.in-chat .top{ display:none; }
 .sheet .row{ margin-top:16px; }
 .codebox{ margin-top:8px; }
 .codebox .type-row{ margin-top:8px; }
+
+/* ===== Pronunciation, drills, level test, skills ===== */
+.sbars{ display:grid; gap:8px; }
+.sbar{ display:grid; grid-template-columns:104px 1fr 34px; align-items:center; gap:10px; font-size:.86rem; }
+.sbar span{ color:var(--muted); font-weight:600; }
+.sbar i{ height:8px; border-radius:99px; background:var(--surface-2); overflow:hidden; }
+.sbar b{ display:block; height:100%; border-radius:99px; background:var(--muted); }
+.sbar b.ok{ background:var(--good); } .sbar b.close{ background:var(--warn-line); } .sbar b.miss{ background:var(--bad); }
+.sbar em{ font-style:normal; font-weight:700; text-align:right; }
+.result .sbars{ max-width:420px; margin:4px auto 14px; text-align:left; }
+.words.az .w{ border:0; font:inherit; font-weight:600; cursor:pointer; margin:2px 0; }
+.words .w.skip{ color:var(--muted); background:var(--surface-2); text-decoration:line-through; }
+.words .w.extra{ color:var(--info); background:color-mix(in srgb, var(--info-line) 15%, transparent); }
+.words .w.sel{ outline:2px solid var(--text); outline-offset:1px; }
+.phon{ margin:12px auto 0; max-width:460px; padding:12px 14px; border-radius:var(--radius-sm); background:var(--surface-2); text-align:left; }
+.phon:empty{ display:none; }
+.phon-head{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.ipa{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.ph{ display:inline-flex; flex-direction:column; align-items:center; padding:4px 9px; border-radius:9px; font-weight:700; font-size:1.05rem; }
+.ph.ok{ background:var(--good-soft); color:var(--good); }
+.ph.close{ background:var(--warn-soft); color:var(--warn); }
+.ph.miss{ background:var(--bad-soft); color:var(--bad); }
+.ph small{ font-size:.7rem; font-weight:600; }
+.ptip{ margin-top:10px; font-size:.88rem; }
+.ptip a{ color:var(--accent); font-weight:600; }
+.ref{ width:100%; border:1.5px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; font:inherit; background:var(--bg); color:var(--text); resize:vertical; }
+.ref:focus{ outline:none; border-color:var(--accent); }
+.num svg{ width:20px; height:20px; }
+.pairs{ display:grid; gap:10px; grid-template-columns:1fr 1fr; }
+@media (max-width:420px){ .pairs{ grid-template-columns:1fr; } }
+.pair{ display:flex; align-items:center; gap:6px; padding:8px; }
+.pw{ flex:1; display:flex; align-items:center; justify-content:space-between; gap:6px; padding:10px 12px; border-radius:10px; border:1.5px solid transparent; text-align:left; }
+.pw b{ font-size:1.05rem; }
+.pw span{ color:var(--muted); display:grid; place-items:center; }
+.pw span svg{ width:16px; height:16px; }
+.pw.sel, .phrase.pw.sel{ border-color:var(--accent); background:var(--accent-soft); }
+.vs{ font-size:.75rem; color:var(--muted); }
+.phrase.pw{ width:100%; }
+.drill-say{ margin-top:16px; text-align:center; }
+.level-card{ display:flex; justify-content:space-around; gap:10px; text-align:center; margin-top:10px; }
+.level-card .lv b{ display:block; font-size:1.9rem; font-weight:700; letter-spacing:-.02em; color:var(--accent); line-height:1.2; }
+.level-card .lv span{ font-size:.78rem; color:var(--muted); }
+.level-card.mini .lv b{ font-size:1.5rem; }
+.home-card{ margin-top:12px; }
+.plan .task{ display:flex; align-items:center; gap:12px; padding:12px 0; border-top:1px solid var(--border); }
+.plan .task:first-of-type{ margin-top:8px; }
+.plan .task b{ display:block; font-size:.95rem; font-weight:600; }
+.plan .task span span{ font-size:.82rem; color:var(--muted); }
+.plan .task .chev{ margin-left:auto; color:var(--muted); }
+.plan .task .chev svg{ width:18px; height:18px; }
+.tick{ width:26px; height:26px; border-radius:50%; border:2px solid var(--border); display:grid; place-items:center; flex:none; color:var(--on-accent); }
+.tick svg{ width:15px; height:15px; }
+.task.done .tick{ background:var(--good); border-color:var(--good); }
+.task.done b{ text-decoration:line-through; color:var(--muted); }
+.pace{ display:flex; gap:8px; align-items:flex-start; margin-top:8px; font-size:.8rem; color:var(--muted); }
+.pace svg{ width:14px; height:14px; flex:none; margin-top:2px; }
+.pace b{ color:var(--text); }

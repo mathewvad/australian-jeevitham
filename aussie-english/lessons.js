@@ -235,3 +235,62 @@ const TIPS = [
   { icon: '🚨', title: 'Emergency: 000', ml: 'പോലീസ്, ആംബുലൻസ്, ഫയർ - അടിയന്തര സാഹചര്യത്തിൽ 000 ("triple zero") വിളിക്കുക.' },
   { icon: '☀️', title: 'Slip, slop, slap', ml: 'ഇവിടത്തെ വെയിൽ വളരെ ശക്തമാണ്. പുറത്ത് ജോലി ചെയ്യുമ്പോൾ സൺസ്ക്രീൻ, തൊപ്പി, കൂളിംഗ് ഗ്ലാസ് ഉപയോഗിക്കുക.' }
 ];
+
+/* Sound drills for the sounds Malayali speakers most often find hard. ipa: the sounds (in the
+   American IPA that Azure reports) this drill trains, used to spot them in any practice. */
+const SOUNDS = [
+  { id: 'vw', title: 'V and W', ipa: ['v', 'w'],
+    tip: 'For V, touch your top teeth to your bottom lip and buzz. For W, round your lips as if saying "oo" - no teeth.',
+    ml: 'V: മേൽപ്പല്ല് താഴത്തെ ചുണ്ടിൽ തൊട്ട് ശബ്ദമുണ്ടാക്കുക. W: പല്ല് തൊടാതെ ചുണ്ടുകൾ "ഊ" പോലെ ഉരുട്ടുക.',
+    pairs: [['vet', 'wet'], ['vine', 'wine'], ['vest', 'west'], ['veil', 'whale']],
+    sentences: ['We visited the ward very early.', 'Would you like a warm vegetable soup?'] },
+  { id: 'th', title: 'TH as in "think"', ipa: ['θ'],
+    tip: 'Put the tip of your tongue lightly between your teeth and blow air out. It is not a "t".',
+    ml: 'നാക്കിന്റെ അറ്റം പല്ലുകൾക്കിടയിൽ വെച്ച് കാറ്റ് ഊതുക. "ട" അല്ല.',
+    pairs: [['thin', 'tin'], ['three', 'tree'], ['thank', 'tank'], ['thought', 'taught']],
+    sentences: ['I think three therapists are on shift on Thursday.', 'Thanks for your thoughtful feedback.'] },
+  { id: 'dh', title: 'TH as in "this"', ipa: ['ð'],
+    tip: 'The same tongue position as "think", but switch your voice on so it buzzes. It is not a "d".',
+    ml: '"think"-ലെ പോലെ നാക്ക് വെക്കുക, പക്ഷേ ശബ്ദത്തോടെ മുഴക്കി പറയുക. "ഡ" അല്ല.',
+    pairs: [['they', 'day'], ['then', 'den'], ['though', 'dough'], ['breathe', 'breed']],
+    sentences: ['The other nurse is there with them.', 'Is this the father or the brother?'] },
+  { id: 'z', title: 'The Z sound', ipa: ['z'],
+    tip: 'Z is a buzzing S. Keep your tongue behind your top teeth - do not turn it into a "j".',
+    ml: 'Z എന്നത് മുഴക്കമുള്ള S ആണ്. "ജ" ആക്കരുത്.',
+    pairs: [['zip', 'sip'], ['zeal', 'seal'], ['prize', 'price'], ['buzz', 'bus']],
+    sentences: ['These busy days are easy to organise.', 'Please close the zip on the bag.'] },
+  { id: 'fp', title: 'F and P', ipa: ['f', 'p'],
+    tip: 'For F, rest your top teeth on your bottom lip and blow. For P, close both lips and pop the air out.',
+    ml: 'F: മേൽപ്പല്ല് താഴത്തെ ചുണ്ടിൽ വെച്ച് ഊതുക. P: രണ്ട് ചുണ്ടും അടച്ച് പൊട്ടിക്കുക.',
+    pairs: [['fan', 'pan'], ['fine', 'pine'], ['fast', 'past'], ['coffee', 'copy']],
+    sentences: ['Fill in the form before the family arrives.', 'The coffee from the cafe is perfect.'] },
+  { id: 'ii', title: 'Short "i" and long "ee"', ipa: ['ɪ', 'i'],
+    tip: '"ship" is short and relaxed. "sheep" is long, with your lips spread in a smile. Hold the long one longer.',
+    ml: '"ship" ചെറുതും അയഞ്ഞതും. "sheep" നീട്ടി, ചിരിക്കുന്നതുപോലെ ചുണ്ട് വിടർത്തി.',
+    pairs: [['ship', 'sheep'], ['live', 'leave'], ['fill', 'feel'], ['sit', 'seat']],
+    sentences: ['Please fill in the sheet before you leave.', 'Did he eat the meat at six?'] },
+  { id: 'ae', title: 'The "a" in "bad"', ipa: ['æ'],
+    tip: 'Open your mouth wide and drop your jaw: "bad", not "bed".',
+    ml: 'വായ നന്നായി തുറന്ന് താടി താഴ്ത്തുക: "bad", "bed" അല്ല.',
+    pairs: [['bad', 'bed'], ['man', 'men'], ['pan', 'pen'], ['sat', 'set']],
+    sentences: ['The man had a bad back.', 'Can you pass me that black bag?'] },
+  { id: 'end', title: 'Word endings', ipa: [],
+    tip: 'Say the last sound clearly: "asked" ends in "skt" and "jobs" ends in "bz". Do not drop it.',
+    ml: 'വാക്കിന്റെ അവസാന ശബ്ദം വ്യക്തമായി പറയുക. "asked", "jobs" എന്നിവയുടെ അവസാനം കളയരുത്.',
+    pairs: [['ask', 'asked'], ['job', 'jobs'], ['help', 'helped'], ['month', 'months']],
+    sentences: ['She asked about the jobs last month.', 'He helped two patients and checked their files.'] }
+];
+
+/* Speaking level test: read three sentences aloud, then answer three questions. */
+const LEVEL_TEST = {
+  read: [
+    'I have been working as a nurse for several years.',
+    'The weather in Queensland is usually warm and sunny.',
+    'Could you please explain the new process to the whole team?'
+  ],
+  questions: [
+    'Tell me a little about yourself and the work you do.',
+    'Describe a difficult situation you handled well. What happened, and what did you do?',
+    'What do you enjoy about living in Australia, or what are you looking forward to?'
+  ]
+};

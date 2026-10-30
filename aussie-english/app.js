@@ -230,21 +230,24 @@
   // One listening session. Calls back with interim text, then final alternatives.
   // pauseMs: stop as soon as the speaker has paused this long, instead of waiting for the
   // browser's own (slower) end-of-speech detection.
+  // continuous: keep listening through short pauses (long answers); stops after pauseMs of silence.
+  // end() gets (alternatives, seconds since start, seconds actually speaking).
   function listen(opts){
-    var r = new SR(), started = Date.now(), finalAlts = [], got = false, lastText = '', timer = null;
-    r.lang = 'en-AU'; r.interimResults = !!opts.interim; r.maxAlternatives = 3; r.continuous = false;
+    var r = new SR(), started = Date.now(), finalAlts = [], got = false, lastText = '', timer = null, firstAt = 0, lastAt = 0;
+    r.lang = 'en-AU'; r.interimResults = !!opts.interim || !!opts.continuous; r.maxAlternatives = 3; r.continuous = !!opts.continuous;
     r.onresult = function(e){
       var text = '';
+      lastAt = Date.now(); if (!firstAt) firstAt = lastAt;
       for (var i = 0; i < e.results.length; i++) {
-        text += e.results[i][0].transcript;
-        if (e.results[i].isFinal) {
+        text += (i && opts.continuous ? ' ' : '') + e.results[i][0].transcript;
+        if (e.results[i].isFinal && !opts.continuous) {
           got = true;
           finalAlts = [];
           for (var k = 0; k < e.results[i].length; k++) finalAlts.push(e.results[i][k].transcript);
         }
       }
-      lastText = text;
-      if (opts.interim) opts.interim(text);
+      lastText = text.replace(/\s+/g, ' ');
+      if (opts.interim) opts.interim(lastText);
       if (opts.pauseMs && !got) {
         clearTimeout(timer);
         timer = setTimeout(function(){ try { r.stop(); } catch(err) {} }, opts.pauseMs);
@@ -253,8 +256,9 @@
     r.onerror = function(e){ if (opts.error) opts.error(e.error); };
     r.onend = function(){
       clearTimeout(timer);
+      var speaking = firstAt ? (lastAt - firstAt) / 1000 + 0.6 : 0;
       // If we stopped early and no final result came, use what was heard so far.
-      opts.end(got ? finalAlts : lastText.trim() ? [lastText] : [], (Date.now() - started) / 1000);
+      opts.end(got ? finalAlts : lastText.trim() ? [lastText] : [], (Date.now() - started) / 1000, speaking);
     };
     try { r.start(); } catch(err) { opts.end([], 0); }
     return r;
@@ -277,6 +281,170 @@
   }
   function micButton(id){ return '<button class="mic" id="' + id + '" type="button" aria-label="Tap to speak">' + I.mic + '</button>'; }
 
+  /* ---------- Sound-by-sound pronunciation (Microsoft Azure) ---------- */
+  // The app asks the server for a 10-minute Azure token, then scores speech in the browser.
+  // Sound names only exist in Azure's American English model; the sounds the drills train are the
+  // same in Australian English. Without Azure (not set up, offline) the free word check is used.
+  var AZURE_SDK = 'https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@1.52.0/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js';
+  var az = { token: null, region: null, exp: 0, off: false, sdk: null };
+  function loadAzureSdk(){
+    if (az.sdk) return az.sdk;
+    az.sdk = new Promise(function(res, rej){
+      if (window.SpeechSDK) return res(window.SpeechSDK);
+      var s = document.createElement('script');
+      s.src = AZURE_SDK; s.onload = function(){ res(window.SpeechSDK); }; s.onerror = function(){ az.sdk = null; rej(new Error('sdk')); };
+      document.head.appendChild(s);
+    });
+    return az.sdk;
+  }
+  function azureToken(){
+    if (az.token && Date.now() < az.exp) return Promise.resolve(az);
+    return fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ azureToken: true }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (!d.token) { if (d.error === 'no_azure') az.off = true; throw new Error(d.error || 'azure'); }
+        az.token = d.token; az.region = d.region; az.exp = Date.now() + 9 * 60 * 1000;
+        return az;
+      });
+  }
+  // Records one utterance and scores it against the reference text.
+  function assessAzure(ref){
+    return Promise.all([loadAzureSdk(), azureToken()]).then(function(v){
+      var sdk = v[0], a = v[1];
+      return new Promise(function(resolve, reject){
+        var sc = sdk.SpeechConfig.fromAuthorizationToken(a.token, a.region);
+        sc.speechRecognitionLanguage = 'en-US';
+        var pc = new sdk.PronunciationAssessmentConfig(ref, sdk.PronunciationAssessmentGradingSystem.HundredMark, sdk.PronunciationAssessmentGranularity.Phoneme, true);
+        pc.phonemeAlphabet = 'IPA';
+        pc.nbestPhonemeCount = 5;
+        pc.enableProsodyAssessment = true;
+        var rec = new sdk.SpeechRecognizer(sc, sdk.AudioConfig.fromDefaultMicrophoneInput());
+        pc.applyTo(rec);
+        rec.recognizeOnceAsync(function(result){
+          var raw = result.properties.getProperty(sdk.PropertyId.SpeechServiceResponse_JsonResult);
+          rec.close();
+          try { resolve(parseAzure(JSON.parse(raw || '{}'))); } catch(e) { resolve(null); }
+        }, function(err){ rec.close(); reject(err); });
+      });
+    });
+  }
+  function parseAzure(j){
+    var nb = j.NBest && j.NBest[0];
+    if (!nb || !nb.PronunciationAssessment) return null;
+    var pa = nb.PronunciationAssessment;
+    return {
+      pron: Math.round(pa.PronScore || 0), accuracy: Math.round(pa.AccuracyScore || 0), fluency: Math.round(pa.FluencyScore || 0),
+      completeness: Math.round(pa.CompletenessScore || 0), prosody: pa.ProsodyScore == null ? null : Math.round(pa.ProsodyScore),
+      heard: nb.Display || '', secs: (j.Duration || 0) / 1e7,
+      words: (nb.Words || []).map(function(w){
+        var wp = w.PronunciationAssessment || {};
+        return { word: w.Word, score: Math.round(wp.AccuracyScore || 0), error: wp.ErrorType || 'None',
+          phonemes: (w.Phonemes || []).map(function(p){
+            var pp = p.PronunciationAssessment || {}, best = (pp.NBestPhonemes || [])[0];
+            return { ipa: p.Phoneme, score: Math.round(pp.AccuracyScore || 0), heard: best ? best.Phoneme : null };
+          }) };
+      })
+    };
+  }
+  function soundFor(ipa){ return SOUNDS.find(function(s){ return s.ipa.indexOf(ipa) >= 0; }); }
+  function scoreCls(n){ return n >= 80 ? 'ok' : n >= 60 ? 'close' : 'miss'; }
+
+  // Adds the day's pronunciation numbers and which drill sounds were weak.
+  function logAzure(res){
+    logDay({ paN: 1, paPron: res.pron, paAcc: res.accuracy, paFlu: res.fluency, paPros: res.prosody == null ? res.pron : res.prosody,
+             pronSum: res.pron, pronN: 1, speakSec: Math.round(res.secs) });
+    state.sounds = state.sounds || {};
+    res.words.forEach(function(w){ w.phonemes.forEach(function(p){
+      var s = soundFor(p.ipa); if (!s) return;
+      var st = state.sounds[s.id] || (state.sounds[s.id] = { n: 0, sum: 0 });
+      st.n++; st.sum += p.score;
+    }); });
+    addVocab(res.heard); markActive(); save();
+  }
+
+  function bar(label, v){
+    return '<div class="sbar"><span>' + label + '</span><i><b class="' + (v == null ? '' : scoreCls(v)) + '" style="width:' + (v || 0) + '%"></b></i><em>' + (v == null ? '–' : v) + '</em></div>';
+  }
+  function renderAzure(box, res){
+    var worst = null;
+    res.words.forEach(function(w){ if (w.error !== 'Omission' && (!worst || w.score < worst.score)) worst = w; });
+    box.innerHTML =
+      '<div class="sbars">' + bar('Overall', res.pron) + bar('Accuracy', res.accuracy) + bar('Fluency', res.fluency) + bar('Intonation', res.prosody) + '</div>' +
+      '<div class="words az">' + res.words.map(function(w, i){
+        var cls = w.error === 'Omission' ? 'skip' : w.error === 'Insertion' ? 'extra' : scoreCls(w.score);
+        return '<button type="button" class="w ' + cls + '" data-i="' + i + '">' + esc(w.word) + '</button>';
+      }).join(' ') + '</div>' +
+      '<div class="legend"><span><i style="background:var(--good)"></i>Clear</span><span><i style="background:var(--warn-line)"></i>Close</span><span><i style="background:var(--bad)"></i>Needs work</span><span>Tap a word for its sounds</span></div>' +
+      '<div class="phon" id="phon"></div>' +
+      '<div class="heard">Heard: “' + esc(res.heard) + '”</div>';
+    function show(w){
+      var p = box.querySelector('#phon');
+      if (w.error === 'Omission') { p.innerHTML = '<b>' + esc(w.word) + '</b> - this word was missed. Try saying every word.'; return; }
+      var tips = [];
+      p.innerHTML = '<div class="phon-head"><b>' + esc(w.word) + '</b> · ' + w.score + '% <button class="btn sm ghost" type="button" data-say>' + I.speaker + 'Hear it</button></div>' +
+        '<div class="ipa">' + w.phonemes.map(function(ph){
+          var wrong = ph.score < 60 && ph.heard && ph.heard !== ph.ipa;
+          var s = soundFor(ph.ipa);
+          if (ph.score < 70 && s && tips.indexOf(s) < 0) tips.push(s);
+          return '<span class="ph ' + scoreCls(ph.score) + '" title="' + ph.score + '%">/' + esc(ph.ipa) + '/' + (wrong ? '<small>you said /' + esc(ph.heard) + '/</small>' : '') + '</span>';
+        }).join('') + '</div>' +
+        tips.map(function(s){ return '<p class="ptip"><b>' + esc(s.title) + ':</b> ' + esc(s.tip) + ' <a href="#/sound/' + s.id + '">Practise this sound</a></p>'; }).join('');
+      p.querySelector('[data-say]').onclick = function(){ speak(w.word); };
+      box.querySelectorAll('.words .w').forEach(function(b){ b.classList.toggle('sel', b.textContent === w.word); });
+    }
+    box.querySelectorAll('.words .w').forEach(function(b){ b.onclick = function(){ show(res.words[+b.dataset.i]); }; });
+    if (worst) show(worst);
+  }
+
+  // A practise-this panel: big mic, then Azure sound-by-sound results (or the free word check).
+  // getRef() returns the sentence to say at the moment the mic is tapped.
+  function practiceCard(el, getRef, onDone){
+    el.innerHTML = (SR || window.MediaRecorder ? micButton('pmic') : '') +
+      '<span class="mic-label" id="plabel">Tap and say it</span><div class="result" id="presult"></div>';
+    var mic = el.querySelector('#pmic'), label = el.querySelector('#plabel'), out = el.querySelector('#presult'), rec = null, busy = false;
+    if (!mic) { label.textContent = 'Speaking practice needs Chrome or Safari.'; return; }
+    function browserCheck(ref){
+      if (!SR) { label.textContent = 'Speaking practice works in Chrome.'; return; }
+      mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap to stop';
+      rec = listen({
+        error: function(err){ if (err === 'not-allowed' || err === 'service-not-allowed') out.innerHTML = '<p class="heard">Microphone is blocked. Please allow it for this site.</p>'; },
+        end: function(alts, secs){
+          rec = null; mic.classList.remove('live');
+          if (!alts.length) { label.textContent = 'Didn\'t catch that - tap and try again'; return; }
+          var best = null, heard = '';
+          alts.forEach(function(a){ var g = grade(ref, a); if (!best || g.score > best.score) { best = g; heard = a; } });
+          label.textContent = 'Tap to try again';
+          out.innerHTML =
+            '<div class="words">' + best.words.map(function(x){ return '<span class="w ' + x.cls + '">' + esc(x.w) + '</span>'; }).join(' ') + '</div>' +
+            '<div class="legend"><span><i style="background:var(--good)"></i>Clear</span><span><i style="background:var(--warn-line)"></i>Close</span><span><i style="background:var(--bad)"></i>Missed</span></div>' +
+            '<div class="score">' + best.score + '%</div><div class="heard">Heard: “' + esc(heard) + '”</div>';
+          logDay({ speakSec: Math.round(secs), pronSum: best.score, pronN: 1 });
+          addVocab(heard); markActive(); save();
+          if (onDone) onDone({ pron: best.score });
+        }
+      });
+    }
+    mic.onclick = function(){
+      if (busy) return;
+      if (rec) { rec.stop(); return; }
+      var ref = (getRef() || '').trim();
+      if (!ref) { label.textContent = 'Type a sentence first'; return; }
+      if (canSpeak) speechSynthesis.cancel();
+      if (az.off || !TALK_API || !getCode()) return browserCheck(ref);
+      busy = true; mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… speak now';
+      assessAzure(ref).then(function(res){
+        busy = false; mic.classList.remove('live');
+        if (!res) { label.textContent = 'Didn\'t catch that - tap and try again'; return; }
+        label.textContent = 'Tap to try again';
+        renderAzure(out, res); logAzure(res);
+        if (onDone) onDone(res);
+      }).catch(function(){
+        busy = false; mic.classList.remove('live');
+        browserCheck(ref);   // Azure not available right now: use the free check instead.
+      });
+    };
+  }
+
   /* ---------- Home: progress dashboard ---------- */
   function chartSvg(days){
     var W = 700, H = 150, top = 22, base = 122, bw = 54, gap = (W - bw * 7) / 6;
@@ -292,13 +460,53 @@
     return out + '</svg>';
   }
 
+  // Skill scores: practice from the last 14 days, falling back to the latest level test.
+  function skills(){
+    var d = lastDays(14), t = state.test || {};
+    function avg(sum, n, fb){ var c = sumOver(d, n); return c ? Math.round(sumOver(d, sum) / c) : (fb == null ? null : fb); }
+    return {
+      pronunciation: sumOver(d, 'paN') ? avg('paPron', 'paN') : avg('pronSum', 'pronN', t.pron),
+      fluency: avg('paFlu', 'paN', t.fluency),
+      intonation: avg('paPros', 'paN', t.prosody),
+      grammar: avg('gramSum', 'gvN', t.grammar),
+      vocabulary: avg('vocabSum', 'gvN', t.vocabulary)
+    };
+  }
+  function skillsCard(){
+    var s = skills();
+    return '<div class="card pad home-card"><div class="chart-head"><b>Your skills</b><span>Last 14 days</span></div>' +
+      '<div class="sbars" style="margin-top:10px">' + bar('Pronunciation', s.pronunciation) + bar('Fluency', s.fluency) + bar('Intonation', s.intonation) + bar('Grammar', s.grammar) + bar('Vocabulary', s.vocabulary) + '</div>' +
+      (Object.keys(s).some(function(k){ return s[k] == null; }) ? '<p class="heard" style="text-align:left">Do a sound drill and a conversation to fill in every skill.</p>' : '') + '</div>';
+  }
+  function levelCard(){
+    var t = state.test;
+    if (!t) return '<a class="card cta" href="#/test"><span class="ic">' + I.check + '</span><span><b>Find your speaking level</b><span>A 4-minute test: CEFR level and an estimated IELTS band</span></span><span class="chev">' + I.chev + '</span></a>';
+    return '<a class="card pad level-card mini" href="#/test"><div class="lv"><b>' + esc(t.cefr) + '</b><span>Your level</span></div><div class="lv"><b>' + esc(String(t.ielts)) + '</b><span>IELTS speaking (est.)</span></div><div class="lv"><span>Tested ' + esc(t.date) + '<br>Tap to retake</span></div></a>';
+  }
+  // Today's plan: the weakest sound, one conversation, and the level test or own-sentence practice.
+  function planCard(){
+    var today = state.days[dayKey(new Date())] || {}, dayNo = Math.floor(Date.now() / 864e5);
+    var scored = SOUNDS.filter(function(s){ return soundAvg(s.id) !== null; }).sort(function(a, b){ return soundAvg(a.id) - soundAvg(b.id); });
+    var snd = scored.length && soundAvg(scored[0].id) < 85 ? scored[0] : SOUNDS[dayNo % SOUNDS.length];
+    var lead = SCENES.filter(function(s){ return s.level === LEVEL; }), scene = lead[dayNo % lead.length];
+    var tasks = [
+      { href: '#/sound/' + snd.id, title: 'Sound drill: ' + snd.title, sub: soundAvg(snd.id) !== null ? 'Your weakest sound - ' + soundAvg(snd.id) + '% so far' : 'Say 3 words or sentences', done: (today.drills || 0) >= 3 },
+      { href: '#/talk/' + scene.id, title: 'Conversation: ' + scene.title, sub: 'Reply at least 5 times', done: (today.turns || 0) >= 5 },
+      state.test
+        ? { href: '#/practise', title: 'Say a sentence from your work', sub: 'Practise 3 of your own sentences', done: (today.paN || today.pronN || 0) >= 6 }
+        : { href: '#/test', title: 'Take the speaking level test', sub: 'About 4 minutes', done: false }
+    ];
+    var n = tasks.filter(function(t){ return t.done; }).length;
+    return '<div class="card pad home-card plan"><div class="chart-head"><b>Today\'s plan</b><span>' + n + ' of 3 done</span></div>' +
+      tasks.map(function(t){
+        return '<a class="task' + (t.done ? ' done' : '') + '" href="' + t.href + '"><span class="tick">' + (t.done ? I.check : '') + '</span><span><b>' + esc(t.title) + '</b><span>' + esc(t.sub) + '</span></span><span class="chev">' + I.chev + '</span></a>';
+      }).join('') + '</div>';
+  }
+
   function home(){
     setTab('home');
     var week = lastDays(7);
     var speakMin = Math.round(sumOver(week, 'speakSec') / 60);
-    var pronN = sumOver(week, 'pronN'), turns = sumOver(week, 'turns');
-    var clarity = pronN ? Math.round(sumOver(week, 'pronSum') / pronN) : null;
-    var fluency = turns ? Math.round(sumOver(week, 'fluSum') / turns) : null;
     var doneCount = LESSONS.filter(function(l){ return state.done[l.id]; }).length;
     var next = LESSONS.find(function(l){ return !state.done[l.id]; }) || LESSONS[0];
     var hour = new Date().getHours();
@@ -314,16 +522,14 @@
       '<h1 class="title">' + (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening') + '</h1>' +
       '<p class="lede">Speak the English Australian healthcare leaders use, with a coach that listens and gives you feedback.</p>' +
       installCard() + notice +
+      planCard() + levelCard() + skillsCard() +
       '<div class="stats">' +
         tile('Day streak', currentStreak(), currentStreak() === 1 ? 'day' : 'days', 'Practise daily to keep it') +
         tile('Speaking time', speakMin, 'min', 'Last 7 days') +
         tile('Words used', Object.keys(state.vocab).length, '', 'Different words you\'ve spoken') +
-        tile('Clarity score', clarity === null ? '–' : clarity, clarity === null ? '' : '%', 'Pronunciation, last 7 days') +
-        tile('Fluency score', fluency === null ? '–' : fluency, fluency === null ? '' : '%', 'Conversation feedback, last 7 days') +
         tile('Lessons done', doneCount, '/ ' + LESSONS.length, 'Quizzes completed') +
       '</div>' +
       '<div class="card chart-card"><div class="chart-head"><b>Speaking minutes</b><span>Last 7 days</span></div>' + chartSvg(week) + '</div>' +
-      '<a class="card cta primary" href="#/talk"><span class="ic">' + I.chat + '</span><span><b>Practise a conversation</b><span>Leadership scenarios in Australian healthcare</span></span><span class="chev">' + I.chev + '</span></a>' +
       '<a class="card cta" href="#/lesson/' + next.id + '"><span class="ic">' + I.book + '</span><span><b>Continue lessons</b><span>' + esc(next.title) + '</span></span><span class="chev">' + I.chev + '</span></a>' +
       (state.phrases.length ? '<h2 class="section-title">Saved power phrases</h2><div class="phrase-list">' + state.phrases.slice().reverse().map(function(p, i){
         return '<div class="card phrase"><div><b>' + esc(p.phrase) + '</b><span>' + esc(p.meaning) + '</span></div>' +
@@ -340,9 +546,14 @@
   function learn(){
     setTab('learn');
     render(
-      '<span class="eyebrow">Everyday Australian English</span>' +
-      '<h1 class="title">Lessons</h1>' +
-      '<p class="lede">Listen to each phrase in an Australian voice, then say it - every word is checked.</p>' +
+      '<span class="eyebrow">Practise speaking</span>' +
+      '<h1 class="title">Learn</h1>' +
+      '<div class="list two">' +
+        '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
+        '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
+        '<a class="card item" href="#/test"><span class="num">' + I.check + '</span><span class="t"><h2>Speaking level test</h2><span class="sub">' + (state.test ? 'Your level: ' + esc(state.test.cefr) + ' · IELTS ~' + state.test.ielts : 'Find your level in about 4 minutes') + '</span></span></a>' +
+      '</div>' +
+      '<h2 class="section-title">Everyday Australian English</h2>' +
       '<div class="list two">' + LESSONS.map(function(l, i){
         var seen = seenIn(l);
         return '<a class="card item" href="#/lesson/' + l.id + '"><span class="num">' + (i + 1) + '</span><span class="t">' +
@@ -372,7 +583,7 @@
         '<p class="phrase-ml" lang="ml">' + esc(p.ml) + '</p>' +
         '<div class="listen-row"><button class="btn" id="play">' + I.speaker + 'Listen</button><button class="btn" id="slow">' + I.speaker + 'Slow</button></div>' +
         (p.tip ? '<p class="tip" lang="ml">' + esc(p.tip) + '</p>' : '') +
-        (SR ? '<div class="speak-zone">' + micButton('mic') + '<span class="mic-label" id="micLabel">Tap and say the phrase</span><div class="result" id="result"></div></div>' : '') +
+        '<div class="speak-zone" id="practice"></div>' +
       '</article>' +
       '<div class="nav">' +
         (idx > 0 ? '<a class="btn ghost" href="#/lesson/' + l.id + '/' + (idx - 1) + '">' + I.back + 'Back</a>' : '<span></span>') +
@@ -383,32 +594,181 @@
     var said = p.say || p.en;
     document.getElementById('play').onclick = function(){ speak(said); };
     document.getElementById('slow').onclick = function(){ speak(said, true); };
-    var mic = document.getElementById('mic');
-    if (mic) {
-      var label = document.getElementById('micLabel'), result = document.getElementById('result'), rec = null;
-      mic.onclick = function(){
+    practiceCard(document.getElementById('practice'), function(){ return p.en; });
+  }
+
+  /* ---------- Practise any sentence ---------- */
+  function practise(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">Your own words</span>' +
+      '<h1 class="title">Practise any sentence</h1>' +
+      '<p class="lede">Type or paste anything - something you say at work, a word you find hard - then hear it and say it.</p>' +
+      '<article class="card pad" style="margin-top:16px">' +
+        '<textarea id="ref" class="ref" maxlength="200" rows="3" placeholder="e.g. I\'m concerned his blood pressure is dropping."></textarea>' +
+        '<div class="listen-row"><button class="btn" id="play">' + I.speaker + 'Listen</button><button class="btn" id="slow">' + I.speaker + 'Slow</button></div>' +
+        '<div class="speak-zone" id="practice"></div>' +
+      '</article>'
+    );
+    var ref = document.getElementById('ref');
+    try { ref.value = localStorage.getItem('aj-english-own') || ''; } catch(e) {}
+    ref.oninput = function(){ try { localStorage.setItem('aj-english-own', ref.value); } catch(e) {} };
+    document.getElementById('play').onclick = function(){ speak(ref.value); };
+    document.getElementById('slow').onclick = function(){ speak(ref.value, true); };
+    practiceCard(document.getElementById('practice'), function(){ return ref.value; });
+  }
+
+  /* ---------- Malayali sound drills ---------- */
+  function soundAvg(id){ var st = (state.sounds || {})[id]; return st && st.n >= 3 ? Math.round(st.sum / st.n) : null; }
+  function sounds(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">Sound drills</span>' +
+      '<h1 class="title">The sounds Malayalis find hardest</h1>' +
+      '<p class="lede">Short drills for each sound, with word pairs and sentences. Every sound you say is scored.</p>' +
+      '<div class="list two">' + SOUNDS.map(function(s, i){
+        var avg = soundAvg(s.id);
+        return '<a class="card item" href="#/sound/' + s.id + '"><span class="num">' + (s.ipa.length ? '/' + esc(s.ipa[0]) + '/' : (i + 1)) + '</span><span class="t">' +
+          '<h2>' + esc(s.title) + '</h2><span class="sub">' + s.pairs.slice(0, 2).map(function(p){ return esc(p[0]) + ' / ' + esc(p[1]); }).join(' · ') + '</span>' +
+          (avg !== null ? '<span class="meta"><span class="pill ' + (avg >= 80 ? 'good' : avg >= 60 ? 'warn' : 'bad') + '">Your score ' + avg + '%</span></span>' : '') + '</span></a>';
+      }).join('') + '</div>'
+    );
+  }
+  function sound(id){
+    var s = SOUNDS.find(function(x){ return x.id === id; });
+    if (!s) return sounds();
+    setTab('learn');
+    var items = [];
+    s.pairs.forEach(function(p){ items.push(p[0], p[1]); });
+    s.sentences.forEach(function(t){ items.push(t); });
+    var cur = 0;
+    render(
+      '<a class="back" href="#/sounds">' + I.back + 'Sound drills</a>' +
+      '<span class="eyebrow">Sound drill</span>' +
+      '<h1 class="title">' + esc(s.title) + '</h1>' +
+      '<article class="card pad" style="margin-top:14px"><p>' + esc(s.tip) + '</p><p class="tip" lang="ml">' + esc(s.ml) + '</p></article>' +
+      '<h2 class="section-title">Word pairs - listen, then pick one to say</h2>' +
+      '<div class="pairs">' + s.pairs.map(function(p, i){
+        return '<div class="card pair">' + [0, 1].map(function(k){
+          return '<button type="button" class="pw" data-i="' + (i * 2 + k) + '"><b>' + esc(p[k]) + '</b><span data-say="' + esc(p[k]) + '">' + I.speaker + '</span></button>';
+        }).join('<span class="vs">vs</span>') + '</div>';
+      }).join('') + '</div>' +
+      '<h2 class="section-title">Sentences</h2>' +
+      '<div class="phrase-list">' + s.sentences.map(function(t, i){
+        return '<button type="button" class="card phrase pw" data-i="' + (s.pairs.length * 2 + i) + '"><div><b>' + esc(t) + '</b></div><span class="icon-btn" data-say="' + esc(t) + '">' + I.speaker + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="card pad drill-say"><span class="count">Now say:</span><p class="phrase-en" id="target"></p><div class="speak-zone" id="practice"></div></div>'
+    );
+    function pick(i){
+      cur = i;
+      document.getElementById('target').textContent = items[i];
+      app.querySelectorAll('.pw').forEach(function(b){ b.classList.toggle('sel', +b.dataset.i === i); });
+    }
+    app.querySelectorAll('.pw').forEach(function(b){ b.onclick = function(){ pick(+b.dataset.i); }; });
+    app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation(); speak(b.dataset.say); }; });
+    pick(0);
+    practiceCard(document.getElementById('practice'), function(){ return items[cur]; }, function(){ logDay({ drills: 1 }); });
+  }
+
+  /* ---------- Speaking level test ---------- */
+  function levelTest(){
+    setTab('learn');
+    var step = 0, reads = [], answers = [];
+    function header(n, of){ return '<a class="back" href="#/learn">' + I.back + 'Learn</a><span class="eyebrow">Speaking level test · ' + n + ' of ' + of + '</span><div class="progress"><i style="width:' + Math.round(n / of * 100) + '%"></i></div>'; }
+    function intro(){
+      render(
+        '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+        '<span class="eyebrow">About 4 minutes</span>' +
+        '<h1 class="title">Speaking level test</h1>' +
+        '<p class="lede">Read three sentences aloud, then answer three questions as you would in a conversation. You\'ll get your level (A1 to C2), an estimated IELTS speaking band, and what to work on.</p>' +
+        (state.test ? '<div class="notice">Last result: <b>' + esc(state.test.cefr) + '</b> · IELTS ~' + state.test.ielts + ' (' + esc(state.test.date) + ')</div>' : '') +
+        '<div class="row" style="margin-top:18px"><button class="btn primary" id="start">Start the test' + I.chev + '</button></div>'
+      );
+      document.getElementById('start').onclick = function(){ step = 0; readStep(); };
+    }
+    function readStep(){
+      var t = LEVEL_TEST.read[step];
+      render(header(step + 1, 6) +
+        '<article class="card pad"><span class="count">Read this aloud</span><p class="phrase-en">' + esc(t) + '</p>' +
+        '<div class="speak-zone" id="practice"></div>' +
+        '<div class="nav"><span></span><button class="btn primary" id="next" disabled>Next' + I.chev + '</button></div></article>');
+      var next = document.getElementById('next');
+      practiceCard(document.getElementById('practice'), function(){ return t; }, function(res){ reads[step] = res; next.disabled = false; });
+      next.onclick = function(){ step++; step < LEVEL_TEST.read.length ? readStep() : (step = 0, askStep()); };
+    }
+    function askStep(){
+      var q = LEVEL_TEST.questions[step], rec = null, text = '', secs = 0;
+      render(header(LEVEL_TEST.read.length + step + 1, 6) +
+        '<article class="card pad"><span class="count">Answer in English - aim for 30 to 60 seconds</span><p class="q-prompt">' + esc(q) + '</p>' +
+        '<div class="listen-row" style="margin:0 0 6px"><button class="btn" id="play">' + I.speaker + 'Hear the question</button></div>' +
+        '<div class="speak-zone">' + (SR ? micButton('amic') + '<span class="mic-label" id="alabel">Tap and start speaking</span>' : '') +
+        '<textarea id="ans" class="ref" rows="4" placeholder="' + (SR ? 'Your words appear here. You can also type.' : 'Type your answer') + '"></textarea></div>' +
+        '<div class="nav"><span></span><button class="btn primary" id="next">' + (step === LEVEL_TEST.questions.length - 1 ? 'Finish' : 'Next') + I.chev + '</button></div></article>');
+      var ans = document.getElementById('ans'), mic = document.getElementById('amic'), label = document.getElementById('alabel');
+      document.getElementById('play').onclick = function(){ speak(q); };
+      speak(q);
+      if (mic) mic.onclick = function(){
         if (rec) { rec.stop(); return; }
         if (canSpeak) speechSynthesis.cancel();
-        mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap to stop';
+        var before = ans.value ? ans.value + ' ' : '';
+        mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap when you\'ve finished';
         rec = listen({
-          error: function(err){ if (err === 'not-allowed' || err === 'service-not-allowed') result.innerHTML = '<p class="heard">Microphone is blocked. Please allow it for this site.</p>'; },
-          end: function(alts, secs){
-            rec = null; mic.classList.remove('live');
-            if (!alts.length) { label.textContent = 'Didn\'t catch that - tap and try again'; return; }
-            var best = null, heard = '';
-            alts.forEach(function(a){ var g = grade(p.en, a); if (!best || g.score > best.score) { best = g; heard = a; } });
-            label.textContent = 'Tap to try again';
-            result.innerHTML =
-              '<div class="words">' + best.words.map(function(x){ return '<span class="w ' + x.cls + '">' + esc(x.w) + '</span>'; }).join(' ') + '</div>' +
-              '<div class="legend"><span><i style="background:var(--good)"></i>Clear</span><span><i style="background:var(--warn-line)"></i>Close</span><span><i style="background:var(--bad)"></i>Missed</span></div>' +
-              '<div class="score">' + (best.score >= 85 ? 'Excellent' : best.score >= 60 ? 'Good - try once more' : 'Keep practising') + ' · ' + best.score + '%</div>' +
-              '<div class="heard">Heard: “' + esc(heard) + '”</div>';
-            logDay({ speakSec: Math.round(secs), pronSum: best.score, pronN: 1 });
-            addVocab(heard); markActive(); save();
+          continuous: true, pauseMs: 4000,
+          interim: function(t){ ans.value = before + t; },
+          end: function(alts, total, speaking){
+            rec = null; mic.classList.remove('live'); label.textContent = 'Tap to add more';
+            if (alts[0]) ans.value = before + alts[0];
+            secs += speaking;
           }
         });
       };
+      document.getElementById('next').onclick = function(){
+        if (rec) rec.stop();
+        text = ans.value.trim();
+        if (!text) { if (label) label.textContent = 'Please answer the question first'; return; }
+        answers[step] = { q: q, a: text, secs: secs };
+        logDay({ speakSec: Math.round(secs) }); addVocab(text);
+        step++;
+        step < LEVEL_TEST.questions.length ? askStep() : grade_();
+      };
     }
+    function grade_(){
+      render(header(6, 6) + '<article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div><p class="lede">Working out your level…</p></article>');
+      var az_ = reads.filter(function(r){ return r && r.accuracy != null; });
+      var avg = function(k){ var v = az_.filter(function(r){ return r[k] != null; }); return v.length ? Math.round(v.reduce(function(a, r){ return a + r[k]; }, 0) / v.length) : null; };
+      var pron = az_.length ? { accuracy: avg('accuracy'), fluency: avg('fluency'), prosody: avg('prosody'), overall: avg('pron') }
+        : { overall: reads.length ? Math.round(reads.reduce(function(a, r){ return a + (r ? r.pron : 0); }, 0) / reads.length) : null };
+      fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+        body: JSON.stringify({ assess: true, answers: answers, pronunciation: pron }) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d.error || !d.cefr) throw new Error(d.error || 'assess');
+          state.test = Object.assign({ date: new Date().toLocaleDateString('en-AU'), pron: pron.overall, fluency: pron.fluency, prosody: pron.prosody }, d);
+          save(); markActive();
+          result(state.test);
+        })
+        .catch(function(e){
+          render(header(6, 6) + '<article class="card pad"><p>' + (String(e.message) === 'access_code' ? 'The level test uses the AI coach - please enter your access code in a conversation first.' : 'Couldn\'t reach the coach. Please check your internet and try again.') + '</p>' +
+            '<div class="row" style="margin-top:14px"><button class="btn primary" id="retry">Try again</button></div></article>');
+          document.getElementById('retry').onclick = grade_;
+        });
+    }
+    function result(t){
+      var tierName = { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced', leadership: 'Leadership' }[t.tier] || t.tier;
+      render(
+        '<a class="back" href="#/">' + I.back + 'Home</a>' +
+        '<span class="eyebrow">Your speaking level</span>' +
+        '<article class="card pad level-card"><div class="lv"><b>' + esc(t.cefr) + '</b><span>CEFR level</span></div><div class="lv"><b>' + esc(String(t.ielts)) + '</b><span>IELTS speaking (estimate)</span></div><div class="lv"><b>' + esc(tierName) + '</b><span>Best practice level</span></div></article>' +
+        '<article class="card pad"><p>' + esc(t.summary) + '</p>' +
+          '<div class="sbars" style="margin-top:14px">' + bar('Grammar', t.grammar) + bar('Vocabulary', t.vocabulary) + bar('Coherence', t.coherence) + bar('Pronunciation', t.pron == null ? null : t.pron) + (t.fluency != null ? bar('Fluency', t.fluency) : '') + '</div></article>' +
+        '<h2 class="section-title">Strengths</h2><div class="phrase-list">' + (t.strengths || []).map(function(x){ return '<div class="card phrase"><div><b>' + esc(x) + '</b></div></div>'; }).join('') + '</div>' +
+        '<h2 class="section-title">Work on next</h2><div class="phrase-list">' + (t.focus || []).map(function(x){ return '<div class="card phrase"><div><b>' + esc(x) + '</b></div></div>'; }).join('') + '</div>' +
+        '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/">See your daily plan' + I.chev + '</a><a class="btn ghost" href="#/test">Take it again</a></div>'
+      );
+    }
+    intro();
   }
 
   /* ---------- Quiz ---------- */
@@ -672,7 +1032,19 @@
       if (micLabel && !rec) micLabel.textContent = on ? (s.who.split(',')[0] + ' is replying…') : 'Tap to speak';
     }
 
-    function send(text, b, secs){
+    // Speaking pace and filler words, shown under a spoken message.
+    var FILLERS = /\b(um+|uh+|er+m?|ah+|hmm+|you know|i mean|basically|actually|kind of|sort of)\b/gi;
+    function paceNote(b, text, speaking){
+      var n = text.trim().split(/\s+/).length, wpm = Math.round(n / speaking * 60), fillers = (text.match(FILLERS) || []).length;
+      if (n < 4 || speaking < 1.5) return;
+      var tip = wpm < 95 ? 'A little slow - try to keep going between ideas.' : wpm > 175 ? 'Quite fast - slow down a little so every word is clear.' : 'A natural pace.';
+      if (fillers > 1) tip += ' Try a short pause instead of filler words.';
+      b.appendChild(el('pace', I.mic + '<span><b>' + wpm + '</b> words/min · <b>' + fillers + '</b> filler word' + (fillers === 1 ? '' : 's') + ' · ' + tip + '</span>'));
+      logDay({ paceN: 1, wpmSum: wpm, fillers: fillers });
+      down();
+    }
+
+    function send(text, b, secs, speaking){
       text = text.trim();
       if (!text || busy) return;
       if (!TALK_API) { note.textContent = 'The AI coach is not set up yet - coming soon!'; return; }
@@ -728,12 +1100,14 @@
         if (d.error === 'refused') { failed(b, 'Let\'s try saying that a different way.'); return; }
         if (d.error || !d.reply) { failed(b, 'Couldn\'t reach your coach. Please try again.'); input.value = text; return; }
         feedback(b, text, d);
+        if (speaking) paceNote(b, text, speaking);
         history.push({ role: 'assistant', content: d.raw });
         aiMsg(d.reply, LEVEL_MALAYALAM ? d.reply_ml : '', null, d.power_phrase, d.spoken);
         showChips(d.suggestions);
         if (typeof d.remaining === 'number') note.textContent = d.remaining + ' messages left today';
         var st = (d.feedback || {}).status;
         logDay({ turns: 1, fluSum: st === 'excellent' ? 100 : st === 'polish' ? 80 : 50, speakSec: Math.round(secs || 0) });
+        if (d.scores) logDay({ gvN: 1, gramSum: +d.scores.grammar || 0, vocabSum: +d.scores.vocabulary || 0 });
         addVocab(text); markActive(); save();
       }).catch(function(){
         dots.remove(); setBusy(false);
@@ -769,13 +1143,13 @@
         pauseMs: 1100,
         interim: function(t){ live.querySelector('p').textContent = t || '…'; down(); },
         error: function(err){ if (err === 'not-allowed' || err === 'service-not-allowed') note.textContent = 'Microphone is blocked - please allow it for this site.'; },
-        end: function(alts, secs){
+        end: function(alts, secs, speaking){
           rec = null; mic.classList.remove('live');
           var text = alts[0] || '';
           if (!text.trim()) { live.remove(); micLabel.textContent = 'Didn\'t catch that - tap to try again'; return; }
           live.classList.remove('live'); live.querySelector('p').textContent = text;
           micLabel.textContent = 'Tap to speak';
-          send(text, live, secs);
+          send(text, live, secs, speaking);
         }
       });
     };
@@ -849,6 +1223,10 @@
     var parts = location.hash.replace(/^#\/?/, '').split('?')[0].split('/');
     if (parts[0] === 'learn') learn();
     else if (parts[0] === 'lesson') lesson(parts[1], parseInt(parts[2], 10) || 0);
+    else if (parts[0] === 'practise') practise();
+    else if (parts[0] === 'sounds') sounds();
+    else if (parts[0] === 'sound') sound(parts[1]);
+    else if (parts[0] === 'test') levelTest();
     else if (parts[0] === 'quiz') quiz(parts[1]);
     else if (parts[0] === 'talk') parts[1] ? talk(parts[1]) : talkHome();
     else if (parts[0] === 'slang') slang();
