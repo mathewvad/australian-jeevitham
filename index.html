@@ -11,68 +11,584 @@
     gtag('config', 'G-HE4E37HMXF');
   </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Australian Jeevitham Aussie English Coach</title>
-  <meta name="description" content="Australian English for Malayalis in Australia: an AI coach for leadership conversations in Australian healthcare, plus Aussie slang, everyday phrases, an Australian voice, pronunciation practice and quizzes.">
-  <link rel="canonical" href="https://www.australianjeevitham.com/aussie-english/">
-  <link rel="icon" type="image/png" href="icons/favicon-64.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Australian Jeevitham | Australian Life Through a Malayali Lens</title>
+  <meta name="description" content="Australian Jeevitham: Malayalam-English guides and stories on Australian life, jobs, migration, settlement, gardening, and culture from Queensland, Australia.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/">
+  <link rel="icon" type="image/png" href="images/favicon.png">
 
-  <!-- Installable app: full screen from the home-screen icon -->
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Aussie English">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Australian Jeevitham">
-  <meta property="og:url" content="https://www.australianjeevitham.com/aussie-english/">
-  <meta property="og:title" content="Australian Jeevitham Aussie English Coach">
-  <meta property="og:description" content="Practise the English Australian healthcare leaders really use - ISBAR handovers, escalating to doctors, talking with families - with an AI coach and an Aussie voice.">
-  <meta property="og:locale" content="ml_IN">
-  <meta property="og:locale:alternate" content="en_AU">
+  <meta property="og:title" content="Australian Jeevitham | Australian Life Through a Malayali Lens">
+  <meta property="og:description" content="Malayalam-English stories and practical information about Australian life, travel, culture, jobs, migration, settlement, gardening, and everyday experiences.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/australian-malayali-vlogger-binu-vadakkedath.webp">
+  <meta property="og:image:alt" content="Binu Vadakkedath, Australian Malayali content creator and founder of Australian Jeevitham">
+  <meta property="og:locale" content="en_AU">
+  <meta property="og:locale:alternate" content="ml_IN">
 
-  <meta name="theme-color" content="#F7F7F5">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Australian Jeevitham | Australian Life Through a Malayali Lens">
+  <meta name="twitter:description" content="Malayalam-English stories and practical information about Australian life, travel, culture, jobs, migration, settlement, gardening, and everyday experiences.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/australian-malayali-vlogger-binu-vadakkedath.webp">
+  <meta name="twitter:image:alt" content="Binu Vadakkedath, Australian Malayali content creator and founder of Australian Jeevitham">
 
+  <meta name="theme-color" content="#FBFBF6">
+
+  <!-- Lean Font Loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;600&display=swap">
-  <link rel="stylesheet" href="app.css?v=5">
-  <script>
-    // Apply saved theme and text size before the page paints.
-    try {
-      var p = JSON.parse(localStorage.getItem('aj-english-prefs')) || {};
-      if (p.theme) document.documentElement.setAttribute('data-theme', p.theme);
-      if (p.size) document.documentElement.style.fontSize = p.size + '%';
-    } catch (e) {}
-  </script>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  </noscript>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <header class="top">
-    <div class="wrap top-row">
-      <a class="brand" href="#/" aria-label="Aussie English Coach home">
-        <img src="icons/icon-192.png" alt="" width="32" height="32">
-        <span class="brand-text"><b>Aussie English Coach</b><small>by Australian Jeevitham</small></span>
-      </a>
-      <div class="top-actions">
-        <button class="icon-btn" id="sizeBtn" type="button" aria-label="Change text size" title="Text size"><span class="aa">Aa</span></button>
-        <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch light or dark mode" title="Light / dark"></button>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="/"><img src="images/logo.webp" alt="Australian Jeevitham logo" width="36" height="36" loading="eager" decoding="async">
+      <span>Australian Jeevitham<br><span class="mal" lang="ml">ഓസ്‌ട്രേലിയൻ ജീവിതം</span></span>
+    </a>
+    <button type="button" class="nav-toggle-btn" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">☰</button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="about-australian-jeevitham.html">Our Story</a></li>
+      <li><a href="australian-malayalam-videos.html">Videos</a></li>
+      <li><a href="australian-malayalam-resources.html">Resources</a></li>
+      <li><a href="creator-australian-jeevitham.html">Creator</a></li>
+      <li><a href="bio.html">Bio</a></li>
+      <li><a class="nav-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener noreferrer">▶ Subscribe</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main-content">
+<!-- ============ HERO ============ -->
+<header class="hero" id="top">
+  <div class="wrap">
+      <div>
+      <span class="stamp">📍 Queensland, Australia</span>
+      <h1 class="hero-title">Australian Jeevitham: Life, culture &amp; <span class="hl">adventures</span> Down Under.</h1>
+      <p class="hero-tag">
+        Welcome to Australian Jeevitham 😀 Malayalam videos and Malayalam-English articles about life in Australia, including practical guides, migration, jobs, travel, culture, gardening, and everyday experiences from a Malayali perspective in Queensland.
+        <span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിലെ ഒരു സാധാരണ മലയാളിയുടെ ജീവിതം എന്താണ് എന്ന് ഈ ചാനലിലൂടെ നിങ്ങൾക്ക് കാണിച്ചു തരുന്നു. കൃഷിയെ ഇഷ്ടപെടുന്ന ഞാൻ എൻ്റെ ജോലി സമയം കഴിഞ്ഞു ഉണ്ടാക്കിയ ചെറിയ ഒരു അടുക്കള തോട്ടം ആണ് എൻ്റെ വീഡിയോയുടെ ഉള്ളടക്കം. പിന്നെ ഓസ്‌ട്രേലിയയിലെ ജോലികളെപ്പറ്റിയും, എങ്ങനെ ഓസ്‌ട്രേലിയയിൽ വരാൻ സാധിക്കും എന്നതിനെപ്പറ്റിയും ഇടക്കിടക്ക് വീഡിയോ ഇടാറുണ്ട്.</span>
+      </p>
+      <div class="hero-ctas">
+        <a class="hero-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener noreferrer">▶ Watch on YouTube</a>
+        <a class="hero-cta instagram" href="https://www.instagram.com/australianjeevitham/" target="_blank" rel="noopener noreferrer">▶ Watch on Instagram</a>
       </div>
     </div>
-  </header>
+    <div class="hero-photo-order">
+      <div class="postcard">
+        <img src="images/australian-jeevitham-binu-holding-youtube-100k-award.webp" alt="Binu Vadakkedath, creator of Australian Jeevitham, holding his YouTube 100K Silver Play Button award" width="450" height="597" loading="eager" decoding="async" fetchpriority="high">
+        <span class="corner-stamp">NEW<br>EPS<br>BIWEEKLY</span>
+      </div>
+    </div>
+  </div>
+</header>
 
-  <main id="app" class="wrap" tabindex="-1"></main>
+<div class="ticket-divider" aria-hidden="true"></div>
 
-  <nav class="tabbar" aria-label="App sections">
-    <a href="#/" data-tab="home"><span data-icon="home"></span>Home</a>
-    <a href="#/learn" data-tab="learn"><span data-icon="book"></span>Learn</a>
-    <a href="#/talk" data-tab="talk"><span data-icon="chat"></span>Talk</a>
-    <a href="#/slang" data-tab="slang"><span data-icon="cards"></span>Slang</a>
-    <a href="#/tips" data-tab="tips"><span data-icon="bulb"></span>Tips</a>
-  </nav>
+<!-- ============ BRAND FEATURE ============ -->
+<section class="section brand-feature" id="brand-feature">
+  <div class="wrap">
+    <div class="brand-feature-grid">
+      <div class="info-card reveal">
+        <div class="info-card-image-wrap">
+          <img src="images/og/australian-malayali-vlogger-binu-vadakkedath.webp"
+               alt="Binu Vadakkedath, Australian Malayali content creator and founder of Australian Jeevitham"
+               width="1200" height="630"
+               loading="lazy" decoding="async">
+          <div class="info-card-image-fade"></div>
+        </div>
+        <span class="stat">130K+</span>
+        <span class="stat-label">YOUTUBE COMMUNITY</span>
+        <p><span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിലെ വിശേഷങ്ങൾ യാതൊരുവിധ അതിശയോക്തിയും കൂടാതെ അതേപടി നിങ്ങളിലേക്കെത്തിക്കാൻ ഞാൻ ശ്രമിക്കുന്നുണ്ട്. അതുപോലെ തന്നെ ഇങ്ങോട്ടു വരാൻ നോക്കുന്നവർക്ക് ഉപകാരപ്രദമായ കാര്യങ്ങളും ഷെയർ ചെയ്യാറുണ്ട്.</span></p>
+      </div>
+      <div class="reveal">
+        <span class="stamp coral">Meet the Creator</span>
+        <div class="section-head" style="margin-top:20px; margin-bottom:20px;">
+          <h2>The face behind Australian Jeevitham</h2>
+        </div>
+        <p class="about-lede">Binu Vadakkedath - software engineer by day, content creator by evening.</p>
+        <div class="about-body">
+          <p>Since starting the channel, I have shared an honest, unscripted look at everyday Malayali life in Australia - jobs, migration, settlement, and backyard farming - all filmed from Queensland.</p>
+        </div>
+        <p class="link-row">
+          <a href="creator-australian-jeevitham.html">Meet Binu, the creator →</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <script src="lessons.js?v=5"></script>
-  <script src="app.js?v=5"></script>
+<!-- ============ ABOUT ============ -->
+<section class="about section" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div>
+        <span class="stamp coral">Filmed in Queensland, Australia</span>
+        <div class="section-head" style="margin-top:20px; margin-bottom:28px;">
+          <div class="kicker"><span style="font-family:var(--mono); font-size:0.78rem; color:var(--fg-muted); text-transform:uppercase; letter-spacing:0.08em;">Our Story</span></div>
+          <h2><span class="mal" lang="ml">എന്തുകൊണ്ട്‌ <span style="color:var(--coral);">ഓസ്‌ട്രേലിയൻ ജീവിതം</span> എന്ന ഈ ചാനൽ ഞാൻ തുടങ്ങി.</span></h2>
+        </div>
+        <p class="about-lede"><span class="mal" lang="ml">ആകസ്മികമായി തുടങ്ങി, പക്ഷെ...</span></p>
+        <div class="about-body">
+          <p><span class="mal" lang="ml">ഓസ്‌ട്രേലിയൻ ജീവിതം എന്ന സോഷ്യൽ മീഡിയ ചാനൽ തുടങ്ങിയത് ആകസ്മികമായിട്ടാണെങ്കിലും, പിന്നീട് അത് തുടരാൻ എന്നെ പ്രേരിപ്പിച്ച കാരണം ഇതാണ്: ഒരിക്കലും ഓസ്‌ട്രേലിയയിൽ വരാൻ സാധിക്കാത്ത അനവധി മലയാളികൾക്ക് ഇവിടുത്തെ വിശേഷങ്ങൾ നേരിട്ട് കാണുവാനുള്ള ഒരു അവസരമൊരുക്കുക. അതോടൊപ്പം, ഓസ്‌ട്രേലിയയിലെ യഥാർത്ഥ ജോലിസാധ്യതകളെക്കുറിച്ചും മറ്റ് പ്രധാന കാര്യങ്ങളെക്കുറിച്ചും തികച്ചും വിശ്വസനീയമായ (genuine) വിവരങ്ങൾ പങ്കുവെക്കുക.</span></p>
+        </div>
+        <p class="link-row">
+          <a href="about-australian-jeevitham.html">Read our full story →</a>
+          <a href="creator-australian-jeevitham.html">Meet Binu, the creator →</a>
+        </p>
+      </div>
+      <div class="about-photo">
+        <img src="images/australian-jeevitham-farming-photo.webp" alt="Binu Vadakkedath holding a breadfruit harvested from his Kerala-style backyard garden in Queensland" width="450" height="646" loading="lazy" decoding="async">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VIDEOS ============ -->
+<section class="videos section" id="videos" style="background:var(--bg-alt); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="stamp grape">Featured Content</span>
+      <h2 style="margin-top:16px;">Catch up on the latest stories, vlogs, and adventures</h2>
+    </div>
+
+    <div class="video-grid">
+      <article class="vcard">
+        <div class="video-frame youtube-facade" data-video-id="EnzjzCUiq1s" role="button" tabindex="0" aria-label="Play video: ഓസ്‌ട്രേലിയയിൽ മുരിങ്ങ നിരോധിച്ചതിൻ്റെ കാരണം അറിയണോ?">
+          <span class="video-badge">New</span>
+          <img src="https://i.ytimg.com/vi/EnzjzCUiq1s/hqdefault.jpg" alt="ഓസ്‌ട്രേലിയയിൽ മുരിങ്ങ നിരോധിച്ചതിൻ്റെ കാരണം അറിയണോ? - Video Thumbnail" width="480" height="360" loading="lazy" decoding="async">
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3><span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിൽ മുരിങ്ങ നിരോധിച്ചതിൻ്റെ കാരണം അറിയണോ?</span></h3>
+        <p><span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിൽ ഇനി മുതൽ മുരിങ്ങ പ്രോഡക്ട്‌സുകൾ ഫുഡ് ഐറ്റം ആയോ ഫുഡ് ingredient ആയോ വിൽക്കാൻ സാധിക്കുകയില്ല.</span></p>
+      </article>
+
+      <article class="vcard">
+        <div class="video-frame youtube-facade" data-video-id="62dW6eBRutw" role="button" tabindex="0" aria-label="Play video: ഈ കൃഷി കാണാതെ പോകരുത്">
+          <span class="video-badge">Popular</span>
+          <img src="https://i.ytimg.com/vi/62dW6eBRutw/hqdefault.jpg" alt="ഈ കൃഷി കാണാതെ പോകരുത് - Video Thumbnail" width="480" height="360" loading="lazy" decoding="async">
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3><span class="mal" lang="ml">ഈ കൃഷി കാണാതെ പോകരുത്</span></h3>
+        <p><span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിലെ കേരള സ്റ്റൈൽ കൃഷിത്തോട്ടം</span></p>
+      </article>
+
+      <article class="vcard">
+        <div class="video-frame youtube-facade" data-video-id="3280tnrmrxM" role="button" tabindex="0" aria-label="Play video: കള്ളുചെത്തൽ ഇവിടെയും തുടങ്ങി">
+          <span class="video-badge">Interesting</span>
+          <img src="https://i.ytimg.com/vi/3280tnrmrxM/hqdefault.jpg" alt="കള്ളുചെത്തൽ ഇവിടെയും തുടങ്ങി - Video Thumbnail" width="480" height="360" loading="lazy" decoding="async">
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3><span class="mal" lang="ml">കള്ളുചെത്തൽ ഇവിടെയും തുടങ്ങി</span></h3>
+        <p><span class="mal" lang="ml">വെറുതെ ഒരു രസത്തിനു ട്രൈ ചെയ്തതാണ്.</span></p>
+      </article>
+    </div>
+
+    <p class="link-row" style="margin-top:36px;">
+      <a href="australian-malayalam-videos.html">Watch all videos →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ============ RESOURCES ============ -->
+<section class="resources section" id="topics" style="background:var(--bg-alt); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="stamp grape">Community &amp; Guides</span>
+      <h2 style="margin-top:16px;">Explore our community and detailed guides</h2>
+    </div>
+    <div class="crosslink-grid">
+      <!-- Card 1: Facebook Community Group -->
+      <a class="crosslink-card info-card-style" href="australiyayilekku-varanirikkunnavar-facebook-group.html">
+        <div class="info-card-image-wrap">
+          <img src="images/og/australiyayilekku-varanirikkunnavar-facebook-group.webp" alt="Australiyayilekku Varanirikkunnavar Facebook Group" width="1200" height="630" loading="lazy" decoding="async">
+          <div class="info-card-image-fade"></div>
+        </div>
+        <h3>Facebook Community Group</h3>
+        <p>Join 110,000+ Malayalis sharing first-hand advice, verifying genuine job offers, and helping newcomers settle in Australia.</p>
+        <ul class="badge-list" style="margin-top:auto;">
+          <li>110K+ Members</li>
+          <li>Community</li>
+          <li>Peer Help</li>
+        </ul>
+      </a>
+      <!-- Card 2: Malayalam Resources Hub -->
+      <a class="crosslink-card info-card-style" href="australian-malayalam-resources.html">
+        <div class="info-card-image-wrap">
+          <img src="images/og/australian-malayalam-resources.webp" alt="Australia Resources Hub for Malayalis" width="1200" height="630" loading="lazy" decoding="async">
+          <div class="info-card-image-fade"></div>
+        </div>
+        <h3>Malayalam Resources Hub</h3>
+        <p>A comprehensive directory of guides covering visas, driving licence conversion, superannuation, and settling into Australia.</p>
+        <ul class="badge-list" style="margin-top:auto;">
+          <li>Guides</li>
+          <li>Checklists</li>
+          <li>Official Links</li>
+        </ul>
+      </a>
+      <!-- Card 3: AHPRA Nursing Registration Guide -->
+      <a class="crosslink-card info-card-style" href="ahpra-nursing-registration-guide-kerala.html">
+        <div class="info-card-image-wrap">
+          <img src="images/og/ahpra-nursing-registration-guide-kerala.webp" alt="AHPRA Nursing Registration Guide for Kerala Nurses" width="1200" height="630" loading="lazy" decoding="async">
+          <div class="info-card-image-fade"></div>
+        </div>
+        <h3>AHPRA Nursing Registration</h3>
+        <p>A step-by-step roadmap for internationally qualified nurses covering Stream B, OBA, NCLEX-RN, OSCE, and English requirements.</p>
+        <ul class="badge-list" style="margin-top:auto;">
+          <li>AHPRA / NMBA</li>
+          <li>NCLEX &amp; OSCE</li>
+          <li>Healthcare</li>
+        </ul>
+      </a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER / CONNECT ============ -->
+<footer id="connect">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="stamp">Connect With Us</span>
+      <h2 style="margin-top:16px;">Stay updated and join our growing global community</h2>
+    </div>
+
+    <div class="connect-grid">
+      <a class="connect-link" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener noreferrer">
+        <span class="glyph"><img src="images/yt_icon_red_digital.png" alt="" width="24" height="24" loading="lazy" decoding="async"></span>
+        <span>
+          <span class="label">YouTube</span>
+          <span class="handle">@AustralianJeevitham</span>
+        </span>
+      </a>
+      <a class="connect-link" href="https://www.facebook.com/Australian.Jeevitham" target="_blank" rel="noopener noreferrer">
+        <span class="glyph"><img src="images/Facebook_Logo_Primary.png" alt="" width="24" height="24" loading="lazy" decoding="async"></span>
+        <span>
+          <span class="label">Facebook</span>
+          <span class="handle">Australian Jeevitham</span>
+        </span>
+      </a>
+      <a class="connect-link" href="australiyayilekku-varanirikkunnavar-facebook-group.html">
+        <span class="glyph"><img src="images/Facebook_Logo_Primary.png" alt="" width="24" height="24" loading="lazy" decoding="async"></span>
+        <span>
+          <span class="label">FB Group</span>
+          <span class="handle">Australiyayilekku Varanirikkunnavar</span>
+        </span>
+      </a>
+      <a class="connect-link" href="https://www.instagram.com/australianjeevitham/" target="_blank" rel="noopener noreferrer">
+        <span class="glyph"><img src="images/Instagram_Glyph_Gradient.png" alt="" width="24" height="24" loading="lazy" decoding="async"></span>
+        <span>
+          <span class="label">Instagram</span>
+          <span class="handle">@australianjeevitham</span>
+        </span>
+      </a>
+      <a class="connect-link" href="https://www.tiktok.com/@australianjeevitham" target="_blank" rel="noopener noreferrer">
+        <span class="glyph"><img src="images/TikTok_Icon_Black_Circle.png" alt="" width="24" height="24" loading="lazy" decoding="async"></span>
+        <span>
+          <span class="label">TikTok</span>
+          <span class="handle">@australianjeevitham</span>
+        </span>
+      </a>
+      <a class="connect-link" href="https://www.threads.com/@australianjeevitham" target="_blank" rel="noopener noreferrer">
+        <span class="glyph icon-threads"><img src="images/threads-logo-white.png" alt="" width="24" height="24" loading="lazy" decoding="async"></span>
+        <span>
+          <span class="label">Threads</span>
+          <span class="handle">@australianjeevitham</span>
+        </span>
+      </a>
+      <a class="connect-link" href="contact-australian-jeevitham.html">
+        <span class="glyph">✉</span>
+        <span>
+          <span class="label">Contact</span>
+          <span class="handle">Get in touch</span>
+        </span>
+      </a>
+    </div>
+
+    <p class="records">
+      About · <a href="about-australian-jeevitham.html">Our Story</a> · <a href="creator-australian-jeevitham.html">Meet the Creator</a> · <a href="media-kit.html">Media Kit</a> · <a href="https://australianjeevitham.blogspot.com/" target="_blank" rel="noopener noreferrer">Blog</a> · Official Profiles (<a href="https://www.imdb.com/title/tt43669114" target="_blank" rel="noopener noreferrer">IMDb</a>)
+    </p>
+    <p class="copyright">© <span id="year">2026</span> Australian Jeevitham. All rights reserved.</p>
+  </div>
+</footer>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.australianjeevitham.com/#website",
+      "name": "Australian Jeevitham",
+      "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "url": "https://www.australianjeevitham.com/",
+      "description": "Australian Jeevitham is a bilingual Malayalam-English website sharing information and stories about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "inLanguage": ["en", "ml"],
+      "publisher": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "creator": {
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
+      },
+      "about": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "mainEntity": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "copyrightHolder": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://www.australianjeevitham.com/#brand",
+      "name": "Australian Jeevitham",
+      "alternateName": "ഓസ്‌ട്രേലിയൻ ജീവിതം",
+      "url": "https://www.australianjeevitham.com/",
+      "description": "Australian Jeevitham is the personal content brand of Malayalam social media influencer and content creator Binu Vadakkedath, based in Queensland, Australia. The brand shares videos and general information about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "slogan": "Australian life through a Malayali lens.",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/AustralianJeevithamLogo.png"
+      },
+      "creator": {
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
+      },
+      "founder": {
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
+      },
+      "location": {
+        "@type": "Place",
+        "name": "Queensland, Australia",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Queensland",
+          "addressCountry": "AU"
+        }
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "general enquiries",
+        "url": "https://www.australianjeevitham.com/contact-australian-jeevitham.html",
+        "availableLanguage": ["en", "ml"]
+      },
+      "knowsAbout": [
+        "Australian life",
+        "Australian travel",
+        "Australian culture",
+        "Australian jobs and employment",
+        "Australian migration and settlement",
+        "Gardening and backyard farming",
+        "Malayali life in Australia"
+      ],
+      "sameAs": [
+        "https://www.youtube.com/@AustralianJeevitham",
+        "https://www.facebook.com/Australian.Jeevitham",
+        "https://www.instagram.com/australianjeevitham/",
+        "https://www.tiktok.com/@australianjeevitham",
+        "https://www.threads.com/@australianjeevitham",
+        "https://x.com/AusJeevitham",
+        "https://www.imdb.com/title/tt43669114",
+        "https://australianjeevitham.blogspot.com/"
+      ],
+      "subjectOf": [
+        {
+          "@type": "Article",
+          "url": "https://www.manoramaonline.com/global-malayali/other-countries/2025/12/11/pravasi-malayali-toddy-tapping-australia.html",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Manorama Online"
+          }
+        },
+        {
+          "@type": "Article",
+          "url": "https://malayalam.indiatoday.in/fact-check/story/fact-check-kangaroo-video-post-not-kerala-482254-2022-12-12",
+          "publisher": {
+            "@type": "Organization",
+            "name": "India Today"
+          }
+        },
+        {
+          "@type": "Article",
+          "url": "https://www.manoramaonline.com/karshakasree/farm-management/2023/10/21/coconut-toddy-production-in-australia.html",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Manorama Online"
+          }
+        },
+        {
+          "@type": "Article",
+          "url": "https://www.manoramaonline.com/karshakasree/home-garden/2023/11/08/kangaroos-destroy-crops.html",
+          "publisher": {
+            "@type": "Organization",
+            "name": "Manorama Online"
+          }
+        }
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.australianjeevitham.com/#webpage",
+      "name": "Australian Jeevitham | Australian Life Through a Malayali Lens",
+      "url": "https://www.australianjeevitham.com/",
+      "description": "Australian Jeevitham shares Malayalam-English stories and information about Australian life, travel, culture, jobs, migration, settlement, gardening and the Malayali experience in Australia.",
+      "isPartOf": {
+        "@id": "https://www.australianjeevitham.com/#website"
+      },
+      "about": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "inLanguage": [
+        "en",
+        "ml"
+      ],
+      "publisher": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "primaryImageOfPage": {
+        "@type": "ImageObject",
+        "url": "https://www.australianjeevitham.com/images/og/australian-malayali-vlogger-binu-vadakkedath.webp"
+      },
+      "dateModified": "2026-09-30",
+      "hasPart": [
+        {
+          "@id": "https://www.australianjeevitham.com/#video-EnzjzCUiq1s"
+        },
+        {
+          "@id": "https://www.australianjeevitham.com/#video-62dW6eBRutw"
+        },
+        {
+          "@id": "https://www.australianjeevitham.com/#video-3280tnrmrxM"
+        }
+      ]
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "https://www.australianjeevitham.com/#video-EnzjzCUiq1s",
+      "name": "ഓസ്‌ട്രേലിയയിൽ മുരിങ്ങ നിരോധിച്ചതിൻ്റെ കാരണം അറിയണോ?",
+      "description": "ഓസ്‌ട്രേലിയയിൽ ഇനി മുതൽ മുരിങ്ങ പ്രോഡക്ട്‌സുകൾ ഫുഡ് ഐറ്റം ആയോ ഫുഡ് ingredient ആയോ വിൽക്കാൻ സാധിക്കുകയില്ല. പ്രവാസികൾ അറിയേണ്ട കാര്യങ്ങൾ.",
+      "thumbnailUrl": [
+        "https://i.ytimg.com/vi/EnzjzCUiq1s/hqdefault.jpg"
+      ],
+      "uploadDate": "2026-05-26T08:00:00+10:00",
+      "contentUrl": "https://www.youtube.com/watch?v=EnzjzCUiq1s",
+      "embedUrl": "https://www.youtube-nocookie.com/embed/EnzjzCUiq1s",
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
+      },
+      "publisher": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "inLanguage": "ml"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "https://www.australianjeevitham.com/#video-62dW6eBRutw",
+      "name": "ഈ കൃഷി കാണാതെ പോകരുത്",
+      "description": "ഓസ്‌ട്രേലിയയിലെ കേരള സ്റ്റൈൽ കൃഷിത്തോട്ടം - Backyard farming in Australia.",
+      "thumbnailUrl": [
+        "https://i.ytimg.com/vi/62dW6eBRutw/hqdefault.jpg"
+      ],
+      "uploadDate": "2023-05-09T08:00:00+10:00",
+      "contentUrl": "https://www.youtube.com/watch?v=62dW6eBRutw",
+      "embedUrl": "https://www.youtube-nocookie.com/embed/62dW6eBRutw",
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
+      },
+      "publisher": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "inLanguage": "ml"
+    },
+    {
+      "@type": "VideoObject",
+      "@id": "https://www.australianjeevitham.com/#video-3280tnrmrxM",
+      "name": "കള്ളുചെത്തൽ ഇവിടെയും തുടങ്ങി",
+      "description": "വെറുതെ ഒരു രസത്തിനു ട്രൈ ചെയ്തതാണ്. Kerala life and experience in Queensland, Australia.",
+      "thumbnailUrl": [
+        "https://i.ytimg.com/vi/3280tnrmrxM/hqdefault.jpg"
+      ],
+      "uploadDate": "2025-12-01T08:00:00+10:00",
+      "contentUrl": "https://www.youtube.com/watch?v=3280tnrmrxM",
+      "embedUrl": "https://www.youtube-nocookie.com/embed/3280tnrmrxM",
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.australianjeevitham.com/creator-australian-jeevitham.html#person",
+        "name": "Binu Vadakkedath",
+        "url": "https://www.australianjeevitham.com/creator-australian-jeevitham.html"
+      },
+      "publisher": {
+        "@id": "https://www.australianjeevitham.com/#brand"
+      },
+      "inLanguage": "ml"
+    }
+  ]
+}
+</script>
+<script>
+  (function(){
+    function playVideo(frame){
+      var id = frame.getAttribute('data-video-id');
+      if(!id) return;
+      var iframe = document.createElement('iframe');
+      iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      iframe.title = 'Australian Jeevitham video';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      frame.innerHTML = '';
+      frame.appendChild(iframe);
+      frame.removeAttribute('role');
+      frame.removeAttribute('tabindex');
+      frame.removeAttribute('aria-label');
+    }
+    document.querySelectorAll('.video-frame[data-video-id]').forEach(function(frame){
+      frame.addEventListener('click', function(){ playVideo(frame); });
+      frame.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          playVideo(frame);
+        }
+      });
+    });
+  })();
+</script>
+<script src="js/main.js" defer></script>
+
 </body>
 </html>
