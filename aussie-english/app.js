@@ -645,6 +645,7 @@
       '<h1 class="title">Learn</h1>' +
       '<div class="list two">' +
         '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
+        '<a class="card item" href="#/interview"><span class="num">' + I.chat + '</span><span class="t"><h2>Interview preparation</h2><span class="sub">20 healthcare interview questions, model answers and AI feedback</span></span></a>' +
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
         '<a class="card item" href="#/test"><span class="num">' + I.check + '</span><span class="t"><h2>Speaking level test</h2><span class="sub">' + (state.test ? 'Your level: ' + esc(state.test.cefr) + ' · IELTS ~' + state.test.ielts : 'Find your level in about 4 minutes') + '</span></span></a>' +
@@ -768,6 +769,143 @@
     practiceCard(document.getElementById('practice'), function(){ return items[cur]; }, function(){ logDay({ drills: 1 }); });
   }
 
+  // Long spoken answers into a text box. Chrome on Android is unreliable in "continuous" mode, so
+  // listen in short sessions and start the next one straight away while the learner keeps talking.
+  // Stops after about 4 seconds of silence, or when they tap the mic again.
+  function longAnswer(mic, label, ans){
+    var recording = false, quietSince = 0, rec = null, secs = 0;
+    function stopUI(msg){ recording = false; mic.classList.remove('live'); label.textContent = msg || 'Tap to add more'; }
+    function chunk(){
+      var before = ans.value.trim() ? ans.value.trim() + ' ' : '';
+      rec = listen({
+        interim: function(t){ ans.value = before + t; },
+        error: function(err){ if (err === 'not-allowed' || err === 'service-not-allowed') stopUI('Microphone is blocked - please allow it for this site.'); },
+        end: function(alts, total, speaking){
+          rec = null;
+          if (alts[0]) { ans.value = before + alts[0]; secs += speaking; quietSince = 0; }
+          else if (!quietSince) quietSince = Date.now();
+          if (recording && (!quietSince || Date.now() - quietSince < 4000)) { chunk(); return; }
+          if (recording) stopUI();
+        }
+      });
+    }
+    if (mic) mic.onclick = function(){
+      if (recording) { recording = false; if (rec) rec.stop(); stopUI(); return; }
+      if (canSpeak) speechSynthesis.cancel();
+      recording = true; quietSince = 0;
+      mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap when you\'ve finished';
+      chunk();
+    };
+    return {
+      stop: function(){ if (recording) { recording = false; if (rec) rec.stop(); if (mic) stopUI(); } },
+      secs: function(){ return secs; }
+    };
+  }
+
+  /* ---------- Interview preparation ---------- */
+  function iqKey(g, i){ return g + ':' + i; }
+  function interviewHome(){
+    setTab('learn');
+    var all = INTERVIEW.groups.reduce(function(a, g){ return a + g.questions.length; }, 0);
+    var done = Object.keys(state.interview || {}).length;
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">Interview preparation · ' + done + ' of ' + all + ' practised</span>' +
+      '<h1 class="title">Get ready for your job interview</h1>' +
+      '<p class="lede">Common Australian healthcare interview questions with model answers. Say your own answer and the AI coach scores it the way an Australian panel would.</p>' +
+      '<div class="card pad" style="margin-top:14px"><label class="count" for="role">The job you are applying for</label>' +
+        '<select id="role" class="ref" style="margin-top:6px">' + INTERVIEW.roles.map(function(r){ return '<option' + (prefs.role === r ? ' selected' : '') + '>' + esc(r) + '</option>'; }).join('') + '</select></div>' +
+      '<h2 class="section-title">Practise questions</h2>' +
+      '<div class="list two">' + INTERVIEW.groups.map(function(g, gi){
+        var n = g.questions.filter(function(q, i){ return (state.interview || {})[iqKey(g.id, i)] != null; }).length;
+        return '<a class="card item" href="#/iq/' + g.id + '/0"><span class="num">' + (gi + 1) + '</span><span class="t"><h2>' + esc(g.title) + '</h2>' +
+          '<span class="sub">' + esc(g.questions[0].q) + '</span>' +
+          '<span class="meta"><span class="mini-bar"><i style="width:' + Math.round(n / g.questions.length * 100) + '%"></i></span>' + n + '/' + g.questions.length + '</span></span></a>';
+      }).join('') + '</div>' +
+      '<h2 class="section-title">Full mock interview</h2>' +
+      '<div class="list">' + ['rn_interview', 'aged_interview', 'panel'].map(function(id){
+        var s = SCENES.find(function(x){ return x.id === id; });
+        return s ? '<a class="card item" href="#/talk/' + s.id + '"><span class="avatar">' + esc(initials(s.who)) + '</span><span class="t"><h2>' + esc(s.title) + '</h2><span class="sub">with ' + esc(s.who) + '</span></span><span class="muted">' + I.chev + '</span></a>' : '';
+      }).join('') + '</div>' +
+      '<h2 class="section-title">Questions to ask the panel</h2>' +
+      '<div class="phrase-list">' + INTERVIEW.ask.map(function(q){
+        return '<div class="card phrase"><div><b>' + esc(q) + '</b></div><button class="icon-btn" data-say="' + esc(q) + '" aria-label="Listen">' + I.speaker + '</button></div>';
+      }).join('') + '</div>' +
+      '<h2 class="section-title">Australian interview tips</h2>' +
+      '<div class="faq">' + INTERVIEW.tips.map(function(t){ return '<details class="card"><summary>' + esc(t.t) + '</summary><div class="a">' + esc(t.d) + '</div></details>'; }).join('') + '</div>'
+    );
+    document.getElementById('role').onchange = function(){ prefs.role = this.value; savePrefs(); };
+    app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
+  }
+
+  function interviewQ(gid, i){
+    var g = INTERVIEW.groups.find(function(x){ return x.id === gid; });
+    if (!g) return interviewHome();
+    i = Math.max(0, Math.min(i || 0, g.questions.length - 1));
+    var q = g.questions[i], best = (state.interview || {})[iqKey(g.id, i)];
+    setTab('learn');
+    var isStar = g.id === 'star' || /tell me about a time/i.test(q.q);
+    render(
+      '<a class="back" href="#/interview">' + I.back + 'Interview preparation</a>' +
+      '<span class="eyebrow">' + esc(g.title) + ' · question ' + (i + 1) + ' of ' + g.questions.length + (best != null ? ' · your best ' + best + '%' : '') + '</span>' +
+      '<article class="card pad" style="margin-top:10px"><p class="q-prompt">' + esc(q.q) + '</p>' +
+        '<div class="listen-row" style="margin:6px 0 0"><button class="btn" id="play">' + I.speaker + 'Hear the question</button></div>' +
+        '<p style="margin-top:14px"><b>Why they ask:</b> ' + esc(q.why) + '</p>' +
+        '<ul class="tiplist">' + q.tips.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' +
+      '</article>' +
+      '<article class="card pad" style="margin-top:12px"><span class="count">Your answer - aim for 1 to 2 minutes' + (isStar ? ', using STAR' : '') + '</span>' +
+        '<div class="speak-zone" style="border-top:0;margin-top:8px;padding-top:0">' + (SR ? micButton('amic') + '<span class="mic-label" id="alabel">Tap and start your answer</span>' : '') +
+        '<textarea id="ans" class="ref" rows="5" placeholder="' + (SR ? 'Your words appear here. You can also type or edit.' : 'Type your answer') + '"></textarea>' +
+        '<button class="btn primary" id="check" type="button">Get feedback' + I.chev + '</button></div>' +
+        '<div id="fb"></div>' +
+      '</article>' +
+      '<details class="card model"><summary>See a model answer</summary><div class="a"><p>' + esc(q.model) + '</p>' +
+        '<div class="listen-row"><button class="btn sm" id="hear">' + I.speaker + 'Listen</button></div>' +
+        '<p class="count" style="margin-top:12px">Useful phrases</p><div class="chips wrap">' + q.phrases.map(function(p){ return '<button type="button" class="chip" data-say="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div></details>' +
+      '<div class="nav">' +
+        (i > 0 ? '<a class="btn ghost" href="#/iq/' + g.id + '/' + (i - 1) + '">' + I.back + 'Previous</a>' : '<span></span>') +
+        (i < g.questions.length - 1 ? '<a class="btn primary" href="#/iq/' + g.id + '/' + (i + 1) + '">Next question' + I.chev + '</a>' : '<a class="btn primary" href="#/interview">All questions' + I.chev + '</a>') +
+      '</div>'
+    );
+    var ans = document.getElementById('ans'), label = document.getElementById('alabel'), fb = document.getElementById('fb'), checkBtn = document.getElementById('check');
+    document.getElementById('play').onclick = function(){ speak(q.q); };
+    document.getElementById('hear').onclick = function(){ speak(q.model); };
+    app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
+    var la = longAnswer(document.getElementById('amic'), label || document.createElement('span'), ans);
+    checkBtn.onclick = function(){
+      la.stop();
+      var text = ans.value.trim();
+      if (text.split(/\s+/).length < 8) { fb.innerHTML = '<p class="heard" style="text-align:left">Give a fuller answer first - at least a few sentences.</p>'; return; }
+      if (!getCode()) { fb.innerHTML = '<p class="heard" style="text-align:left">The AI coach needs your access code - enter it once in a Talk conversation first.</p>'; return; }
+      checkBtn.disabled = true; fb.innerHTML = '<div class="typing" style="margin:14px 0"><i></i><i></i><i></i></div>';
+      fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+        body: JSON.stringify({ interview: true, question: q.q, answer: text, role: prefs.role || INTERVIEW.roles[0], secs: la.secs() }) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          checkBtn.disabled = false;
+          if (d.error || d.score == null) throw new Error(d.error || 'ai');
+          state.interview = state.interview || {};
+          state.interview[iqKey(g.id, i)] = Math.max(state.interview[iqKey(g.id, i)] || 0, d.score);
+          logDay({ speakSec: Math.round(la.secs()) }); addVocab(text); markActive(); save();
+          var star = d.star || {};
+          fb.innerHTML =
+            '<div class="iv-score"><b class="' + scoreCls(d.score) + '">' + d.score + '</b><span>' + esc(d.verdict) + '</span></div>' +
+            (isStar ? '<div class="star">' + ['situation', 'task', 'action', 'result'].map(function(k){ return '<span class="' + (star[k] ? 'ok' : 'no') + '">' + (star[k] ? '✓ ' : '✗ ') + k[0].toUpperCase() + k.slice(1) + '</span>'; }).join('') + '</div>' : '') +
+            '<p class="count" style="margin-top:12px">What worked</p><ul class="tiplist good">' + (d.strengths || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+            '<p class="count" style="margin-top:10px">To improve</p><ul class="tiplist">' + (d.improve || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+            '<div class="coach better-ans"><p class="count">Your answer, improved</p><p>' + esc(d.better_answer) + '</p>' +
+              '<div class="listen-row"><button class="btn sm" type="button" id="hearBetter">' + I.speaker + 'Listen</button></div>' +
+              '<div class="chips wrap" style="margin-top:10px">' + (d.phrases || []).map(function(p){ return '<button type="button" class="chip" data-say="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div>';
+          document.getElementById('hearBetter').onclick = function(){ speak(d.better_answer); };
+          fb.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
+        })
+        .catch(function(e){
+          checkBtn.disabled = false;
+          fb.innerHTML = '<p class="heard" style="text-align:left">' + (String(e.message) === 'access_code' ? 'The access code was not accepted - check it in a Talk conversation.' : 'Couldn\'t reach the coach. Please check your internet and try again.') + '</p>';
+        });
+    };
+  }
+
   /* ---------- Vocabulary ---------- */
   function learntIn(t){ return t.words.filter(function(w, i){ return (state.learnt || {})[t.id + ':' + i]; }).length; }
   function vocab(){
@@ -786,7 +924,7 @@
       }).join('') + '</div>'
     );
   }
-  function words(id){
+  function wordsPage(id){
     var t = VOCAB.find(function(x){ return x.id === id; });
     if (!t) return vocab();
     setTab('learn');
@@ -880,35 +1018,10 @@
       var ans = document.getElementById('ans'), mic = document.getElementById('amic'), label = document.getElementById('alabel');
       document.getElementById('play').onclick = function(){ speak(q); };
       speak(q);
-      // Long answers: Chrome on Android is unreliable in "continuous" mode, so listen in short
-      // sessions and start the next one straight away while the learner keeps talking. Stop after
-      // about 4 seconds of silence, or when they tap the mic again.
-      var recording = false, quietSince = 0;
-      function stopUI(msg){ recording = false; mic.classList.remove('live'); label.textContent = msg || 'Tap to add more'; }
-      function chunk(){
-        var before = ans.value.trim() ? ans.value.trim() + ' ' : '';
-        rec = listen({
-          interim: function(t){ ans.value = before + t; },
-          error: function(err){ if (err === 'not-allowed' || err === 'service-not-allowed') stopUI('Microphone is blocked - please allow it for this site.'); },
-          end: function(alts, total, speaking){
-            rec = null;
-            if (alts[0]) { ans.value = before + alts[0]; secs += speaking; quietSince = 0; }
-            else if (!quietSince) quietSince = Date.now();
-            if (recording && (!quietSince || Date.now() - quietSince < 4000)) { chunk(); return; }
-            if (recording) stopUI();
-          }
-        });
-      }
-      if (mic) mic.onclick = function(){
-        if (recording) { recording = false; if (rec) rec.stop(); stopUI(); return; }
-        if (canSpeak) speechSynthesis.cancel();
-        recording = true; quietSince = 0;
-        mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap when you\'ve finished';
-        chunk();
-      };
+      var la = longAnswer(mic, label, ans);
       document.getElementById('next').onclick = function(){
-        recording = false;
-        if (rec) rec.stop();
+        la.stop();
+        secs = la.secs();
         text = ans.value.trim();
         if (!text) { if (label) label.textContent = 'Please answer the question first'; return; }
         answers[step] = { q: q, a: text, secs: secs };
@@ -1411,7 +1524,9 @@
     else if (parts[0] === 'practise') practise();
     else if (parts[0] === 'help') help();
     else if (parts[0] === 'vocab') vocab();
-    else if (parts[0] === 'words') words(parts[1]);
+    else if (parts[0] === 'interview') interviewHome();
+    else if (parts[0] === 'iq') interviewQ(parts[1], parseInt(parts[2], 10) || 0);
+    else if (parts[0] === 'words') wordsPage(parts[1]);
     else if (parts[0] === 'sounds') sounds();
     else if (parts[0] === 'sound') sound(parts[1]);
     else if (parts[0] === 'test') levelTest();

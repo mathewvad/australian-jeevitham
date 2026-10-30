@@ -402,3 +402,22 @@ body.in-chat .tabbar, body.in-chat .top{ display:none; }
 .vw-back .mal{ font-weight:600; }
 .vw-back .ex{ color:var(--muted); font-style:italic; }
 .vw-back .btn{ margin-top:10px; }
+
+/* ===== Interview preparation ===== */
+.tiplist{ margin:8px 0 0 20px; display:grid; gap:4px; font-size:.93rem; color:var(--muted); }
+.tiplist.good li::marker{ color:var(--good); }
+select.ref{ appearance:auto; }
+.speak-zone .btn.primary{ margin-top:6px; }
+.iv-score{ display:flex; align-items:center; gap:14px; margin-top:16px; padding-top:14px; border-top:1px solid var(--border); }
+.iv-score b{ font-size:2.2rem; font-weight:700; letter-spacing:-.02em; }
+.iv-score b.ok{ color:var(--good); } .iv-score b.close{ color:var(--warn); } .iv-score b.miss{ color:var(--bad); }
+.star{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+.star span{ padding:4px 10px; border-radius:999px; font-size:.8rem; font-weight:700; }
+.star .ok{ background:var(--good-soft); color:var(--good); }
+.star .no{ background:var(--bad-soft); color:var(--bad); }
+.better-ans{ margin-top:14px; background:var(--accent-soft); }
+.better-ans p:not(.count){ margin-top:4px; }
+.chips.wrap{ flex-wrap:wrap; overflow:visible; padding-bottom:0; }
+.model{ margin-top:12px; }
+.model summary{ cursor:pointer; padding:14px 16px; font-weight:600; }
+.model .a{ padding:0 16px 16px; }
