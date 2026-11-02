@@ -66,7 +66,8 @@ svg{ display:block; }
 .brand-text{ display:flex; flex-direction:column; line-height:1.15; }
 .brand-text b{ font-size:.95rem; font-weight:700; }
 .brand-text b{ white-space:nowrap; }
-.brand-text .ver{ font-size:.62rem; font-weight:600; color:var(--muted); background:var(--surface-2); border-radius:99px; padding:1px 6px; vertical-align:1px; }
+.brand-text small{ white-space:nowrap; }
+.brand-text .ver{ font-size:.62rem; font-weight:600; color:var(--muted); background:var(--surface-2); border-radius:99px; padding:0 5px; margin-left:2px; }
 .brand-text .ver:empty{ display:none; }
 .brand-text small{ font-size:.74rem; color:var(--muted); }
 .top-actions{ display:flex; gap:6px; }
@@ -74,6 +75,7 @@ svg{ display:block; }
 .icon-btn:hover{ background:var(--surface-2); color:var(--text); }
 .icon-btn .aa{ font-weight:700; font-size:.95rem; }
 .icon-btn svg{ width:20px; height:20px; }
+@media (max-width:400px){ .top-actions{ gap:0; } .top-actions .icon-btn{ width:34px; } }
 
 /* ---- Bottom tab bar ---- */
 .tabbar{ position:fixed; left:0; right:0; bottom:0; z-index:20; display:flex; justify-content:center; gap:4px; padding:6px 8px calc(6px + env(safe-area-inset-bottom)); background:var(--surface); border-top:1px solid var(--border); }
@@ -150,6 +152,13 @@ h1.title{ font-size:clamp(1.5rem,5vw,1.9rem); line-height:1.2; font-weight:700; 
 .item .t{ flex:1; min-width:0; }
 .item h2{ font-size:1rem; font-weight:600; line-height:1.3; }
 .item .sub{ display:block; font-size:.85rem; color:var(--muted); }
+.voice-opt{ padding:10px 12px 10px 10px; }
+.voice-opt.on{ border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
+.voice-pick{ display:flex; align-items:center; gap:12px; text-align:left; background:none; border:0; padding:6px; color:inherit; font:inherit; cursor:pointer; }
+.voice-pick .tick{ width:26px; height:26px; flex:none; border-radius:50%; border:1.5px solid var(--border); display:grid; place-items:center; color:transparent; }
+.voice-pick .tick svg{ width:15px; height:15px; }
+.voice-opt.on .tick{ background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
+.voice-opt .btn svg{ width:16px; height:16px; }
 .item .meta{ display:flex; align-items:center; gap:8px; font-size:.78rem; color:var(--muted); margin-top:6px; }
 .mini-bar{ flex:1; max-width:120px; height:5px; border-radius:99px; background:var(--surface-2); overflow:hidden; }
 .mini-bar i{ display:block; height:100%; background:var(--accent); }

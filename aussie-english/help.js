@@ -58,7 +58,7 @@ const HELP = [
   ] },
   { title: 'Problems and fixes', items: [
     { q: 'The microphone doesn\'t listen', a: 'Check that the microphone is allowed for this app: on Android open <b>Settings, Apps, Chrome, Permissions, Microphone</b> and choose <b>Allow</b>. Close other apps that use the microphone, such as a phone call or a voice recorder. Then close this app completely and open it again.' },
-    { q: 'There is no Australian voice', a: 'The voice comes from your phone. Chrome usually has an Australian English voice; if not, the app uses another English voice. On Android you can add voices in <b>Settings, Text-to-speech</b>.' },
+    { q: 'Changing the voice', a: 'Tap the speaker button at the top of the screen. Choose one of six natural Australian voices (Natasha, William, Annette, Darren, Carly or Ken) - tap <b>Listen</b> to hear each one. Natural voices need internet and your access code. You can also choose <b>Phone\'s own voice</b>, which works offline; if the phone has no Australian voice, Android can add one in <b>Settings, Text-to-speech</b>.' },
     { q: '"Access code needed" or "today\'s limit"', a: 'Enter the access code you were given; it is saved on that phone. Each person has a daily limit on conversation messages, which resets every day.' },
     { q: 'Something looks out of date', a: 'Close the app completely and open it again; it updates itself. If it still looks old, open the web address in Chrome once and reload the page.' },
     { q: 'Using it offline', a: 'Lessons, slang and tips work without internet. Conversations, the level test and sound-by-sound scoring need internet.' }

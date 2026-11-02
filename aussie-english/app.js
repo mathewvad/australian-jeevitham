@@ -152,16 +152,91 @@
   if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
   function hasAussieVoice(){ return !!voice && /en[-_]AU/i.test(voice.lang); }
 
-  // queue: add after whatever is already being spoken (used to read a reply sentence by sentence).
-  function speak(text, slow, queue){
-    if (!canSpeak || !text) return;
+  // The phone's own voice. Voices read "G'day" letter by letter; "Gidday" sounds right.
+  function phoneSpeak(text, rate, queue, done){
+    if (!canSpeak) { if (done) done(); return; }
     if (!queue) speechSynthesis.cancel();
-    // Voices read "G'day" letter by letter; "Gidday" sounds right.
     var u = new SpeechSynthesisUtterance(text.replace(/\bg['’]day\b/gi, 'Gidday'));
     if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = 'en-AU'; }
-    // slow: true for slow practice speed, or a number for an exact rate (e.g. 1.15 for fast speech).
-    u.rate = typeof slow === 'number' ? slow : slow ? 0.6 : 0.95;
+    u.rate = rate;
+    if (done) u.onend = u.onerror = done;
     speechSynthesis.speak(u);
+  }
+
+  /* ---------- Natural voice (Azure neural text-to-speech via the server) ---------- */
+  // prefs.voice is one of these, or 'phone' for the phone's own voice. Natural voices need the
+  // access code and internet; when they fail (offline, monthly free quota used up) the phone's
+  // voice says it instead.
+  var NATURAL_VOICES = [
+    ['en-AU-NatashaNeural', 'Natasha', 'female'], ['en-AU-WilliamNeural', 'William', 'male'],
+    ['en-AU-AnnetteNeural', 'Annette', 'female'], ['en-AU-DarrenNeural', 'Darren', 'male'],
+    ['en-AU-CarlyNeural', 'Carly', 'female'], ['en-AU-KenNeural', 'Ken', 'male']
+  ];
+  var player = new Audio(), playing = null, ttsQueue = [], ttsUrls = {}, ttsKeys = [], ttsOff = false, speakGen = 0;
+  function naturalVoice(){
+    var v = prefs.voice || NATURAL_VOICES[0][0];
+    return v !== 'phone' && !ttsOff && TALK_API && getCode() && navigator.onLine !== false ? v : null;
+  }
+  // iPhones only play audio started by a tap, so play a silent clip on the first tap to unlock the player.
+  function unlockPlayer(){
+    document.removeEventListener('click', unlockPlayer, true);
+    if (playing || ttsQueue.length) return;
+    player.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+    player.play().catch(function(){});
+  }
+  document.addEventListener('click', unlockPlayer, true);
+  function ttsFetch(text, v, rate){
+    var k = v + '|' + rate + '|' + text;
+    if (ttsUrls[k]) return ttsUrls[k];
+    var p = ttsUrls[k] = fetch(TALK_API + '/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+      body: JSON.stringify({ text: text, voice: v, rate: rate })
+    }).then(function(r){
+      if (!r.ok) { if ([401, 429, 503].indexOf(r.status) >= 0) ttsOff = true; throw new Error('tts ' + r.status); }
+      return r.blob();
+    }).then(function(b){ return URL.createObjectURL(b); });
+    p.catch(function(){ if (ttsUrls[k] === p) delete ttsUrls[k]; });
+    // Keep the last 80 clips so replaying a phrase is instant.
+    ttsKeys.push(k);
+    if (ttsKeys.length > 80) { var old = ttsKeys.shift(), q = ttsUrls[old]; delete ttsUrls[old]; if (q) q.then(function(u){ URL.revokeObjectURL(u); }, function(){}); }
+    return p;
+  }
+  function playNext(gen){
+    var item = ttsQueue[0];
+    if (!item || gen !== speakGen) return;
+    function next(){ if (gen !== speakGen) return; playing = null; ttsQueue.shift(); playNext(gen); }
+    item.url.then(function(url){
+      if (gen !== speakGen) return;
+      playing = next;
+      player.src = url;
+      return player.play();
+    }).catch(function(){
+      if (gen !== speakGen) return;
+      playing = null;
+      phoneSpeak(item.text, item.rate, true, next);
+    });
+  }
+  player.onended = function(){ if (playing) playing(); };
+  function stopSpeech(){
+    speakGen++; ttsQueue = []; playing = null;
+    try { player.pause(); } catch(e) {}
+    if (canSpeak) speechSynthesis.cancel();
+  }
+  // Say text with a given voice id (a natural voice, or 'phone').
+  function speakAs(v, text, rate, queue){
+    if (!queue) stopSpeech();
+    if (v === 'phone' || !v) return phoneSpeak(text, rate, queue);
+    var item = { text: text, rate: rate, url: ttsFetch(text, v, rate) };
+    item.url.catch(function(){});
+    ttsQueue.push(item);
+    if (ttsQueue.length === 1) playNext(speakGen);
+  }
+  // queue: add after whatever is already being spoken (used to read a reply sentence by sentence).
+  // slow: true for slow practice speed, or a number for an exact rate (e.g. 1.15 for fast speech).
+  function speak(text, slow, queue){
+    if (!text) return;
+    speakAs(naturalVoice() || 'phone', text, typeof slow === 'number' ? slow : slow ? 0.6 : 0.95, queue);
   }
 
   /* ---------- Speech recognition and word matching ---------- */
@@ -429,7 +504,7 @@
     mic.onclick = function(){
       if (rec) { rec.stop(); return; }
       if (busy) return;
-      if (canSpeak) speechSynthesis.cancel();
+      stopSpeech();
       mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap when you\'ve finished';
       timer.hidden = false; timer.textContent = fmt(maxSec);
       rec = recordWav({ splitSec: 50, pauseMs: opts.pauseMs || 7000, waitMs: 10000, maxMs: maxSec * 1000,
@@ -643,7 +718,7 @@
       if (rec) { rec.stop(); return; }
       var ref = (getRef() || '').trim();
       if (!ref) { label.textContent = 'Type a sentence first'; return; }
-      if (canSpeak) speechSynthesis.cancel();
+      stopSpeech();
       if (az.off || !canRecord || !TALK_API || !getCode()) return browserCheck(ref);
       // Start recording right here, inside the tap.
       mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… speak now';
@@ -717,6 +792,35 @@
       HELP_STEPS.map(function(s, i){ return stepRow(s, i, st[s.check], i === next); }).join('') +
       '<div class="row" style="margin-top:10px"><a class="btn ghost sm" href="#/help">Full guide</a><button class="btn ghost sm" id="startHide" type="button">Hide</button></div></div>';
   }
+  // Choose the coach's voice: a natural Australian voice, or the phone's own.
+  function voicePage(){
+    setTab('');
+    var cur = prefs.voice || NATURAL_VOICES[0][0];
+    var opts = NATURAL_VOICES.map(function(v){ return [v[0], v[1], (v[2] === 'male' ? 'Male' : 'Female') + ' · Australian']; })
+      .concat([['phone', 'Phone\'s own voice', 'Works offline · varies by phone']]);
+    render(
+      '<span class="eyebrow">Settings</span>' +
+      '<h1 class="title">Choose a voice</h1>' +
+      '<p class="lede">The voice that reads lessons, drills and your coach\'s replies. Tap a name to choose it and hear a sample.</p>' +
+      (getCode() ? '' : '<div class="notice">Natural voices start working once you have entered your access code (in Talk). Until then the phone\'s voice is used.</div>') +
+      '<div class="list">' + opts.map(function(o){
+        return '<div class="card item voice-opt' + (o[0] === cur ? ' on' : '') + '" data-v="' + o[0] + '">' +
+          '<button type="button" class="voice-pick t" aria-pressed="' + (o[0] === cur) + '"><span class="tick">' + I.check + '</span><span><h2>' + esc(o[1]) + '</h2><span class="sub">' + esc(o[2]) + '</span></span></button>' +
+          '<button type="button" class="btn sm ghost" data-play aria-label="Listen to ' + esc(o[1]) + '">' + I.speaker + 'Listen</button></div>';
+      }).join('') + '</div>' +
+      '<p class="heard" style="margin-top:18px;text-align:left">Natural voices need internet. If one can\'t play, the phone\'s voice reads it instead.</p>'
+    );
+    var SAMPLE = 'G\'day! I\'m your Aussie English coach. Let\'s practise speaking together.';
+    app.querySelectorAll('.voice-opt').forEach(function(row){
+      var id = row.dataset.v;
+      row.querySelector('.voice-pick').onclick = function(){
+        prefs.voice = id; savePrefs(); ttsOff = false;
+        app.querySelectorAll('.voice-opt').forEach(function(r){ r.classList.toggle('on', r === row); r.querySelector('.voice-pick').setAttribute('aria-pressed', r === row); });
+        speakAs(naturalVoice() || 'phone', SAMPLE, 0.95);
+      };
+      row.querySelector('[data-play]').onclick = function(){ ttsOff = false; speakAs(id === 'phone' || !getCode() ? 'phone' : id, SAMPLE, 0.95); };
+    });
+  }
   function help(){
     setTab('');
     var st = startStatus();
@@ -786,8 +890,8 @@
     var next = LESSONS.find(function(l){ return !state.done[l.id]; }) || LESSONS[0];
     var hour = new Date().getHours();
     var notice = '';
-    if (!canSpeak) notice += '<div class="notice">This browser can\'t play the Australian voice. Please open this page in Chrome.</div>';
-    else if (voice && !hasAussieVoice()) notice += '<div class="notice">No Australian voice on this device, so a ' + esc(voice.lang) + ' English voice is used. Chrome usually has one.</div>';
+    if (!naturalVoice() && !canSpeak) notice += '<div class="notice">This browser can\'t play the Australian voice. Please open this page in Chrome.</div>';
+    else if (!naturalVoice() && voice && !hasAussieVoice()) notice += '<div class="notice">No Australian voice on this device, so a ' + esc(voice.lang) + ' English voice is used. Chrome usually has one.</div>';
     if (!SR) notice += '<div class="notice">Speaking practice works in Chrome on Android or a computer. You can still type in conversations.</div>';
 
     function tile(k, v, unit, s){ return '<div class="card stat"><div class="k">' + k + '</div><div class="v">' + v + (unit ? '<small>' + unit + '</small>' : '') + '</div><div class="s">' + s + '</div></div>'; }
@@ -978,7 +1082,7 @@
     }
     if (mic) mic.onclick = function(){
       if (recording) { recording = false; if (rec) rec.stop(); stopUI(); return; }
-      if (canSpeak) speechSynthesis.cancel();
+      stopSpeech();
       recording = true; quietSince = 0;
       mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap when you\'ve finished';
       chunk();
@@ -1460,7 +1564,7 @@
     mic.onclick = function(){
       if (finished || busy) return;
       if (rec) { rec.stop(); return; }
-      if (canSpeak) speechSynthesis.cancel();
+      stopSpeech();
       mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… pause when you\'ve finished';
       if (useAzure) {
         rec = recordWav({ splitSec: 50, pauseMs: 1600, maxMs: 60000, level: function(v){ mic.style.transform = 'scale(' + (1 + v * 0.18).toFixed(3) + ')'; } });
@@ -2165,7 +2269,7 @@
     if (mic) mic.onclick = function(){
       if (busy) return;
       if (rec) { rec.stop(); return; }
-      if (canSpeak) speechSynthesis.cancel();
+      stopSpeech();
       var live = meMsg('…', true);
       mic.classList.add('live'); micLabel.innerHTML = waveHtml() + 'Listening… tap to stop';
       rec = listen({
@@ -2247,13 +2351,14 @@
 
   /* ---------- Router ---------- */
   function route(){
-    if (canSpeak) speechSynthesis.cancel();
+    stopSpeech();
     document.querySelectorAll('.sheet-bg').forEach(function(x){ x.remove(); });
     var parts = location.hash.replace(/^#\/?/, '').split('?')[0].split('/');
     if (parts[0] === 'learn') learn();
     else if (parts[0] === 'lesson') lesson(parts[1], parseInt(parts[2], 10) || 0);
     else if (parts[0] === 'practise') practise();
     else if (parts[0] === 'help') help();
+    else if (parts[0] === 'voice') voicePage();
     else if (parts[0] === 'vocab') vocab();
     else if (parts[0] === 'interview') interviewHome();
     else if (parts[0] === 'ielts') ielts(parts[1], parts[2]);
