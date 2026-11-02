@@ -136,6 +136,10 @@
   function sumOver(days, k){ return days.reduce(function(a, x){ return a + (x.v[k] || 0); }, 0); }
 
   /* ---------- Australian voice ---------- */
+  // Show the loaded version (the ?v= number on this script) next to the app name.
+  // Before going live it shows as v0.<build> (?v=20 -> v0.20); change the prefix to 'v1.' at launch.
+  var APP_VERSION = ((document.currentScript && document.currentScript.src || '').match(/[?&]v=(\d+)/) || [])[1];
+  if (APP_VERSION && document.getElementById('appVer')) document.getElementById('appVer').textContent = 'v0.' + APP_VERSION;
   var canSpeak = 'speechSynthesis' in window;
   var voice = null;
   function pickVoice(){
@@ -494,8 +498,44 @@
     addVocab(res.heard); markActive(); save();
   }
 
+  // What each score bar means, shown when it is tapped: [English, Malayalam].
+  var SCORE_INFO = {
+    Overall: ['Your total pronunciation score - accuracy, fluency and intonation together. 80 or more is clear speech that is easy to understand.',
+      'നിങ്ങളുടെ ഉച്ചാരണത്തിന്റെ ആകെ സ്കോർ - കൃത്യത, ഒഴുക്ക്, സ്വരഭേദം എന്നിവ ചേർന്നത്. 80-ന് മുകളിൽ ആണെങ്കിൽ വ്യക്തവും എളുപ്പം മനസ്സിലാകുന്നതുമായ സംസാരം.'],
+    Accuracy: ['How correctly you said each sound, compared with a native speaker. Tap a red word to see which sound to fix.',
+      'ഓരോ ശബ്ദവും എത്ര ശരിയായി ഉച്ചരിച്ചു എന്ന്, ഒരു നേറ്റീവ് സ്പീക്കറുമായി താരതമ്യം ചെയ്ത്. ഏത് ശബ്ദം ശരിയാക്കണം എന്നറിയാൻ ചുവന്ന വാക്കിൽ തൊടുക.'],
+    Fluency: ['How smoothly you spoke - a natural speed, with no long pauses or stops between words.',
+      'എത്ര സുഗമമായി സംസാരിച്ചു എന്ന് - സ്വാഭാവിക വേഗതയിൽ, വാക്കുകൾക്കിടയിൽ നീണ്ട ഇടവേളകളോ നിർത്തലുകളോ ഇല്ലാതെ.'],
+    Intonation: ['The music of your speech - stress on the right syllable, and a voice that rises and falls naturally instead of staying flat.',
+      'സംസാരത്തിന്റെ താളം - ശരിയായ ഭാഗത്ത് ഊന്നൽ നൽകുക, ശബ്ദം ഒരേ നിരപ്പിൽ നിൽക്കാതെ സ്വാഭാവികമായി ഉയർന്നും താഴ്ന്നും വരിക.'],
+    Pronunciation: ['How clearly you say words and sounds, measured from your voice in drills, lessons and tests.',
+      'വാക്കുകളും ശബ്ദങ്ങളും എത്ര വ്യക്തമായി ഉച്ചരിക്കുന്നു എന്ന് - ഡ്രില്ലുകളിലും പാഠങ്ങളിലും ടെസ്റ്റുകളിലും നിങ്ങളുടെ ശബ്ദത്തിൽ നിന്ന് അളക്കുന്നു.'],
+    Grammar: ['How correct your sentences are - tenses, word order, and small words like "a" and "the".',
+      'വാക്യങ്ങൾ എത്ര ശരിയാണ് എന്ന് - കാലം (tense), വാക്കുകളുടെ ക്രമം, "a", "the" പോലുള്ള ചെറിയ വാക്കുകൾ.'],
+    Vocabulary: ['How well you choose words - natural, precise and professional words, not only simple ones.',
+      'വാക്കുകൾ എത്ര നന്നായി തിരഞ്ഞെടുക്കുന്നു എന്ന് - ലളിതമായ വാക്കുകൾ മാത്രമല്ല, സ്വാഭാവികവും കൃത്യവും പ്രൊഫഷണലുമായ വാക്കുകൾ.'],
+    Coherence: ['How clearly your ideas connect - a clear start, points linked with words like "first", "also" and "because", and an ending.',
+      'ആശയങ്ങൾ എത്ര വ്യക്തമായി ബന്ധിപ്പിക്കുന്നു എന്ന് - വ്യക്തമായ തുടക്കം, "first", "also", "because" പോലുള്ള വാക്കുകൾ കൊണ്ട് ബന്ധിപ്പിച്ച ആശയങ്ങൾ, ഒരു അവസാനം.']
+  };
+  // Tapping a score bar opens (or closes) its meaning right under it.
+  document.addEventListener('click', function(e){
+    var b = e.target.closest && e.target.closest('.sbar[data-info]');
+    if (!b) return;
+    var open = b.nextElementSibling && b.nextElementSibling.classList.contains('sbar-info');
+    b.parentNode.querySelectorAll('.sbar-info').forEach(function(x){ x.remove(); });
+    b.parentNode.querySelectorAll('.sbar.on').forEach(function(x){ x.classList.remove('on'); });
+    if (open) return;
+    var t = SCORE_INFO[b.getAttribute('data-info')], d = document.createElement('div');
+    d.className = 'sbar-info';
+    d.innerHTML = '<p>' + esc(t[0]) + '</p><p class="mal" lang="ml">' + esc(t[1]) + '</p>';
+    b.classList.add('on');
+    b.after(d);
+  });
+  document.addEventListener('keydown', function(e){
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('.sbar[data-info]')) { e.preventDefault(); e.target.click(); }
+  });
   function bar(label, v){
-    return '<div class="sbar"><span>' + label + '</span><i><b class="' + (v == null ? '' : scoreCls(v)) + '" style="width:' + (v || 0) + '%"></b></i><em>' + (v == null ? '–' : v) + '</em></div>';
+    return '<div class="sbar"' + (SCORE_INFO[label] ? ' data-info="' + label + '" role="button" tabindex="0" aria-label="' + label + ' ' + (v == null ? '' : v) + ' - tap for what this means"' : '') + '><span>' + label + '</span><i><b class="' + (v == null ? '' : scoreCls(v)) + '" style="width:' + (v || 0) + '%"></b></i><em>' + (v == null ? '–' : v) + '</em></div>';
   }
   // A simple front view of the mouth for each drill sound: lips, teeth and tongue.
   var MOUTH = {

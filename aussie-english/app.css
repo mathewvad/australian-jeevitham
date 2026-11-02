@@ -65,6 +65,9 @@ svg{ display:block; }
 .share-ic svg{ width:18px; height:18px; }
 .brand-text{ display:flex; flex-direction:column; line-height:1.15; }
 .brand-text b{ font-size:.95rem; font-weight:700; }
+.brand-text b{ white-space:nowrap; }
+.brand-text .ver{ font-size:.62rem; font-weight:600; color:var(--muted); background:var(--surface-2); border-radius:99px; padding:1px 6px; vertical-align:1px; }
+.brand-text .ver:empty{ display:none; }
 .brand-text small{ font-size:.74rem; color:var(--muted); }
 .top-actions{ display:flex; gap:6px; }
 .icon-btn{ width:40px; height:40px; border-radius:12px; display:grid; place-items:center; color:var(--muted); }
@@ -315,6 +318,12 @@ body.in-chat .tabbar, body.in-chat .top{ display:none; }
 .sbar b{ display:block; height:100%; border-radius:99px; background:var(--muted); }
 .sbar b.ok{ background:var(--good); } .sbar b.close{ background:var(--warn-line); } .sbar b.miss{ background:var(--bad); }
 .sbar em{ font-style:normal; font-weight:700; text-align:right; }
+.sbar[data-info]{ grid-template-columns:122px 1fr 34px; cursor:pointer; border-radius:8px; margin:-3px -6px; padding:3px 6px; -webkit-tap-highlight-color:transparent; }
+.sbar[data-info]:hover, .sbar[data-info].on{ background:var(--surface-2); }
+.sbar[data-info] span{ white-space:nowrap; }
+.sbar[data-info] span::after{ content:'i'; display:inline-grid; place-items:center; width:14px; height:14px; margin-left:5px; border-radius:50%; border:1.5px solid currentColor; font:700 9px/1 Georgia, serif; font-style:italic; vertical-align:1px; opacity:.7; }
+.sbar-info{ font-size:.84rem; line-height:1.45; background:var(--surface-2); border-radius:10px; padding:9px 12px; margin-top:-4px; text-align:left; }
+.sbar-info p{ margin:0; } .sbar-info .mal{ color:var(--muted); margin-top:5px; }
 .result .sbars{ max-width:420px; margin:4px auto 14px; text-align:left; }
 .words.az .w{ border:0; font:inherit; font-weight:600; cursor:pointer; margin:2px 0; }
 .words .w.skip{ color:var(--muted); background:var(--surface-2); text-decoration:line-through; }

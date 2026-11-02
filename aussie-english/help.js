@@ -36,7 +36,7 @@ const HELP = [
     { q: 'Everyday lessons and quizzes', a: 'Eight lessons of everyday Australian English with Malayalam meanings. Listen to each phrase, say it, then take the quiz at the end.' }
   ] },
   { title: 'Reading your pronunciation scores', items: [
-    { q: 'The four scores', a: '<b>Overall</b> - your total pronunciation score.<br><b>Accuracy</b> - how clearly you said each sound.<br><b>Fluency</b> - how smoothly you spoke, without long pauses.<br><b>Intonation</b> - stress, rhythm and the rise and fall of your voice.' },
+    { q: 'The four scores', a: '<b>Overall</b> - your total pronunciation score.<br><b>Accuracy</b> - how clearly you said each sound.<br><b>Fluency</b> - how smoothly you spoke, without long pauses.<br><b>Intonation</b> - stress, rhythm and the rise and fall of your voice.<br>Tap any score bar to see what it means, in English and Malayalam.' },
     { q: 'The coloured words and sounds', a: '<b>Green</b> is clear, <b>yellow</b> is close and <b>red</b> needs work. A crossed-out word was missed. Tap any word to see its syllables and each of its sounds; a red sound shows what you actually said, for example <b>/θ/ you said /t/</b>. Your weakest sound appears in a yellow box at the top with a picture of the mouth position, a tip in English and Malayalam, and a link to the matching drill.' },
     { q: 'Australian or American?', a: 'The sound-by-sound check uses an American English engine, because it is the only one that names each sound. The sounds the drills train are the same in Australian English. Words where Australians drop the "r" (like "car" or "nurse") may sometimes score a little lower - that is fine.' }
   ] },

@@ -1,19 +1,19 @@
 // Offline support for the installed app. Lessons, slang and tips work without internet;
 // the AI coach (a different website) always goes to the network.
 // Bump VERSION whenever the app's files change, together with the ?v= numbers in index.html.
-const VERSION = 'v19';
+const VERSION = 'v20';
 const CACHE = 'aussie-english-' + VERSION;
 const FILES = [
   './',
   'index.html',
-  'app.css?v=19',
-  'lessons.js?v=19',
-  'vocab.js?v=19',
-  'interview.js?v=19',
-  'ielts.js?v=19',
-  'oet.js?v=19',
-  'help.js?v=19',
-  'app.js?v=19',
+  'app.css?v=20',
+  'lessons.js?v=20',
+  'vocab.js?v=20',
+  'interview.js?v=20',
+  'ielts.js?v=20',
+  'oet.js?v=20',
+  'help.js?v=20',
+  'app.js?v=20',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',
