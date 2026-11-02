@@ -421,3 +421,44 @@ select.ref{ appearance:auto; }
 .model{ margin-top:12px; }
 .model summary{ cursor:pointer; padding:14px 16px; font-weight:600; }
 .model .a{ padding:0 16px 16px; }
+
+/* ===== IELTS ===== */
+.timer{ font-variant-numeric:tabular-nums; font-weight:700; font-size:1.3rem; color:var(--accent); }
+.timer.big{ font-size:2.4rem; text-align:center; margin:4px 0 10px; }
+.timer.low{ color:var(--bad); }
+.mic.nudge{ animation:nudge 1s ease-in-out 3; }
+@keyframes nudge{ 50%{ transform:scale(1.12); } }
+.cue{ border-left:4px solid var(--accent); }
+.notes-view{ white-space:pre-wrap; font-size:.9rem; color:var(--muted); background:var(--surface-2); padding:8px 10px; border-radius:10px; margin:4px 0 10px; }
+.sbar.band{ grid-template-columns:150px 1fr 34px; }
+.crit{ margin-top:10px; font-size:.92rem; }
+ul.tiplist.card{ margin-left:0; padding-left:34px; }
+
+/* ===== Weakest-sound tip, mouth pictures, syllables ===== */
+.weak-tip{ display:flex; gap:14px; align-items:center; text-align:left; max-width:520px; margin:6px auto 14px; padding:14px; border-radius:var(--radius-sm); background:var(--warn-soft); border:1px solid color-mix(in srgb, var(--warn-line) 40%, transparent); }
+.weak-tip > div{ flex:1; min-width:0; }
+.weak-tip b{ display:block; font-size:1.02rem; margin-top:2px; }
+.weak-tip p{ font-size:.88rem; margin-top:6px; }
+.weak-tip .mal{ color:var(--muted); }
+.weak-tip a{ display:inline-flex; align-items:center; gap:4px; margin-top:8px; color:var(--accent); font-weight:600; font-size:.9rem; }
+.weak-tip a svg{ width:16px; height:16px; }
+.mouth{ flex:none; width:118px; text-align:center; }
+.mouth svg{ width:110px; height:82px; background:#F6E4DA; border-radius:14px; }
+.mouth figcaption{ font-size:.72rem; color:var(--muted); margin-top:4px; line-height:1.3; }
+@media (max-width:420px){ .weak-tip{ flex-direction:column-reverse; align-items:flex-start; } }
+.sound-hero{ display:flex; gap:14px; align-items:center; }
+.syl{ margin-top:10px; font-size:1.05rem; font-weight:700; display:flex; flex-wrap:wrap; align-items:center; gap:4px; }
+.syl .count{ font-size:.75rem; margin-right:6px; }
+.syl i{ color:var(--muted); font-style:normal; }
+.sy{ padding:2px 6px; border-radius:7px; }
+.sy.ok{ background:var(--good-soft); color:var(--good); } .sy.close{ background:var(--warn-soft); color:var(--warn); } .sy.miss{ background:var(--bad-soft); color:var(--bad); }
+
+/* ===== 6-part fluency report ===== */
+.metrics{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+@media (min-width:640px){ .metrics{ grid-template-columns:repeat(3,1fr); } }
+.metric{ padding:12px; border-radius:var(--radius-sm); background:var(--surface-2); border-left:4px solid var(--border); }
+.metric.good{ border-left-color:var(--good); } .metric.ok{ border-left-color:var(--warn-line); } .metric.low{ border-left-color:var(--bad); }
+.metric .k{ display:block; font-size:.76rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+.metric b{ display:block; font-size:1.5rem; font-weight:700; margin-top:2px; }
+.metric b small{ font-size:.78rem; font-weight:600; color:var(--muted); }
+.metric .tip6{ display:block; font-size:.8rem; color:var(--muted); margin-top:4px; line-height:1.35; }

@@ -155,7 +155,8 @@
     // Voices read "G'day" letter by letter; "Gidday" sounds right.
     var u = new SpeechSynthesisUtterance(text.replace(/\bg['’]day\b/gi, 'Gidday'));
     if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = 'en-AU'; }
-    u.rate = slow ? 0.6 : 0.95;
+    // slow: true for slow practice speed, or a number for an exact rate (e.g. 1.15 for fast speech).
+    u.rate = typeof slow === 'number' ? slow : slow ? 0.6 : 0.95;
     speechSynthesis.speak(u);
   }
 
@@ -304,7 +305,12 @@
       if (stream) stream.getTracks().forEach(function(t){ t.stop(); });
       var rate = ctx.sampleRate;
       try { ctx.close(); } catch(e) {}
-      resolveFn(heardVoice ? toWav(chunks, rate) : null);
+      // splitSec: return several WAVs of at most this many seconds (Azure takes up to 60 s per request).
+      if (!heardVoice) return resolveFn(null);
+      if (!opts.splitSec) return resolveFn(toWav(chunks, rate));
+      var per = Math.floor(opts.splitSec * rate / 4096), parts = [];
+      for (var i = 0; i < chunks.length; i += per) parts.push(toWav(chunks.slice(i, i + per), rate));
+      resolveFn(parts);
     }
     navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } })
       .then(function(s){
@@ -323,8 +329,9 @@
           var loud = rms > Math.max(0.012, noise * 2.5);
           if (loud) { heardVoice = true; lastVoice = now; }
           if (opts.level) opts.level(Math.min(1, rms * 12));
-          // Stop after a short silence once they've spoken, after 7 s of nothing, or after 20 s.
-          if ((heardVoice && now - lastVoice > (opts.pauseMs || 1300)) || (!heardVoice && now - started > 7000) || now - started > 20000) finish();
+          if (opts.tick) opts.tick((now - started) / 1000);
+          // Stop after a pause once they've spoken, if nothing is said at all, or at the time limit.
+          if ((heardVoice && now - lastVoice > (opts.pauseMs || 1300)) || (!heardVoice && now - started > (opts.waitMs || 7000)) || now - started > (opts.maxMs || 20000)) finish();
         };
         src.connect(proc); proc.connect(ctx.destination);
       })
@@ -360,6 +367,92 @@
       return parseAzure(j);
     });
   }
+  // Free speech (IELTS, OET): sends each recorded piece unscripted, then joins the transcripts and
+  // averages the scores weighted by how long each piece was.
+  function scoreFree(wavs){
+    var out = { text: [], secs: 0, acc: 0, flu: 0, pros: 0, pauses: 0, longPauses: 0 };
+    return wavs.reduce(function(p, wav){
+      return p.then(function(){
+        return fetch(TALK_API.replace(/\/$/, '') + '/pron', {
+          method: 'POST', headers: { 'Content-Type': 'audio/wav', 'X-Access-Code': getCode(), 'X-Unscripted': '1', 'X-Reference': '' }, body: wav
+        }).then(function(r){ return r.json(); }).then(function(j){
+          if (j.error) { if (j.error === 'no_azure') az.off = true; throw new Error(j.error); }
+          var nb = j.NBest && j.NBest[0];
+          if (!nb) return;
+          var pa = nb.PronunciationAssessment || nb, d = (j.Duration || 0) / 1e7;
+          out.text.push(nb.Display || ''); out.secs += d;
+          out.acc += (pa.AccuracyScore || 0) * d; out.flu += (pa.FluencyScore || 0) * d; out.pros += (pa.ProsodyScore || pa.AccuracyScore || 0) * d;
+          // Pauses: gaps between words (times are in 100-nanosecond units) - over 0.6 s is a
+          // hesitation, over 1.5 s a long pause.
+          var w = nb.Words || [];
+          for (var i = 1; i < w.length; i++) {
+            var gap = (w[i].Offset - (w[i - 1].Offset + w[i - 1].Duration)) / 1e7;
+            if (gap > 0.6) out.pauses++;
+            if (gap > 1.5) out.longPauses++;
+          }
+        });
+      });
+    }, Promise.resolve()).then(function(){
+      var s = out.secs || 1;
+      return { text: out.text.join(' ').trim(), secs: out.secs, pauses: out.pauses, longPauses: out.longPauses,
+        pron: out.secs ? { accuracy: Math.round(out.acc / s), fluency: Math.round(out.flu / s), prosody: Math.round(out.pros / s) } : null };
+    });
+  }
+
+  // A "speak your answer" panel for long answers: tap to start, a running timer, tap again (or a
+  // long pause, or the time limit) to finish. Uses Azure when set up (transcript + pronunciation);
+  // otherwise the phone's own speech recognition. The answer box can always be typed in or edited.
+  // done({ text, secs, pron }) is called whenever an answer is captured.
+  function speakAnswer(el, opts){
+    var maxSec = opts.maxSec || 60, useAzure = !az.off && !!TALK_API && !!getCode() && !!(navigator.mediaDevices && (window.AudioContext || window.webkitAudioContext));
+    el.innerHTML = micButton('smic') + '<span class="mic-label" id="slabel">Tap and start speaking</span>' +
+      '<div class="timer" id="stimer" hidden></div>' +
+      '<textarea id="sans" class="ref" rows="5" placeholder="Your answer appears here after you speak. You can also type or correct it."></textarea>';
+    var mic = el.querySelector('#smic'), label = el.querySelector('#slabel'), timer = el.querySelector('#stimer'), ans = el.querySelector('#sans');
+    var rec = null, busy = false, result = { text: '', secs: 0, pron: null }, la = null, pending = Promise.resolve();
+    function fmt(s){ s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }
+    ans.oninput = function(){ result.text = ans.value; };
+    if (!useAzure) {
+      if (!SR) { mic.remove(); label.textContent = 'Type your answer below.'; return { get: function(){ return { text: ans.value.trim(), secs: 0, pron: null }; }, finish: function(){ return Promise.resolve(); }, flash: function(){} }; }
+      la = longAnswer(mic, label, ans);
+      return { get: function(){ return { text: ans.value.trim(), secs: la.secs(), pron: null }; }, finish: function(){ la.stop(); return Promise.resolve(); },
+        flash: function(){ mic.classList.add('nudge'); label.textContent = 'Tap the microphone and start speaking now'; } };
+    }
+    mic.onclick = function(){
+      if (rec) { rec.stop(); return; }
+      if (busy) return;
+      if (canSpeak) speechSynthesis.cancel();
+      mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… tap when you\'ve finished';
+      timer.hidden = false; timer.textContent = fmt(maxSec);
+      rec = recordWav({ splitSec: 50, pauseMs: opts.pauseMs || 7000, waitMs: 10000, maxMs: maxSec * 1000,
+        tick: function(t){ timer.textContent = fmt(maxSec - t); timer.classList.toggle('low', maxSec - t < 15); },
+        level: function(v){ mic.style.transform = 'scale(' + (1 + v * 0.18).toFixed(3) + ')'; },
+        error: function(name){ if (name === 'NotAllowedError') label.textContent = 'Microphone is blocked. Please allow it for this site.'; } });
+      pending = rec.done.then(function(wavs){
+        rec = null; mic.classList.remove('live'); mic.style.transform = '';
+        if (!wavs || !wavs.length) { label.textContent = 'Didn\'t catch that - tap and try again'; return; }
+        busy = true; mic.classList.add('busy'); mic.innerHTML = I.spinner; label.textContent = 'Listening back to your answer…';
+        return scoreFree(wavs).then(function(r){
+          busy = false; mic.classList.remove('busy'); mic.innerHTML = I.mic;
+          ans.value = (ans.value.trim() ? ans.value.trim() + ' ' : '') + r.text;
+          result = { text: ans.value, secs: result.secs + r.secs, pron: r.pron || result.pron, pauses: (result.pauses || 0) + r.pauses, longPauses: (result.longPauses || 0) + r.longPauses };
+          label.textContent = r.text ? 'Got it - tap to add more, or check your answer below' : 'Didn\'t catch that - tap and try again';
+          logDay({ speakSec: Math.round(r.secs) }); addVocab(r.text); markActive(); save();
+          if (opts.done) opts.done(result);
+        });
+      }).catch(function(){
+        rec = null; busy = false; mic.classList.remove('live', 'busy'); mic.innerHTML = I.mic;
+        label.textContent = 'Couldn\'t process that - check your internet and try again, or type your answer.';
+      });
+    };
+    return {
+      get: function(){ return { text: ans.value.trim(), secs: result.secs, pron: result.pron, pauses: result.pauses, longPauses: result.longPauses }; },
+      // Stops any recording in progress and resolves once its words are in the answer box.
+      finish: function(){ if (rec) rec.stop(); return pending.catch(function(){}); },
+      flash: function(){ mic.classList.add('nudge'); label.textContent = 'Tap the microphone and start speaking now'; }
+    };
+  }
+
   // Azure's result: scores either flat on each item or inside "PronunciationAssessment".
   function parseAzure(j){
     var nb = j.NBest && j.NBest[0];
@@ -373,6 +466,7 @@
       words: (nb.Words || []).map(function(w){
         var wp = w.PronunciationAssessment || w;
         return { word: w.Word, score: Math.round(wp.AccuracyScore || 0), error: wp.ErrorType || 'None',
+          syllables: (w.Syllables || []).map(function(s){ return { syl: s.Syllable, score: Math.round((s.PronunciationAssessment || s).AccuracyScore || 0) }; }),
           phonemes: (w.Phonemes || []).map(function(p){
             var pp = p.PronunciationAssessment || p, best = (pp.NBestPhonemes || [])[0];
             return { ipa: p.Phoneme, score: Math.round(pp.AccuracyScore || 0), heard: best ? best.Phoneme : null };
@@ -399,11 +493,50 @@
   function bar(label, v){
     return '<div class="sbar"><span>' + label + '</span><i><b class="' + (v == null ? '' : scoreCls(v)) + '" style="width:' + (v || 0) + '%"></b></i><em>' + (v == null ? '–' : v) + '</em></div>';
   }
+  // A simple front view of the mouth for each drill sound: lips, teeth and tongue.
+  var MOUTH = {
+    'v': ['lipteeth', 'Top teeth rest lightly on your bottom lip'], 'f': ['lipteeth', 'Top teeth rest lightly on your bottom lip'],
+    'w': ['round', 'Lips rounded and pushed forward - no teeth'], 'θ': ['tongue', 'Tongue tip between your teeth, blow air'],
+    'ð': ['tongue', 'Tongue tip between your teeth, voice on'], 'z': ['ridge', 'Teeth almost closed, tongue behind them, buzz'],
+    'p': ['closed', 'Both lips closed, then pop them open'], 'i': ['smile', 'Lips spread wide, like a smile'],
+    'ɪ': ['relaxed', 'Mouth relaxed and only slightly open'], 'æ': ['open', 'Jaw dropped, mouth wide open'],
+    'ɹ': ['curl', 'Tongue tip curled back, not touching the roof']
+  };
+  function mouthSvg(ipa){
+    var m = MOUTH[ipa]; if (!m) return '';
+    var k = m[0], lip = 'var(--bad)', tooth = '#fff', tongue = '#E8828C', dark = '#3a1d22', s = '';
+    var shapes = {
+      lipteeth: '<path d="M10 38 Q60 16 110 38 Q60 34 10 38Z" fill="' + lip + '"/><path d="M10 42 Q60 68 110 42 Q60 44 10 42Z" fill="' + lip + '"/><rect x="34" y="32" width="52" height="15" rx="3" fill="' + tooth + '"/>',
+      round: '<ellipse cx="60" cy="45" rx="22" ry="20" fill="' + lip + '"/><ellipse cx="60" cy="45" rx="9" ry="8" fill="' + dark + '"/>',
+      tongue: '<path d="M10 40 Q60 14 110 40 Q60 34 10 40Z" fill="' + lip + '"/><rect x="34" y="34" width="52" height="7" rx="2" fill="' + tooth + '"/><rect x="34" y="50" width="52" height="7" rx="2" fill="' + tooth + '"/><ellipse cx="60" cy="46" rx="20" ry="8" fill="' + tongue + '"/><path d="M10 58 Q60 82 110 58 Q60 62 10 58Z" fill="' + lip + '"/>',
+      ridge: '<path d="M8 40 Q60 22 112 40 Q60 36 8 40Z" fill="' + lip + '"/><rect x="30" y="36" width="60" height="8" rx="2" fill="' + tooth + '"/><rect x="30" y="46" width="60" height="7" rx="2" fill="' + tooth + '"/><path d="M8 54 Q60 70 112 54 Q60 58 8 54Z" fill="' + lip + '"/>',
+      closed: '<path d="M14 44 Q60 26 106 44 Q60 46 14 44Z" fill="' + lip + '"/><path d="M14 44 Q60 64 106 44 Q60 46 14 44Z" fill="' + lip + '"/>',
+      smile: '<path d="M4 40 Q60 28 116 40 Q60 38 4 40Z" fill="' + lip + '"/><rect x="24" y="38" width="72" height="8" rx="3" fill="' + tooth + '"/><path d="M24 46 L96 46 Q60 52 24 46Z" fill="' + dark + '"/><path d="M4 46 Q60 62 116 46 Q60 52 4 46Z" fill="' + lip + '"/>',
+      relaxed: '<path d="M14 40 Q60 24 106 40 Q60 38 14 40Z" fill="' + lip + '"/><ellipse cx="60" cy="45" rx="34" ry="6" fill="' + dark + '"/><path d="M14 48 Q60 68 106 48 Q60 52 14 48Z" fill="' + lip + '"/>',
+      open: '<path d="M14 26 Q60 8 106 26 Q60 22 14 26Z" fill="' + lip + '"/><rect x="34" y="24" width="52" height="7" rx="2" fill="' + tooth + '"/><ellipse cx="60" cy="48" rx="38" ry="20" fill="' + dark + '"/><ellipse cx="60" cy="62" rx="26" ry="7" fill="' + tongue + '"/><path d="M14 70 Q60 92 106 70 Q60 74 14 70Z" fill="' + lip + '"/>',
+      curl: '<path d="M14 34 Q60 16 106 34 Q60 30 14 34Z" fill="' + lip + '"/><ellipse cx="60" cy="46" rx="30" ry="12" fill="' + dark + '"/><path d="M38 52 Q60 30 76 44" stroke="' + tongue + '" stroke-width="7" fill="none" stroke-linecap="round"/><path d="M14 58 Q60 78 106 58 Q60 62 14 58Z" fill="' + lip + '"/>'
+    };
+    s = shapes[k] || '';
+    return '<figure class="mouth"><svg viewBox="0 0 120 90" role="img" aria-label="' + esc(m[1]) + '">' + s + '</svg><figcaption>' + esc(m[1]) + '</figcaption></figure>';
+  }
+  // The weakest drill sound in a result (lowest-scoring sound that a drill trains), if it needs work.
+  function weakestSound(res){
+    var best = null;
+    res.words.forEach(function(w){ w.phonemes.forEach(function(p){
+      var s = soundFor(p.ipa);
+      if (s && p.score < 70 && (!best || p.score < best.p.score)) best = { s: s, p: p, word: w.word };
+    }); });
+    return best;
+  }
   function renderAzure(box, res){
-    var worst = null;
+    var worst = null, weak = weakestSound(res);
     res.words.forEach(function(w){ if (w.error !== 'Omission' && (!worst || w.score < worst.score)) worst = w; });
     box.innerHTML =
       '<div class="sbars">' + bar('Overall', res.pron) + bar('Accuracy', res.accuracy) + bar('Fluency', res.fluency) + bar('Intonation', res.prosody) + '</div>' +
+      (weak ? '<div class="weak-tip"><div><span class="count">Fix this sound first</span><b>/' + esc(weak.p.ipa) + '/ in “' + esc(weak.word) + '”' +
+        (weak.p.heard && weak.p.heard !== weak.p.ipa ? ' - you said /' + esc(weak.p.heard) + '/' : '') + '</b>' +
+        '<p>' + esc(weak.s.tip) + '</p><p class="mal" lang="ml">' + esc(weak.s.ml) + '</p><a href="#/sound/' + weak.s.id + '">Practise ' + esc(weak.s.title) + I.chev + '</a></div>' +
+        mouthSvg(weak.p.ipa) + '</div>' : '') +
       '<div class="words az">' + res.words.map(function(w, i){
         var cls = w.error === 'Omission' ? 'skip' : w.error === 'Insertion' ? 'extra' : scoreCls(w.score);
         return '<button type="button" class="w ' + cls + '" data-i="' + i + '">' + esc(w.word) + '</button>';
@@ -416,6 +549,7 @@
       if (w.error === 'Omission') { p.innerHTML = '<b>' + esc(w.word) + '</b> - this word was missed. Try saying every word.'; return; }
       var tips = [];
       p.innerHTML = '<div class="phon-head"><b>' + esc(w.word) + '</b> · ' + w.score + '% <button class="btn sm ghost" type="button" data-say>' + I.speaker + 'Hear it</button></div>' +
+        (w.syllables && w.syllables.length > 1 ? '<div class="syl"><span class="count">Syllables</span> ' + w.syllables.map(function(s){ return '<span class="sy ' + scoreCls(s.score) + '" title="' + s.score + '%">' + esc(s.syl) + '</span>'; }).join('<i>·</i>') + '</div>' : '') +
         '<div class="ipa">' + w.phonemes.map(function(ph){
           var wrong = ph.score < 60 && ph.heard && ph.heard !== ph.ipa;
           var s = soundFor(ph.ipa);
@@ -645,6 +779,10 @@
       '<h1 class="title">Learn</h1>' +
       '<div class="list two">' +
         '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
+        '<a class="card item" href="#/listen"><span class="num">' + I.speaker + '</span><span class="t"><h2>Listening: older patients</h2><span class="sub">Understand fast, informal Aussie patient talk' + (state.listenBest != null ? ' · best ' + state.listenBest + '%' : '') + '</span></span></a>' +
+        '<a class="card item" href="#/fluency"><span class="num">' + I.mic + '</span><span class="t"><h2>1-minute speaking check</h2><span class="sub">Pronunciation, grammar, vocabulary, pace, pauses and fillers in one report</span></span></a>' +
+        '<a class="card item" href="#/oet"><span class="num">' + I.check + '</span><span class="t"><h2>OET Speaking (Nursing)</h2><span class="sub">10 role-plays with a 3-minute prep and 5-minute talk, marked on all 9 criteria</span></span></a>' +
+        '<a class="card item" href="#/ielts"><span class="num">' + I.check + '</span><span class="t"><h2>IELTS Speaking</h2><span class="sub">Parts 1-3, cue cards with timers, full mock test, band scores on the 4 criteria</span></span></a>' +
         '<a class="card item" href="#/interview"><span class="num">' + I.chat + '</span><span class="t"><h2>Interview preparation</h2><span class="sub">20 healthcare interview questions, model answers and AI feedback</span></span></a>' +
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
@@ -745,7 +883,8 @@
       '<a class="back" href="#/sounds">' + I.back + 'Sound drills</a>' +
       '<span class="eyebrow">Sound drill</span>' +
       '<h1 class="title">' + esc(s.title) + '</h1>' +
-      '<article class="card pad" style="margin-top:14px"><p>' + esc(s.tip) + '</p><p class="tip" lang="ml">' + esc(s.ml) + '</p></article>' +
+      '<article class="card pad" style="margin-top:14px">' + (s.ipa.length ? '<div class="sound-hero">' + s.ipa.map(mouthSvg).join('') + '</div>' : '') +
+        '<p style="margin-top:10px">' + esc(s.tip) + '</p><p class="tip" lang="ml">' + esc(s.ml) + '</p></article>' +
       '<h2 class="section-title">Word pairs - listen, then pick one to say</h2>' +
       '<div class="pairs">' + s.pairs.map(function(p, i){
         return '<div class="card pair">' + [0, 1].map(function(k){
@@ -800,6 +939,550 @@
       stop: function(){ if (recording) { recording = false; if (rec) rec.stop(); if (mic) stopUI(); } },
       secs: function(){ return secs; }
     };
+  }
+
+  /* ---------- Listening: older Australian patients ---------- */
+  function listening(){
+    setTab('learn');
+    var order = shuffle(LISTENING.map(function(c, i){ return i; })), n = 0, right = 0;
+    function show(){
+      var c = LISTENING[order[n]];
+      render(
+        '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+        '<span class="eyebrow">Listening · older patients · ' + (n + 1) + ' of ' + order.length + '</span>' +
+        '<div class="progress"><i style="width:' + Math.round(n / order.length * 100) + '%"></i></div>' +
+        '<article class="card pad"><p class="q-prompt">What is the patient telling you?</p>' +
+          '<p class="q-sub">Older Australians often speak fast and use slang. Listen at full speed first.</p>' +
+          '<div class="listen-row" style="margin:0 0 14px"><button class="btn primary" id="fast">' + I.speaker + 'Play</button><button class="btn" id="norm">' + I.speaker + 'Normal</button><button class="btn" id="slow">' + I.speaker + 'Slow</button></div>' +
+          '<div class="opts">' + c.options.map(function(o, i){ return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join('') + '</div>' +
+          '<div id="after"></div></article>'
+      );
+      document.getElementById('fast').onclick = function(){ speak(c.say, 1.15); };
+      document.getElementById('norm').onclick = function(){ speak(c.say, 0.95); };
+      document.getElementById('slow').onclick = function(){ speak(c.say, 0.7); };
+      speak(c.say, 1.15);
+      app.querySelectorAll('.opt').forEach(function(b){
+        b.onclick = function(){
+          var ok = +b.dataset.i === c.answer;
+          if (ok) right++;
+          app.querySelectorAll('.opt').forEach(function(x){ x.disabled = true; if (+x.dataset.i === c.answer) x.classList.add('right'); });
+          if (!ok) b.classList.add('wrong');
+          document.getElementById('after').innerHTML =
+            '<div class="coach" style="margin-top:14px"><p class="count">They said</p><p><b>“' + esc(c.say) + '”</b></p><p class="why">' + esc(c.note) + '</p></div>' +
+            '<div class="nav"><span></span><button class="btn primary" id="next">' + (n === order.length - 1 ? 'See my score' : 'Next') + I.chev + '</button></div>';
+          document.getElementById('next').onclick = function(){ n++; n < order.length ? show() : done(); };
+        };
+      });
+    }
+    function done(){
+      var pct = Math.round(right / order.length * 100);
+      state.listenBest = Math.max(state.listenBest || 0, pct); markActive(); save();
+      render('<article class="card pad done"><span class="eyebrow">Listening complete</span><div class="big">' + right + ' / ' + order.length + '</div>' +
+        '<p class="lede">' + (pct >= 80 ? 'Excellent - you can follow fast, informal patient talk.' : 'Good practice. Try again - the slang gets easier each time.') + '</p>' +
+        '<div class="row" style="justify-content:center;margin-top:18px"><a class="btn ghost" href="#/listen?r=' + Date.now() + '">' + I.restart + 'Try again</a><a class="btn primary" href="#/learn">Learn' + I.chev + '</a></div></article>');
+    }
+    show();
+  }
+
+  /* ---------- 1-minute speaking check (6-part fluency report) ---------- */
+  var CHECK_TOPICS = ['Describe your typical day at work.', 'Talk about the best thing about living in Australia.', 'Describe a patient or person who taught you something.',
+    'Talk about your hometown in Kerala.', 'Describe how you spend your weekends.', 'Talk about a goal you are working towards.', 'Explain how you deal with stress.',
+    'Describe a good team you have worked in.', 'Talk about a festival you enjoy.', 'Describe a challenge you faced when you moved to a new place.',
+    'Talk about your favourite food and how to cook it.', 'Explain why you chose your career.'];
+  var FILLER_RE = /\b(um+|uh+|er+m?|ah+|hmm+|you know|i mean|basically|actually|kind of|sort of)\b/gi;
+  function fluencyCheck(){
+    setTab('learn');
+    var topic = CHECK_TOPICS[Math.floor(Math.random() * CHECK_TOPICS.length)];
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">1-minute speaking check</span>' +
+      '<h1 class="title">Your fluency report</h1>' +
+      '<p class="lede">Talk about the topic for up to a minute. You get scores for pronunciation, grammar, vocabulary, pace, pauses and filler words.</p>' +
+      '<article class="card pad" style="margin-top:14px"><span class="count">Your topic</span><p class="q-prompt" id="topic">' + esc(topic) + '</p>' +
+        '<div class="listen-row" style="margin:6px 0 0"><button class="btn ghost sm" id="another">Another topic</button></div>' +
+        '<div class="speak-zone" id="speak"></div>' +
+        '<button class="btn primary" id="go" type="button" style="margin-top:10px">Get my report' + I.chev + '</button><div id="out"></div></article>'
+    );
+    var sp = speakAnswer(document.getElementById('speak'), { maxSec: 60, pauseMs: 6000 });
+    document.getElementById('another').onclick = function(){ topic = CHECK_TOPICS[(CHECK_TOPICS.indexOf(topic) + 1) % CHECK_TOPICS.length]; document.getElementById('topic').textContent = topic; };
+    document.getElementById('go').onclick = function(){
+      var btn = this, out = document.getElementById('out');
+      btn.disabled = true;
+      sp.finish().then(function(){
+        var r = sp.get(), words = r.text.split(/\s+/).filter(Boolean).length;
+        if (words < 15) { btn.disabled = false; out.innerHTML = '<p class="heard" style="text-align:left">Talk a bit longer first - at least 20 seconds.</p>'; return; }
+        if (!getCode()) { btn.disabled = false; out.innerHTML = '<p class="heard" style="text-align:left">The report uses the AI coach - enter your access code in a Talk conversation first.</p>'; return; }
+        out.innerHTML = '<div class="typing" style="margin:14px 0"><i></i><i></i><i></i></div>';
+        fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ check: true, topic: topic, text: r.text, secs: r.secs }) })
+          .then(function(x){ return x.json(); })
+          .then(function(d){
+            btn.disabled = false;
+            if (d.grammar == null) throw new Error(d.error);
+            var mins = Math.max(r.secs, 1) / 60, wpm = r.secs ? Math.round(words / mins) : null;
+            var pausesPm = r.pauses == null ? null : Math.round(r.pauses / mins), fillers = (r.text.match(FILLER_RE) || []).length;
+            function tile(name, val, unit, rate, tip){
+              return '<div class="metric ' + rate + '"><span class="k">' + name + '</span><b>' + (val == null ? '–' : val) + '<small>' + unit + '</small></b><span class="tip6">' + tip + '</span></div>';
+            }
+            var pr = r.pron ? r.pron.accuracy : null;
+            out.innerHTML = '<div class="metrics">' +
+              tile('Pronunciation', pr, pr == null ? '' : '/100', pr == null ? '' : pr >= 85 ? 'good' : pr >= 70 ? 'ok' : 'low', pr == null ? 'Set up Azure scoring to measure this' : pr >= 85 ? 'Clear and easy to understand' : 'Try the sound drills for your weakest sounds') +
+              tile('Grammar', d.grammar, '/100', d.grammar >= 80 ? 'good' : d.grammar >= 60 ? 'ok' : 'low', esc(d.grammar_note)) +
+              tile('Vocabulary', d.vocabulary, '/100', d.vocabulary >= 80 ? 'good' : d.vocabulary >= 60 ? 'ok' : 'low', esc(d.vocab_note)) +
+              tile('Pace', wpm, ' words/min', wpm == null ? '' : wpm >= 110 && wpm <= 165 ? 'good' : wpm >= 90 && wpm <= 185 ? 'ok' : 'low', wpm == null ? '' : wpm < 110 ? 'A little slow - aim for 120-160' : wpm > 165 ? 'Quite fast - slow down so every word is clear' : 'A natural pace') +
+              tile('Pauses', pausesPm, ' per min', pausesPm == null ? '' : pausesPm <= 4 ? 'good' : pausesPm <= 8 ? 'ok' : 'low', pausesPm == null ? 'Set up Azure scoring to count pauses' : (r.longPauses ? r.longPauses + ' long pause' + (r.longPauses === 1 ? '' : 's') + '. ' : '') + (pausesPm <= 4 ? 'Smooth speech' : 'Use phrases like "Let me think…" instead of silence')) +
+              tile('Filler words', fillers, '', fillers <= 1 ? 'good' : fillers <= 3 ? 'ok' : 'low', fillers <= 1 ? 'Very few fillers' : 'Pause briefly instead of "basically", "actually", "umm"') +
+              '</div>' +
+              '<div class="coach better-ans"><p class="count">Your talk, improved</p><p>' + esc(d.better) + '</p><div class="listen-row"><button class="btn sm" type="button" id="hearB">' + I.speaker + 'Listen</button></div></div>';
+            document.getElementById('hearB').onclick = function(){ speak(d.better); };
+            logDay({ gvN: 1, gramSum: d.grammar, vocabSum: d.vocabulary });
+            if (r.pron) logDay({ paN: 1, paPron: r.pron.accuracy, paAcc: r.pron.accuracy, paFlu: r.pron.fluency, paPros: r.pron.prosody });
+            if (wpm) logDay({ paceN: 1, wpmSum: wpm, fillers: fillers });
+            markActive(); save();
+          })
+          .catch(function(){ btn.disabled = false; out.innerHTML = '<p class="heard" style="text-align:left">Couldn\'t reach the coach. Please check your internet and try again.</p>'; });
+      });
+    };
+  }
+
+  /* ---------- IELTS Speaking ---------- */
+  var CRITERIA = [['fc', 'Fluency and Coherence'], ['lr', 'Lexical Resource'], ['gra', 'Grammatical Range and Accuracy'], ['p', 'Pronunciation']];
+  function bandBar(label, b){
+    return '<div class="sbar band"><span>' + label + '</span><i><b class="' + (b >= 7 ? 'ok' : b >= 6 ? 'close' : 'miss') + '" style="width:' + Math.round((b || 0) / 9 * 100) + '%"></b></i><em>' + (b == null ? '–' : b.toFixed(1)) + '</em></div>';
+  }
+  function ieltsHome(){
+    setTab('learn');
+    var hist = state.ielts || [], last = hist[hist.length - 1];
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">IELTS Speaking</span>' +
+      '<h1 class="title">Practise for IELTS Speaking</h1>' +
+      '<p class="lede">Real test format, timed like the exam, and marked on the four official criteria. AHPRA needs 7.0 in Speaking.</p>' +
+      (last ? '<div class="card pad level-card mini"><div class="lv"><b>' + last.overall.toFixed(1) + '</b><span>Latest band</span></div><div class="lv"><b>' + Math.max.apply(null, hist.map(function(h){ return h.overall; })).toFixed(1) + '</b><span>Best band</span></div><div class="lv"><span>' + hist.length + ' attempt' + (hist.length === 1 ? '' : 's') + '<br>' + esc(last.date) + '</span></div></div>' : '') +
+      '<div class="list two" style="margin-top:14px">' +
+        '<a class="card item" href="#/ielts/mock"><span class="num">' + I.check + '</span><span class="t"><h2>Full mock test</h2><span class="sub">Parts 1, 2 and 3 with an examiner voice, about 12 minutes, full band report</span></span></a>' +
+        '<a class="card item" href="#/ielts/guide"><span class="num">' + I.book + '</span><span class="t"><h2>How the test works</h2><span class="sub">Format, marking, band meanings, AHPRA, tips</span></span></a>' +
+        '<a class="card item" href="#/ielts/p1"><span class="num">1</span><span class="t"><h2>Part 1 - about you</h2><span class="sub">' + IELTS.part1.length + ' topics, short answers</span></span></a>' +
+        '<a class="card item" href="#/ielts/p2"><span class="num">2</span><span class="t"><h2>Part 2 - cue card</h2><span class="sub">' + IELTS.cards.length + ' cards: 1 minute to prepare, 2 minutes to talk</span></span></a>' +
+        '<a class="card item" href="#/ielts/p3"><span class="num">3</span><span class="t"><h2>Part 3 - discussion</h2><span class="sub">Deeper questions for each cue card topic</span></span></a>' +
+      '</div>' +
+      (hist.length ? '<h2 class="section-title">Your bands</h2><div class="phrase-list">' + hist.slice().reverse().slice(0, 10).map(function(h){
+        return '<div class="card phrase"><div><b>Band ' + h.overall.toFixed(1) + ' · ' + esc(h.kind) + '</b><span>' + esc(h.date) + ' · FC ' + h.fc + ' · LR ' + h.lr + ' · GRA ' + h.gra + ' · P ' + h.p + '</span></div></div>';
+      }).join('') + '</div>' : '')
+    );
+  }
+  function ieltsGuide(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/ielts">' + I.back + 'IELTS Speaking</a>' +
+      '<span class="eyebrow">IELTS Speaking guide</span><h1 class="title">How the test works</h1>' +
+      '<div class="faq" style="margin-top:16px">' + IELTS.guide.map(function(g, i){ return '<details class="card"' + (i === 0 ? ' open' : '') + '><summary>' + esc(g.t) + '</summary><div class="a">' + g.d + '</div></details>'; }).join('') + '</div>' +
+      '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/ielts/mock">Try a mock test' + I.chev + '</a></div>'
+    );
+  }
+  function ieltsList(part){
+    setTab('learn');
+    var items = part === 1 ? IELTS.part1.map(function(t, i){ return { href: '#/ielts/p1/' + i, title: t.title, sub: t.qs[0] }; })
+      : IELTS.cards.map(function(c, i){ return { href: '#/ielts/p' + part + '/' + i, title: c.title, sub: part === 2 ? c.bullets.slice(0, 3).join(' · ') : c.part3[0] }; });
+    render(
+      '<a class="back" href="#/ielts">' + I.back + 'IELTS Speaking</a>' +
+      '<span class="eyebrow">IELTS Speaking · Part ' + part + '</span>' +
+      '<h1 class="title">' + (part === 1 ? 'Part 1 topics' : part === 2 ? 'Part 2 cue cards' : 'Part 3 discussions') + '</h1>' +
+      '<p class="lede">' + (part === 1 ? 'Four short questions per topic. Answer each in 2-3 sentences: answer, reason, example.' : part === 2 ? 'One minute to prepare and make notes, then talk for up to two minutes.' : 'Give opinions with reasons and examples, and compare past and present.') + '</p>' +
+      '<div class="list two">' + items.map(function(it, i){ return '<a class="card item" href="' + it.href + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(it.title) + '</h2><span class="sub">' + esc(it.sub) + '</span></span></a>'; }).join('') + '</div>'
+    );
+  }
+  function ieltsSet(part, idx){
+    if (part === 1) { var t = IELTS.part1[idx]; return t && t.qs.map(function(q){ return { part: 1, q: q }; }); }
+    var c = IELTS.cards[idx]; if (!c) return null;
+    return part === 2 ? [{ part: 2, card: c }] : c.part3.map(function(q){ return { part: 3, q: q }; });
+  }
+  function ieltsMockSet(){
+    var t = IELTS.part1[Math.floor(Math.random() * IELTS.part1.length)], ci = Math.floor(Math.random() * IELTS.cards.length), c = IELTS.cards[ci];
+    return t.qs.map(function(q){ return { part: 1, q: q }; }).concat([{ part: 2, card: c }], c.part3.slice(0, 3).map(function(q){ return { part: 3, q: q }; }));
+  }
+  function cueText(c){ return c.title + ' You should say: ' + c.bullets.join(', '); }
+  function modelCache(){ try { return JSON.parse(localStorage.getItem('aj-ielts-models')) || {}; } catch(e) { return {}; } }
+
+  // Runs a list of IELTS questions one by one, then marks them all together.
+  function ieltsRun(kind, items, backHref){
+    setTab('learn');
+    var n = 0, answers = [], mock = kind === 'Mock test';
+    function head(){
+      var it = items[n];
+      return '<a class="back" href="' + backHref + '">' + I.back + 'IELTS Speaking</a>' +
+        '<span class="eyebrow">' + esc(kind) + ' · Part ' + it.part + ' · ' + (n + 1) + ' of ' + items.length + '</span>' +
+        '<div class="progress"><i style="width:' + Math.round(n / items.length * 100) + '%"></i></div>';
+    }
+    function modelBtn(q, part){
+      if (mock) return '';
+      return '<details class="card model" id="model"><summary>Hear a Band 8 answer</summary><div class="a" id="modelBody"><p class="heard" style="text-align:left">Tap to load…</p></div></details>';
+    }
+    function bindModel(q, part){
+      var d = document.getElementById('model'); if (!d) return;
+      d.ontoggle = function(){
+        if (!d.open || d.dataset.loaded) return;
+        var body = document.getElementById('modelBody'), cache = modelCache();
+        function show(m){
+          d.dataset.loaded = 1;
+          body.innerHTML = '<p>' + esc(m.answer) + '</p><div class="listen-row"><button class="btn sm" type="button" id="hearModel">' + I.speaker + 'Listen</button></div>' +
+            '<ul class="tiplist good">' + (m.notes || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>';
+          document.getElementById('hearModel').onclick = function(){ speak(m.answer); };
+        }
+        if (cache[q]) return show(cache[q]);
+        if (!getCode()) { body.innerHTML = '<p class="heard" style="text-align:left">Model answers use the AI coach - enter your access code in a Talk conversation first.</p>'; return; }
+        body.innerHTML = '<div class="typing" style="margin:8px 0"><i></i><i></i><i></i></div>';
+        fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ ielts: { model: true, part: part, q: q } }) })
+          .then(function(r){ return r.json(); }).then(function(m){
+            if (!m.answer) throw new Error(m.error);
+            cache[q] = m; try { localStorage.setItem('aj-ielts-models', JSON.stringify(cache)); } catch(e) {}
+            show(m);
+          }).catch(function(){ body.innerHTML = '<p class="heard" style="text-align:left">Couldn\'t load a model answer - check your internet and try again.</p>'; });
+      };
+    }
+    function next(res, q, part){
+      answers.push({ part: part, q: q, a: res.text, secs: res.secs, pron: res.pron });
+      n++;
+      n < items.length ? show() : grade();
+    }
+    function questionScreen(it){
+      render(head() +
+        '<article class="card pad"><p class="q-prompt">' + esc(it.q) + '</p>' +
+          '<div class="listen-row" style="margin:6px 0 0"><button class="btn" id="play">' + I.speaker + 'Hear the question</button></div>' +
+          '<div class="speak-zone" id="speak"></div>' +
+          '<div class="nav"><span></span><button class="btn primary" id="next">' + (n === items.length - 1 ? 'Finish and get my band' : 'Next question') + I.chev + '</button></div></article>' +
+        modelBtn(it.q, it.part));
+      var sp = speakAnswer(document.getElementById('speak'), { maxSec: it.part === 1 ? 60 : 90 });
+      document.getElementById('play').onclick = function(){ speak(it.q); };
+      speak(it.q);
+      bindModel(it.q, it.part);
+      document.getElementById('next').onclick = function(){
+        var btn = this; btn.disabled = true;
+        sp.finish().then(function(){
+          var res = sp.get();
+          if (res.text.split(/\s+/).filter(Boolean).length < 3) { btn.disabled = false; document.getElementById('slabel').textContent = 'Please answer the question first'; return; }
+          next(res, it.q, it.part);
+        });
+      };
+    }
+    function cardScreen(it){
+      var c = it.card, prepLeft = 60, prepTimer = null;
+      render(head() +
+        '<article class="card pad cue"><span class="count">Cue card</span><p class="q-prompt">' + esc(c.title) + '</p><p>You should say:</p>' +
+          '<ul class="tiplist">' + c.bullets.map(function(b){ return '<li>' + esc(b) + '</li>'; }).join('') + '</ul>' +
+          '<div class="listen-row"><button class="btn" id="play">' + I.speaker + 'Hear the card</button></div></article>' +
+        '<article class="card pad" id="stage" style="margin-top:12px">' +
+          '<p><b>1 minute to prepare.</b> Make a few notes, then talk for up to 2 minutes.</p>' +
+          '<div class="row" style="margin-top:12px"><button class="btn primary" id="prep">Start preparing (1:00)</button><button class="btn ghost" id="skip">Skip to speaking</button></div></article>' +
+        modelBtn(c.title, 2));
+      document.getElementById('play').onclick = function(){ speak(cueText(c)); };
+      bindModel(cueText(c), 2);
+      function talk(){
+        clearInterval(prepTimer);
+        var notes = (document.getElementById('notes') || {}).value || '';
+        document.getElementById('stage').innerHTML =
+          (notes ? '<p class="count">Your notes</p><p class="notes-view">' + esc(notes) + '</p>' : '') +
+          '<p><b>Now talk for up to 2 minutes.</b> Try to keep going until the timer is nearly finished.</p>' +
+          '<div class="speak-zone" id="speak"></div>' +
+          '<div class="nav"><span></span><button class="btn primary" id="next">' + (n === items.length - 1 ? 'Finish and get my band' : 'Next') + I.chev + '</button></div>';
+        var sp = speakAnswer(document.getElementById('speak'), { maxSec: 120, pauseMs: 8000 });
+        speak('Please start speaking now.'); sp.flash();
+        document.getElementById('next').onclick = function(){
+          var btn = this; btn.disabled = true;
+          sp.finish().then(function(){
+            var res = sp.get();
+            if (res.text.split(/\s+/).filter(Boolean).length < 10) { btn.disabled = false; document.getElementById('slabel').textContent = 'Please give your talk first'; return; }
+            next(res, cueText(c), 2);
+          });
+        };
+      }
+      document.getElementById('skip').onclick = talk;
+      document.getElementById('prep').onclick = function(){
+        speak('You have one minute to prepare. You can make some notes.');
+        document.getElementById('stage').innerHTML = '<div class="timer big" id="ptimer">1:00</div><textarea id="notes" class="ref" rows="4" placeholder="Quick notes - key words only"></textarea>' +
+          '<div class="row" style="margin-top:10px"><button class="btn primary" id="ready">I\'m ready to talk</button></div>';
+        document.getElementById('ready').onclick = talk;
+        prepTimer = setInterval(function(){
+          prepLeft--;
+          var t = document.getElementById('ptimer'); if (!t) return clearInterval(prepTimer);
+          t.textContent = '0:' + ('0' + Math.max(0, prepLeft)).slice(-2);
+          t.classList.toggle('low', prepLeft <= 10);
+          if (prepLeft <= 0) talk();
+        }, 1000);
+      };
+    }
+    function show(){ var it = items[n]; it.part === 2 ? cardScreen(it) : questionScreen(it); }
+    function grade(){
+      render('<a class="back" href="' + backHref + '">' + I.back + 'IELTS Speaking</a><article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div><p class="lede">The examiner is marking your answers…</p></article>');
+      var withP = answers.filter(function(a){ return a.pron && a.secs; }), tot = withP.reduce(function(s, a){ return s + a.secs; }, 0);
+      var pron = tot ? ['accuracy', 'fluency', 'prosody'].reduce(function(o, k){ o[k] = Math.round(withP.reduce(function(s, a){ return s + a.pron[k] * a.secs; }, 0) / tot); return o; }, {}) : null;
+      fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+        body: JSON.stringify({ ielts: { answers: answers.map(function(a){ return { part: a.part, q: a.q, a: a.a, secs: a.secs }; }), pron: pron } }) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (d.error || d.overall == null) throw new Error(d.error || 'ai');
+          state.ielts = (state.ielts || []).concat([{ date: new Date().toLocaleDateString('en-AU'), kind: kind, overall: d.overall, fc: d.fc.band, lr: d.lr.band, gra: d.gra.band, p: d.p.band }]).slice(-30);
+          save(); markActive();
+          report(d, pron);
+        })
+        .catch(function(e){
+          render('<a class="back" href="' + backHref + '">' + I.back + 'IELTS Speaking</a><article class="card pad"><p>' +
+            (String(e.message) === 'access_code' || !getCode() ? 'Marking uses the AI coach - please enter your access code in a Talk conversation first.' : 'Couldn\'t reach the examiner. Please check your internet and try again.') + '</p>' +
+            '<div class="row" style="margin-top:14px"><button class="btn primary" id="retry">Try again</button></div></article>');
+          document.getElementById('retry').onclick = grade;
+        });
+    }
+    function report(d, pron){
+      render(
+        '<a class="back" href="#/ielts">' + I.back + 'IELTS Speaking</a>' +
+        '<span class="eyebrow">' + esc(kind) + ' · band report</span>' +
+        '<article class="card pad level-card"><div class="lv"><b>' + d.overall.toFixed(1) + '</b><span>Overall band (estimate)</span></div><div class="lv"><b>' + (d.overall >= 7 ? '✓' : (7 - d.overall).toFixed(1)) + '</b><span>' + (d.overall >= 7 ? 'At AHPRA level' : 'bands to reach 7.0') + '</span></div></article>' +
+        '<article class="card pad"><div class="sbars">' + CRITERIA.map(function(c){ return bandBar(c[1], d[c[0]].band); }).join('') + '</div>' +
+          CRITERIA.map(function(c){ return '<p class="crit"><b>' + esc(c[1]) + ' ' + d[c[0]].band.toFixed(1) + ':</b> ' + esc(d[c[0]].comment) + '</p>'; }).join('') +
+          (pron ? '<p class="heard" style="text-align:left">Pronunciation measured from your voice: accuracy ' + pron.accuracy + ', fluency ' + pron.fluency + ', intonation ' + pron.prosody + '.</p>' : '<p class="heard" style="text-align:left">Pronunciation is an estimate - set up Azure scoring for a measured band.</p>') +
+        '</article>' +
+        '<h2 class="section-title">What worked</h2><ul class="tiplist good card pad">' + (d.strengths || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+        '<h2 class="section-title">To raise your band</h2><ul class="tiplist card pad">' + (d.fixes || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+        '<h2 class="section-title">Your answers at Band 8</h2><div class="faq">' + answers.map(function(a, i){
+          var b8 = (d.improved || [])[i] || '';
+          return '<details class="card"><summary>Part ' + a.part + ': ' + esc(a.part === 2 ? a.q.split(' You should say')[0] : a.q) + '</summary><div class="a">' +
+            '<p class="count">You said</p><p>' + esc(a.a) + '</p>' +
+            (b8 ? '<p class="count" style="margin-top:10px">Band 8 version</p><p>' + esc(b8) + '</p><div class="listen-row"><button class="btn sm" type="button" data-say="' + esc(b8) + '">' + I.speaker + 'Listen</button></div>' : '') +
+          '</div></details>';
+        }).join('') + '</div>' +
+        '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/ielts">IELTS home' + I.chev + '</a><a class="btn ghost" href="#/ielts/mock">New mock test</a></div>'
+      );
+      app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
+    }
+    show();
+  }
+  function ielts(sub, idx){
+    if (sub === 'guide') return ieltsGuide();
+    if (sub === 'mock') {
+      return ieltsIntroMock();
+    }
+    var part = { p1: 1, p2: 2, p3: 3 }[sub];
+    if (!part) return ieltsHome();
+    if (idx === undefined || idx === '') return ieltsList(part);
+    var set = ieltsSet(part, parseInt(idx, 10));
+    if (!set) return ieltsList(part);
+    ieltsRun('Part ' + part + ' practice', set, '#/ielts/p' + part);
+  }
+  function ieltsIntroMock(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/ielts">' + I.back + 'IELTS Speaking</a>' +
+      '<span class="eyebrow">IELTS Speaking · mock test</span><h1 class="title">Full mock test</h1>' +
+      '<p class="lede">Like the real test: 4 short Part 1 questions, a Part 2 cue card (1 minute to prepare, 2 minutes to talk), then 3 Part 3 questions. The examiner reads each question aloud. Model answers are hidden until the end. You get a full band report.</p>' +
+      '<ul class="tiplist card pad"><li>Find a quiet place and hold the phone about 20 cm away.</li><li>Speak as you would to a real examiner - do not read prepared answers.</li><li>It takes about 12 minutes.</li></ul>' +
+      '<div class="row" style="margin-top:18px"><button class="btn primary" id="go">Start the mock test' + I.chev + '</button></div>'
+    );
+    document.getElementById('go').onclick = function(){ ieltsRun('Mock test', ieltsMockSet(), '#/ielts'); };
+  }
+
+  /* ---------- OET Speaking (Nursing) ---------- */
+  var OET_LING = [['intelligibility', 'Intelligibility'], ['fluency', 'Fluency'], ['appropriateness', 'Appropriateness of language'], ['grammar', 'Grammar and expression']];
+  var OET_CLIN = [['relationship', 'Relationship-building'], ['perspective', 'Patient\'s perspective'], ['structure', 'Providing structure'], ['gathering', 'Information-gathering'], ['giving', 'Information-giving']];
+  function critBar(label, v, max){
+    var pct = Math.round((v || 0) / max * 100);
+    return '<div class="sbar band"><span>' + label + '</span><i><b class="' + (pct >= 75 ? 'ok' : pct >= 55 ? 'close' : 'miss') + '" style="width:' + pct + '%"></b></i><em>' + v + '/' + max + '</em></div>';
+  }
+  function oetHome(){
+    setTab('learn');
+    var hist = state.oet || [], last = hist[hist.length - 1];
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">OET Speaking · Nursing</span>' +
+      '<h1 class="title">Practise OET role-plays</h1>' +
+      '<p class="lede">Read the card, prepare for 3 minutes, then talk with the patient for 5 minutes - you start. You are marked on all 9 OET criteria. AHPRA needs grade B (350).</p>' +
+      (last ? '<div class="card pad level-card mini"><div class="lv"><b>' + esc(last.grade) + '</b><span>Latest grade (' + last.total + ')</span></div><div class="lv"><b>' + Math.max.apply(null, hist.map(function(h){ return h.total; })) + '</b><span>Best score /500</span></div><div class="lv"><span>' + hist.length + ' role-play' + (hist.length === 1 ? '' : 's') + '<br>' + esc(last.date) + '</span></div></div>' : '') +
+      '<a class="card cta" href="#/oet/guide" style="margin-top:14px"><span class="ic">' + I.book + '</span><span><b>How OET Speaking works</b><span>Format, the 9 criteria, grades, a step-by-step method, useful phrases</span></span><span class="chev">' + I.chev + '</span></a>' +
+      '<h2 class="section-title">Role-plays</h2>' +
+      '<div class="list two">' + OET.cards.map(function(c, i){
+        var best = hist.filter(function(h){ return h.card === c.id; }).reduce(function(m, h){ return Math.max(m, h.total); }, -1);
+        return '<a class="card item" href="#/oet/' + i + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(c.title) + '</h2><span class="sub">' + esc(c.setting) + '</span>' +
+          (best >= 0 ? '<span class="meta"><span class="pill ' + (best >= 350 ? 'good' : best >= 300 ? 'warn' : 'bad') + '">Best ' + best + '</span></span>' : '') + '</span></a>';
+      }).join('') + '</div>' +
+      (hist.length ? '<h2 class="section-title">Your results</h2><div class="phrase-list">' + hist.slice().reverse().slice(0, 10).map(function(h){
+        return '<div class="card phrase"><div><b>Grade ' + esc(h.grade) + ' · ' + h.total + '/500</b><span>' + esc(h.date) + ' · ' + esc(h.title) + '</span></div></div>';
+      }).join('') + '</div>' : '')
+    );
+  }
+  function oetGuide(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/oet">' + I.back + 'OET Speaking</a>' +
+      '<span class="eyebrow">OET Speaking guide</span><h1 class="title">How OET Speaking works</h1>' +
+      '<div class="faq" style="margin-top:16px">' + OET.guide.map(function(g, i){ return '<details class="card"' + (i === 0 ? ' open' : '') + '><summary>' + esc(g.t) + '</summary><div class="a">' + g.d + '</div></details>'; }).join('') + '</div>' +
+      '<h2 class="section-title">Useful phrases</h2><div class="faq">' + Object.keys(OET.phrases).map(function(k){
+        return '<details class="card"><summary>' + esc(k) + '</summary><div class="a"><div class="chips wrap">' + OET.phrases[k].map(function(p){ return '<button type="button" class="chip" data-say="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div></details>';
+      }).join('') + '</div>'
+    );
+    app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
+  }
+
+  function oetCard(i){
+    var c = OET.cards[i];
+    if (!c) return oetHome();
+    setTab('learn');
+    var left = 180, timer = null;
+    render(
+      '<a class="back" href="#/oet">' + I.back + 'OET Speaking</a>' +
+      '<span class="eyebrow">OET role-play card · Nurse</span>' +
+      '<article class="card pad cue"><p class="q-prompt">' + esc(c.title) + '</p>' +
+        '<p><b>Setting:</b> ' + esc(c.setting) + '</p><p style="margin-top:6px"><b>Patient:</b> ' + esc(c.patient) + '</p>' +
+        '<p style="margin-top:10px"><b>Task:</b></p><ul class="tiplist">' + c.tasks.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></article>' +
+      '<article class="card pad" id="stage" style="margin-top:12px"><p><b>3 minutes to prepare.</b> Plan your opening, the questions you will ask and the key points. Then you start the conversation.</p>' +
+        '<div class="row" style="margin-top:12px"><button class="btn primary" id="prep">Start preparing (3:00)</button><button class="btn ghost" id="skip">Skip to the role-play</button></div></article>'
+    );
+    function go(){ clearInterval(timer); oetRoleplay(i, (document.getElementById('notes') || {}).value || ''); }
+    document.getElementById('skip').onclick = go;
+    document.getElementById('prep').onclick = function(){
+      document.getElementById('stage').innerHTML = '<div class="timer big" id="ptimer">3:00</div><textarea id="notes" class="ref" rows="5" placeholder="Notes: opening, questions to ask, key points"></textarea>' +
+        '<div class="row" style="margin-top:10px"><button class="btn primary" id="ready">Start the role-play</button></div>';
+      document.getElementById('ready').onclick = go;
+      timer = setInterval(function(){
+        left--;
+        var t = document.getElementById('ptimer'); if (!t) return clearInterval(timer);
+        t.textContent = Math.floor(left / 60) + ':' + ('0' + left % 60).slice(-2);
+        t.classList.toggle('low', left <= 20);
+        if (left <= 0) go();
+      }, 1000);
+    };
+  }
+
+  // The 5-minute role-play: the nurse speaks first; no corrections until the end (exam conditions).
+  function oetRoleplay(i, notes){
+    var c = OET.cards[i], turns = [], busy = false, rec = null, started = 0, secsLeft = 300, clock = null, finished = false;
+    var prons = [], useAzure = !az.off && !!TALK_API && !!getCode() && !!(navigator.mediaDevices && (window.AudioContext || window.webkitAudioContext));
+    render(
+      '<section class="chat-view">' +
+        '<header class="chat-top">' +
+          '<a class="icon-btn" href="#/oet" aria-label="Leave the role-play">' + I.back + '</a>' +
+          '<span class="avatar">P</span><div class="who"><b>Patient</b><span>' + esc(c.title) + '</span></div>' +
+          '<span class="timer" id="clock">5:00</span>' +
+        '</header>' +
+        '<div class="chat-scroll" id="scroll"><div class="chat-inner" id="chat" aria-live="polite">' +
+          '<div class="day-note">OET role-play · ' + esc(c.setting) + '. You start: greet the patient and introduce yourself. No corrections until the end.</div>' +
+          (notes ? '<div class="day-note notes-view" style="text-align:left">Your notes: ' + esc(notes) + '</div>' : '') +
+        '</div></div>' +
+        '<div class="composer"><div class="composer-inner">' +
+          '<div class="mic-row">' +
+            '<button class="side-btn" id="card" type="button" aria-label="See the card">' + I.book + '</button>' +
+            micButton('mic') +
+            '<button class="side-btn" id="finish" type="button" aria-label="Finish the role-play">' + I.check + '</button>' +
+          '</div>' +
+          '<div class="mic-label" id="micLabel" style="text-align:center;margin-top:6px">Tap and start the conversation</div>' +
+          '<form class="type-row" id="typeRow" autocomplete="off" style="margin-top:10px"><input id="say" type="text" maxlength="600" placeholder="Or type what you would say" aria-label="Your reply"><button class="send" type="submit" aria-label="Send">' + I.send + '</button></form>' +
+        '</div></div>' +
+      '</section>'
+    );
+    document.body.classList.add('in-chat');
+    var chat = document.getElementById('chat'), scroll = document.getElementById('scroll'), mic = document.getElementById('mic'), label = document.getElementById('micLabel'), input = document.getElementById('say');
+    function add(cls, text){ var d = document.createElement('div'); d.className = cls; d.innerHTML = '<p>' + esc(text) + '</p>'; chat.appendChild(d); scroll.scrollTop = scroll.scrollHeight; return d; }
+    function tick(){
+      secsLeft--;
+      var el = document.getElementById('clock'); if (!el) return clearInterval(clock);
+      el.textContent = Math.floor(Math.max(0, secsLeft) / 60) + ':' + ('0' + Math.max(0, secsLeft) % 60).slice(-2);
+      el.classList.toggle('low', secsLeft <= 30);
+      if (secsLeft <= 0) { clearInterval(clock); label.textContent = 'Time is up - finishing…'; if (!busy && !rec) finish(); }
+    }
+    function nurseSays(text, pron, secs){
+      text = text.trim(); if (!text || finished) return;
+      if (!started) { started = Date.now(); clock = setInterval(tick, 1000); }
+      if (pron) prons.push({ p: pron, s: secs || 1 });
+      turns.push({ role: 'nurse', text: text });
+      add('msg me', text);
+      var dots = document.createElement('div'); dots.className = 'typing'; dots.innerHTML = '<i></i><i></i><i></i>'; chat.appendChild(dots); scroll.scrollTop = scroll.scrollHeight;
+      busy = true; mic.classList.add('busy');
+      fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ oet: { chat: true, card: c.id, turns: turns } }) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          dots.remove(); busy = false; mic.classList.remove('busy');
+          if (!d.reply) throw new Error(d.error || 'ai');
+          turns.push({ role: 'patient', text: d.reply });
+          add('msg ai', d.reply); speak(d.reply);
+          label.textContent = secsLeft <= 0 ? 'Time is up - finishing…' : 'Tap to reply';
+          if (secsLeft <= 0) finish();
+        })
+        .catch(function(e){
+          dots.remove(); busy = false; mic.classList.remove('busy'); turns.pop();
+          label.textContent = String(e.message) === 'access_code' ? 'Enter your access code in a Talk conversation first.' : 'Couldn\'t reach the patient - tap to try again.';
+        });
+    }
+    mic.onclick = function(){
+      if (finished || busy) return;
+      if (rec) { rec.stop(); return; }
+      if (canSpeak) speechSynthesis.cancel();
+      mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… pause when you\'ve finished';
+      if (useAzure) {
+        rec = recordWav({ splitSec: 50, pauseMs: 1600, maxMs: 60000, level: function(v){ mic.style.transform = 'scale(' + (1 + v * 0.18).toFixed(3) + ')'; } });
+        rec.done.then(function(wavs){
+          rec = null; mic.classList.remove('live'); mic.style.transform = '';
+          if (!wavs) { label.textContent = 'Didn\'t catch that - tap and try again'; return; }
+          label.textContent = 'One moment…';
+          return scoreFree(wavs).then(function(r){ r.text ? nurseSays(r.text, r.pron, r.secs) : (label.textContent = 'Didn\'t catch that - tap and try again'); });
+        }).catch(function(){ rec = null; mic.classList.remove('live'); useAzure = false; label.textContent = 'Tap to try again'; });
+      } else if (SR) {
+        rec = listen({ pauseMs: 1100, end: function(alts){ rec = null; mic.classList.remove('live'); alts[0] ? nurseSays(alts[0]) : (label.textContent = 'Didn\'t catch that - tap and try again'); } });
+      } else { mic.classList.remove('live'); label.textContent = 'Type your reply below.'; }
+    };
+    document.getElementById('typeRow').onsubmit = function(e){ e.preventDefault(); if (!busy) { nurseSays(input.value); input.value = ''; } };
+    document.getElementById('card').onclick = function(){
+      var bg = document.createElement('div'); bg.className = 'sheet-bg';
+      bg.innerHTML = '<div class="sheet"><div class="grab"></div><b>' + esc(c.title) + '</b><p style="margin-top:6px">' + esc(c.patient) + '</p><ul class="tiplist">' + c.tasks.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul><div class="row"><button class="btn primary" type="button">Back to the role-play</button></div></div>';
+      document.body.appendChild(bg);
+      bg.onclick = function(e){ if (e.target === bg || e.target.closest('button')) bg.remove(); };
+    };
+    document.getElementById('finish').onclick = function(){ if (turns.length < 2) { label.textContent = 'Have the conversation first - you start.'; return; } finish(); };
+    function finish(){
+      if (finished) return;
+      finished = true; clearInterval(clock); if (rec) rec.stop();
+      var secs = started ? (Date.now() - started) / 1000 : 0;
+      document.body.classList.remove('in-chat');
+      render('<a class="back" href="#/oet">' + I.back + 'OET Speaking</a><article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div><p class="lede">The assessor is marking your role-play…</p></article>');
+      var tot = prons.reduce(function(s, x){ return s + x.s; }, 0);
+      var pron = tot ? ['accuracy', 'fluency', 'prosody'].reduce(function(o, k){ o[k] = Math.round(prons.reduce(function(s, x){ return s + x.p[k] * x.s; }, 0) / tot); return o; }, {}) : null;
+      function send(){
+        fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+          body: JSON.stringify({ oet: { grade: true, card: c.id, tasks: c.tasks, turns: turns, secs: secs, pron: pron } }) })
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            if (d.error || d.total == null) throw new Error(d.error || 'ai');
+            state.oet = (state.oet || []).concat([{ date: new Date().toLocaleDateString('en-AU'), card: c.id, title: c.title, total: d.total, grade: d.grade }]).slice(-30);
+            logDay({ speakSec: Math.round(secs / 2) }); turns.forEach(function(t){ if (t.role === 'nurse') addVocab(t.text); }); markActive(); save();
+            oetReport(c, d, pron, secs);
+          })
+          .catch(function(){
+            render('<a class="back" href="#/oet">' + I.back + 'OET Speaking</a><article class="card pad"><p>Couldn\'t reach the assessor. Please check your internet and try again.</p><div class="row" style="margin-top:14px"><button class="btn primary" id="retry">Try again</button></div></article>');
+            document.getElementById('retry').onclick = function(){ render('<article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div></article>'); send(); };
+          });
+      }
+      send();
+    }
+  }
+  function oetReport(c, d, pron, secs){
+    render(
+      '<a class="back" href="#/oet">' + I.back + 'OET Speaking</a>' +
+      '<span class="eyebrow">OET role-play · ' + esc(c.title) + '</span>' +
+      '<article class="card pad level-card"><div class="lv"><b>' + esc(d.grade) + '</b><span>Estimated grade</span></div><div class="lv"><b>' + d.total + '</b><span>Score out of 500</span></div><div class="lv"><b>' + (d.total >= 350 ? '✓' : 350 - d.total) + '</b><span>' + (d.total >= 350 ? 'At AHPRA grade B' : 'points to grade B') + '</span></div></article>' +
+      '<article class="card pad"><p class="count">Language</p><div class="sbars" style="margin-top:6px">' + OET_LING.map(function(k){ return critBar(k[1], d[k[0]].score, 6); }).join('') + '</div>' +
+        '<p class="count" style="margin-top:14px">Clinical communication</p><div class="sbars" style="margin-top:6px">' + OET_CLIN.map(function(k){ return critBar(k[1], d[k[0]].score, 3); }).join('') + '</div>' +
+        OET_LING.concat(OET_CLIN).map(function(k){ return '<p class="crit"><b>' + esc(k[1]) + ':</b> ' + esc(d[k[0]].comment) + '</p>'; }).join('') +
+        '<p class="crit"><b>Tasks on the card:</b> ' + esc(d.tasks) + '</p>' +
+        '<p class="heard" style="text-align:left">' + Math.round(secs / 60 * 10) / 10 + ' minutes' + (pron ? ' · pronunciation from your voice: accuracy ' + pron.accuracy + ', fluency ' + pron.fluency + ', intonation ' + pron.prosody : ' · intelligibility is an estimate (no voice scores)') + '</p></article>' +
+      '<h2 class="section-title">What worked</h2><ul class="tiplist good card pad">' + (d.strengths || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+      '<h2 class="section-title">To reach a higher grade</h2><ul class="tiplist card pad">' + (d.fixes || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+      '<h2 class="section-title">Say it like a grade-A nurse</h2><div class="phrase-list">' + (d.better || []).map(function(b){
+        return '<div class="card phrase"><div><span>You said: “' + esc(b.said) + '”</span><b>' + esc(b.better) + '</b></div><button class="icon-btn" data-say="' + esc(b.better) + '" aria-label="Listen">' + I.speaker + '</button></div>';
+      }).join('') + '</div>' +
+      '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/oet">OET home' + I.chev + '</a><a class="btn ghost" href="#/oet/guide">Useful phrases</a></div>'
+    );
+    app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
+  }
+  function oet(sub){
+    if (sub === 'guide') return oetGuide();
+    if (sub !== undefined && sub !== '' && !isNaN(+sub)) return oetCard(+sub);
+    oetHome();
   }
 
   /* ---------- Interview preparation ---------- */
@@ -1525,6 +2208,10 @@
     else if (parts[0] === 'help') help();
     else if (parts[0] === 'vocab') vocab();
     else if (parts[0] === 'interview') interviewHome();
+    else if (parts[0] === 'ielts') ielts(parts[1], parts[2]);
+    else if (parts[0] === 'oet') oet(parts[1]);
+    else if (parts[0] === 'fluency') fluencyCheck();
+    else if (parts[0] === 'listen') listening();
     else if (parts[0] === 'iq') interviewQ(parts[1], parseInt(parts[2], 10) || 0);
     else if (parts[0] === 'words') wordsPage(parts[1]);
     else if (parts[0] === 'sounds') sounds();
