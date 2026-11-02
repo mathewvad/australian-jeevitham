@@ -296,7 +296,7 @@
     var AC = window.AudioContext || window.webkitAudioContext;
     var ctx = new AC(), chunks = [], stream = null, proc = null, src = null, finished = false;
     if (ctx.resume) ctx.resume();
-    var started = Date.now(), lastVoice = 0, heardVoice = false, noise = 0.004, frames = 0, resolveFn;
+    var started = Date.now(), lastVoice = 0, heardVoice = false, noise = 0.004, peak = 0, firstVoice = 0, frames = 0, resolveFn;
     var done = new Promise(function(res){ resolveFn = res; });
     function finish(){
       if (finished) return;
@@ -312,7 +312,8 @@
       for (var i = 0; i < chunks.length; i += per) parts.push(toWav(chunks.slice(i, i + per), rate));
       resolveFn(parts);
     }
-    navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 } })
+    // No auto-gain: it lifts the room noise in every pause, so the pause never looks quiet.
+    navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: false, channelCount: 1 } })
       .then(function(s){
         if (finished) { s.getTracks().forEach(function(t){ t.stop(); }); return; }
         stream = s;
@@ -326,12 +327,15 @@
           var rms = Math.sqrt(sum / d.length), now = Date.now();
           frames++;
           if (frames <= 3) noise = Math.max(noise, rms);          // measure the room for the first moment
-          var loud = rms > Math.max(0.012, noise * 2.5);
-          if (loud) { heardVoice = true; lastVoice = now; }
+          else if (rms < noise) noise = rms;                      // and follow it down when the room gets quieter
+          // Voice = clearly above the room AND not far below the loudest moment so far,
+          // so a noisy room after the word still counts as a pause.
+          var loud = rms > Math.max(0.012, noise * 2.5, peak * 0.3);
+          if (loud) { if (!heardVoice) firstVoice = now; heardVoice = true; lastVoice = now; if (rms > peak) peak = rms; }
           if (opts.level) opts.level(Math.min(1, rms * 12));
           if (opts.tick) opts.tick((now - started) / 1000);
           // Stop after a pause once they've spoken, if nothing is said at all, or at the time limit.
-          if ((heardVoice && now - lastVoice > (opts.pauseMs || 1300)) || (!heardVoice && now - started > (opts.waitMs || 7000)) || now - started > (opts.maxMs || 20000)) finish();
+          if ((heardVoice && now - lastVoice > (opts.pauseMs || 1300)) || (!heardVoice && now - started > (opts.waitMs || 7000)) || now - started > (opts.maxMs || 20000) || (heardVoice && opts.voiceMs && now - firstVoice > opts.voiceMs)) finish();
         };
         src.connect(proc); proc.connect(ctx.destination);
       })
@@ -603,7 +607,11 @@
       if (az.off || !canRecord || !TALK_API || !getCode()) return browserCheck(ref);
       // Start recording right here, inside the tap.
       mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… speak now';
+      // A word or two stops soon after it's said (2.5 s at most once they start); a sentence gets about 1 s per word.
+      var nWords = ref.split(/\s+/).length;
       recording = recordWav({
+        pauseMs: nWords <= 2 ? 700 : 1100, waitMs: 6000,
+        maxMs: 20000, voiceMs: nWords <= 2 ? 2500 : Math.max(4000, nWords * 900 + 1500),
         level: function(v){ mic.style.transform = 'scale(' + (1 + v * 0.18).toFixed(3) + ')'; },
         error: function(name){ if (name === 'NotAllowedError') out.innerHTML = '<p class="heard">Microphone is blocked. Please allow it for this site.</p>'; }
       });
