@@ -573,3 +573,12 @@ ul.tiplist.card{ margin-left:0; padding-left:34px; }
 /* Talk menu */
 .sec-ic{ font-size:1.25rem; background:var(--surface-2); }
 .item h2 .pill, .title .pill, .section-title .pill{ vertical-align:2px; margin-left:6px; font-size:.68rem; }
+
+/* Your course */
+.course-cta{ margin-top:16px; border:1.5px solid var(--accent); }
+.course-level{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.course-level small{ font-size:.78rem; color:var(--muted); font-weight:500; text-transform:none; letter-spacing:0; }
+.item.locked{ opacity:.5; cursor:default; }
+.item.locked:hover{ border-color:var(--border); }
+.focus-box{ margin:12px 0 4px; border-left:4px solid var(--accent); }
+.focus-box p{ margin-top:4px; } .focus-box .mal{ color:var(--muted); margin-top:6px; }

@@ -419,7 +419,17 @@
   /* ---------- Helpers ---------- */
   function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
   function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-  function lessonById(id){ return curLessons().find(function(l){ return l.id === id; }); }
+  // Course lessons for one level (Beginner and Intermediate have a course; see course.js).
+  function courseUnits(level){ return (typeof COURSE !== 'undefined' && COURSE[level]) || []; }
+  function allCourseUnits(){ return courseUnits('beginner').concat(courseUnits('intermediate')); }
+  // The list a lesson belongs to: its course level, or the everyday lessons.
+  function lessonList(l){ return ['beginner', 'intermediate'].map(courseUnits).find(function(u){ return u.indexOf(l) >= 0; }) || curLessons(); }
+  function lessonById(id){ return curLessons().find(function(l){ return l.id === id; }) || allCourseUnits().find(function(l){ return l.id === id; }); }
+  // The next course lesson to do at the learner's level (null when done or above Intermediate).
+  function nextCourseUnit(){
+    var u = courseUnits(userLevel());
+    return u.find(function(l){ return !state.done[l.id]; }) || null;
+  }
   function initials(name){ return name.split(/[\s,]+/).filter(function(w){ return /^[A-Z]/.test(w); }).slice(0, 2).map(function(w){ return w[0]; }).join('') || name[0]; }
   function seenIn(l){ return l.phrases.filter(function(p, i){ return state.seen[l.id + ':' + i]; }).length; }
   function setTab(name){
@@ -952,7 +962,10 @@
       { href: '#/talk/' + scene.id, title: 'Conversation: ' + scene.title, sub: 'Reply at least 5 times', done: (today.turns || 0) >= 5 },
       myLevelInfo() && nextLevel() && !nextExamDate()
         ? { href: '#/exam', title: 'Take your ' + nextLevel().name + ' exam', sub: 'Pass with 80% to move up a level', done: false }
-        : { href: '#/practise', title: 'Say a sentence from your work', sub: 'Practise 3 of your own sentences', done: (today.paN || today.pronN || 0) >= 6 }
+        : nextCourseUnit() || (today.lessons && courseUnits(userLevel()).length)
+          ? (function(u){ return u ? { href: '#/lesson/' + u.id, title: 'Lesson: ' + u.title, sub: 'Learn 6 phrases, then take the quiz', done: (today.lessons || 0) >= 1 }
+                                   : { href: '#/course', title: 'Course lesson done', sub: 'Well done - see your course', done: true }; })(nextCourseUnit())
+          : { href: '#/practise', title: 'Say a sentence from your work', sub: 'Practise 3 of your own sentences', done: (today.paN || today.pronN || 0) >= 6 }
     ];
     var n = tasks.filter(function(t){ return t.done; }).length;
     return '<div class="card pad home-card plan"><div class="chart-head"><b>Today\'s plan</b><span>' + n + ' of 3 done</span></div>' +
@@ -1011,6 +1024,9 @@
     render(
       '<span class="eyebrow">Practise speaking</span>' +
       '<h1 class="title">Learn</h1>' +
+      (myLevelInfo() ? '<a class="card cta course-cta" href="#/course"><span class="ic">' + I.book + '</span><span><b>Your course · ' + esc(levelById(userLevel()).name) + '</b><span>' +
+        (nextCourseUnit() ? 'Next lesson: ' + esc(nextCourseUnit().title) : courseUnits(userLevel()).length ? 'All ' + courseUnits(userLevel()).length + ' lessons done - take the level exam' : 'Practice for your level, step by step') +
+        '</span></span><span class="chev">' + I.chev + '</span></a>' : '') +
       '<div class="list two">' +
         '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
         '<a class="card item" href="#/listen"><span class="num">' + I.speaker + '</span><span class="t"><h2>Listening: older patients</h2><span class="sub">' + eng().listenSub + (state.listenBest != null ? ' · best ' + state.listenBest + '%' : '') + '</span></span></a>' +
@@ -1027,6 +1043,45 @@
     );
   }
   function quizzesDone(){ return curLessons().filter(function(l){ return state.done[l.id]; }).length; }
+
+  // Your course: the four levels in order. Beginner and Intermediate have lessons; Advanced and
+  // Leadership point to the practice that fits them. Levels above yours are locked until you pass.
+  function coursePage(){
+    setTab('learn');
+    var mine = LEVELS.findIndex(function(x){ return x.id === userLevel(); });
+    var more = {
+      advanced: [['#/vocab', I.book, 'Healthcare and work vocabulary', 'Words for the ward, aged care, leading a team and difficult talks'],
+                 ['#/fluency', I.mic, '1-minute speaking check', 'Pronunciation, grammar, vocabulary, pace and fillers'],
+                 ['#/ielts', I.check, 'IELTS Speaking', 'Parts 1-3 with band scores'],
+                 ['#/talks/' + ((mySection() || TALK_MENU[0]).id), I.chat, 'Work conversations', 'Real situations from your field']],
+      leadership: [['#/talks/health', I.chat, 'Senior and leadership conversations', 'Short-staffed shifts, feedback, conflict, pitches'],
+                   ['#/talks/pro', I.chat, 'Professional Services', 'Clients, complaints, pay and results'],
+                   ['#/talks/interview', I.chat, 'Mock interviews', 'Full interviews with follow-up questions']].concat(myEnglish() === 'in' ? [] : [['#/oet', I.check, 'OET Speaking (Nursing)', 'Role-plays marked on all 9 criteria']])
+    };
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">' + esc(eng().name) + '</span>' +
+      '<h1 class="title">Your course</h1>' +
+      '<p class="lede">Work through your level, then pass the level exam (80%) to unlock the next one. Lessons at lower levels stay open for revision.</p>' +
+      LEVELS.map(function(lv, i){
+        var locked = mine >= 0 && i > mine, units = courseUnits(lv.id), done = units.filter(function(u){ return state.done[u.id]; }).length;
+        var status = i === mine ? '<span class="pill good">Your level</span>' : locked ? '<span class="pill">🔒 Pass the ' + esc(lv.name) + ' exam</span>' : '<span class="pill">Open for revision</span>';
+        var body = units.length
+          ? '<div class="list two">' + units.map(function(u, n){
+              var seen = seenIn(u), inner = '<span class="num">' + u.icon + '</span><span class="t"><h2>' + (n + 1) + '. ' + esc(u.title) + '</h2>' + natHtml(u, 'sub mal', 'span') +
+                (locked ? '' : '<span class="meta"><span class="mini-bar"><i style="width:' + Math.round(seen / u.phrases.length * 100) + '%"></i></span>' + seen + '/' + u.phrases.length +
+                  (state.done[u.id] ? ' <span class="pill good">Quiz ' + state.best[u.id] + '%</span>' : '') + '</span>') + '</span>';
+              return locked ? '<div class="card item locked">' + inner + '</div>' : '<a class="card item" href="#/lesson/' + u.id + '">' + inner + '</a>';
+            }).join('') + '</div>'
+          : '<div class="list two">' + more[lv.id].map(function(m){
+              var inner = '<span class="num">' + m[1] + '</span><span class="t"><h2>' + esc(m[2]) + '</h2><span class="sub">' + esc(m[3]) + '</span></span>';
+              return locked ? '<div class="card item locked">' + inner + '</div>' : '<a class="card item" href="' + m[0] + '">' + inner + '</a>';
+            }).join('') + '</div>';
+        return '<h2 class="section-title course-level">' + esc(lv.name) + ' <small>' + esc(lv.cefr) + (units.length ? ' · ' + done + ' of ' + units.length + ' lessons' : '') + '</small> ' + status + '</h2>' + body;
+      }).join('') +
+      (nextLevel() ? '<p style="margin-top:18px"><a class="btn primary" href="#/exam">' + esc(nextLevel().name) + ' exam' + I.chev + '</a></p>' : '')
+    );
+  }
 
   // Everyday Australian English: the list of lessons, opened from Learn like Sound drills.
   function everyday(){
@@ -1056,8 +1111,9 @@
     state.seen[l.id + ':' + idx] = 1; save();
     var last = idx === l.phrases.length - 1;
     render(
-      '<a class="back" href="#/everyday">' + I.back + 'Everyday English</a>' +
+      (l.focus ? '<a class="back" href="#/course">' + I.back + 'Your course</a>' : '<a class="back" href="#/everyday">' + I.back + 'Everyday English</a>') +
       '<span class="eyebrow">' + esc(l.title) + '</span>' +
+      (l.focus && idx === 0 ? '<div class="card pad focus-box"><span class="count">Today\'s focus</span><p>' + esc(l.focus.en) + '</p>' + natHtml(l.focus, 'mal') + '</div>' : '') +
       '<div class="progress"><i style="width:' + Math.round((idx + 1) / l.phrases.length * 100) + '%"></i></div>' +
       '<article class="card pad">' +
         '<span class="count">Phrase ' + (idx + 1) + ' of ' + l.phrases.length + '</span>' +
@@ -2155,8 +2211,8 @@
       var pct = Math.round(right / qs.length * 100);
       state.done[l.id] = true;
       state.best[l.id] = Math.max(state.best[l.id] || 0, pct);
-      save(); markActive();
-      var i = curLessons().indexOf(l), nextL = curLessons()[i + 1];
+      logDay({ lessons: 1 }); save(); markActive();
+      var list = lessonList(l), i = list.indexOf(l), nextL = list[i + 1];
       render(
         '<article class="card pad done">' +
           '<span class="eyebrow">Quiz complete</span>' +
@@ -3016,6 +3072,7 @@
     else if (parts[0] === 'talks') talkSection(parts[1]);
     else if (parts[0] === 'slang') slang();
     else if (parts[0] === 'everyday') everyday();
+    else if (parts[0] === 'course') coursePage();
     else if (parts[0] === 'feedback') feedbackPage();
     else if (parts[0] === 'tips') tips();
     else home();
