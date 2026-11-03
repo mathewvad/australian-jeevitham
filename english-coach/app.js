@@ -1823,7 +1823,7 @@
       '<h2 class="section-title">Full mock interview</h2>' +
       '<div class="list">' + ['rn_interview', 'aged_interview', 'panel'].map(function(id){
         var s = sceneById(id);
-        return s ? '<a class="card item" href="#/talk/' + s.id + '"><span class="avatar">' + esc(initials(s.who)) + '</span><span class="t"><h2>' + esc(s.title) + '</h2><span class="sub">with ' + esc(s.who) + '</span></span><span class="muted">' + I.chev + '</span></a>' : '';
+        return s ? sceneRow(s) : '';
       }).join('') + '</div>' +
       '<h2 class="section-title">Questions to ask the panel</h2>' +
       '<div class="phrase-list">' + INTERVIEW.ask.map(function(q){
@@ -2664,13 +2664,35 @@
   function mySection(){ var f = profile && profile.field; return TALK_MENU.find(function(x){ return x.field && x.field === f; }) || null; }
   function mySub(){ var sec = mySection(), r = profile && profile.role; return sec && sec.subs ? sec.subs.find(function(x){ return x.role === r; }) || null : null; }
   // Conversations picked for this learner: their role or field; Beginners start with everyday life.
-  function talkScenes(){
+  // The "For you" pick: the learner's role, else their field, else everyday life - whichever has
+  // conversations open at their level. Returns { title, scenes }.
+  function talkPick(){
     var sec = mySection(), sub = mySub();
-    var ids = userLevel() === 'beginner' || !sec ? TALK_MENU[0].scenes : sub ? sub.scenes : sectionScenes(sec);
-    return ids.map(sceneById).filter(Boolean);
+    var tries = [sub && { title: sub.title, ids: sub.scenes }, sec && { title: sec.title, ids: sectionScenes(sec) }, { title: 'Everyday life', ids: TALK_MENU[0].scenes }].filter(Boolean);
+    for (var i = 0; i < tries.length; i++) {
+      var open = tries[i].ids.filter(function(id){ return levelAllows(sceneMinLevel(id)); });
+      if (open.length) return { title: tries[i].title, scenes: open.map(sceneById).filter(Boolean) };
+    }
+    return { title: 'Everyday life', scenes: TALK_MENU[0].scenes.map(sceneById) };
   }
+  function talkScenes(){ return talkPick().scenes; }
   function sectionOf(id){ return TALK_MENU.find(function(x){ return sectionScenes(x).indexOf(id) >= 0; }) || TALK_MENU[0]; }
+  // Level locks: Beginners have General and Mock Interview; Intermediate has everything except the
+  // Senior nurses scenes and the two leadership ones (pitch, Nurse Unit Manager interview); Advanced
+  // and Leadership have everything. Access codes (no level) see everything.
+  var ADVANCED_SCENES = ['pitch', 'panel'];
+  function sectionMinLevel(sec){ return sec.id === 'general' || sec.id === 'interview' ? 'beginner' : 'intermediate'; }
+  function sceneMinLevel(id){
+    var senior = TALK_MENU[1].subs.find(function(x){ return x.id === 'senior'; });
+    if (ADVANCED_SCENES.indexOf(id) >= 0 || senior.scenes.indexOf(id) >= 0) return 'advanced';
+    return sectionMinLevel(sectionOf(id));
+  }
+  function levelAllows(min){ return LEVELS.findIndex(function(l){ return l.id === userLevel(); }) >= LEVELS.findIndex(function(l){ return l.id === min; }); }
+  function lockNote(min){ return '🔒 Unlocks at ' + levelById(min).name + ' - pass the ' + levelById(min).name + ' exam'; }
   function sceneRow(s){
+    var min = sceneMinLevel(s.id);
+    if (!levelAllows(min)) return '<div class="card item locked"><span class="avatar">' + esc(initials(s.who)) + '</span><span class="t">' +
+      '<h2>' + esc(s.title) + '</h2><span class="sub">' + esc(lockNote(min)) + '</span></span></div>';
     return '<a class="card item" href="#/talk/' + s.id + '"><span class="avatar">' + esc(initials(s.who)) + '</span><span class="t">' +
       '<h2>' + esc(s.title) + '</h2><span class="sub">with ' + esc(s.who) + '</span></span><span class="muted">' + I.chev + '</span></a>';
   }
@@ -2684,12 +2706,13 @@
       '<h1 class="title" style="margin-top:10px">Conversations</h1>' +
       '<p class="lede">Practise real situations from daily life and work. Speak as you would - your coach marks anything to improve and shows a better way to say it.</p>' +
       (TALK_API ? '' : '<div class="notice">The AI coach is being set up. Coming soon!</div>') +
-      '<h2 class="section-title">For you' + (sub ? ' · ' + esc(sub.title) : mine && userLevel() !== 'beginner' ? ' · ' + esc(mine.title) : ' · Everyday life') + '</h2>' +
+      '<h2 class="section-title">For you · ' + esc(talkPick().title) + '</h2>' +
       '<div class="list">' + forYou.map(sceneRow).join('') + '</div>' +
       '<h2 class="section-title">All topics</h2>' +
       '<div class="list two">' + order.map(function(x){
-        return '<a class="card item" href="#/talks/' + x.id + '"><span class="num sec-ic">' + x.icon + '</span><span class="t"><h2>' + esc(x.title) +
-          (x === mine ? ' <span class="pill good">For you</span>' : '') + '</h2><span class="sub">' + esc(x.about) + ' · ' + sectionScenes(x).length + ' conversations</span></span><span class="muted">' + I.chev + '</span></a>';
+        var min = sectionMinLevel(x), inner = '<span class="num sec-ic">' + x.icon + '</span><span class="t"><h2>' + esc(x.title) +
+          (x === mine ? ' <span class="pill good">For you</span>' : '') + '</h2><span class="sub">' + (levelAllows(min) ? esc(x.about) + ' · ' + sectionScenes(x).length + ' conversations' : esc(lockNote(min))) + '</span></span>';
+        return levelAllows(min) ? '<a class="card item" href="#/talks/' + x.id + '">' + inner + '<span class="muted">' + I.chev + '</span></a>' : '<div class="card item locked">' + inner + '</div>';
       }).join('') + '</div>'
     );
   }
@@ -2706,7 +2729,8 @@
       '<h1 class="title">' + esc(sec.title) + (sec === mySection() ? ' <span class="pill good">For you</span>' : '') + '</h1>' +
       '<p class="lede">' + esc(sec.about) + '.</p>' +
       groups.map(function(g){
-        return (g.title ? '<h2 class="section-title">' + esc(g.title) + (g === sub ? ' <span class="pill good">For you</span>' : '') + '</h2>' : '') +
+        var gmin = g.id === 'senior' ? 'advanced' : sectionMinLevel(sec);
+        return (g.title ? '<h2 class="section-title">' + esc(g.title) + (g === sub ? ' <span class="pill good">For you</span>' : '') + (levelAllows(gmin) ? '' : ' <span class="pill">🔒 ' + esc(levelById(gmin).name) + '</span>') + '</h2>' : '') +
           '<div class="list">' + g.scenes.map(sceneById).filter(Boolean).map(sceneRow).join('') + '</div>';
       }).join('')
     );
@@ -2715,6 +2739,13 @@
   function talk(id){
     var s = sceneById(id);
     if (!s) return talkHome();
+    if (!levelAllows(sceneMinLevel(id))) {
+      setTab('talk');
+      return render('<a class="back" href="#/talks/' + sectionOf(id).id + '">' + I.back + 'Conversations</a>' +
+        '<article class="card pad done"><span class="ic big-ic">🔒</span><h1 class="title">' + esc(s.title) + '</h1>' +
+        '<p class="lede">' + esc(lockNote(sceneMinLevel(id))) + '. Until then, practise the conversations for your level.</p>' +
+        '<div class="row" style="justify-content:center;margin-top:18px"><a class="btn primary" href="#/talk">Conversations for you' + I.chev + '</a></div></article>');
+    }
     setTab('talk');
     var history = [];   // what the server sees: learner turns and the character's raw replies
     var busy = false, rec = null, lastReply = s.say || s.opening, typing = !SR;
