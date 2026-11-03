@@ -950,6 +950,7 @@
       '<h1 class="title">' + (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening') + (profile && profile.name ? ', ' + esc(profile.name.split(' ')[0]) : '') + '</h1>' +
       '<a class="acct-link" href="#/account"><span class="avatar sm">' + esc(((profile && profile.name) || '?').charAt(0).toUpperCase()) + '</span>My account</a>' +
       '<p class="lede">Speak the English Australian healthcare leaders use, with a coach that listens and gives you feedback.</p>' +
+      (!me && getCode() ? '<a class="card cta signin-cta" href="#/signin"><span class="ic">' + I.check + '</span><span><b>Create your account</b><span>Sign in with Google or email to get your level, the placement test and weekly exams. Access codes will stop working soon.</span></span><span class="chev">' + I.chev + '</span></a>' : '') +
       levelCard() + installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
       planCard() + skillsCard() +
       '<div class="stats">' +
@@ -2434,7 +2435,7 @@
     render(
       '<span class="eyebrow">My account</span>' +
       '<h1 class="title">' + esc(pr.name || 'Your account') + '</h1>' +
-      (me ? '' : '<div class="notice">You are using an access code. Please <a href="#/signin">create your account</a> - access codes will stop working soon.</div>') +
+      (me ? '' : '<div class="notice">You are using an access code, which will stop working soon.</div><a class="btn primary" href="#/signin" style="margin-top:12px">Sign in or create your account' + I.chev + '</a>') +
       (me ? '<div class="card pad" style="margin-top:16px">' + row('Email', me.email) + row('Learning', myEnglish() ? ENGLISHES[myEnglish()].name : '') + row('Level', myLevelInfo() ? levelById(userLevel()).name : '') +
         row('Lives in', pr.country) + row('Field', pr.role ? pr.field + ' · ' + pr.role : pr.field || pr.job) + row('Main goal', pr.goal) + row('Member since', pr.created) +
         '<div class="row" style="margin-top:12px;gap:8px"><a class="btn ghost sm" href="#/profile">' + I.pencil + 'Edit profile</a><a class="btn ghost sm" href="#/english">Change English</a></div></div>' : '') +
