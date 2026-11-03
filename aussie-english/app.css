@@ -569,3 +569,7 @@ ul.tiplist.card{ margin-left:0; padding-left:34px; }
 
 .tipcard [lang]{ font-family:var(--mal); }
 .tipcard p + p{ margin-top:6px; color:var(--muted); }
+
+/* Talk menu */
+.sec-ic{ font-size:1.25rem; background:var(--surface-2); }
+.item h2 .pill, .title .pill, .section-title .pill{ vertical-align:2px; margin-left:6px; font-size:.68rem; }

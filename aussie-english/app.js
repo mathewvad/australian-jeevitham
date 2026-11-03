@@ -2545,26 +2545,78 @@
       '<p style="margin-top:16px"><a class="btn ghost" href="' + (me || getCode() ? '#/account' : '#/signin') + '">' + I.back + 'Back</a></p>');
   }
 
+  /* ---------- Talk menu: sections by field (Healthcare has a sub-menu per role) ---------- */
+  var TALK_MENU = [
+    { id: 'general', icon: '☕', title: 'General', about: 'Everyday life: neighbours, shops, the doctor, the bank and small talk', field: 'General / everyday life',
+      scenes: ['general', 'mate', 'bbq', 'coffee', 'shop_return', 'directions', 'gp', 'rental', 'bank', 'customs', 'workmate'] },
+    { id: 'health', icon: '🏥', title: 'Healthcare & Medical', about: 'Nurses, care workers, assistant nurses, senior nurses and allied health', field: 'Healthcare & Medical', subs: [
+      { id: 'nurse', title: 'Nurses', role: 'Nurse', scenes: ['handover', 'escalate', 'painmeds', 'family'] },
+      { id: 'care', title: 'Care workers', role: 'Care worker', scenes: ['care_morning', 'care_dementia', 'care_report', 'care_family'] },
+      { id: 'ain', title: 'Assistant nurses', role: 'Assistant nurse', scenes: ['ain_obs', 'ain_clarify', 'ain_falls', 'ain_handover'] },
+      { id: 'senior', title: 'Senior nurses', role: 'Senior nurse', scenes: ['staffing', 'feedback', 'conflict', 'pitch'] },
+      { id: 'allied', title: 'Allied health', role: 'Allied health', scenes: ['ah_physio', 'ah_ot', 'ah_pharm', 'ah_radiography'] }
+    ] },
+    { id: 'tech', icon: '💻', title: 'Technology & IT', about: 'Stand-ups, bugs, clients and outages', field: 'Technology & IT', scenes: ['standup', 'it_bug', 'it_client', 'it_incident'] },
+    { id: 'eng', icon: '🏗️', title: 'Engineering', about: 'Site safety, design reviews, contractors and clients', field: 'Engineering', scenes: ['eng_safety', 'eng_review', 'eng_delay', 'eng_client'] },
+    { id: 'edu', icon: '🎓', title: 'Education & Teaching', about: 'Parents, students and staff meetings', field: 'Education & Teaching', scenes: ['edu_parent', 'edu_behaviour', 'edu_staff', 'edu_explain'] },
+    { id: 'pro', icon: '💼', title: 'Professional Services', about: 'Clients, complaints, pitches, pay and results', field: 'Professional Services', scenes: ['ps_client', 'sales', 'ps_complaint', 'salary', 'ps_results'] },
+    { id: 'interview', icon: '🎤', title: 'Mock Interview', about: 'Full job interviews for nurses, care workers, IT, engineers, teachers and office roles',
+      scenes: ['rn_interview', 'aged_interview', 'panel', 'mi_it', 'mi_eng', 'mi_teacher', 'mi_office'] }
+  ];
+  function sceneById(id){ return SCENES.find(function(x){ return x.id === id; }); }
+  function sectionScenes(sec){ return sec.subs ? [].concat.apply([], sec.subs.map(function(x){ return x.scenes; })) : sec.scenes; }
+  // The learner's own section (from their field) and, in Healthcare, their role's sub-menu.
+  function mySection(){ var f = profile && profile.field; return TALK_MENU.find(function(x){ return x.field && x.field === f; }) || null; }
+  function mySub(){ var sec = mySection(), r = profile && profile.role; return sec && sec.subs ? sec.subs.find(function(x){ return x.role === r; }) || null : null; }
+  // Conversations picked for this learner: their role or field; Beginners start with everyday life.
+  function talkScenes(){
+    var sec = mySection(), sub = mySub();
+    var ids = userLevel() === 'beginner' || !sec ? TALK_MENU[0].scenes : sub ? sub.scenes : sectionScenes(sec);
+    return ids.map(sceneById).filter(Boolean);
+  }
+  function sectionOf(id){ return TALK_MENU.find(function(x){ return sectionScenes(x).indexOf(id) >= 0; }) || TALK_MENU[0]; }
+  function sceneRow(s){
+    return '<a class="card item" href="#/talk/' + s.id + '"><span class="avatar">' + esc(initials(s.who)) + '</span><span class="t">' +
+      '<h2>' + esc(s.title) + '</h2><span class="sub">with ' + esc(s.who) + '</span></span><span class="muted">' + I.chev + '</span></a>';
+  }
+
   function talkHome(){
     setTab('talk');
+    var mine = mySection(), sub = mySub(), forYou = talkScenes().slice(0, 4);
+    var order = mine ? [mine].concat(TALK_MENU.filter(function(x){ return x !== mine; })) : TALK_MENU;
     render(
       '<span class="pill level">' + esc((levelById(userLevel()) || LEVELS[3]).name) + ' level' + (myEnglish() ? ' · ' + esc(ENGLISHES[myEnglish()].name) : '') + '</span>' +
       '<h1 class="title" style="margin-top:10px">Conversations</h1>' +
-      '<p class="lede">Real leadership situations in Australian healthcare. Speak as you would at work - your coach marks anything to improve and shows how a senior Australian nurse leader would say it.</p>' +
+      '<p class="lede">Practise real situations from daily life and work. Speak as you would - your coach marks anything to improve and shows a better way to say it.</p>' +
       (TALK_API ? '' : '<div class="notice">The AI coach is being set up. Coming soon!</div>') +
-      '<div class="list">' + talkScenes().map(function(s){
-        return '<a class="card item" href="#/talk/' + s.id + '"><span class="avatar">' + esc(initials(s.who)) + '</span><span class="t">' +
-          '<h2>' + esc(s.title) + '</h2><span class="sub">with ' + esc(s.who) + '</span></span><span class="muted">' + I.chev + '</span></a>';
+      '<h2 class="section-title">For you' + (sub ? ' · ' + esc(sub.title) : mine && userLevel() !== 'beginner' ? ' · ' + esc(mine.title) : ' · Everyday life') + '</h2>' +
+      '<div class="list">' + forYou.map(sceneRow).join('') + '</div>' +
+      '<h2 class="section-title">All topics</h2>' +
+      '<div class="list two">' + order.map(function(x){
+        return '<a class="card item" href="#/talks/' + x.id + '"><span class="num sec-ic">' + x.icon + '</span><span class="t"><h2>' + esc(x.title) +
+          (x === mine ? ' <span class="pill good">For you</span>' : '') + '</h2><span class="sub">' + esc(x.about) + ' · ' + sectionScenes(x).length + ' conversations</span></span><span class="muted">' + I.chev + '</span></a>';
       }).join('') + '</div>'
     );
   }
 
-  // Conversations for this level: Beginner and Intermediate start with the everyday scenes.
-  // (The full Talk menu by field comes in the next phase.)
-  function talkScenes(){
-    var work = SCENES.filter(function(s){ return s.level === 'leadership'; }), daily = SCENES.filter(function(s){ return !s.level; });
-    return malayalamHelp() ? daily.concat(work) : work;
+  // One section; Healthcare lists each role, with the learner's own role first.
+  function talkSection(id){
+    var sec = TALK_MENU.find(function(x){ return x.id === id; });
+    if (!sec) return talkHome();
+    setTab('talk');
+    var sub = mySub(), groups = sec.subs ? (sub && sec === mySection() ? [sub].concat(sec.subs.filter(function(x){ return x !== sub; })) : sec.subs) : [{ scenes: sec.scenes }];
+    render(
+      '<a class="back" href="#/talk">' + I.back + 'Conversations</a>' +
+      '<span class="eyebrow">' + sec.icon + ' Conversations</span>' +
+      '<h1 class="title">' + esc(sec.title) + (sec === mySection() ? ' <span class="pill good">For you</span>' : '') + '</h1>' +
+      '<p class="lede">' + esc(sec.about) + '.</p>' +
+      groups.map(function(g){
+        return (g.title ? '<h2 class="section-title">' + esc(g.title) + (g === sub ? ' <span class="pill good">For you</span>' : '') + '</h2>' : '') +
+          '<div class="list">' + g.scenes.map(sceneById).filter(Boolean).map(sceneRow).join('') + '</div>';
+      }).join('')
+    );
   }
+
   function talk(id){
     var s = SCENES.find(function(x){ return x.id === id; });
     if (!s) return talkHome();
@@ -2575,7 +2627,7 @@
     render(
       '<section class="chat-view">' +
         '<header class="chat-top">' +
-          '<a class="icon-btn" href="#/talk" aria-label="Back to conversations">' + I.back + '</a>' +
+          '<a class="icon-btn" href="#/talks/' + sectionOf(s.id).id + '" aria-label="Back to conversations">' + I.back + '</a>' +
           '<span class="avatar">' + esc(initials(s.who)) + '</span>' +
           '<div class="who"><b>' + esc(s.who) + '</b><span>' + esc(s.title) + '</span></div>' +
           '<button class="icon-btn" id="restart" type="button" aria-label="Start over" title="Start over">' + I.restart + '</button>' +
@@ -2940,6 +2992,7 @@
     else if (parts[0] === 'exam') examRun('levelup');
     else if (parts[0] === 'quiz') quiz(parts[1]);
     else if (parts[0] === 'talk') parts[1] ? talk(parts[1]) : talkHome();
+    else if (parts[0] === 'talks') talkSection(parts[1]);
     else if (parts[0] === 'slang') slang();
     else if (parts[0] === 'everyday') everyday();
     else if (parts[0] === 'feedback') feedbackPage();
