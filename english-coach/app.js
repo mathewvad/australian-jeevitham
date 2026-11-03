@@ -49,8 +49,20 @@
   function curSlang(){ return pack().slang || SLANG; }
   function curTips(){ return pack().tips || TIPS; }
   function curListening(){ return pack().listening || LISTENING; }
+  // Interview prep and the IELTS / OET guides with the pack's changes (roles, tips, place names, requirements).
+  function interviewRoles(){ return (pack().interview || {}).roles || INTERVIEW.roles; }
+  function interviewTips(){ var o = (pack().interview || {}).tips || {}; return INTERVIEW.tips.map(function(t){ return o[t.t] ? { t: t.t, d: o[t.t] } : t; }); }
+  function modelAnswer(gid, i, q){ return ((pack().interview || {}).models || {})[gid + ':' + i] || q.model; }
+  function curGuide(list){ var o = pack().guides || {}; return list.map(function(g){ return o[g.t] || g; }); }
   function curSounds(){ var o = pack().sounds || {}; return SOUNDS.map(function(x){ return o[x.id] ? Object.assign({}, x, o[x.id]) : x; }); }
-  function curVocab(){ var life = pack().life; return life ? VOCAB.map(function(t){ return t.id === 'life' ? life : t; }) : VOCAB; }
+  // Vocabulary themes: the Beginner and Intermediate sets (course.js), then the healthcare and work
+  // themes (vocab.js, with the pack's "everyday life" set). Each theme gets a level for the Vocabulary page.
+  var VOCAB_LEVEL = { ward: 'advanced', meds: 'advanced', aged: 'advanced', body: 'intermediate', lead: 'leadership', feel: 'advanced', admin: 'intermediate', life: 'intermediate' };
+  function curVocab(){
+    var life = pack().life;
+    var main = VOCAB.map(function(t){ var x = t.id === 'life' && life ? life : t; x.level = x.level || VOCAB_LEVEL[t.id] || 'advanced'; return x; });
+    return (typeof COURSE_VOCAB !== 'undefined' ? COURSE_VOCAB : []).concat(main);
+  }
   function levelById(id){ return LEVELS.find(function(l){ return l.id === id; }) || null; }
   function myEnglish(){ return profile && ENGLISHES[profile.english] ? profile.english : null; }
   function myLevelInfo(){ var e = myEnglish(); return e && profile.levels && profile.levels[e] ? profile.levels[e] : null; }
@@ -1034,7 +1046,7 @@
         (myEnglish() === 'in' ? '' : '<a class="card item" href="#/oet"><span class="num">' + I.check + '</span><span class="t"><h2>OET Speaking (Nursing)</h2><span class="sub">10 role-plays with a 3-minute prep and 5-minute talk, marked on all 9 criteria</span></span></a>') +
         '<a class="card item" href="#/ielts"><span class="num">' + I.check + '</span><span class="t"><h2>IELTS Speaking</h2><span class="sub">Parts 1-3, cue cards with timers, full mock test, band scores on the 4 criteria</span></span></a>' +
         '<a class="card item" href="#/interview"><span class="num">' + I.chat + '</span><span class="t"><h2>Interview preparation</h2><span class="sub">20 healthcare interview questions, model answers and AI feedback</span></span></a>' +
-        '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
+        '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">' + curVocab().reduce(function(a, t){ return a + t.words.length; }, 0) + ' words from Beginner to Leadership: everyday life, work and healthcare</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
         '<a class="card item" href="#/exam"><span class="num">' + I.check + '</span><span class="t"><h2>Your level and exams</h2><span class="sub">' + (myLevelInfo() ? 'You are ' + esc(levelById(userLevel()).name) + (nextLevel() ? ' · ' + (nextExamDate() ? 'next exam ' + esc(niceDate(nextExamDate())) : 'exam ready now') : '') : 'Take the placement test') + '</span></span></a>' +
         '<a class="card item" href="#/everyday"><span class="num">' + I.chat + '</span><span class="t"><h2>' + eng().everyday + '</h2><span class="sub">' + curLessons().length + ' lessons of everyday phrases' + (nativeLang() !== 'en' ? ' with ' + NATIVES[nativeLang()] + ' meanings' : '') + (quizzesDone() ? ' · ' + quizzesDone() + '/' + curLessons().length + ' quizzes done' : '') + '</span></span></a>' +
@@ -1378,7 +1390,7 @@
     render(
       '<a class="back" href="#/ielts">' + I.back + 'IELTS Speaking</a>' +
       '<span class="eyebrow">IELTS Speaking guide</span><h1 class="title">How the test works</h1>' +
-      '<div class="faq" style="margin-top:16px">' + IELTS.guide.map(function(g, i){ return '<details class="card"' + (i === 0 ? ' open' : '') + '><summary>' + esc(g.t) + '</summary><div class="a">' + g.d + '</div></details>'; }).join('') + '</div>' +
+      '<div class="faq" style="margin-top:16px">' + curGuide(IELTS.guide).map(function(g, i){ return '<details class="card"' + (i === 0 ? ' open' : '') + '><summary>' + esc(g.t) + '</summary><div class="a">' + g.d + '</div></details>'; }).join('') + '</div>' +
       '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/ielts/mock">Try a mock test' + I.chev + '</a></div>'
     );
   }
@@ -1615,7 +1627,7 @@
     render(
       '<a class="back" href="#/oet">' + I.back + 'OET Speaking</a>' +
       '<span class="eyebrow">OET Speaking guide</span><h1 class="title">How OET Speaking works</h1>' +
-      '<div class="faq" style="margin-top:16px">' + OET.guide.map(function(g, i){ return '<details class="card"' + (i === 0 ? ' open' : '') + '><summary>' + esc(g.t) + '</summary><div class="a">' + g.d + '</div></details>'; }).join('') + '</div>' +
+      '<div class="faq" style="margin-top:16px">' + curGuide(OET.guide).map(function(g, i){ return '<details class="card"' + (i === 0 ? ' open' : '') + '><summary>' + esc(g.t) + '</summary><div class="a">' + g.d + '</div></details>'; }).join('') + '</div>' +
       '<h2 class="section-title">Useful phrases</h2><div class="faq">' + Object.keys(OET.phrases).map(function(k){
         return '<details class="card"><summary>' + esc(k) + '</summary><div class="a"><div class="chips wrap">' + OET.phrases[k].map(function(p){ return '<button type="button" class="chip" data-say="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div></details>';
       }).join('') + '</div>'
@@ -1800,7 +1812,7 @@
       '<h1 class="title">Get ready for your job interview</h1>' +
       '<p class="lede">Common healthcare interview questions with model answers. Say your own answer and the AI coach scores it the way a ' + eng().short + ' panel would.</p>' +
       '<div class="card pad" style="margin-top:14px"><label class="count" for="role">The job you are applying for</label>' +
-        '<select id="role" class="ref" style="margin-top:6px">' + INTERVIEW.roles.map(function(r){ return '<option' + (prefs.role === r ? ' selected' : '') + '>' + esc(r) + '</option>'; }).join('') + '</select></div>' +
+        '<select id="role" class="ref" style="margin-top:6px">' + interviewRoles().map(function(r){ return '<option' + (prefs.role === r ? ' selected' : '') + '>' + esc(r) + '</option>'; }).join('') + '</select></div>' +
       '<h2 class="section-title">Practise questions</h2>' +
       '<div class="list two">' + INTERVIEW.groups.map(function(g, gi){
         var n = g.questions.filter(function(q, i){ return (state.interview || {})[iqKey(g.id, i)] != null; }).length;
@@ -1818,7 +1830,7 @@
         return '<div class="card phrase"><div><b>' + esc(q) + '</b></div><button class="icon-btn" data-say="' + esc(q) + '" aria-label="Listen">' + I.speaker + '</button></div>';
       }).join('') + '</div>' +
       '<h2 class="section-title">Interview tips</h2>' +
-      '<div class="faq">' + INTERVIEW.tips.map(function(t){ return '<details class="card"><summary>' + esc(t.t) + '</summary><div class="a">' + esc(t.d) + '</div></details>'; }).join('') + '</div>'
+      '<div class="faq">' + interviewTips().map(function(t){ return '<details class="card"><summary>' + esc(t.t) + '</summary><div class="a">' + esc(t.d) + '</div></details>'; }).join('') + '</div>'
     );
     document.getElementById('role').onchange = function(){ prefs.role = this.value; savePrefs(); };
     app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
@@ -1845,7 +1857,7 @@
         '<button class="btn primary" id="check" type="button">Get feedback' + I.chev + '</button></div>' +
         '<div id="fb"></div>' +
       '</article>' +
-      '<details class="card model"><summary>See a model answer</summary><div class="a"><p>' + esc(q.model) + '</p>' +
+      '<details class="card model"><summary>See a model answer</summary><div class="a"><p>' + esc(modelAnswer(g.id, i, q)) + '</p>' +
         '<div class="listen-row"><button class="btn sm" id="hear">' + I.speaker + 'Listen</button></div>' +
         '<p class="count" style="margin-top:12px">Useful phrases</p><div class="chips wrap">' + q.phrases.map(function(p){ return '<button type="button" class="chip" data-say="' + esc(p) + '">' + esc(p) + '</button>'; }).join('') + '</div></div></details>' +
       '<div class="nav">' +
@@ -1855,7 +1867,7 @@
     );
     var ans = document.getElementById('ans'), label = document.getElementById('alabel'), fb = document.getElementById('fb'), checkBtn = document.getElementById('check');
     document.getElementById('play').onclick = function(){ speak(q.q); };
-    document.getElementById('hear').onclick = function(){ speak(q.model); };
+    document.getElementById('hear').onclick = function(){ speak(modelAnswer(g.id, i, q)); };
     app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
     var la = longAnswer(document.getElementById('amic'), label || document.createElement('span'), ans);
     checkBtn.onclick = function(){
@@ -1865,7 +1877,7 @@
       if (!hasAccess()) { fb.innerHTML = '<p class="heard" style="text-align:left">The AI coach needs you to <a href="#/signin">sign in</a> first.</p>'; return; }
       checkBtn.disabled = true; fb.innerHTML = '<div class="typing" style="margin:14px 0"><i></i><i></i><i></i></div>';
       apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
-        body: JSON.stringify({ interview: true, question: q.q, answer: text, role: prefs.role || INTERVIEW.roles[0], secs: la.secs() }) })
+        body: JSON.stringify({ interview: true, question: q.q, answer: text, role: prefs.role || interviewRoles()[0], secs: la.secs() }) })
         .then(function(r){ return r.json(); })
         .then(function(d){
           checkBtn.disabled = false;
@@ -1901,13 +1913,19 @@
       '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
       '<span class="eyebrow">Vocabulary · ' + got + ' of ' + total + ' learnt</span>' +
       '<h1 class="title">Words for work and life</h1>' +
-      '<p class="lede">Healthcare, leadership and everyday words, each with a meaning and an example. Hear them, say them, and mark them as learnt.</p>' +
-      '<div class="list two">' + curVocab().map(function(t, i){
-        var n = learntIn(t);
-        return '<a class="card item" href="#/words/' + t.id + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(t.title) + '</h2>' +
-          '<span class="sub">' + t.words.slice(0, 3).map(function(w){ return esc(w.w); }).join(' · ') + '</span>' +
-          '<span class="meta"><span class="mini-bar"><i style="width:' + Math.round(n / t.words.length * 100) + '%"></i></span>' + n + '/' + t.words.length + '</span></span></a>';
-      }).join('') + '</div>'
+      '<p class="lede">Everyday, work and healthcare words, each with a meaning and an example. Hear them, say them, and mark them as learnt. Words for your level come first.</p>' +
+      // Your level first, then the others from Beginner up.
+      [userLevel()].concat(LEVELS.map(function(l){ return l.id; }).filter(function(id){ return id !== userLevel(); })).map(function(lid){
+        var themes = curVocab().filter(function(t){ return t.level === lid; });
+        if (!themes.length) return '';
+        return '<h2 class="section-title course-level">' + esc(levelById(lid).name) + (lid === userLevel() && myLevelInfo() ? ' <span class="pill good">Your level</span>' : '') + '</h2>' +
+          '<div class="list two">' + themes.map(function(t){
+            var n = learntIn(t);
+            return '<a class="card item" href="#/words/' + t.id + '"><span class="num">' + I.book + '</span><span class="t"><h2>' + esc(t.title) + '</h2>' +
+              '<span class="sub">' + t.words.slice(0, 3).map(function(w){ return esc(w.w); }).join(' · ') + '</span>' +
+              '<span class="meta"><span class="mini-bar"><i style="width:' + Math.round(n / t.words.length * 100) + '%"></i></span>' + n + '/' + t.words.length + '</span></span></a>';
+          }).join('') + '</div>';
+      }).join('')
     );
   }
   function wordsPage(id){

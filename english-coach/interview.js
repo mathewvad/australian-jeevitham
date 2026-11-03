@@ -1,5 +1,6 @@
-/* Interview preparation for healthcare jobs in Australia. Each question: q, why (what the panel
-   wants to hear), tips, model (an example answer in natural Australian English), phrases. */
+/* Interview preparation for healthcare jobs. Each question: q, why (what the panel wants to hear),
+   tips, model (an example answer in natural Australian English), phrases. British and Indian
+   English packs (uk.js, in.js) change the roles, a few tips and answers that name places. */
 const INTERVIEW = {
   roles: ['Registered Nurse', 'Enrolled Nurse', 'Assistant in Nursing / Personal Care Assistant', 'Aged care worker', 'Team leader / Nurse Unit Manager', 'Other healthcare role'],
   groups: [
@@ -22,7 +23,7 @@ const INTERVIEW = {
       { q: 'What is a weakness you are working on?',
         why: 'They want honesty and self-awareness - a real area you are actively improving.',
         tips: ['Pick a real but manageable weakness - not one essential to the job.', 'Explain what you are doing to improve it.', 'End on your progress.'],
-        model: 'When I first started working in Australia, I found it hard to speak up in team meetings, because in my previous workplace junior nurses rarely questioned seniors. I realised that speaking up is expected here and is important for patient safety. So I started preparing one point before each meeting, and I joined our ward\'s practice council. Now I regularly raise ideas, and last month one of my suggestions about handover was adopted.',
+        model: 'When I first joined my current team, I found it hard to speak up in team meetings, because in my previous workplace junior nurses rarely questioned seniors. I realised that speaking up is expected here and is important for patient safety. So I started preparing one point before each meeting, and I joined our ward\'s practice council. Now I regularly raise ideas, and last month one of my suggestions about handover was adopted.',
         phrases: ['I realised that…', 'So I started…', 'Now I regularly…'] }
     ] },
     { id: 'star', title: 'Behavioural (STAR)', questions: [
@@ -32,7 +33,7 @@ const INTERVIEW = {
         model: 'In my last role, a resident\'s son became very angry because his mother had a fall and he wasn\'t told until the next morning. My task was to calm the situation and rebuild his trust. I took him to a quiet room, listened without interrupting, and acknowledged that he should have been called straight away. I apologised sincerely, explained what had happened and what we were doing - a falls review and a sensor mat - and agreed to call him after every change. He thanked me, and he later wrote a compliment to our manager.',
         phrases: ['My task was to…', 'I acknowledged that…', 'As a result…'] },
       { q: 'Tell me about a time you made a mistake at work.',
-        why: 'They want honesty, accountability and what you learned - Australia values a just, learning culture.',
+        why: 'They want honesty, accountability and what you learned - good healthcare teams value a just, learning culture.',
         tips: ['Choose a real mistake that did not cause serious harm.', 'Own it - do not blame others.', 'Focus on how you fixed it and what you changed.'],
         model: 'Early in my career I nearly gave a patient the wrong dose of an antibiotic because I misread the chart during a busy medication round. I noticed it while doing my final check at the bedside, so the patient was never harmed. I immediately told the team leader, completed an incident report, and we found the chart was hard to read. Since then I always do the five rights check out loud and I never let myself be interrupted during a medication round. It taught me how important it is to report near misses.',
         phrases: ['I immediately told…', 'Since then I always…', 'It taught me…'] },
@@ -71,7 +72,7 @@ const INTERVIEW = {
     ] },
     { id: 'values', title: 'Values and teamwork', questions: [
       { q: 'What does person-centred care mean to you?',
-        why: 'It is central to Australian healthcare and the Aged Care Quality Standards.',
+        why: 'It is central to modern healthcare and to care quality standards.',
         tips: ['Define it simply.', 'Give a real example.', 'Mention choice, dignity and involving family.'],
         model: 'To me, person-centred care means seeing the person, not just the condition, and planning care around what matters to them. For example, one resident always liked to shower in the evening, as she had done her whole life. Instead of following the usual morning routine, we changed her care plan, and her agitation reduced a lot. It\'s about choice, dignity and working with the person and their family.',
         phrases: ['To me, it means…', 'what matters to them', 'choice, dignity and…'] },
@@ -86,7 +87,7 @@ const INTERVIEW = {
         model: 'Teamwork means we all share the goal of safe, good-quality care, and we look out for each other to get there. On my ward, if I finish my tasks early, I always check whether anyone needs a hand. I also think clear communication is a big part of it - good handovers and speaking up early. A strong team makes the shift safer for patients and better for staff.',
         phrases: ['we look out for each other', 'I always check whether anyone needs a hand', 'speaking up early'] },
       { q: 'How do you work with people from different cultures?',
-        why: 'Australian workplaces and patients are very diverse.',
+        why: 'Workplaces and patients are very diverse.',
         tips: ['Show respect and curiosity.', 'Mention using interpreters and asking about preferences.', 'Your own experience moving countries is a strength.'],
         model: 'Having moved from India, I know how it feels to adapt to a new culture, so I try to be respectful and curious. With patients, I ask about their preferences - for example, food, prayer times or who they want involved in decisions - and I use professional interpreters, not family members, for important conversations. With colleagues, I focus on clear, friendly communication and I\'m always happy to learn from different ways of working.',
         phrases: ['I know how it feels to…', 'I ask about their preferences.', 'professional interpreters'] }
@@ -124,7 +125,7 @@ const INTERVIEW = {
   ],
   tips: [
     { t: 'Use STAR for "Tell me about a time…"', d: 'Situation, Task, Action, Result. Spend most of your answer on the Action - what YOU did - and finish with a clear result.' },
-    { t: 'Keep answers to 1-2 minutes', d: 'Australian panels prefer clear, concise answers. If they want more detail, they will ask.' },
+    { t: 'Keep answers to 1-2 minutes', d: 'Interview panels prefer clear, concise answers. If they want more detail, they will ask.' },
     { t: 'Say "I", not just "we"', d: 'Panels want to know your own role. Say "I escalated…" or "I arranged…".' },
     { t: 'Research the employer', d: 'Read their website, values and any recent news. Mention one or two specific things in your answers.' },
     { t: 'Know the key frameworks', d: 'For hospitals, the NSQHS Standards; for aged care, the Aged Care Quality Standards; plus ISBAR, open disclosure and the NMBA standards for practice.' },

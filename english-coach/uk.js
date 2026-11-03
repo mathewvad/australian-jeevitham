@@ -6,6 +6,21 @@
 const CONTENT_PACKS = {};
 
 CONTENT_PACKS.uk = {
+  // ---- Interview preparation and the IELTS / OET guides ----
+  interview: {
+    roles: ['Registered Nurse (Band 5)', 'Senior Staff Nurse / Sister (Band 6)', 'Healthcare Assistant (HCA)', 'Care worker / Senior carer', 'Ward Manager (Band 7)', 'Other healthcare role'],
+    tips: {
+      'Know the key frameworks': 'The NHS values and the NHS Constitution, the NMC Code, the CQC fundamental standards, SBAR handover and the duty of candour. Mention them naturally in your answers.'
+    },
+    models: {
+      'about:0': "I'm a Registered Nurse with six years' experience, mostly in medical and elderly care wards. I started my career in Kochi, and for the last two years I've worked on a busy medical ward at an NHS trust in Birmingham, where I often act as nurse in charge. I'm known for staying calm when things get busy and for clear communication with families. I'm now looking for a Band 6 role where I can keep building my leadership skills, and your ward's focus on falls prevention really matches my interests."
+    }
+  },
+  guides: {
+    'What you need for AHPRA': { t: 'What you need for the NMC', d: 'For nurse and midwife registration in the UK, the NMC accepts IELTS Academic (or IELTS for UKVI) with <b>7.0 overall, at least 7.0 in Listening, Reading and Speaking and 6.5 in Writing</b>. OET grade B (C+ in Writing) is also accepted. For a visa you may also need a UKVI test - always check the latest rules on the NMC and GOV.UK websites.' },
+    'Grades and what AHPRA needs': { t: 'Grades and what the NMC needs', d: 'Scores are reported from 0 to 500. <b>A</b> = 450-500, <b>B</b> = 350-440, <b>C+</b> = 300-340, <b>C</b> = 200-290, <b>D</b> = 100-190, <b>E</b> = 0-90. For UK nurse registration, the NMC needs at least <b>grade B in Listening, Reading and Speaking and C+ in Writing</b> - always check the latest rules on the NMC website.' }
+  },
+
   // ---- Everyday lessons ----
   lessons: [
     { id: 'uk_greetings', icon: '👋', title: 'British Greetings & Slang', ml: 'ബ്രിട്ടീഷ് അഭിവാദ്യങ്ങളും സ്ലാംഗും', hi: 'ब्रिटिश अभिवादन और बोलचाल के शब्द', ta: 'பிரிட்டிஷ் வாழ்த்துகளும் பேச்சுவழக்குச் சொற்களும்', phrases: [

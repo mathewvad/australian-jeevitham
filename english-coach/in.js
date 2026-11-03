@@ -5,6 +5,21 @@
    abroad would say it differently. */
 
 CONTENT_PACKS.in = {
+  // ---- Interview preparation and the IELTS guide ----
+  interview: {
+    roles: ['Staff Nurse', 'Senior Nurse / Nursing In-charge', 'Nursing Assistant / GDA', 'Home-care nurse / attendant', 'Nursing Supervisor / Superintendent', 'Other healthcare role'],
+    tips: {
+      'Know the key frameworks': "NABH accreditation standards, your hospital's SOPs and infection-control protocols, SBAR or ISBAR handover, the International Patient Safety Goals and the Indian Nursing Council code of ethics.",
+      'Dress and manner': 'Formal clothes, a friendly smile and eye contact. "Sir" and "Ma\'am" are normal with interview panels in India - follow the panel\'s lead.'
+    },
+    models: {
+      'about:0': "I'm a staff nurse with six years' experience, mostly in medical and critical care wards. I started my career in Kochi, and for the last two years I've worked on a busy medical ward at a multi-speciality hospital in Bengaluru, where I often act as shift in-charge. I'm known for staying calm when things get busy and for clear communication with patients' families. I'm now looking for a senior role where I can keep building my leadership skills, and your hospital's focus on patient safety and NABH standards really matches my interests."
+    }
+  },
+  guides: {
+    'What you need for AHPRA': { t: 'Do you need IELTS?', d: 'IELTS is not needed to work in India, but many employers value a good band, and it is the first step if you plan to work abroad later - Australia (AHPRA) and the UK (NMC) usually ask for about <b>7.0</b>. Use this practice to measure and improve your speaking.' }
+  },
+
   // ---- Everyday lessons ----
   lessons: [
     { id: 'in_greetings', icon: '🙏', title: 'Polite Greetings & Small Talk', ml: 'മര്യാദയുള്ള അഭിവാദ്യങ്ങളും ചെറുസംസാരവും', hi: 'शिष्ट अभिवादन और छोटी बातचीत', ta: 'மரியாதையான வாழ்த்துகளும் சிறு உரையாடலும்', phrases: [

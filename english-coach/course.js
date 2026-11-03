@@ -170,3 +170,64 @@ const COURSE = {
       ] }
   ]
 };
+
+/* Vocabulary for Beginner and Intermediate (Advanced and Leadership use the healthcare and work
+   themes in vocab.js). Each word: w, m (meaning), ml / hi / ta, ex (an example). */
+const COURSE_VOCAB = [
+  { id: 'v_home', level: 'beginner', title: 'Home and family', words: [
+    { w: 'mother', m: 'your female parent', ml: 'അമ്മ', hi: 'माँ', ta: 'அம்மா', ex: 'My mother lives in Kerala.' },
+    { w: 'father', m: 'your male parent', ml: 'അച്ഛൻ', hi: 'पिता', ta: 'அப்பா', ex: 'My father is a teacher.' },
+    { w: 'son', m: 'your male child', ml: 'മകൻ', hi: 'बेटा', ta: 'மகன்', ex: 'My son is six years old.' },
+    { w: 'daughter', m: 'your female child', ml: 'മകൾ', hi: 'बेटी', ta: 'மகள்', ex: 'My daughter goes to school.' },
+    { w: 'husband', m: 'the man you are married to', ml: 'ഭർത്താവ്', hi: 'पति', ta: 'கணவர்', ex: 'My husband works at night.' },
+    { w: 'wife', m: 'the woman you are married to', ml: 'ഭാര്യ', hi: 'पत्नी', ta: 'மனைவி', ex: 'His wife is a nurse.' },
+    { w: 'kitchen', m: 'the room where you cook', ml: 'അടുക്കള', hi: 'रसोई', ta: 'சமையலறை', ex: 'We eat in the kitchen.' },
+    { w: 'bedroom', m: 'the room where you sleep', ml: 'കിടപ്പുമുറി', hi: 'सोने का कमरा', ta: 'படுக்கையறை', ex: 'The flat has two bedrooms.' },
+    { w: 'neighbour', m: 'a person who lives near you', ml: 'അയൽക്കാരൻ', hi: 'पड़ोसी', ta: 'பக்கத்து வீட்டுக்காரர்', ex: 'Our neighbour is very friendly.' },
+    { w: 'rent', m: 'money you pay to live in a house or flat', ml: 'വാടക', hi: 'किराया', ta: 'வாடகை', ex: 'The rent is due on Monday.' },
+    { w: 'bill', m: 'a paper that shows how much you must pay', ml: 'ബില്ല്', hi: 'बिल', ta: 'கட்டணச் சீட்டு', ex: 'I paid the electricity bill.' },
+    { w: 'weekend', m: 'Saturday and Sunday', ml: 'ആഴ്ചാവസാനം (ശനിയും ഞായറും)', hi: 'सप्ताहांत (शनिवार और रविवार)', ta: 'வார இறுதி (சனி, ஞாயிறு)', ex: 'What did you do at the weekend?' }
+  ] },
+  { id: 'v_shop', level: 'beginner', title: 'Food, shops and money', words: [
+    { w: 'breakfast', m: 'the first meal of the day', ml: 'പ്രഭാതഭക്ഷണം', hi: 'नाश्ता', ta: 'காலை உணவு', ex: 'I have breakfast at seven.' },
+    { w: 'lunch', m: 'the meal in the middle of the day', ml: 'ഉച്ചഭക്ഷണം', hi: 'दोपहर का खाना', ta: 'மதிய உணவு', ex: "Lunch is at one o'clock." },
+    { w: 'dinner', m: 'the evening meal', ml: 'അത്താഴം', hi: 'रात का खाना', ta: 'இரவு உணவு', ex: 'We have dinner at eight.' },
+    { w: 'vegetables', m: 'plants you cook and eat, like carrots', ml: 'പച്ചക്കറികൾ', hi: 'सब्ज़ियाँ', ta: 'காய்கறிகள்', ex: 'I buy fresh vegetables every week.' },
+    { w: 'price', m: 'how much something costs', ml: 'വില', hi: 'दाम, क़ीमत', ta: 'விலை', ex: 'What is the price of this bag?' },
+    { w: 'cheap', m: 'not costing much money', ml: 'വില കുറഞ്ഞ', hi: 'सस्ता', ta: 'மலிவான', ex: 'This shop is cheap.' },
+    { w: 'expensive', m: 'costing a lot of money', ml: 'വില കൂടിയ', hi: 'महँगा', ta: 'விலை உயர்ந்த', ex: 'Taxis are expensive here.' },
+    { w: 'change', m: 'money you get back when you pay too much', ml: 'ബാക്കി തുക', hi: 'बाक़ी पैसे', ta: 'மீதிச் சில்லறை', ex: 'Here is your change.' },
+    { w: 'receipt', m: 'a paper that shows what you paid', ml: 'രസീത്', hi: 'रसीद', ta: 'ரசீது', ex: 'Keep the receipt.' },
+    { w: 'queue', m: 'a line of people waiting', ml: 'വരി', hi: 'लाइन, कतार', ta: 'வரிசை', ex: 'Please wait in the queue.' },
+    { w: 'open', m: 'ready for customers', ml: 'തുറന്നിരിക്കുന്ന', hi: 'खुला', ta: 'திறந்திருக்கும்', ex: 'The pharmacy is open until nine.' },
+    { w: 'closed', m: 'not open', ml: 'അടച്ചിരിക്കുന്ന', hi: 'बंद', ta: 'மூடப்பட்டது', ex: 'The bank is closed on Sunday.' }
+  ] },
+  { id: 'v_work', level: 'intermediate', title: 'Work and study', words: [
+    { w: 'shift', m: 'a set period of work, for example a night shift', ml: 'ഷിഫ്റ്റ് (ജോലി സമയം)', hi: 'शिफ़्ट (काम का समय)', ta: 'ஷிப்ட் (வேலை நேரம்)', ex: "I'm on the night shift this week." },
+    { w: 'colleague', m: 'a person you work with', ml: 'സഹപ്രവർത്തകൻ', hi: 'सहकर्मी', ta: 'சக ஊழியர்', ex: 'My colleague covered my shift.' },
+    { w: 'manager', m: 'the person in charge of a team', ml: 'മാനേജർ', hi: 'मैनेजर, प्रबंधक', ta: 'மேலாளர்', ex: 'I need to speak to my manager.' },
+    { w: 'deadline', m: 'the time by which something must be done', ml: 'അവസാന സമയപരിധി', hi: 'अंतिम समय-सीमा', ta: 'கடைசி நாள்', ex: 'The deadline is Friday.' },
+    { w: 'training', m: 'learning the skills for a job', ml: 'പരിശീലനം', hi: 'प्रशिक्षण', ta: 'பயிற்சி', ex: 'New staff get two weeks of training.' },
+    { w: 'experience', m: 'knowledge you get from doing a job', ml: 'പരിചയം', hi: 'अनुभव', ta: 'அனுபவம்', ex: 'She has five years of experience.' },
+    { w: 'apply', m: 'ask formally for a job or a place', ml: 'അപേക്ഷിക്കുക', hi: 'आवेदन करना', ta: 'விண்ணப்பித்தல்', ex: 'I applied for a job at the hospital.' },
+    { w: 'interview', m: 'a meeting where they decide if you get a job', ml: 'ഇന്റർവ്യൂ', hi: 'इंटरव्यू, साक्षात्कार', ta: 'நேர்காணல்', ex: 'My interview is on Tuesday.' },
+    { w: 'salary', m: 'the money you earn for a job', ml: 'ശമ്പളം', hi: 'वेतन', ta: 'சம்பளம்', ex: 'The salary is paid monthly.' },
+    { w: 'promotion', m: 'moving up to a higher job', ml: 'സ്ഥാനക്കയറ്റം', hi: 'पदोन्नति', ta: 'பதவி உயர்வு', ex: 'He got a promotion last year.' },
+    { w: 'responsible for', m: 'in charge of', ml: 'ചുമതലയുള്ള', hi: 'ज़िम्मेदार', ta: 'பொறுப்பான', ex: "I'm responsible for the medication round." },
+    { w: 'day off', m: 'a day when you do not work', ml: 'അവധി ദിവസം', hi: 'छुट्टी का दिन', ta: 'விடுமுறை நாள்', ex: 'Tomorrow is my day off.' }
+  ] },
+  { id: 'v_opinion', level: 'intermediate', title: 'Feelings and opinions', words: [
+    { w: 'worried', m: 'feeling that something bad might happen', ml: 'ആശങ്കയുള്ള', hi: 'चिंतित', ta: 'கவலையாக', ex: "I'm worried about my exam." },
+    { w: 'confident', m: 'sure of yourself', ml: 'ആത്മവിശ്വാസമുള്ള', hi: 'आत्मविश्वासी', ta: 'தன்னம்பிக்கையுடன்', ex: 'I feel more confident now.' },
+    { w: 'disappointed', m: 'sad because something was not as good as you hoped', ml: 'നിരാശനായ', hi: 'निराश', ta: 'ஏமாற்றமடைந்த', ex: 'She was disappointed with the result.' },
+    { w: 'relieved', m: 'happy because a worry has gone', ml: 'ആശ്വാസമായ', hi: 'राहत महसूस करना', ta: 'நிம்மதியாக', ex: 'I was relieved when he called.' },
+    { w: 'frustrated', m: 'annoyed because you cannot do what you want', ml: 'അസ്വസ്ഥനായ', hi: 'झुँझलाया हुआ', ta: 'எரிச்சலாக', ex: 'I get frustrated when the bus is late.' },
+    { w: 'agree', m: 'have the same opinion', ml: 'യോജിക്കുക', hi: 'सहमत होना', ta: 'ஒப்புக்கொள்ளுதல்', ex: 'I agree with you.' },
+    { w: 'disagree', m: 'have a different opinion', ml: 'വിയോജിക്കുക', hi: 'असहमत होना', ta: 'மாறுபடுதல்', ex: 'I disagree, but I see your point.' },
+    { w: 'suggest', m: 'give an idea for others to think about', ml: 'നിർദ്ദേശിക്കുക', hi: 'सुझाव देना', ta: 'பரிந்துரைத்தல்', ex: 'I suggest we meet at ten.' },
+    { w: 'prefer', m: 'like one thing more than another', ml: 'കൂടുതൽ ഇഷ്ടപ്പെടുക', hi: 'ज़्यादा पसंद करना', ta: 'அதிகம் விரும்புதல்', ex: 'I prefer tea to coffee.' },
+    { w: 'advantage', m: 'a good point about something', ml: 'നേട്ടം', hi: 'फ़ायदा', ta: 'நன்மை', ex: 'One advantage is the short drive.' },
+    { w: 'disadvantage', m: 'a bad point about something', ml: 'ദോഷം', hi: 'नुक़सान', ta: 'குறைபாடு', ex: 'The main disadvantage is the cost.' },
+    { w: 'in my opinion', m: 'what I think is', ml: 'എന്റെ അഭിപ്രായത്തിൽ', hi: 'मेरी राय में', ta: 'என் கருத்தில்', ex: 'In my opinion, the new plan is better.' }
+  ] }
+];
