@@ -1,91 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-HE4E37HMXF');
-  </script>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Australian Jeevitham Aussie English Coach</title>
-  <meta name="description" content="Australian English for Malayalis in Australia: an AI coach for leadership conversations in Australian healthcare, plus Aussie slang, everyday phrases, an Australian voice, pronunciation practice and quizzes.">
-  <link rel="canonical" href="https://www.australianjeevitham.com/aussie-english/">
-  <link rel="icon" type="image/png" href="icons/favicon-64.png">
-
-  <!-- Installable app: full screen from the home-screen icon -->
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Aussie English">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Australian Jeevitham">
-  <meta property="og:url" content="https://www.australianjeevitham.com/aussie-english/">
-  <meta property="og:title" content="Australian Jeevitham Aussie English Coach">
-  <meta property="og:description" content="Practise the English Australian healthcare leaders really use - ISBAR handovers, escalating to doctors, talking with families - with an AI coach and an Aussie voice.">
-  <meta property="og:locale" content="ml_IN">
-  <meta property="og:locale:alternate" content="en_AU">
-
-  <meta name="theme-color" content="#F7F7F5">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600&family=Noto+Sans+Tamil:wght@400;600&display=swap">
-  <link rel="stylesheet" href="app.css?v=34">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Coach by Australian Jeevitham has moved</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://www.australianjeevitham.com/english-coach/">
+  <meta http-equiv="refresh" content="2; url=/english-coach/">
   <script>
-    // Apply saved theme and text size before the page paints.
-    try {
-      var p = JSON.parse(localStorage.getItem('aj-english-prefs')) || {};
-      if (p.theme) document.documentElement.setAttribute('data-theme', p.theme);
-      if (p.size) document.documentElement.style.fontSize = p.size + '%';
-    } catch (e) {}
+    // The app moved from /aussie-english/ to /english-coach/ (3 Nov 2026). Keep the page the
+    // person was on, e.g. #/talk, and go straight there.
+    location.replace('/english-coach/' + location.hash);
   </script>
+  <style>
+    body{ margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; box-sizing:border-box;
+      font-family:system-ui, -apple-system, "Segoe UI", sans-serif; background:#F7F7F5; color:#1d1d1b; text-align:center; }
+    main{ max-width:420px; }
+    h1{ font-size:1.4rem; margin:0 0 10px; }
+    p{ line-height:1.5; color:#555; }
+    a{ display:inline-block; margin-top:12px; padding:12px 20px; border-radius:12px; background:#0F7C76; color:#fff; font-weight:600; text-decoration:none; }
+    @media (prefers-color-scheme: dark){ body{ background:#121212; color:#eee; } p{ color:#aaa; } }
+  </style>
 </head>
 <body>
-  <header class="top">
-    <div class="wrap top-row">
-      <a class="brand" href="#/" aria-label="Aussie English Coach home">
-        <img src="icons/icon-192.png" alt="" width="32" height="32">
-        <span class="brand-text"><b>Aussie English Coach</b><small><span id="brandSub">by Australian Jeevitham</span> <span class="ver" id="appVer"></span></small></span>
-      </a>
-      <div class="top-actions">
-        <a class="icon-btn" href="#/help" aria-label="Help - how to use the app" title="Help"><span class="aa">?</span></a>
-        <a class="icon-btn" href="#/voice" aria-label="Choose a voice" title="Voice" data-icon="speaker"></a>
-        <button class="icon-btn" id="sizeBtn" type="button" aria-label="Change text size" title="Text size"><span class="aa">Aa</span></button>
-        <button class="icon-btn" id="themeBtn" type="button" aria-label="Switch light or dark mode" title="Light / dark"></button>
-      </div>
-    </div>
-  </header>
-
-  <main id="app" class="wrap" tabindex="-1"></main>
-
-  <nav class="tabbar" aria-label="App sections">
-    <a href="#/" data-tab="home"><span data-icon="home"></span>Home</a>
-    <a href="#/learn" data-tab="learn"><span data-icon="book"></span>Learn</a>
-    <a href="#/talk" data-tab="talk"><span data-icon="chat"></span>Talk</a>
-    <a href="#/feedback" data-tab="feedback"><span data-icon="feedback"></span>Feedback</a>
-    <a href="#/tips" data-tab="tips"><span data-icon="bulb"></span>Tips</a>
-  </nav>
-
-  <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/13.2.0/firebase-auth-compat.js"></script>
-  <script src="lessons.js?v=34"></script>
-  <script src="vocab.js?v=34"></script>
-  <script src="natives.js?v=34"></script>
-  <script src="uk.js?v=34"></script>
-  <script src="in.js?v=34"></script>
-  <script src="course.js?v=34"></script>
-  <script src="interview.js?v=34"></script>
-  <script src="ielts.js?v=34"></script>
-  <script src="oet.js?v=34"></script>
-  <script src="help.js?v=34"></script>
-  <script src="app.js?v=34"></script>
+  <main>
+    <h1>We've moved</h1>
+    <p>Aussie English Coach is now <b>English Coach by Australian Jeevitham</b>. Your account and progress come with you.</p>
+    <p>If you installed the app, please install it again from the new page.</p>
+    <a href="/english-coach/">Open English Coach</a>
+  </main>
 </body>
 </html>
