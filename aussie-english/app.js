@@ -2239,6 +2239,8 @@
     fbAuth.onAuthStateChanged(function(u){
       var was = authReady;
       me = u; authReady = true;
+      // Signed in: the old access code is no longer needed on this phone.
+      if (u) { try { localStorage.removeItem(CODE_KEY); } catch(e) {} }
       if (u || was) afterSignIn(); else route();
     });
   } catch(e) { fbAuth = null; }   // Firebase didn't load (offline): returning users can still practise
