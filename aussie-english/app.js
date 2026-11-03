@@ -6,9 +6,36 @@
   // AI conversation server (aussie-english-worker). For free local testing with canned replies,
   // run `npx wrangler dev` in that folder and use 'http://127.0.0.1:8787' here instead.
   var TALK_API = 'https://aussie-english.australianjeevitham.workers.dev';
-  // Teaching tier for Talk. Only 'leadership' exists so far; beginner, intermediate and advanced come later.
-  var LEVEL = 'leadership';
-  var LEVEL_MALAYALAM = false;   // leadership chats are English-only; lower tiers will turn this on
+  // The three Englishes and four levels. Each learner chooses one English and is placed at a level
+  // by the placement test; the weekly level-up exam (80% to pass) moves them up. The server keeps
+  // the level, so the app only shows it.
+  var ENGLISHES = {
+    au: { name: 'Australian English', short: 'Australian', tag: 'AU', desc: 'For life and work in Australia', voice: 'en[-_]AU' },
+    uk: { name: 'British English', short: 'British', tag: 'UK', desc: 'For life and work in the United Kingdom', voice: 'en[-_]GB' },
+    in: { name: 'Indian English', short: 'Indian', tag: 'IN', desc: 'Clear, professional English for working in India', voice: 'en[-_]IN' }
+  };
+  var LEVELS = [
+    { id: 'beginner', name: 'Beginner', cefr: 'A1-A2', about: 'Everyday words and simple sentences' },
+    { id: 'intermediate', name: 'Intermediate', cefr: 'B1', about: 'Everyday and workplace conversations' },
+    { id: 'advanced', name: 'Advanced', cefr: 'B2-C1', about: 'Fluent, precise professional English' },
+    { id: 'leadership', name: 'Leadership', cefr: 'C1-C2', about: 'Polished, persuasive senior-level English' }
+  ];
+  function levelById(id){ return LEVELS.find(function(l){ return l.id === id; }) || null; }
+  function myEnglish(){ return profile && ENGLISHES[profile.english] ? profile.english : null; }
+  function myLevelInfo(){ var e = myEnglish(); return e && profile.levels && profile.levels[e] ? profile.levels[e] : null; }
+  // The level the AI coach teaches at (signed-in learners: their own; access codes: leadership).
+  function userLevel(){ var lv = myLevelInfo(); return lv ? lv.level : 'leadership'; }
+  // Beginner and Intermediate chats come with Malayalam help.
+  function malayalamHelp(){ return !!myLevelInfo() && (userLevel() === 'beginner' || userLevel() === 'intermediate'); }
+  // When the next level-up exam may be taken: null = now (or no exam, at the top level).
+  function nextExamDate(){
+    var lv = myLevelInfo();
+    if (!lv || !lv.last) return null;
+    var t = new Date(lv.last).getTime() + 7 * 864e5;
+    return t > Date.now() ? new Date(t) : null;
+  }
+  function nextLevel(){ var i = LEVELS.findIndex(function(l){ return l.id === userLevel(); }); return i >= 0 && i < LEVELS.length - 1 ? LEVELS[i + 1] : null; }
+  function niceDate(d){ return d.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' }); }
 
   /* ---------- Icons (24px line icons) ---------- */
   function svg(d){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>'; }
@@ -146,8 +173,9 @@
   var voice = null;
   function pickVoice(){
     if (!canSpeak) return;
-    var vs = speechSynthesis.getVoices();
-    voice = vs.find(function(v){ return /en[-_]AU/i.test(v.lang); }) ||
+    var vs = speechSynthesis.getVoices(), mine = typeof profile !== 'undefined' && myEnglish() ? new RegExp(ENGLISHES[myEnglish()].voice, 'i') : null;
+    voice = (mine && vs.find(function(v){ return mine.test(v.lang); })) ||
+            vs.find(function(v){ return /en[-_]AU/i.test(v.lang); }) ||
             vs.find(function(v){ return /en[-_]GB/i.test(v.lang); }) ||
             vs.find(function(v){ return /^en/i.test(v.lang); }) || null;
   }
@@ -157,6 +185,7 @@
   // The phone's own voice. Voices read "G'day" letter by letter; "Gidday" sounds right.
   function phoneSpeak(text, rate, queue, done){
     if (!canSpeak) { if (done) done(); return; }
+    pickVoice();
     if (!queue) speechSynthesis.cancel();
     var u = new SpeechSynthesisUtterance(text.replace(/\bg['’]day\b/gi, 'Gidday'));
     if (voice) { u.voice = voice; u.lang = voice.lang; } else { u.lang = 'en-AU'; }
@@ -170,13 +199,22 @@
   // access code and internet; when they fail (offline, monthly free quota used up) the phone's
   // voice says it instead.
   var NATURAL_VOICES = [
-    ['en-AU-NatashaNeural', 'Natasha', 'female'], ['en-AU-WilliamNeural', 'William', 'male'],
-    ['en-AU-AnnetteNeural', 'Annette', 'female'], ['en-AU-DarrenNeural', 'Darren', 'male'],
-    ['en-AU-CarlyNeural', 'Carly', 'female'], ['en-AU-KenNeural', 'Ken', 'male']
+    ['en-AU-NatashaNeural', 'Natasha', 'female', 'au'], ['en-AU-WilliamNeural', 'William', 'male', 'au'],
+    ['en-AU-AnnetteNeural', 'Annette', 'female', 'au'], ['en-AU-DarrenNeural', 'Darren', 'male', 'au'],
+    ['en-AU-CarlyNeural', 'Carly', 'female', 'au'], ['en-AU-KenNeural', 'Ken', 'male', 'au'],
+    ['en-GB-SoniaNeural', 'Sonia', 'female', 'uk'], ['en-GB-RyanNeural', 'Ryan', 'male', 'uk'],
+    ['en-GB-LibbyNeural', 'Libby', 'female', 'uk'], ['en-GB-ThomasNeural', 'Thomas', 'male', 'uk'],
+    ['en-IN-NeerjaNeural', 'Neerja', 'female', 'in'], ['en-IN-PrabhatNeural', 'Prabhat', 'male', 'in']
   ];
+  function voicesFor(eng){ return NATURAL_VOICES.filter(function(v){ return v[3] === (eng || 'au'); }); }
+  // The chosen voice, or the first voice of the learner's English when the choice is for another English.
+  function chosenVoice(){
+    var list = voicesFor(myEnglish()), v = prefs.voice;
+    return v === 'phone' ? 'phone' : list.some(function(x){ return x[0] === v; }) ? v : list[0][0];
+  }
   var player = new Audio(), playing = null, ttsQueue = [], ttsUrls = {}, ttsKeys = [], ttsOff = false, speakGen = 0;
   function naturalVoice(){
-    var v = prefs.voice || NATURAL_VOICES[0][0];
+    var v = chosenVoice();
     return v !== 'phone' && !ttsOff && TALK_API && hasAccess() && navigator.onLine !== false ? v : null;
   }
   // iPhones only play audio started by a tap, so play a silent clip on the first tap to unlock the player.
@@ -771,7 +809,7 @@
     return {
       installed: isInstalled(),
       code: hasAccess(),
-      test: !!state.test,
+      test: !!myLevelInfo(),
       drill: Object.keys(state.sounds || {}).length > 0,
       talk: turns >= 5,
       plan: currentStreak() >= 3
@@ -797,8 +835,8 @@
   // Choose the coach's voice: a natural Australian voice, or the phone's own.
   function voicePage(){
     setTab('');
-    var cur = prefs.voice || NATURAL_VOICES[0][0];
-    var opts = NATURAL_VOICES.map(function(v){ return [v[0], v[1], (v[2] === 'male' ? 'Male' : 'Female') + ' · Australian']; })
+    var cur = chosenVoice(), eng = ENGLISHES[myEnglish() || 'au'];
+    var opts = voicesFor(myEnglish()).map(function(v){ return [v[0], v[1], (v[2] === 'male' ? 'Male' : 'Female') + ' · ' + eng.short]; })
       .concat([['phone', 'Phone\'s own voice', 'Works offline · varies by phone']]);
     render(
       '<span class="eyebrow">Settings</span>' +
@@ -859,23 +897,31 @@
       '<div class="sbars" style="margin-top:10px">' + bar('Pronunciation', s.pronunciation) + bar('Fluency', s.fluency) + bar('Intonation', s.intonation) + bar('Grammar', s.grammar) + bar('Vocabulary', s.vocabulary) + '</div>' +
       (Object.keys(s).some(function(k){ return s[k] == null; }) ? '<p class="heard" style="text-align:left">Do a sound drill and a conversation to fill in every skill.</p>' : '') + '</div>';
   }
+  // Your level: the English, the level on a 4-step ladder, and when the next exam is.
   function levelCard(){
-    var t = state.test;
-    if (!t) return '<a class="card cta" href="#/test"><span class="ic">' + I.check + '</span><span><b>Find your speaking level</b><span>A 4-minute test: CEFR level and an estimated IELTS band</span></span><span class="chev">' + I.chev + '</span></a>';
-    return '<a class="card pad level-card mini" href="#/test"><div class="lv"><b>' + esc(t.cefr) + '</b><span>Your level</span></div><div class="lv"><b>' + esc(String(t.ielts)) + '</b><span>IELTS speaking (est.)</span></div><div class="lv"><span>Tested ' + esc(t.date) + '<br>Tap to retake</span></div></a>';
+    var lv = myLevelInfo();
+    if (!lv) return '';
+    var cur = levelById(lv.level), idx = LEVELS.indexOf(cur), nx = nextLevel(), wait = nextExamDate();
+    return '<a class="card pad my-level" href="#/exam">' +
+      '<div class="ml-top"><span class="eyebrow">' + esc(ENGLISHES[myEnglish()].name) + '</span><span class="pill">' + esc(cur.cefr) + '</span></div>' +
+      '<div class="ml-name">' + esc(cur.name) + '</div>' +
+      '<div class="ladder">' + LEVELS.map(function(l, i){ return '<span class="' + (i < idx ? 'past' : i === idx ? 'now' : '') + '"><i></i>' + esc(l.name) + '</span>'; }).join('') + '</div>' +
+      '<div class="ml-next">' + (!nx ? 'You have reached the top level - well done!'
+        : wait ? 'Next level exam (' + esc(nx.name) + ') from <b>' + esc(niceDate(wait)) + '</b>'
+        : '<b>Your ' + esc(nx.name) + ' exam is ready</b> - pass with 80% to move up') + I.chev + '</div></a>';
   }
   // Today's plan: the weakest sound, one conversation, and the level test or own-sentence practice.
   function planCard(){
     var today = state.days[dayKey(new Date())] || {}, dayNo = Math.floor(Date.now() / 864e5);
     var scored = SOUNDS.filter(function(s){ return soundAvg(s.id) !== null; }).sort(function(a, b){ return soundAvg(a.id) - soundAvg(b.id); });
     var snd = scored.length && soundAvg(scored[0].id) < 85 ? scored[0] : SOUNDS[dayNo % SOUNDS.length];
-    var lead = SCENES.filter(function(s){ return s.level === LEVEL; }), scene = lead[dayNo % lead.length];
+    var lead = talkScenes(), scene = lead[dayNo % lead.length];
     var tasks = [
       { href: '#/sound/' + snd.id, title: 'Sound drill: ' + snd.title, sub: soundAvg(snd.id) !== null ? 'Your weakest sound - ' + soundAvg(snd.id) + '% so far' : 'Say 3 words or sentences', done: (today.drills || 0) >= 3 },
       { href: '#/talk/' + scene.id, title: 'Conversation: ' + scene.title, sub: 'Reply at least 5 times', done: (today.turns || 0) >= 5 },
-      state.test
-        ? { href: '#/practise', title: 'Say a sentence from your work', sub: 'Practise 3 of your own sentences', done: (today.paN || today.pronN || 0) >= 6 }
-        : { href: '#/test', title: 'Take the speaking level test', sub: 'About 4 minutes', done: false }
+      myLevelInfo() && nextLevel() && !nextExamDate()
+        ? { href: '#/exam', title: 'Take your ' + nextLevel().name + ' exam', sub: 'Pass with 80% to move up a level', done: false }
+        : { href: '#/practise', title: 'Say a sentence from your work', sub: 'Practise 3 of your own sentences', done: (today.paN || today.pronN || 0) >= 6 }
     ];
     var n = tasks.filter(function(t){ return t.done; }).length;
     return '<div class="card pad home-card plan"><div class="chart-head"><b>Today\'s plan</b><span>' + n + ' of 3 done</span></div>' +
@@ -904,8 +950,8 @@
       '<h1 class="title">' + (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening') + (profile && profile.name ? ', ' + esc(profile.name.split(' ')[0]) : '') + '</h1>' +
       '<a class="acct-link" href="#/account"><span class="avatar sm">' + esc(((profile && profile.name) || '?').charAt(0).toUpperCase()) + '</span>My account</a>' +
       '<p class="lede">Speak the English Australian healthcare leaders use, with a coach that listens and gives you feedback.</p>' +
-      installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
-      planCard() + levelCard() + skillsCard() +
+      levelCard() + installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
+      planCard() + skillsCard() +
       '<div class="stats">' +
         tile('Day streak', currentStreak(), currentStreak() === 1 ? 'day' : 'days', 'Practise daily to keep it') +
         tile('Speaking time', speakMin, 'min', 'Last 7 days') +
@@ -942,7 +988,7 @@
         '<a class="card item" href="#/interview"><span class="num">' + I.chat + '</span><span class="t"><h2>Interview preparation</h2><span class="sub">20 healthcare interview questions, model answers and AI feedback</span></span></a>' +
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
-        '<a class="card item" href="#/test"><span class="num">' + I.check + '</span><span class="t"><h2>Speaking level test</h2><span class="sub">' + (state.test ? 'Your level: ' + esc(state.test.cefr) + ' · IELTS ~' + state.test.ielts : 'Find your level in about 4 minutes') + '</span></span></a>' +
+        '<a class="card item" href="#/exam"><span class="num">' + I.check + '</span><span class="t"><h2>Your level and exams</h2><span class="sub">' + (myLevelInfo() ? 'You are ' + esc(levelById(userLevel()).name) + (nextLevel() ? ' · ' + (nextExamDate() ? 'next exam ' + esc(niceDate(nextExamDate())) : 'exam ready now') : '') : 'Take the placement test') + '</span></span></a>' +
         '<a class="card item" href="#/everyday"><span class="num">' + I.chat + '</span><span class="t"><h2>Everyday Australian English</h2><span class="sub">' + LESSONS.length + ' lessons of everyday phrases with Malayalam meanings' + (quizzesDone() ? ' · ' + quizzesDone() + '/' + LESSONS.length + ' quizzes done' : '') + '</span></span></a>' +
         '<a class="card item" href="#/slang"><span class="num">' + I.cards + '</span><span class="t"><h2>Aussie slang</h2><span class="sub">' + SLANG.length + ' words you\'ll hear every day, from "arvo" to "ambo"</span></span></a>' +
       '</div>'
@@ -1827,98 +1873,197 @@
   }
 
   /* ---------- Speaking level test ---------- */
-  function levelTest(){
+  /* ---------- Levels: placement test and level-up exams ---------- */
+  // Your level page: the ladder, when the next exam is, and past results.
+  function examHome(){
     setTab('learn');
-    var step = 0, reads = [], answers = [];
-    // Pick a version not taken yet; once all ten are done, reuse the one taken longest ago.
-    var done = state.testsDone || [];
-    var testNo = LEVEL_TESTS.findIndex(function(t, i){ return done.indexOf(i) < 0; });
-    if (testNo < 0) testNo = done[0] || 0;
-    var TEST = LEVEL_TESTS[testNo];
-    function header(n, of){ return '<a class="back" href="#/learn">' + I.back + 'Learn</a><span class="eyebrow">Speaking level test · ' + n + ' of ' + of + '</span><div class="progress"><i style="width:' + Math.round(n / of * 100) + '%"></i></div>'; }
+    var lv = myLevelInfo(), nx = nextLevel(), wait = nextExamDate();
+    if (!lv) { location.hash = '#/'; return; }
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">' + esc(ENGLISHES[myEnglish()].name) + '</span>' +
+      '<h1 class="title">Your level</h1>' +
+      levelCard().replace('<a class="card pad my-level" href="#/exam">', '<div class="card pad my-level">').replace(/<\/a>$/, '</div>') +
+      (nx ? '<article class="card pad" style="margin-top:14px"><h2 class="section-title" style="margin-top:0">' + esc(nx.name) + ' exam</h2>' +
+        '<p>About 10 minutes in three parts: a listening and vocabulary quiz (30%), reading three sentences aloud (20%) and answering three questions out loud (50%). Score <b>80% or more</b> to move up to ' + esc(nx.name) + '.</p>' +
+        '<p class="heard" style="text-align:left">You can take one exam a week. Find a quiet place, and use headphones if you can.</p>' +
+        (wait ? '<button class="btn" disabled>Available from ' + esc(niceDate(wait)) + '</button>' : '<a class="btn primary" href="#/exam/levelup">Start the exam' + I.chev + '</a>') +
+        '</article>' : '') +
+      ((lv.history || []).length ? '<h2 class="section-title">Your results</h2><div class="phrase-list">' + lv.history.slice().reverse().map(function(h){
+        var d = new Date(h.date);
+        return '<div class="card phrase"><div><b>' + (h.kind === 'placement' ? 'Placement test: ' + esc(levelById(h.level).name) : esc(levelById(h.target).name) + ' exam: ' + h.score + '% · ' + (h.passed ? 'Passed' : 'Not yet')) + '</b>' +
+          '<span>' + esc(niceDate(d)) + ' · quiz ' + h.parts.quiz + '%' + (h.parts.read != null ? ' · reading ' + h.parts.read + '%' : '') + ' · speaking ' + h.parts.speak + '%</span></div></div>';
+      }).join('') + '</div>' : '') +
+      '<p style="margin-top:18px"><a class="btn ghost" href="#/english">Learning a different English?</a></p>'
+    );
+  }
+
+  // One exam from start to finish: kind 'placement' (decides your starting level) or 'levelup'.
+  function examRun(kind){
+    setTab('learn');
+    var paper = null, step = 0, picks = [], reads = [], answers = [];
+    var placement = kind === 'placement';
+    var eng = ENGLISHES[myEnglish()];
+    function total(){ return paper.quiz.length + paper.read.length + paper.speak.length; }
+    function header(n, label){
+      return (placement ? '' : '<a class="back" href="#/exam">' + I.back + 'Your level</a>') +
+        '<span class="eyebrow">' + (placement ? 'Placement test' : esc(levelById(paper.target).name) + ' exam') + ' · ' + label + '</span>' +
+        '<div class="progress"><i style="width:' + Math.round(n / total() * 100) + '%"></i></div>';
+    }
     function intro(){
+      var nx = nextLevel();
       render(
-        '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
-        '<span class="eyebrow">Version ' + (testNo + 1) + ' of ' + LEVEL_TESTS.length + ' · About 4 minutes</span>' +
-        '<h1 class="title">Speaking level test</h1>' +
-        '<p class="lede">Read three sentences aloud, then answer three questions as you would in a conversation. You\'ll get your level (A1 to C2), an estimated IELTS speaking band, and what to work on.</p>' +
-        '<div class="row" style="margin-top:18px"><button class="btn primary" id="start">Start the test' + I.chev + '</button></div>' +
-        ((state.tests || []).length ? '<h2 class="section-title">Your results</h2><div class="phrase-list">' + state.tests.slice().reverse().map(function(t){
-          return '<div class="card phrase"><div><b>' + esc(t.cefr) + ' · IELTS ~' + esc(String(t.ielts)) + '</b><span>' + esc(t.date) + ' · version ' + t.version + '</span></div></div>';
-        }).join('') + '</div>' : state.test ? '<div class="notice">Last result: <b>' + esc(state.test.cefr) + '</b> · IELTS ~' + state.test.ielts + ' (' + esc(state.test.date) + ')</div>' : '')
+        (placement ? '' : '<a class="back" href="#/exam">' + I.back + 'Your level</a>') +
+        '<span class="eyebrow">' + esc(eng.name) + ' · about 10 minutes</span>' +
+        '<h1 class="title">' + (placement ? 'Find your level' : esc(nx ? nx.name : '') + ' exam') + '</h1>' +
+        '<p class="lede">' + (placement
+          ? 'A short test to find where you should start: <b>Beginner</b>, <b>Intermediate</b>, <b>Advanced</b> or <b>Leadership</b>. Your lessons and conversations will match your level, and each week you can take an exam to move up.'
+          : 'Score 80% or more to move up to ' + esc(nx ? nx.name : '') + '. You can take one exam a week.') + '</p>' +
+        '<div class="card pad exam-parts">' +
+          '<div><span class="num">1</span><span><b>Listening and vocabulary quiz</b><span>' + (placement ? '12' : '10') + ' questions - tap the answer</span></span></div>' +
+          '<div><span class="num">2</span><span><b>Read aloud</b><span>3 sentences, scored for pronunciation</span></span></div>' +
+          '<div><span class="num">3</span><span><b>Speak</b><span>Answer 3 questions out loud, 30 to 60 seconds each</span></span></div>' +
+        '</div>' +
+        '<p class="heard" style="text-align:left;margin-top:12px">Find a quiet place, hold the phone about 20 cm away, and use headphones for the listening questions if you can.</p>' +
+        '<div class="row" style="margin-top:16px"><button class="btn primary" id="start">Start' + I.chev + '</button></div>' +
+        '<p class="auth-msg" id="msg" role="status"></p>'
       );
-      document.getElementById('start').onclick = function(){ step = 0; readStep(); };
+      var btn = document.getElementById('start'), msg = document.getElementById('msg');
+      btn.onclick = function(){
+        btn.disabled = true; msg.textContent = '';
+        apiFetch(TALK_API + '/exam/start', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ kind: kind }) })
+          .then(function(r){ return r.json(); })
+          .then(function(d){
+            if (d.error === 'too_soon') { msg.textContent = 'Your next exam is available from ' + niceDate(new Date(d.next)) + '.'; return; }
+            if (d.error === 'already_placed') { location.hash = '#/exam'; return; }
+            if (d.error || !d.quiz) throw new Error(d.error || 'exam');
+            paper = d; step = 0; quizStep();
+          })
+          .catch(function(){ btn.disabled = false; msg.textContent = 'Couldn\'t start the exam - please check your internet and try again.'; });
+      };
+    }
+    function quizStep(){
+      var q = paper.quiz[step], chosen = null;
+      render(header(step + 1, 'Quiz ' + (step + 1) + ' of ' + paper.quiz.length) +
+        '<article class="card pad">' +
+          (q.type === 'listen' ? '<span class="count">Listen, then answer</span><div class="listen-row" style="margin:6px 0 10px"><button class="btn" id="play">' + I.speaker + 'Play</button><button class="btn" id="slow">' + I.speaker + 'Slow</button></div>' : '<span class="count">Choose the best answer</span>') +
+          '<p class="q-prompt">' + esc(q.q) + '</p>' +
+          '<div class="opts">' + q.o.map(function(o, i){ return '<button type="button" class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join('') + '</div>' +
+          '<div class="nav"><span></span><button class="btn primary" id="next" disabled>Next' + I.chev + '</button></div>' +
+        '</article>');
+      if (q.type === 'listen') {
+        document.getElementById('play').onclick = function(){ speak(q.say); };
+        document.getElementById('slow').onclick = function(){ speak(q.say, true); };
+        speak(q.say);
+      }
+      var next = document.getElementById('next');
+      app.querySelectorAll('.opt').forEach(function(b){ b.onclick = function(){
+        chosen = +b.dataset.i;
+        app.querySelectorAll('.opt').forEach(function(x){ x.classList.toggle('picked', x === b); });
+        next.disabled = false;
+      }; });
+      next.onclick = function(){
+        picks[step] = chosen; step++;
+        if (step < paper.quiz.length) quizStep(); else { step = 0; readStep(); }
+      };
     }
     function readStep(){
-      var t = TEST.read[step];
-      render(header(step + 1, 6) +
+      var t = paper.read[step], n = paper.quiz.length + step + 1;
+      render(header(n, 'Read aloud ' + (step + 1) + ' of ' + paper.read.length) +
         '<article class="card pad"><span class="count">Read this aloud</span><p class="phrase-en">' + esc(t) + '</p>' +
         '<div class="speak-zone" id="practice"></div>' +
         '<div class="nav"><span></span><button class="btn primary" id="next" disabled>Next' + I.chev + '</button></div></article>');
       var next = document.getElementById('next');
       practiceCard(document.getElementById('practice'), function(){ return t; }, function(res){ reads[step] = res; next.disabled = false; });
-      next.onclick = function(){ step++; step < TEST.read.length ? readStep() : (step = 0, askStep()); };
+      next.onclick = function(){ step++; if (step < paper.read.length) readStep(); else { step = 0; speakStep(); } };
     }
-    function askStep(){
-      var q = TEST.questions[step], rec = null, text = '', secs = 0;
-      render(header(TEST.read.length + step + 1, 6) +
-        '<article class="card pad"><span class="count">Answer in English - aim for 30 to 60 seconds</span><p class="q-prompt">' + esc(q) + '</p>' +
+    function speakStep(){
+      var q = paper.speak[step], n = paper.quiz.length + paper.read.length + step + 1;
+      render(header(n, 'Speak ' + (step + 1) + ' of ' + paper.speak.length) +
+        '<article class="card pad"><span class="count">Answer out loud - aim for 30 to 60 seconds</span><p class="q-prompt">' + esc(q) + '</p>' +
         '<div class="listen-row" style="margin:0 0 6px"><button class="btn" id="play">' + I.speaker + 'Hear the question</button></div>' +
         '<div class="speak-zone">' + (SR ? micButton('amic') + '<span class="mic-label" id="alabel">Tap and start speaking</span>' : '') +
         '<textarea id="ans" class="ref" rows="4" placeholder="' + (SR ? 'Your words appear here. You can also type.' : 'Type your answer') + '"></textarea></div>' +
-        '<div class="nav"><span></span><button class="btn primary" id="next">' + (step === TEST.questions.length - 1 ? 'Finish' : 'Next') + I.chev + '</button></div></article>');
+        '<div class="nav"><span></span><button class="btn primary" id="next">' + (step === paper.speak.length - 1 ? 'Finish' : 'Next') + I.chev + '</button></div></article>');
       var ans = document.getElementById('ans'), mic = document.getElementById('amic'), label = document.getElementById('alabel');
       document.getElementById('play').onclick = function(){ speak(q); };
       speak(q);
       var la = longAnswer(mic, label, ans);
       document.getElementById('next').onclick = function(){
         la.stop();
-        secs = la.secs();
-        text = ans.value.trim();
+        var text = ans.value.trim();
         if (!text) { if (label) label.textContent = 'Please answer the question first'; return; }
-        answers[step] = { q: q, a: text, secs: secs };
-        logDay({ speakSec: Math.round(secs) }); addVocab(text);
+        answers[step] = { a: text, secs: la.secs() };
+        logDay({ speakSec: Math.round(la.secs()) }); addVocab(text);
         step++;
-        step < TEST.questions.length ? askStep() : grade_();
+        if (step < paper.speak.length) speakStep(); else submit();
       };
     }
-    function grade_(){
-      render(header(6, 6) + '<article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div><p class="lede">Working out your level…</p></article>');
-      var az_ = reads.filter(function(r){ return r && r.accuracy != null; });
-      var avg = function(k){ var v = az_.filter(function(r){ return r[k] != null; }); return v.length ? Math.round(v.reduce(function(a, r){ return a + r[k]; }, 0) / v.length) : null; };
-      var pron = az_.length ? { accuracy: avg('accuracy'), fluency: avg('fluency'), prosody: avg('prosody'), overall: avg('pron') }
-        : { overall: reads.length ? Math.round(reads.reduce(function(a, r){ return a + (r ? r.pron : 0); }, 0) / reads.length) : null };
-      apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
-        body: JSON.stringify({ assess: true, answers: answers, pronunciation: pron }) })
+    function submit(){
+      render(header(total(), 'Marking') + '<article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div><p class="lede">Marking your exam…</p></article>');
+      apiFetch(TALK_API + '/exam/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quiz: picks, read: reads.map(function(r){ return r ? r.pron : null; }), speak: answers }) })
         .then(function(r){ return r.json(); })
         .then(function(d){
-          if (d.error || !d.cefr) throw new Error(d.error || 'assess');
-          state.test = Object.assign({ date: new Date().toLocaleDateString('en-AU'), pron: pron.overall, fluency: pron.fluency, prosody: pron.prosody, version: testNo + 1 }, d);
-          state.testsDone = (state.testsDone || []).filter(function(i){ return i !== testNo; }).concat([testNo]);
-          state.tests = (state.tests || []).concat([{ date: state.test.date, cefr: d.cefr, ielts: d.ielts, version: testNo + 1 }]).slice(-20);
+          if (d.error || d.score == null) throw new Error(d.error || 'exam');
+          saveProfile(Object.assign({ uid: me.uid }, d.profile));
+          state.test = { date: new Date().toLocaleDateString(), cefr: d.cefr, grammar: d.grammar, vocabulary: d.vocabulary, coherence: d.coherence, pron: d.parts.read };
           save(); markActive();
-          result(state.test);
+          result(d);
         })
         .catch(function(e){
-          render(header(6, 6) + '<article class="card pad"><p>' + (/^(access_code|signin)$/.test(String(e.message)) ? 'The level test uses the AI coach - please sign in again.' : 'Couldn\'t reach the coach. Please check your internet and try again.') + '</p>' +
-            '<div class="row" style="margin-top:14px"><button class="btn primary" id="retry">Try again</button></div></article>');
-          document.getElementById('retry').onclick = grade_;
+          render(header(total(), 'Marking') + '<article class="card pad"><p>' + (String(e.message) === 'no_exam' ? 'This exam has timed out (exams must be finished within 3 hours). Please start again.' : 'Couldn\'t mark your exam - please check your internet and try again.') + '</p>' +
+            '<div class="row" style="margin-top:14px">' + (String(e.message) === 'no_exam' ? '<a class="btn primary" href="#/exam">Back</a>' : '<button class="btn primary" id="retry">Try again</button>') + '</div></article>');
+          var r = document.getElementById('retry'); if (r) r.onclick = submit;
         });
     }
-    function result(t){
-      var tierName = { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced', leadership: 'Leadership' }[t.tier] || t.tier;
+    function result(d){
+      var lvl = levelById(d.level), next = d.next ? new Date(d.next) : null;
+      var head = placement
+        ? '<span class="eyebrow">Your starting level</span><div class="big">' + esc(lvl.name) + '</div><p class="lede">' + esc(lvl.about) + ' · CEFR ' + esc(d.cefr || lvl.cefr) + '</p>'
+        : '<span class="eyebrow">' + esc(levelById(d.target).name) + ' exam</span><div class="big">' + d.score + '%</div>' +
+          (d.passed ? '<p class="pass-msg good">Passed! You are now <b>' + esc(lvl.name) + '</b>.</p>' : '<p class="pass-msg">Not yet - you need 80%. You can try again from <b>' + (next ? esc(niceDate(next)) : 'next week') + '</b>.</p>');
       render(
-        '<a class="back" href="#/">' + I.back + 'Home</a>' +
-        '<span class="eyebrow">Your speaking level</span>' +
-        '<article class="card pad level-card"><div class="lv"><b>' + esc(t.cefr) + '</b><span>CEFR level</span></div><div class="lv"><b>' + esc(String(t.ielts)) + '</b><span>IELTS speaking (estimate)</span></div><div class="lv"><b>' + esc(tierName) + '</b><span>Best practice level</span></div></article>' +
-        '<article class="card pad"><p>' + esc(t.summary) + '</p>' +
-          '<div class="sbars" style="margin-top:14px">' + bar('Grammar', t.grammar) + bar('Vocabulary', t.vocabulary) + bar('Coherence', t.coherence) + bar('Pronunciation', t.pron == null ? null : t.pron) + (t.fluency != null ? bar('Fluency', t.fluency) : '') + '</div></article>' +
-        '<h2 class="section-title">Strengths</h2><div class="phrase-list">' + (t.strengths || []).map(function(x){ return '<div class="card phrase"><div><b>' + esc(x) + '</b></div></div>'; }).join('') + '</div>' +
-        '<h2 class="section-title">Work on next</h2><div class="phrase-list">' + (t.focus || []).map(function(x){ return '<div class="card phrase"><div><b>' + esc(x) + '</b></div></div>'; }).join('') + '</div>' +
-        '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/">See your daily plan' + I.chev + '</a><a class="btn ghost" href="#/test">Take it again</a></div>'
+        '<article class="card pad done exam-result">' + head + '<p>' + esc(d.summary) + '</p></article>' +
+        '<article class="card pad"><div class="sbars">' +
+          bar('Quiz', d.parts.quiz) + (d.parts.read != null ? bar('Reading aloud', d.parts.read) : '') + bar('Speaking', d.parts.speak) +
+          bar('Grammar', d.grammar) + bar('Vocabulary', d.vocabulary) + bar('Coherence', d.coherence) +
+        '</div></article>' +
+        '<h2 class="section-title">Your answers</h2><div class="phrase-list">' + d.answers.map(function(a){
+          return '<div class="card phrase"><div><b>' + a.score + '% · ' + esc(a.q) + '</b><span>' + esc(a.comment) + '</span></div></div>';
+        }).join('') + '</div>' +
+        (d.strengths.length ? '<h2 class="section-title">Strengths</h2><div class="phrase-list">' + d.strengths.map(function(x){ return '<div class="card phrase"><div><b>' + esc(x) + '</b></div></div>'; }).join('') + '</div>' : '') +
+        (d.improve.length ? '<h2 class="section-title">Work on next</h2><div class="phrase-list">' + d.improve.map(function(x){ return '<div class="card phrase"><div><b>' + esc(x) + '</b></div></div>'; }).join('') + '</div>' : '') +
+        '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/">Start practising' + I.chev + '</a></div>'
       );
     }
     intro();
+  }
+
+  // Choose your English: at registration, or to switch later (each English keeps its own level).
+  function englishPage(){
+    var first = !myEnglish();
+    (first ? authShell : function(h){ setTab(''); render('<a class="back" href="#/account">' + I.back + 'My account</a>' + h); })(
+      '<h1 class="title">Which English do you want to learn?</h1>' +
+      '<p class="lede">' + (first ? 'Your lessons, voices and conversations will match it. You can change it later in My account.' : 'Each English keeps its own level. A new one starts with a placement test.') + '</p>' +
+      '<div class="list eng-list">' + Object.keys(ENGLISHES).map(function(k){
+        var e = ENGLISHES[k], lv = profile && profile.levels && profile.levels[k];
+        return '<button type="button" class="card item eng-opt' + (myEnglish() === k ? ' on' : '') + '" data-e="' + k + '"><span class="num">' + e.tag + '</span><span class="t"><h2>' + esc(e.name) + '</h2><span class="sub">' + esc(e.desc) + (lv ? ' · your level: ' + esc(levelById(lv.level).name) : '') + '</span></span><span class="chev">' + I.chev + '</span></button>';
+      }).join('') + '</div><p class="auth-msg" id="msg" role="status"></p>'
+    );
+    var msg = document.getElementById('msg');
+    app.querySelectorAll('.eng-opt').forEach(function(b){ b.onclick = function(){
+      app.querySelectorAll('.eng-opt').forEach(function(x){ x.disabled = true; });
+      apiFetch(TALK_API + '/english', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ english: b.dataset.e }) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (!d.profile) throw new Error(d.error || 'english');
+          saveProfile(Object.assign({ uid: me.uid }, d.profile));
+          pickVoice();
+          if (location.hash === '#/') route(); else location.hash = '#/';
+        })
+        .catch(function(){ app.querySelectorAll('.eng-opt').forEach(function(x){ x.disabled = false; }); msg.textContent = 'Couldn\'t save - please check your internet and try again.'; });
+    }; });
   }
 
   /* ---------- Quiz ---------- */
@@ -2107,6 +2252,9 @@
     if (!me) return getCode() ? null : 'signin';
     if (!me.emailVerified) return 'verify';
     if (!profile || profile.uid !== me.uid) return 'profile';
+    if (page === 'privacy' || page === 'terms' || page === 'account' || page === 'profile') return null;
+    if (!myEnglish() || page === 'english') return 'english';
+    if (!myLevelInfo()) return 'placement';
     return null;
   }
   var AUTH_ERRORS = {
@@ -2219,7 +2367,8 @@
   }
 
   var COUNTRIES = ['India', 'Australia', 'United Arab Emirates', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Oman', 'Bahrain', 'United Kingdom', 'Ireland', 'New Zealand', 'Canada', 'Other'];
-  var JOBS = ['Registered Nurse', 'Enrolled Nurse', 'Aged care worker / PCA / AIN', 'Nursing student', 'Other healthcare role', 'Not in healthcare'];
+  var FIELDS = ['General / everyday life', 'Healthcare & Medical', 'Technology & IT', 'Engineering', 'Education & Teaching', 'Professional Services', 'Student', 'Other'];
+  var HEALTH_ROLES = ['Nurse', 'Care worker', 'Assistant nurse', 'Senior nurse', 'Allied health'];
   var GOALS = ['IELTS', 'OET', 'Job interviews', 'Speaking confidently at work', 'Everyday English in Australia'];
   function options(list, cur){ return '<option value="">Choose…</option>' + list.map(function(o){ return '<option' + (o === cur ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join(''); }
 
@@ -2232,7 +2381,8 @@
       '<form id="pf" class="auth-form">' +
         '<label>Your name<input id="nm" type="text" autocomplete="name" maxlength="60" required value="' + esc(pr.name || (me && me.displayName) || '') + '"></label>' +
         '<label>Where do you live now?<select id="ct" required>' + options(COUNTRIES, pr.country) + '</select></label>' +
-        '<label>Your work<select id="jb" required>' + options(JOBS, pr.job) + '</select></label>' +
+        '<label>Your field<select id="fd" required>' + options(FIELDS, pr.field) + '</select></label>' +
+        '<label id="rlWrap"' + (pr.field === 'Healthcare & Medical' ? '' : ' hidden') + '>Your role<select id="rl">' + options(HEALTH_ROLES, pr.role) + '</select></label>' +
         '<label>Your main goal<select id="gl" required>' + options(GOALS, pr.goal) + '</select></label>' +
         (first ? '<label class="check"><input id="ok" type="checkbox" required> I am 18 or older and agree to the <a href="#/terms">Terms</a> and <a href="#/privacy">Privacy policy</a>.</label>' : '') +
         '<button class="btn primary" id="sv" type="submit">' + (first ? 'Start practising' : 'Save') + '</button>' +
@@ -2240,12 +2390,15 @@
       '<p class="auth-msg" id="msg" role="status"></p>' +
       (first ? '<button type="button" class="link" id="out">Sign out</button>' : '<a class="link" href="#/account">Cancel</a>')
     );
-    var msg = app.querySelector('#msg'), sv = app.querySelector('#sv');
+    var msg = app.querySelector('#msg'), sv = app.querySelector('#sv'), fd = app.querySelector('#fd');
     if (first) app.querySelector('#out').onclick = signOut;
+    fd.onchange = function(){ app.querySelector('#rlWrap').hidden = fd.value !== 'Healthcare & Medical'; };
     app.querySelector('#pf').onsubmit = function(e){
       e.preventDefault();
-      var body = { name: app.querySelector('#nm').value.trim(), country: app.querySelector('#ct').value, job: app.querySelector('#jb').value, goal: app.querySelector('#gl').value };
-      if (!body.name || !body.country || !body.job || !body.goal) { msg.textContent = 'Please fill in every question.'; return; }
+      var health = fd.value === 'Healthcare & Medical';
+      var body = { name: app.querySelector('#nm').value.trim(), country: app.querySelector('#ct').value, field: fd.value, role: health ? app.querySelector('#rl').value : '', goal: app.querySelector('#gl').value };
+      body.job = body.role || body.field;
+      if (!body.name || !body.country || !body.field || !body.goal || (health && !body.role)) { msg.textContent = 'Please fill in every question.'; return; }
       if (first && !app.querySelector('#ok').checked) { msg.textContent = 'Please tick the box to agree to the Terms and Privacy policy.'; return; }
       sv.disabled = true; msg.textContent = '';
       apiFetch(TALK_API + '/profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
@@ -2259,6 +2412,10 @@
     };
   }
 
+  function showLevelBadge(){
+    var el = document.getElementById('brandSub'), lv = myLevelInfo();
+    if (el) el.textContent = lv && me ? ENGLISHES[myEnglish()].short + ' · ' + levelById(lv.level).name : 'by Australian Jeevitham';
+  }
   function signOut(){
     stopSpeech();
     saveProfile(null);
@@ -2276,8 +2433,9 @@
       '<span class="eyebrow">My account</span>' +
       '<h1 class="title">' + esc(pr.name || 'Your account') + '</h1>' +
       (me ? '' : '<div class="notice">You are using an access code. Please <a href="#/signin">create your account</a> - access codes will stop working soon.</div>') +
-      (me ? '<div class="card pad" style="margin-top:16px">' + row('Email', me.email) + row('Lives in', pr.country) + row('Work', pr.job) + row('Main goal', pr.goal) + row('Member since', pr.created) +
-        '<a class="btn ghost sm" href="#/profile" style="margin-top:12px">' + I.pencil + 'Edit profile</a></div>' : '') +
+      (me ? '<div class="card pad" style="margin-top:16px">' + row('Email', me.email) + row('Learning', myEnglish() ? ENGLISHES[myEnglish()].name : '') + row('Level', myLevelInfo() ? levelById(userLevel()).name : '') +
+        row('Lives in', pr.country) + row('Field', pr.role ? pr.field + ' · ' + pr.role : pr.field || pr.job) + row('Main goal', pr.goal) + row('Member since', pr.created) +
+        '<div class="row" style="margin-top:12px;gap:8px"><a class="btn ghost sm" href="#/profile">' + I.pencil + 'Edit profile</a><a class="btn ghost sm" href="#/english">Change English</a></div></div>' : '') +
       (hasAccess() ? quotaHtml() : '') +
       '<div class="list">' +
         '<a class="card item" href="#/voice"><span class="t"><h2>Voice</h2><span class="sub">Choose the coach\'s voice</span></span><span class="chev">' + I.chev + '</span></a>' +
@@ -2368,17 +2526,23 @@
   function talkHome(){
     setTab('talk');
     render(
-      '<span class="pill level">Leadership level · Healthcare</span>' +
+      '<span class="pill level">' + esc((levelById(userLevel()) || LEVELS[3]).name) + ' level' + (myEnglish() ? ' · ' + esc(ENGLISHES[myEnglish()].name) : '') + '</span>' +
       '<h1 class="title" style="margin-top:10px">Conversations</h1>' +
       '<p class="lede">Real leadership situations in Australian healthcare. Speak as you would at work - your coach marks anything to improve and shows how a senior Australian nurse leader would say it.</p>' +
       (TALK_API ? '' : '<div class="notice">The AI coach is being set up. Coming soon!</div>') +
-      '<div class="list">' + SCENES.filter(function(s){ return (s.level || 'everyday') === LEVEL; }).map(function(s){
+      '<div class="list">' + talkScenes().map(function(s){
         return '<a class="card item" href="#/talk/' + s.id + '"><span class="avatar">' + esc(initials(s.who)) + '</span><span class="t">' +
           '<h2>' + esc(s.title) + '</h2><span class="sub">with ' + esc(s.who) + '</span></span><span class="muted">' + I.chev + '</span></a>';
       }).join('') + '</div>'
     );
   }
 
+  // Conversations for this level: Beginner and Intermediate start with the everyday scenes.
+  // (The full Talk menu by field comes in the next phase.)
+  function talkScenes(){
+    var work = SCENES.filter(function(s){ return s.level === 'leadership'; }), daily = SCENES.filter(function(s){ return !s.level; });
+    return malayalamHelp() ? daily.concat(work) : work;
+  }
   function talk(id){
     var s = SCENES.find(function(x){ return x.id === id; });
     if (!s) return talkHome();
@@ -2447,7 +2611,7 @@
       if (phrase && phrase.phrase) {
         var saved = state.phrases.some(function(x){ return x.phrase === phrase.phrase; });
         var pc = add(el('power', '<div style="flex:1"><span class="lbl">Power phrase</span><b>' + esc(phrase.phrase) + '</b>' +
-          '<span class="' + (LEVEL_MALAYALAM ? 'mal' : 'why') + '"' + (LEVEL_MALAYALAM ? ' lang="ml"' : '') + '>' + esc(phrase.meaning || '') + '</span></div>' +
+          '<span class="' + (malayalamHelp() ? 'mal' : 'why') + '"' + (malayalamHelp() ? ' lang="ml"' : '') + '>' + esc(phrase.meaning || '') + '</span></div>' +
           '<div class="acts"><button type="button" data-a="pp" aria-label="Listen">' + I.speaker + '</button>' +
           '<button type="button" data-a="save" class="' + (saved ? 'saved' : '') + '" aria-label="Save phrase">' + I.save + '</button></div>'));
         pc.querySelector('[data-a=pp]').onclick = function(){ speak(phrase.phrase); };
@@ -2573,7 +2737,7 @@
       apiFetch(TALK_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
-        body: JSON.stringify({ level: LEVEL, scene: s.id, messages: history })
+        body: JSON.stringify({ level: userLevel(), scene: s.id, messages: history })
       }).then(function(r){
         if (!r.body || (r.headers.get('Content-Type') || '').indexOf('ndjson') < 0) {
           return r.json().catch(function(){ return { error: 'ai_error' }; });
@@ -2620,7 +2784,7 @@
         feedback(b, text, d);
         if (speaking) paceNote(b, text, speaking);
         history.push({ role: 'assistant', content: d.raw });
-        aiMsg(d.reply, LEVEL_MALAYALAM ? d.reply_ml : '', null, d.power_phrase, d.spoken);
+        aiMsg(d.reply, malayalamHelp() ? d.reply_ml : '', null, d.power_phrase, d.spoken);
         showChips(d.suggestions);
         if (typeof d.remaining === 'number') { note.textContent = d.remaining + ' AI action' + (d.remaining === 1 ? '' : 's') + ' left today'; setQuota(d.remaining); }
         var st = (d.feedback || {}).status;
@@ -2662,7 +2826,7 @@
     typeRow.onsubmit = function(e){ e.preventDefault(); send(input.value); };
     document.getElementById('restart').onclick = function(){ if (rec) rec.abort(); talk(id); };
 
-    aiMsg(s.opening, LEVEL_MALAYALAM ? s.opening_ml : '', s.say);
+    aiMsg(s.opening, malayalamHelp() ? s.opening_ml : '', s.say);
 
     // Load this scene into the server's cache while the learner reads the opening line,
     // so their first reply comes back as quickly as later ones.
@@ -2670,7 +2834,7 @@
       apiFetch(TALK_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
-        body: JSON.stringify({ warm: true, level: LEVEL, scene: s.id })
+        body: JSON.stringify({ warm: true, level: userLevel(), scene: s.id })
       }).catch(function(){});
     }
   }
@@ -2725,10 +2889,13 @@
     document.querySelectorAll('.sheet-bg').forEach(function(x){ x.remove(); });
     var parts = location.hash.replace(/^#\/?/, '').split('?')[0].split('/');
     var g = gate(parts[0]);
+    showLevelBadge();
     if (g === 'wait') return waitPage();
     if (g === 'signin') return signinPage();
     if (g === 'verify') return verifyPage();
     if (g === 'profile' || (parts[0] === 'profile' && me)) return profilePage();
+    if (g === 'english') return englishPage();
+    if (g === 'placement') return examRun('placement');
     if (parts[0] === 'signin') signinPage();
     else if (parts[0] === 'account') accountPage();
     else if (parts[0] === 'privacy' || parts[0] === 'terms') legalPage(parts[0]);
@@ -2747,7 +2914,8 @@
     else if (parts[0] === 'words') wordsPage(parts[1]);
     else if (parts[0] === 'sounds') sounds();
     else if (parts[0] === 'sound') sound(parts[1]);
-    else if (parts[0] === 'test') levelTest();
+    else if (parts[0] === 'test' || (parts[0] === 'exam' && !parts[1])) examHome();
+    else if (parts[0] === 'exam') examRun('levelup');
     else if (parts[0] === 'quiz') quiz(parts[1]);
     else if (parts[0] === 'talk') parts[1] ? talk(parts[1]) : talkHome();
     else if (parts[0] === 'slang') slang();

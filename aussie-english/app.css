@@ -542,3 +542,25 @@ ul.tiplist.card{ margin-left:0; padding-left:34px; }
 .fb-form .btn svg{ width:18px; height:18px; }
 .big-ic{ width:56px; height:56px; margin:0 auto 10px; display:grid; place-items:center; border-radius:50%; background:var(--good-soft); color:var(--good); }
 .big-ic svg{ width:28px; height:28px; }
+
+/* Your level */
+.my-level{ display:block; margin-top:16px; border:1.5px solid var(--accent); }
+.ml-top{ display:flex; justify-content:space-between; align-items:center; }
+.ml-name{ font-size:1.7rem; font-weight:800; letter-spacing:-.01em; margin:2px 0 10px; color:var(--accent); }
+.ladder{ display:grid; grid-template-columns:repeat(4, 1fr); gap:6px; }
+.ladder span{ display:grid; gap:6px; font-size:.7rem; font-weight:600; color:var(--muted); text-align:center; }
+.ladder i{ height:6px; border-radius:99px; background:var(--surface-2); }
+.ladder .past i{ background:var(--accent-soft); } .ladder .past{ color:var(--text); }
+.ladder .now i{ background:var(--accent); } .ladder .now{ color:var(--accent); }
+.ml-next{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border); font-size:.86rem; color:var(--muted); }
+.ml-next b{ color:var(--text); } .ml-next svg{ width:18px; height:18px; flex:none; }
+.exam-parts{ display:grid; gap:12px; margin-top:16px; }
+.exam-parts > div{ display:flex; gap:12px; align-items:center; }
+.exam-parts b{ display:block; } .exam-parts span span{ font-size:.85rem; color:var(--muted); }
+.opts{ display:grid; gap:10px; margin-top:12px; }
+.opt.picked{ border-color:var(--accent); background:var(--accent-soft); }
+.exam-result .big{ font-size:2.6rem; }
+.pass-msg{ font-size:1rem; margin-top:4px; } .pass-msg.good{ color:var(--good); }
+.eng-list .eng-opt{ width:100%; text-align:left; font:inherit; color:inherit; cursor:pointer; }
+.eng-list .eng-opt.on{ border-color:var(--accent); }
+.eng-list .num{ font-size:.8rem; }
