@@ -2049,8 +2049,10 @@
         }).join('') + '</div>' +
         (d.strengths.length ? '<h2 class="section-title">Strengths</h2><div class="phrase-list">' + d.strengths.map(function(x){ return '<div class="card phrase"><div><b>' + esc(x) + '</b></div></div>'; }).join('') + '</div>' : '') +
         (d.improve.length ? '<h2 class="section-title">Work on next</h2><div class="phrase-list">' + d.improve.map(function(x){ return '<div class="card phrase"><div><b>' + esc(x) + '</b></div></div>'; }).join('') + '</div>' : '') +
-        '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/">Start practising' + I.chev + '</a></div>'
+        '<div class="row" style="margin-top:18px"><button class="btn primary" id="go">Start practising' + I.chev + '</button></div>'
       );
+      // The placement test runs at "#/", where a link to "#/" would change nothing - so route directly.
+      document.getElementById('go').onclick = function(){ if (location.hash === '#/' || location.hash === '') route(); else location.hash = '#/'; };
     }
     intro();
   }
@@ -2944,6 +2946,14 @@
     else if (parts[0] === 'tips') tips();
     else home();
   }
+  // A link to the address already showing (for example Home while a test result is shown at "#/")
+  // fires no hashchange, so show that page again directly.
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!a || e.defaultPrevented) return;
+    var h = a.getAttribute('href'), cur = location.hash || '#/';
+    if (h === cur || (h === '#/' && cur === '#')) { e.preventDefault(); route(); }
+  });
   var lastPage = location.hash || '#/';
   window.addEventListener('hashchange', function(e){
     var from = (e.oldURL || '').split('#')[1];
