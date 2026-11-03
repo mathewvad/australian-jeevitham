@@ -20,13 +20,27 @@
     { id: 'advanced', name: 'Advanced', cefr: 'B2-C1', about: 'Fluent, precise professional English' },
     { id: 'leadership', name: 'Leadership', cefr: 'C1-C2', about: 'Polished, persuasive senior-level English' }
   ];
+  // Mother tongue for explanations: ml (Malayalam), hi (Hindi), ta (Tamil) or en (English only).
+  // Content keeps Malayalam in "ml" fields; Hindi and Tamil come from natives.js ("hi"/"ta" fields).
+  var NATIVES = { ml: 'Malayalam', hi: 'Hindi', ta: 'Tamil', en: 'English only (no translations)' };
+  function nativeLang(){ return profile && NATIVES[profile.native] ? profile.native : 'ml'; }
+  // The text of field f (default "ml") in the learner's language: ml -> f, hi -> "hi" or f_hi.
+  function nat(o, f){
+    var l = nativeLang(); f = f || 'ml';
+    if (!o || l === 'en') return '';
+    return (l === 'ml' ? o[f] : o[/ml$/.test(f) ? f.replace(/ml$/, l) : f + '_' + l]) || '';
+  }
+  function natHtml(o, cls, tag, f){
+    var t = nat(o, f); tag = tag || 'p';
+    return t ? '<' + tag + ' class="' + cls + '" lang="' + nativeLang() + '">' + esc(t) + '</' + tag + '>' : '';
+  }
   function levelById(id){ return LEVELS.find(function(l){ return l.id === id; }) || null; }
   function myEnglish(){ return profile && ENGLISHES[profile.english] ? profile.english : null; }
   function myLevelInfo(){ var e = myEnglish(); return e && profile.levels && profile.levels[e] ? profile.levels[e] : null; }
   // The level the AI coach teaches at (signed-in learners: their own; access codes: leadership).
   function userLevel(){ var lv = myLevelInfo(); return lv ? lv.level : 'leadership'; }
-  // Beginner and Intermediate chats come with Malayalam help.
-  function malayalamHelp(){ return !!myLevelInfo() && (userLevel() === 'beginner' || userLevel() === 'intermediate'); }
+  // Beginner and Intermediate chats come with help in the learner's mother tongue.
+  function malayalamHelp(){ return !!myLevelInfo() && nativeLang() !== 'en' && (userLevel() === 'beginner' || userLevel() === 'intermediate'); }
   // When the next level-up exam may be taken: null = now (or no exam, at the top level).
   function nextExamDate(){
     var lv = myLevelInfo();
@@ -613,7 +627,7 @@
     addVocab(res.heard); markActive(); save();
   }
 
-  // What each score bar means, shown when it is tapped: [English, Malayalam].
+  // What each score bar means, shown when it is tapped: [English, Malayalam] (Hindi and Tamil are in natives.js).
   var SCORE_INFO = {
     Overall: ['Your total pronunciation score - accuracy, fluency and intonation together. 80 or more is clear speech that is easy to understand.',
       'നിങ്ങളുടെ ഉച്ചാരണത്തിന്റെ ആകെ സ്കോർ - കൃത്യത, ഒഴുക്ക്, സ്വരഭേദം എന്നിവ ചേർന്നത്. 80-ന് മുകളിൽ ആണെങ്കിൽ വ്യക്തവും എളുപ്പം മനസ്സിലാകുന്നതുമായ സംസാരം.'],
@@ -642,7 +656,7 @@
     if (open) return;
     var t = SCORE_INFO[b.getAttribute('data-info')], d = document.createElement('div');
     d.className = 'sbar-info';
-    d.innerHTML = '<p>' + esc(t[0]) + '</p><p class="mal" lang="ml">' + esc(t[1]) + '</p>';
+    d.innerHTML = '<p>' + esc(t[0]) + '</p>' + natHtml({ ml: t[1], hi: NATIVE_TEXT.hi['score:' + b.getAttribute('data-info')], ta: NATIVE_TEXT.ta['score:' + b.getAttribute('data-info')] }, 'mal');
     b.classList.add('on');
     b.after(d);
   });
@@ -694,7 +708,7 @@
       '<div class="sbars">' + bar('Overall', res.pron) + bar('Accuracy', res.accuracy) + bar('Fluency', res.fluency) + bar('Intonation', res.prosody) + '</div>' +
       (weak ? '<div class="weak-tip"><div><span class="count">Fix this sound first</span><b>/' + esc(weak.p.ipa) + '/ in “' + esc(weak.word) + '”' +
         (weak.p.heard && weak.p.heard !== weak.p.ipa ? ' - you said /' + esc(weak.p.heard) + '/' : '') + '</b>' +
-        '<p>' + esc(weak.s.tip) + '</p><p class="mal" lang="ml">' + esc(weak.s.ml) + '</p><a href="#/sound/' + weak.s.id + '">Practise ' + esc(weak.s.title) + I.chev + '</a></div>' +
+        '<p>' + esc(weak.s.tip) + '</p>' + natHtml(weak.s, 'mal', 'p') + '<a href="#/sound/' + weak.s.id + '">Practise ' + esc(weak.s.title) + I.chev + '</a></div>' +
         mouthSvg(weak.p.ipa) + '</div>' : '') +
       '<div class="words az">' + res.words.map(function(w, i){
         var cls = w.error === 'Omission' ? 'skip' : w.error === 'Insertion' ? 'extra' : scoreCls(w.score);
@@ -990,7 +1004,7 @@
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
         '<a class="card item" href="#/exam"><span class="num">' + I.check + '</span><span class="t"><h2>Your level and exams</h2><span class="sub">' + (myLevelInfo() ? 'You are ' + esc(levelById(userLevel()).name) + (nextLevel() ? ' · ' + (nextExamDate() ? 'next exam ' + esc(niceDate(nextExamDate())) : 'exam ready now') : '') : 'Take the placement test') + '</span></span></a>' +
-        '<a class="card item" href="#/everyday"><span class="num">' + I.chat + '</span><span class="t"><h2>Everyday Australian English</h2><span class="sub">' + LESSONS.length + ' lessons of everyday phrases with Malayalam meanings' + (quizzesDone() ? ' · ' + quizzesDone() + '/' + LESSONS.length + ' quizzes done' : '') + '</span></span></a>' +
+        '<a class="card item" href="#/everyday"><span class="num">' + I.chat + '</span><span class="t"><h2>Everyday Australian English</h2><span class="sub">' + LESSONS.length + ' lessons of everyday phrases' + (nativeLang() !== 'en' ? ' with ' + NATIVES[nativeLang()] + ' meanings' : '') + (quizzesDone() ? ' · ' + quizzesDone() + '/' + LESSONS.length + ' quizzes done' : '') + '</span></span></a>' +
         '<a class="card item" href="#/slang"><span class="num">' + I.cards + '</span><span class="t"><h2>Aussie slang</h2><span class="sub">' + SLANG.length + ' words you\'ll hear every day, from "arvo" to "ambo"</span></span></a>' +
       '</div>'
     );
@@ -1004,11 +1018,11 @@
       '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
       '<span class="eyebrow">Everyday Australian English</span>' +
       '<h1 class="title">Phrases for daily life</h1>' +
-      '<p class="lede">Short lessons of everyday phrases with Malayalam meanings. Listen, say each phrase, then take the quiz.</p>' +
+      '<p class="lede">Short lessons of everyday phrases' + (nativeLang() !== 'en' ? ' with ' + NATIVES[nativeLang()] + ' meanings' : '') + '. Listen, say each phrase, then take the quiz.</p>' +
       '<div class="list two">' + LESSONS.map(function(l, i){
         var seen = seenIn(l);
         return '<a class="card item" href="#/lesson/' + l.id + '"><span class="num">' + (i + 1) + '</span><span class="t">' +
-          '<h2>' + esc(l.title) + '</h2><span class="sub mal" lang="ml">' + esc(l.ml) + '</span>' +
+          '<h2>' + esc(l.title) + '</h2>' + natHtml(l, 'sub mal', 'span') +
           '<span class="meta"><span class="mini-bar"><i style="width:' + Math.round(seen / l.phrases.length * 100) + '%"></i></span>' + seen + '/' + l.phrases.length +
           (state.done[l.id] ? ' <span class="pill good">Quiz ' + state.best[l.id] + '%</span>' : '') + '</span></span></a>';
       }).join('') + '</div>'
@@ -1031,9 +1045,9 @@
       '<article class="card pad">' +
         '<span class="count">Phrase ' + (idx + 1) + ' of ' + l.phrases.length + '</span>' +
         '<p class="phrase-en">' + esc(p.en) + '</p>' +
-        '<p class="phrase-ml" lang="ml">' + esc(p.ml) + '</p>' +
+        natHtml(p, 'phrase-ml', 'p') +
         '<div class="listen-row"><button class="btn" id="play">' + I.speaker + 'Listen</button><button class="btn" id="slow">' + I.speaker + 'Slow</button></div>' +
-        (p.tip ? '<p class="tip" lang="ml">' + esc(p.tip) + '</p>' : '') +
+        natHtml(p, 'tip', 'p', 'tip') +
         '<div class="speak-zone" id="practice"></div>' +
       '</article>' +
       '<div class="nav">' +
@@ -1100,7 +1114,7 @@
       '<span class="eyebrow">Sound drill</span>' +
       '<h1 class="title">' + esc(s.title) + '</h1>' +
       '<article class="card pad" style="margin-top:14px">' + (s.ipa.length ? '<div class="sound-hero">' + s.ipa.map(mouthSvg).join('') + '</div>' : '') +
-        '<p style="margin-top:10px">' + esc(s.tip) + '</p><p class="tip" lang="ml">' + esc(s.ml) + '</p></article>' +
+        '<p style="margin-top:10px">' + esc(s.tip) + '</p>' + natHtml(s, 'tip', 'p') + '</article>' +
       '<h2 class="section-title">Word pairs - listen, then pick one to say</h2>' +
       '<div class="pairs">' + s.pairs.map(function(p, i){
         return '<div class="card pair">' + [0, 1].map(function(k){
@@ -1814,7 +1828,7 @@
       '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
       '<span class="eyebrow">Vocabulary · ' + got + ' of ' + total + ' learnt</span>' +
       '<h1 class="title">Words for work and life</h1>' +
-      '<p class="lede">Healthcare, leadership and everyday words, each with a meaning, an example and Malayalam. Hear them, say them, and mark them as learnt.</p>' +
+      '<p class="lede">Healthcare, leadership and everyday words, each with a meaning and an example. Hear them, say them, and mark them as learnt.</p>' +
       '<div class="list two">' + VOCAB.map(function(t, i){
         var n = learntIn(t);
         return '<a class="card item" href="#/words/' + t.id + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(t.title) + '</h2>' +
@@ -1837,7 +1851,7 @@
         var learnt = (state.learnt || {})[t.id + ':' + i];
         return '<div class="card vw' + (learnt ? ' learnt' : '') + '" data-i="' + i + '" role="button" tabindex="0" aria-expanded="false">' +
           '<div class="vw-top"><b>' + esc(w.w) + '</b><button class="say" type="button" data-say="' + esc(w.w) + '" aria-label="Listen">' + I.speaker + '</button></div>' +
-          '<div class="vw-back"><p>' + esc(w.m) + '</p><p class="mal" lang="ml">' + esc(w.ml) + '</p><p class="ex">“' + esc(w.ex) + '” <button class="say" type="button" data-say="' + esc(w.ex) + '" aria-label="Listen to the example">' + I.speaker + '</button></p>' +
+          '<div class="vw-back"><p>' + esc(w.m) + '</p>' + natHtml(w, 'mal', 'p') + '<p class="ex">“' + esc(w.ex) + '” <button class="say" type="button" data-say="' + esc(w.ex) + '" aria-label="Listen to the example">' + I.speaker + '</button></p>' +
           '<button class="btn sm ' + (learnt ? 'primary' : 'ghost') + '" type="button" data-learn="' + i + '">' + (learnt ? I.check + 'Learnt' : 'Mark as learnt') + '</button></div></div>';
       }).join('') + '</div>' +
       '<div class="card pad drill-say"><span class="count">Now say the example:</span><p class="phrase-en" id="target"></p><div class="speak-zone" id="practice"></div></div>'
@@ -2075,7 +2089,7 @@
     var picks = shuffle(l.phrases).slice(0, Math.min(6, l.phrases.length));
     var qs = picks.map(function(p, i){
       var others = shuffle(l.phrases.filter(function(o){ return o !== p; })).slice(0, 3);
-      return { p: p, type: i % 2 ? 'listen' : 'meaning', opts: shuffle([p].concat(others)) };
+      return { p: p, type: i % 2 || !nat(p) ? 'listen' : 'meaning', opts: shuffle([p].concat(others)) };
     });
     var n = 0, right = 0;
 
@@ -2092,7 +2106,7 @@
             : '<p class="q-prompt">Listen and choose what you hear</p><p class="q-sub">Play it as many times as you like.</p>') +
           '<div class="listen-row" style="margin:0 0 14px"><button class="btn" id="play">' + I.speaker + 'Play</button><button class="btn" id="slow">' + I.speaker + 'Slow</button></div>' +
           '<div class="opts">' + q.opts.map(function(o, i){
-            return '<button class="opt' + (isMeaning ? ' mal' : '') + '" data-i="' + i + '"' + (isMeaning ? ' lang="ml"' : '') + '>' + esc(isMeaning ? o.ml : o.en) + '</button>';
+            return '<button class="opt' + (isMeaning ? ' mal' : '') + '" data-i="' + i + '"' + (isMeaning ? ' lang="' + nativeLang() + '"' : '') + '>' + esc(isMeaning ? nat(o) : o.en) + '</button>';
           }).join('') + '</div>' +
           '<div class="nav" id="next" hidden><button class="btn primary">' + (n === qs.length - 1 ? 'See my score' : 'Next question') + I.chev + '</button></div>' +
         '</article>'
@@ -2254,7 +2268,7 @@
     if (!authReady || profileLoading) return 'wait';
     if (!me) return getCode() ? null : 'signin';
     if (!me.emailVerified) return 'verify';
-    if (!profile || profile.uid !== me.uid) return 'profile';
+    if (!profile || profile.uid !== me.uid || !profile.native) return 'profile';
     if (page === 'privacy' || page === 'terms' || page === 'account' || page === 'profile') return null;
     if (!myEnglish() || page === 'english') return 'english';
     if (!myLevelInfo()) return 'placement';
@@ -2377,9 +2391,9 @@
 
   // The short profile: asked once after registering, and editable from My account.
   function profilePage(){
-    var first = !profile || profile.uid !== me.uid, pr = first ? {} : profile;
+    var first = !profile || profile.uid !== me.uid, pr = first ? {} : profile, missing = !first && !pr.native;
     authShell(
-      '<h1 class="title">' + (first ? 'Tell us about you' : 'Edit your profile') + '</h1>' +
+      '<h1 class="title">' + (first ? 'Tell us about you' : missing ? 'One more question' : 'Edit your profile') + '</h1>' +
       '<p class="lede">' + (first ? 'This helps us make the app better for people like you.' : 'Update your details.') + '</p>' +
       '<form id="pf" class="auth-form">' +
         '<label>Your name<input id="nm" type="text" autocomplete="name" maxlength="60" required value="' + esc(pr.name || (me && me.displayName) || '') + '"></label>' +
@@ -2387,6 +2401,8 @@
         '<label>Your field<select id="fd" required>' + options(FIELDS, pr.field) + '</select></label>' +
         '<label id="rlWrap"' + (pr.field === 'Healthcare & Medical' ? '' : ' hidden') + '>Your role<select id="rl">' + options(HEALTH_ROLES, pr.role) + '</select></label>' +
         '<label>Your main goal<select id="gl" required>' + options(GOALS, pr.goal) + '</select></label>' +
+        '<label>Your mother tongue<select id="nt" required><option value="">Choose…</option>' + Object.keys(NATIVES).map(function(k){ return '<option value="' + k + '"' + (pr.native === k ? ' selected' : '') + '>' + esc(NATIVES[k]) + '</option>'; }).join('') + '</select>' +
+          '<span class="hint">Explanations and help in the app will be in this language.</span></label>' +
         (first ? '<label class="check"><input id="ok" type="checkbox" required> I am 18 or older and agree to the <a href="#/terms">Terms</a> and <a href="#/privacy">Privacy policy</a>.</label>' : '') +
         '<button class="btn primary" id="sv" type="submit">' + (first ? 'Start practising' : 'Save') + '</button>' +
       '</form>' +
@@ -2401,7 +2417,8 @@
       var health = fd.value === 'Healthcare & Medical';
       var body = { name: app.querySelector('#nm').value.trim(), country: app.querySelector('#ct').value, field: fd.value, role: health ? app.querySelector('#rl').value : '', goal: app.querySelector('#gl').value };
       body.job = body.role || body.field;
-      if (!body.name || !body.country || !body.field || !body.goal || (health && !body.role)) { msg.textContent = 'Please fill in every question.'; return; }
+      body.native = app.querySelector('#nt').value;
+      if (!body.name || !body.country || !body.field || !body.goal || !body.native || (health && !body.role)) { msg.textContent = 'Please fill in every question.'; return; }
       if (first && !app.querySelector('#ok').checked) { msg.textContent = 'Please tick the box to agree to the Terms and Privacy policy.'; return; }
       sv.disabled = true; msg.textContent = '';
       apiFetch(TALK_API + '/profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
@@ -2409,7 +2426,7 @@
         .then(function(d){
           if (!d.profile) throw new Error(d.error || 'save');
           saveProfile(Object.assign({ uid: me.uid }, d.profile));
-          if (location.hash === '#/' || location.hash === '' ) route(); else location.hash = first ? '#/' : '#/account';
+          if (location.hash === '#/' || location.hash === '' ) route(); else location.hash = first || missing ? '#/' : '#/account';
         })
         .catch(function(){ sv.disabled = false; msg.textContent = 'Couldn\'t save - please check your internet and try again.'; });
     };
@@ -2437,7 +2454,7 @@
       '<h1 class="title">' + esc(pr.name || 'Your account') + '</h1>' +
       (me ? '' : '<div class="notice">You are using an access code, which will stop working soon.</div><a class="btn primary" href="#/signin" style="margin-top:12px">Sign in or create your account' + I.chev + '</a>') +
       (me ? '<div class="card pad" style="margin-top:16px">' + row('Email', me.email) + row('Learning', myEnglish() ? ENGLISHES[myEnglish()].name : '') + row('Level', myLevelInfo() ? levelById(userLevel()).name : '') +
-        row('Lives in', pr.country) + row('Field', pr.role ? pr.field + ' · ' + pr.role : pr.field || pr.job) + row('Main goal', pr.goal) + row('Member since', pr.created) +
+        row('Lives in', pr.country) + row('Field', pr.role ? pr.field + ' · ' + pr.role : pr.field || pr.job) + row('Main goal', pr.goal) + row('Mother tongue', NATIVES[pr.native] || '') + row('Member since', pr.created) +
         '<div class="row" style="margin-top:12px;gap:8px"><a class="btn ghost sm" href="#/profile">' + I.pencil + 'Edit profile</a><a class="btn ghost sm" href="#/english">Change English</a></div></div>' : '') +
       (hasAccess() ? quotaHtml() : '') +
       '<div class="list">' +
@@ -2606,7 +2623,7 @@
       var b = add(el('msg ai', '<p>' + esc(text) + '</p>' +
         '<div class="msg-tools"><button type="button" data-a="say">' + I.speaker + 'Play</button><button type="button" data-a="slow">Slow</button>' +
         (ml ? '<button type="button" data-a="ml">മലയാളം</button>' : '') + '</div>' +
-        (ml ? '<p class="coach mal" lang="ml" hidden>' + esc(ml) + '</p>' : '')));
+        (ml ? '<p class="coach mal" lang="' + nativeLang() + '" hidden>' + esc(ml) + '</p>' : '')));
       b.querySelector('[data-a=say]').onclick = function(){ speak(spoken || text); };
       b.querySelector('[data-a=slow]').onclick = function(){ speak(spoken || text, true); };
       var mlBtn = b.querySelector('[data-a=ml]');
@@ -2614,7 +2631,7 @@
       if (phrase && phrase.phrase) {
         var saved = state.phrases.some(function(x){ return x.phrase === phrase.phrase; });
         var pc = add(el('power', '<div style="flex:1"><span class="lbl">Power phrase</span><b>' + esc(phrase.phrase) + '</b>' +
-          '<span class="' + (malayalamHelp() ? 'mal' : 'why') + '"' + (malayalamHelp() ? ' lang="ml"' : '') + '>' + esc(phrase.meaning || '') + '</span></div>' +
+          '<span class="' + (malayalamHelp() ? 'mal' : 'why') + '"' + (malayalamHelp() ? ' lang="' + nativeLang() + '"' : '') + '>' + esc(phrase.meaning || '') + '</span></div>' +
           '<div class="acts"><button type="button" data-a="pp" aria-label="Listen">' + I.speaker + '</button>' +
           '<button type="button" data-a="save" class="' + (saved ? 'saved' : '') + '" aria-label="Save phrase">' + I.save + '</button></div>'));
         pc.querySelector('[data-a=pp]').onclick = function(){ speak(phrase.phrase); };
@@ -2680,7 +2697,7 @@
       var coach = '';
       if (status !== 'excellent') coach += '<div class="better">“' + esc(f.better) + '”</div>';
       if (f.explain) coach += '<div class="why">' + esc(f.explain) + '</div>';
-      if (f.explain_ml) coach += '<span class="mal" lang="ml">' + esc(f.explain_ml) + '</span>';
+      if (f.explain_ml) coach += '<span class="mal" lang="' + nativeLang() + '">' + esc(f.explain_ml) + '</span>';
       unplaced.forEach(function(x){ coach += '<div class="why">“' + esc(x.text) + '” → ' + esc(x.fix) + ' - ' + esc(x.note) + '</div>'; });
       var v = document.createElement('button');
       v.type = 'button'; v.className = 'verdict ' + status; v.innerHTML = label;
@@ -2829,7 +2846,7 @@
     typeRow.onsubmit = function(e){ e.preventDefault(); send(input.value); };
     document.getElementById('restart').onclick = function(){ if (rec) rec.abort(); talk(id); };
 
-    aiMsg(s.opening, malayalamHelp() ? s.opening_ml : '', s.say);
+    aiMsg(s.opening, malayalamHelp() ? nat(s, 'opening_ml') : '', s.say);
 
     // Load this scene into the server's cache while the learner reads the opening line,
     // so their first reply comes back as quickly as later ones.
@@ -2855,7 +2872,7 @@
           '<button class="say" type="button" data-i="' + i + '" aria-label="Listen to ' + esc(s.word) + '">' + I.speaker + '</button>' +
           '<div class="w">' + esc(s.word) + '</div>' +
           '<div class="hint">Tap to see meaning</div>' +
-          '<div class="back-side">= ' + esc(s.means) + '<span class="mal" lang="ml">' + esc(s.ml) + '</span><em>“' + esc(s.ex) + '”</em></div>' +
+          '<div class="back-side">= ' + esc(s.means) + natHtml(s, 'mal', 'span') + '<em>“' + esc(s.ex) + '”</em></div>' +
         '</div>';
       }).join('') + '</div>'
     );
@@ -2881,7 +2898,7 @@
       '<h1 class="title">Working and living in Australia</h1>' +
       '<p class="lede">The unwritten rules that help you fit in from day one.</p>' +
       '<div class="tips">' + TIPS.map(function(t){
-        return '<div class="card tipcard"><h2>' + esc(t.title) + '</h2><p lang="ml">' + esc(t.ml) + '</p></div>';
+        return '<div class="card tipcard"><h2>' + esc(t.title) + '</h2>' + (t.en ? '<p>' + esc(t.en) + '</p>' : '') + natHtml(t, '') + '</div>';
       }).join('') + '</div>'
     );
   }
