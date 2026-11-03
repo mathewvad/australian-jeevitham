@@ -17,7 +17,7 @@
       everyday: 'Everyday British English', slang: 'British slang', slangSub: 'words you\'ll hear every day, from "cuppa" to "knackered"', older: 'Older British patients',
       listenSub: 'Understand fast, informal British patient talk', sample: 'Hello! I\'m your English coach. Let\'s practise speaking together.' },
     in: { name: 'Indian English', short: 'Indian', tag: 'IN', desc: 'Clear, professional English for working in India', voice: 'en[-_]IN', country: 'India',
-      everyday: 'Everyday English', slang: 'Everyday expressions', slangSub: 'words and expressions you\'ll hear every day', older: 'Older patients',
+      everyday: 'Everyday English in India', slang: 'Everyday expressions', slangSub: 'words and expressions you\'ll hear every day', older: 'Older patients',
       listenSub: 'Understand fast, informal patient talk', sample: 'Hello! I\'m your English coach. Let\'s practise speaking together.' }
   };
   var LEVELS = [
@@ -49,6 +49,7 @@
   function curSlang(){ return pack().slang || SLANG; }
   function curTips(){ return pack().tips || TIPS; }
   function curListening(){ return pack().listening || LISTENING; }
+  function curSounds(){ var o = pack().sounds || {}; return SOUNDS.map(function(x){ return o[x.id] ? Object.assign({}, x, o[x.id]) : x; }); }
   function curVocab(){ var life = pack().life; return life ? VOCAB.map(function(t){ return t.id === 'life' ? life : t; }) : VOCAB; }
   function levelById(id){ return LEVELS.find(function(l){ return l.id === id; }) || null; }
   function myEnglish(){ return profile && ENGLISHES[profile.english] ? profile.english : null; }
@@ -627,7 +628,7 @@
       })
     };
   }
-  function soundFor(ipa){ return SOUNDS.find(function(s){ return s.ipa.indexOf(ipa) >= 0; }); }
+  function soundFor(ipa){ return curSounds().find(function(s){ return s.ipa.indexOf(ipa) >= 0; }); }
   function scoreCls(n){ return n >= 80 ? 'ok' : n >= 60 ? 'close' : 'miss'; }
 
   // Adds the day's pronunciation numbers and which drill sounds were weak.
@@ -943,8 +944,8 @@
   // Today's plan: the weakest sound, one conversation, and the level test or own-sentence practice.
   function planCard(){
     var today = state.days[dayKey(new Date())] || {}, dayNo = Math.floor(Date.now() / 864e5);
-    var scored = SOUNDS.filter(function(s){ return soundAvg(s.id) !== null; }).sort(function(a, b){ return soundAvg(a.id) - soundAvg(b.id); });
-    var snd = scored.length && soundAvg(scored[0].id) < 85 ? scored[0] : SOUNDS[dayNo % SOUNDS.length];
+    var scored = curSounds().filter(function(s){ return soundAvg(s.id) !== null; }).sort(function(a, b){ return soundAvg(a.id) - soundAvg(b.id); });
+    var snd = scored.length && soundAvg(scored[0].id) < 85 ? scored[0] : curSounds()[dayNo % curSounds().length];
     var lead = talkScenes(), scene = lead[dayNo % lead.length];
     var tasks = [
       { href: '#/sound/' + snd.id, title: 'Sound drill: ' + snd.title, sub: soundAvg(snd.id) !== null ? 'Your weakest sound - ' + soundAvg(snd.id) + '% so far' : 'Say 3 words or sentences', done: (today.drills || 0) >= 3 },
@@ -1014,7 +1015,7 @@
         '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
         '<a class="card item" href="#/listen"><span class="num">' + I.speaker + '</span><span class="t"><h2>Listening: older patients</h2><span class="sub">' + eng().listenSub + (state.listenBest != null ? ' · best ' + state.listenBest + '%' : '') + '</span></span></a>' +
         '<a class="card item" href="#/fluency"><span class="num">' + I.mic + '</span><span class="t"><h2>1-minute speaking check</h2><span class="sub">Pronunciation, grammar, vocabulary, pace, pauses and fillers in one report</span></span></a>' +
-        '<a class="card item" href="#/oet"><span class="num">' + I.check + '</span><span class="t"><h2>OET Speaking (Nursing)</h2><span class="sub">10 role-plays with a 3-minute prep and 5-minute talk, marked on all 9 criteria</span></span></a>' +
+        (myEnglish() === 'in' ? '' : '<a class="card item" href="#/oet"><span class="num">' + I.check + '</span><span class="t"><h2>OET Speaking (Nursing)</h2><span class="sub">10 role-plays with a 3-minute prep and 5-minute talk, marked on all 9 criteria</span></span></a>') +
         '<a class="card item" href="#/ielts"><span class="num">' + I.check + '</span><span class="t"><h2>IELTS Speaking</h2><span class="sub">Parts 1-3, cue cards with timers, full mock test, band scores on the 4 criteria</span></span></a>' +
         '<a class="card item" href="#/interview"><span class="num">' + I.chat + '</span><span class="t"><h2>Interview preparation</h2><span class="sub">20 healthcare interview questions, model answers and AI feedback</span></span></a>' +
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
@@ -1109,7 +1110,7 @@
       '<span class="eyebrow">Sound drills</span>' +
       '<h1 class="title">The sounds Malayalis find hardest</h1>' +
       '<p class="lede">Short drills for each sound, with word pairs and sentences. Every sound you say is scored.</p>' +
-      '<div class="list two">' + SOUNDS.map(function(s, i){
+      '<div class="list two">' + curSounds().map(function(s, i){
         var avg = soundAvg(s.id);
         return '<a class="card item" href="#/sound/' + s.id + '"><span class="num">' + (s.ipa.length ? '/' + esc(s.ipa[0]) + '/' : (i + 1)) + '</span><span class="t">' +
           '<h2>' + esc(s.title) + '</h2><span class="sub">' + s.pairs.slice(0, 2).map(function(p){ return esc(p[0]) + ' / ' + esc(p[1]); }).join(' · ') + '</span>' +
@@ -1118,7 +1119,7 @@
     );
   }
   function sound(id){
-    var s = SOUNDS.find(function(x){ return x.id === id; });
+    var s = curSounds().find(function(x){ return x.id === id; });
     if (!s) return sounds();
     setTab('learn');
     var items = [];
