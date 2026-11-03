@@ -1,19 +1,20 @@
 // Offline support for the installed app. Lessons, slang and tips work without internet;
-// the AI coach (a different website) always goes to the network.
+// the AI coach (a different website) always goes to the network. The Firebase sign-in scripts are
+// kept too, so returning users can open the app offline.
 // Bump VERSION whenever the app's files change, together with the ?v= numbers in index.html.
-const VERSION = 'v21';
+const VERSION = 'v25';
 const CACHE = 'aussie-english-' + VERSION;
 const FILES = [
   './',
   'index.html',
-  'app.css?v=21',
-  'lessons.js?v=21',
-  'vocab.js?v=21',
-  'interview.js?v=21',
-  'ielts.js?v=21',
-  'oet.js?v=21',
-  'help.js?v=21',
-  'app.js?v=21',
+  'app.css?v=25',
+  'lessons.js?v=25',
+  'vocab.js?v=25',
+  'interview.js?v=25',
+  'ielts.js?v=25',
+  'oet.js?v=25',
+  'help.js?v=25',
+  'app.js?v=25',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',
@@ -38,7 +39,8 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   const sameSite = url.origin === self.location.origin;
   const fonts = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
-  if (!sameSite && !fonts) return;
+  const firebaseJs = url.hostname === 'www.gstatic.com' && url.pathname.startsWith('/firebasejs/');
+  if (!sameSite && !fonts && !firebaseJs) return;
 
   // Pages: try the network first so updates show straight away, fall back to the saved copy offline.
   if (req.mode === 'navigate') {

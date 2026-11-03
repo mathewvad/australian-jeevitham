@@ -33,7 +33,9 @@
     pencil: svg('<path d="M4 20h4L19 9l-4-4L4 16z"/>'),
     save: svg('<path d="M6 3h12v18l-6-4-6 4z"/>'),
     spinner: svg('<path d="M21 12a9 9 0 1 1-9-9"/>'),
-    x: svg('<path d="M6 6l12 12M18 6 6 18"/>')
+    x: svg('<path d="M6 6l12 12M18 6 6 18"/>'),
+    feedback: svg('<path d="M4 4.5h16v11.5H9l-5 4z"/><path d="M8.5 8.5h7M8.5 12h4.5"/>'),
+    star: svg('<path d="m12 3 2.8 5.8 6.2.9-4.5 4.4 1 6.2-5.5-2.9-5.5 2.9 1-6.2L3 9.7l6.2-.9z"/>')
   };
   document.querySelectorAll('[data-icon]').forEach(function(el){ el.innerHTML = I[el.dataset.icon] || ''; });
 
@@ -175,7 +177,7 @@
   var player = new Audio(), playing = null, ttsQueue = [], ttsUrls = {}, ttsKeys = [], ttsOff = false, speakGen = 0;
   function naturalVoice(){
     var v = prefs.voice || NATURAL_VOICES[0][0];
-    return v !== 'phone' && !ttsOff && TALK_API && getCode() && navigator.onLine !== false ? v : null;
+    return v !== 'phone' && !ttsOff && TALK_API && hasAccess() && navigator.onLine !== false ? v : null;
   }
   // iPhones only play audio started by a tap, so play a silent clip on the first tap to unlock the player.
   function unlockPlayer(){
@@ -188,7 +190,7 @@
   function ttsFetch(text, v, rate){
     var k = v + '|' + rate + '|' + text;
     if (ttsUrls[k]) return ttsUrls[k];
-    var p = ttsUrls[k] = fetch(TALK_API + '/tts', {
+    var p = ttsUrls[k] = apiFetch(TALK_API + '/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
       body: JSON.stringify({ text: text, voice: v, rate: rate })
@@ -443,7 +445,7 @@
   // Sends a recording to the server for scoring against the reference text.
   function scoreWav(wav, ref){
     var refB64 = btoa(unescape(encodeURIComponent(ref)));
-    return fetch(TALK_API.replace(/\/$/, '') + '/pron', {
+    return apiFetch(TALK_API.replace(/\/$/, '') + '/pron', {
       method: 'POST', headers: { 'Content-Type': 'audio/wav', 'X-Access-Code': getCode(), 'X-Reference': refB64 }, body: wav
     }).then(function(r){ return r.json(); }).then(function(j){
       if (j.error) { if (j.error === 'no_azure') az.off = true; throw new Error(j.error); }
@@ -456,7 +458,7 @@
     var out = { text: [], secs: 0, acc: 0, flu: 0, pros: 0, pauses: 0, longPauses: 0 };
     return wavs.reduce(function(p, wav){
       return p.then(function(){
-        return fetch(TALK_API.replace(/\/$/, '') + '/pron', {
+        return apiFetch(TALK_API.replace(/\/$/, '') + '/pron', {
           method: 'POST', headers: { 'Content-Type': 'audio/wav', 'X-Access-Code': getCode(), 'X-Unscripted': '1', 'X-Reference': '' }, body: wav
         }).then(function(r){ return r.json(); }).then(function(j){
           if (j.error) { if (j.error === 'no_azure') az.off = true; throw new Error(j.error); }
@@ -487,7 +489,7 @@
   // otherwise the phone's own speech recognition. The answer box can always be typed in or edited.
   // done({ text, secs, pron }) is called whenever an answer is captured.
   function speakAnswer(el, opts){
-    var maxSec = opts.maxSec || 60, useAzure = !az.off && !!TALK_API && !!getCode() && !!(navigator.mediaDevices && (window.AudioContext || window.webkitAudioContext));
+    var maxSec = opts.maxSec || 60, useAzure = !az.off && !!TALK_API && hasAccess() && !!(navigator.mediaDevices && (window.AudioContext || window.webkitAudioContext));
     el.innerHTML = micButton('smic') + '<span class="mic-label" id="slabel">Tap and start speaking</span>' +
       '<div class="timer" id="stimer" hidden></div>' +
       '<textarea id="sans" class="ref" rows="5" placeholder="Your answer appears here after you speak. You can also type or correct it."></textarea>';
@@ -719,7 +721,7 @@
       var ref = (getRef() || '').trim();
       if (!ref) { label.textContent = 'Type a sentence first'; return; }
       stopSpeech();
-      if (az.off || !canRecord || !TALK_API || !getCode()) return browserCheck(ref);
+      if (az.off || !canRecord || !TALK_API || !hasAccess()) return browserCheck(ref);
       // Start recording right here, inside the tap.
       mic.classList.add('live'); label.innerHTML = waveHtml() + 'Listening… speak now';
       // A word or two stops soon after it's said (2.5 s at most once they start); a sentence gets about 1 s per word.
@@ -768,7 +770,7 @@
     var turns = Object.keys(state.days).reduce(function(a, k){ return a + (state.days[k].turns || 0); }, 0);
     return {
       installed: isInstalled(),
-      code: !!getCode(),
+      code: hasAccess(),
       test: !!state.test,
       drill: Object.keys(state.sounds || {}).length > 0,
       talk: turns >= 5,
@@ -802,7 +804,7 @@
       '<span class="eyebrow">Settings</span>' +
       '<h1 class="title">Choose a voice</h1>' +
       '<p class="lede">The voice that reads lessons, drills and your coach\'s replies. Tap a name to choose it and hear a sample.</p>' +
-      (getCode() ? '' : '<div class="notice">Natural voices start working once you have entered your access code (in Talk). Until then the phone\'s voice is used.</div>') +
+      (hasAccess() ? '' : '<div class="notice">Natural voices start working once you have signed in. Until then the phone\'s voice is used.</div>') +
       '<div class="list">' + opts.map(function(o){
         return '<div class="card item voice-opt' + (o[0] === cur ? ' on' : '') + '" data-v="' + o[0] + '">' +
           '<button type="button" class="voice-pick t" aria-pressed="' + (o[0] === cur) + '"><span class="tick">' + I.check + '</span><span><h2>' + esc(o[1]) + '</h2><span class="sub">' + esc(o[2]) + '</span></span></button>' +
@@ -818,7 +820,7 @@
         app.querySelectorAll('.voice-opt').forEach(function(r){ r.classList.toggle('on', r === row); r.querySelector('.voice-pick').setAttribute('aria-pressed', r === row); });
         speakAs(naturalVoice() || 'phone', SAMPLE, 0.95);
       };
-      row.querySelector('[data-play]').onclick = function(){ ttsOff = false; speakAs(id === 'phone' || !getCode() ? 'phone' : id, SAMPLE, 0.95); };
+      row.querySelector('[data-play]').onclick = function(){ ttsOff = false; speakAs(id === 'phone' || !hasAccess() ? 'phone' : id, SAMPLE, 0.95); };
     });
   }
   function help(){
@@ -884,6 +886,7 @@
 
   function home(){
     setTab('home');
+    refreshQuota();
     var week = lastDays(7);
     var speakMin = Math.round(sumOver(week, 'speakSec') / 60);
     var doneCount = LESSONS.filter(function(l){ return state.done[l.id]; }).length;
@@ -898,9 +901,10 @@
 
     render(
       '<span class="eyebrow">Australian Jeevitham Aussie English Coach</span>' +
-      '<h1 class="title">' + (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening') + '</h1>' +
+      '<h1 class="title">' + (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening') + (profile && profile.name ? ', ' + esc(profile.name.split(' ')[0]) : '') + '</h1>' +
+      '<a class="acct-link" href="#/account"><span class="avatar sm">' + esc(((profile && profile.name) || '?').charAt(0).toUpperCase()) + '</span>My account</a>' +
       '<p class="lede">Speak the English Australian healthcare leaders use, with a coach that listens and gives you feedback.</p>' +
-      installCard() + notice + startCard() +
+      installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
       planCard() + levelCard() + skillsCard() +
       '<div class="stats">' +
         tile('Day streak', currentStreak(), currentStreak() === 1 ? 'day' : 'days', 'Practise daily to keep it') +
@@ -939,8 +943,21 @@
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
         '<a class="card item" href="#/test"><span class="num">' + I.check + '</span><span class="t"><h2>Speaking level test</h2><span class="sub">' + (state.test ? 'Your level: ' + esc(state.test.cefr) + ' · IELTS ~' + state.test.ielts : 'Find your level in about 4 minutes') + '</span></span></a>' +
-      '</div>' +
-      '<h2 class="section-title">Everyday Australian English</h2>' +
+        '<a class="card item" href="#/everyday"><span class="num">' + I.chat + '</span><span class="t"><h2>Everyday Australian English</h2><span class="sub">' + LESSONS.length + ' lessons of everyday phrases with Malayalam meanings' + (quizzesDone() ? ' · ' + quizzesDone() + '/' + LESSONS.length + ' quizzes done' : '') + '</span></span></a>' +
+        '<a class="card item" href="#/slang"><span class="num">' + I.cards + '</span><span class="t"><h2>Aussie slang</h2><span class="sub">' + SLANG.length + ' words you\'ll hear every day, from "arvo" to "ambo"</span></span></a>' +
+      '</div>'
+    );
+  }
+  function quizzesDone(){ return LESSONS.filter(function(l){ return state.done[l.id]; }).length; }
+
+  // Everyday Australian English: the list of lessons, opened from Learn like Sound drills.
+  function everyday(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">Everyday Australian English</span>' +
+      '<h1 class="title">Phrases for daily life</h1>' +
+      '<p class="lede">Short lessons of everyday phrases with Malayalam meanings. Listen, say each phrase, then take the quiz.</p>' +
       '<div class="list two">' + LESSONS.map(function(l, i){
         var seen = seenIn(l);
         return '<a class="card item" href="#/lesson/' + l.id + '"><span class="num">' + (i + 1) + '</span><span class="t">' +
@@ -961,7 +978,7 @@
     state.seen[l.id + ':' + idx] = 1; save();
     var last = idx === l.phrases.length - 1;
     render(
-      '<a class="back" href="#/learn">' + I.back + 'Lessons</a>' +
+      '<a class="back" href="#/everyday">' + I.back + 'Everyday English</a>' +
       '<span class="eyebrow">' + esc(l.title) + '</span>' +
       '<div class="progress"><i style="width:' + Math.round((idx + 1) / l.phrases.length * 100) + '%"></i></div>' +
       '<article class="card pad">' +
@@ -1163,9 +1180,9 @@
       sp.finish().then(function(){
         var r = sp.get(), words = r.text.split(/\s+/).filter(Boolean).length;
         if (words < 15) { btn.disabled = false; out.innerHTML = '<p class="heard" style="text-align:left">Talk a bit longer first - at least 20 seconds.</p>'; return; }
-        if (!getCode()) { btn.disabled = false; out.innerHTML = '<p class="heard" style="text-align:left">The report uses the AI coach - enter your access code in a Talk conversation first.</p>'; return; }
+        if (!hasAccess()) { btn.disabled = false; out.innerHTML = '<p class="heard" style="text-align:left">The report uses the AI coach - please <a href="#/signin">sign in</a> first.</p>'; return; }
         out.innerHTML = '<div class="typing" style="margin:14px 0"><i></i><i></i><i></i></div>';
-        fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ check: true, topic: topic, text: r.text, secs: r.secs }) })
+        apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ check: true, topic: topic, text: r.text, secs: r.secs }) })
           .then(function(x){ return x.json(); })
           .then(function(d){
             btn.disabled = false;
@@ -1281,9 +1298,9 @@
           document.getElementById('hearModel').onclick = function(){ speak(m.answer); };
         }
         if (cache[q]) return show(cache[q]);
-        if (!getCode()) { body.innerHTML = '<p class="heard" style="text-align:left">Model answers use the AI coach - enter your access code in a Talk conversation first.</p>'; return; }
+        if (!hasAccess()) { body.innerHTML = '<p class="heard" style="text-align:left">Model answers use the AI coach - please <a href="#/signin">sign in</a> first.</p>'; return; }
         body.innerHTML = '<div class="typing" style="margin:8px 0"><i></i><i></i><i></i></div>';
-        fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ ielts: { model: true, part: part, q: q } }) })
+        apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ ielts: { model: true, part: part, q: q } }) })
           .then(function(r){ return r.json(); }).then(function(m){
             if (!m.answer) throw new Error(m.error);
             cache[q] = m; try { localStorage.setItem('aj-ielts-models', JSON.stringify(cache)); } catch(e) {}
@@ -1367,7 +1384,7 @@
       render('<a class="back" href="' + backHref + '">' + I.back + 'IELTS Speaking</a><article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div><p class="lede">The examiner is marking your answers…</p></article>');
       var withP = answers.filter(function(a){ return a.pron && a.secs; }), tot = withP.reduce(function(s, a){ return s + a.secs; }, 0);
       var pron = tot ? ['accuracy', 'fluency', 'prosody'].reduce(function(o, k){ o[k] = Math.round(withP.reduce(function(s, a){ return s + a.pron[k] * a.secs; }, 0) / tot); return o; }, {}) : null;
-      fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+      apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
         body: JSON.stringify({ ielts: { answers: answers.map(function(a){ return { part: a.part, q: a.q, a: a.a, secs: a.secs }; }), pron: pron } }) })
         .then(function(r){ return r.json(); })
         .then(function(d){
@@ -1378,7 +1395,7 @@
         })
         .catch(function(e){
           render('<a class="back" href="' + backHref + '">' + I.back + 'IELTS Speaking</a><article class="card pad"><p>' +
-            (String(e.message) === 'access_code' || !getCode() ? 'Marking uses the AI coach - please enter your access code in a Talk conversation first.' : 'Couldn\'t reach the examiner. Please check your internet and try again.') + '</p>' +
+            (/^(access_code|signin)$/.test(String(e.message)) || !hasAccess() ? 'Marking uses the AI coach - please sign in again.' : 'Couldn\'t reach the examiner. Please check your internet and try again.') + '</p>' +
             '<div class="row" style="margin-top:14px"><button class="btn primary" id="retry">Try again</button></div></article>');
           document.getElementById('retry').onclick = grade;
         });
@@ -1505,7 +1522,7 @@
   // The 5-minute role-play: the nurse speaks first; no corrections until the end (exam conditions).
   function oetRoleplay(i, notes){
     var c = OET.cards[i], turns = [], busy = false, rec = null, started = 0, secsLeft = 300, clock = null, finished = false;
-    var prons = [], useAzure = !az.off && !!TALK_API && !!getCode() && !!(navigator.mediaDevices && (window.AudioContext || window.webkitAudioContext));
+    var prons = [], useAzure = !az.off && !!TALK_API && hasAccess() && !!(navigator.mediaDevices && (window.AudioContext || window.webkitAudioContext));
     render(
       '<section class="chat-view">' +
         '<header class="chat-top">' +
@@ -1546,7 +1563,7 @@
       add('msg me', text);
       var dots = document.createElement('div'); dots.className = 'typing'; dots.innerHTML = '<i></i><i></i><i></i>'; chat.appendChild(dots); scroll.scrollTop = scroll.scrollHeight;
       busy = true; mic.classList.add('busy');
-      fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ oet: { chat: true, card: c.id, turns: turns } }) })
+      apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ oet: { chat: true, card: c.id, turns: turns } }) })
         .then(function(r){ return r.json(); })
         .then(function(d){
           dots.remove(); busy = false; mic.classList.remove('busy');
@@ -1558,7 +1575,7 @@
         })
         .catch(function(e){
           dots.remove(); busy = false; mic.classList.remove('busy'); turns.pop();
-          label.textContent = String(e.message) === 'access_code' ? 'Enter your access code in a Talk conversation first.' : 'Couldn\'t reach the patient - tap to try again.';
+          label.textContent = /^(access_code|signin)$/.test(String(e.message)) ? 'Please sign in again.' : 'Couldn\'t reach the patient - tap to try again.';
         });
     }
     mic.onclick = function(){
@@ -1595,7 +1612,7 @@
       var tot = prons.reduce(function(s, x){ return s + x.s; }, 0);
       var pron = tot ? ['accuracy', 'fluency', 'prosody'].reduce(function(o, k){ o[k] = Math.round(prons.reduce(function(s, x){ return s + x.p[k] * x.s; }, 0) / tot); return o; }, {}) : null;
       function send(){
-        fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+        apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
           body: JSON.stringify({ oet: { grade: true, card: c.id, tasks: c.tasks, turns: turns, secs: secs, pron: pron } }) })
           .then(function(r){ return r.json(); })
           .then(function(d){
@@ -1711,9 +1728,9 @@
       la.stop();
       var text = ans.value.trim();
       if (text.split(/\s+/).length < 8) { fb.innerHTML = '<p class="heard" style="text-align:left">Give a fuller answer first - at least a few sentences.</p>'; return; }
-      if (!getCode()) { fb.innerHTML = '<p class="heard" style="text-align:left">The AI coach needs your access code - enter it once in a Talk conversation first.</p>'; return; }
+      if (!hasAccess()) { fb.innerHTML = '<p class="heard" style="text-align:left">The AI coach needs you to <a href="#/signin">sign in</a> first.</p>'; return; }
       checkBtn.disabled = true; fb.innerHTML = '<div class="typing" style="margin:14px 0"><i></i><i></i><i></i></div>';
-      fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+      apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
         body: JSON.stringify({ interview: true, question: q.q, answer: text, role: prefs.role || INTERVIEW.roles[0], secs: la.secs() }) })
         .then(function(r){ return r.json(); })
         .then(function(d){
@@ -1736,7 +1753,7 @@
         })
         .catch(function(e){
           checkBtn.disabled = false;
-          fb.innerHTML = '<p class="heard" style="text-align:left">' + (String(e.message) === 'access_code' ? 'The access code was not accepted - check it in a Talk conversation.' : 'Couldn\'t reach the coach. Please check your internet and try again.') + '</p>';
+          fb.innerHTML = '<p class="heard" style="text-align:left">' + (/^(access_code|signin)$/.test(String(e.message)) ? 'Please sign in again.' : 'Couldn\'t reach the coach. Please check your internet and try again.') + '</p>';
         });
     };
   }
@@ -1871,7 +1888,7 @@
       var avg = function(k){ var v = az_.filter(function(r){ return r[k] != null; }); return v.length ? Math.round(v.reduce(function(a, r){ return a + r[k]; }, 0) / v.length) : null; };
       var pron = az_.length ? { accuracy: avg('accuracy'), fluency: avg('fluency'), prosody: avg('prosody'), overall: avg('pron') }
         : { overall: reads.length ? Math.round(reads.reduce(function(a, r){ return a + (r ? r.pron : 0); }, 0) / reads.length) : null };
-      fetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+      apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
         body: JSON.stringify({ assess: true, answers: answers, pronunciation: pron }) })
         .then(function(r){ return r.json(); })
         .then(function(d){
@@ -1883,7 +1900,7 @@
           result(state.test);
         })
         .catch(function(e){
-          render(header(6, 6) + '<article class="card pad"><p>' + (String(e.message) === 'access_code' ? 'The level test uses the AI coach - please enter your access code in a conversation first.' : 'Couldn\'t reach the coach. Please check your internet and try again.') + '</p>' +
+          render(header(6, 6) + '<article class="card pad"><p>' + (/^(access_code|signin)$/.test(String(e.message)) ? 'The level test uses the AI coach - please sign in again.' : 'Couldn\'t reach the coach. Please check your internet and try again.') + '</p>' +
             '<div class="row" style="margin-top:14px"><button class="btn primary" id="retry">Try again</button></div></article>');
           document.getElementById('retry').onclick = grade_;
         });
@@ -1980,6 +1997,373 @@
   var CODE_KEY = 'aj-english-code';
   function getCode(){ try { return localStorage.getItem(CODE_KEY) || ''; } catch(e) { return ''; } }
   function setCode(c){ try { localStorage.setItem(CODE_KEY, c); } catch(e) {} }
+
+  /* ---------- Accounts (Firebase Authentication) ---------- */
+  // People register with Google or email + password and fill in a short profile. Every request to
+  // the AI server carries their Firebase ID token. Old access codes keep working during the changeover.
+  var FIREBASE = {
+    apiKey: 'AIzaSyCTcvbGukdITH6qMssXIV6vpCWpq8ZjSdo',
+    authDomain: 'australian-jeevitham.firebaseapp.com',
+    projectId: 'australian-jeevitham',
+    appId: '1:678810149486:web:0cabda21a0f085f84cfc7f'
+  };
+  var PROFILE_KEY = 'aj-english-profile';
+  var fbAuth = null, me = null, authReady = false, profileLoading = false, profile = null;
+  try { profile = JSON.parse(localStorage.getItem(PROFILE_KEY)); } catch(e) {}
+  function saveProfile(pr){
+    profile = pr;
+    try { if (pr) localStorage.setItem(PROFILE_KEY, JSON.stringify(pr)); else localStorage.removeItem(PROFILE_KEY); } catch(e) {}
+  }
+  // Signed in with a confirmed email and a profile - or holding an old access code.
+  function hasAccess(){ return !!(me && me.emailVerified && profile && profile.uid === me.uid) || (!me && !!getCode()); }
+  // Calls to the AI server, with the signed-in user's token.
+  function apiFetch(url, opts){
+    opts = opts || {};
+    return (me ? me.getIdToken().catch(function(){ return ''; }) : Promise.resolve('')).then(function(t){
+      var h = Object.assign({}, opts.headers);
+      if (t) { h.Authorization = 'Bearer ' + t; delete h['X-Access-Code']; }
+      return fetch(url, Object.assign({}, opts, { headers: h }));
+    }).then(function(r){
+      if ((r.headers.get('Content-Type') || '').indexOf('application/json') === 0 && !/\/(pron|tts)$/.test(url)) {
+        r.clone().json().then(function(d){ if (d && typeof d.remaining === 'number') setQuota(d.remaining, d.limit); }).catch(function(){});
+      }
+      // Today's allowance used up: say so, whichever feature asked.
+      if (r.status === 429) r.clone().json().then(function(d){
+        if (d.error === 'daily_limit') toast(/\/pron$/.test(url)
+          ? 'You\'ve reached today\'s limit for pronunciation checks. It resets tomorrow.'
+          : 'You\'ve used all of today\'s AI actions. They reset tomorrow - meanwhile, sound drills, lessons and slang still work.');
+      }).catch(function(){});
+      return r;
+    });
+  }
+  /* ---------- AI actions left today ---------- */
+  // The server counts AI actions per UTC day; the counter on Home and My account shows what's left.
+  var QUOTA_KEY = 'aj-english-quota';
+  var quota = null;
+  try { quota = JSON.parse(localStorage.getItem(QUOTA_KEY)); } catch(e) {}
+  function utcDay(){ return new Date().toISOString().slice(0, 10); }
+  function setQuota(remaining, limit){
+    quota = { left: remaining, limit: limit || (quota && quota.limit) || 60, day: utcDay() };
+    try { localStorage.setItem(QUOTA_KEY, JSON.stringify(quota)); } catch(e) {}
+    document.querySelectorAll('[data-quota]').forEach(function(el){ el.outerHTML = quotaHtml(); });
+  }
+  // The local time the allowance resets (midnight UTC), e.g. "10:00 am" in Queensland.
+  function resetTime(){
+    var d = new Date(); d.setUTCHours(24, 0, 0, 0);
+    return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  }
+  function quotaHtml(){
+    var lim = (quota && quota.limit) || 60;
+    var left = quota && quota.day === utcDay() ? quota.left : lim;
+    var pct = Math.max(0, Math.min(100, Math.round(left / lim * 100)));
+    return '<div class="card pad quota" data-quota><div class="chart-head"><b>AI actions today</b><span>' + left + ' of ' + lim + ' left</span></div>' +
+      '<i class="qbar"><b class="' + (pct > 30 ? 'ok' : pct > 10 ? 'close' : 'miss') + '" style="width:' + pct + '%"></b></i>' +
+      '<p>Each coach reply, OET patient reply, IELTS marking, interview feedback, 1-minute check or level test uses one. Resets at ' + esc(resetTime()) + '. Drills, lessons and slang are unlimited.</p></div>';
+  }
+  // Ask the server for the latest count (when Home or My account opens).
+  function refreshQuota(){
+    if (!TALK_API || !hasAccess()) return;
+    apiFetch(TALK_API + '/usage', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: '{}' }).catch(function(){});
+  }
+
+  function toast(text){
+    var old = document.querySelector('.toast'); if (old) old.remove();
+    var t = document.createElement('div');
+    t.className = 'toast'; t.setAttribute('role', 'status'); t.textContent = text;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 7000);
+  }
+  // After sign-in (or on a new phone): fetch the saved profile from the server.
+  function afterSignIn(){
+    if (me && me.emailVerified && (!profile || profile.uid !== me.uid)) {
+      profileLoading = true; route();
+      apiFetch(TALK_API + '/me', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+        .then(function(r){ return r.json(); })
+        .then(function(d){ if (d.profile) saveProfile(Object.assign({ uid: me.uid }, d.profile)); })
+        .catch(function(){})
+        .then(function(){ profileLoading = false; route(); });
+      return;
+    }
+    route();
+  }
+  try {
+    firebase.initializeApp(FIREBASE);
+    fbAuth = firebase.auth();
+    fbAuth.languageCode = 'en';
+    fbAuth.getRedirectResult().catch(function(){});
+    fbAuth.onAuthStateChanged(function(u){
+      var was = authReady;
+      me = u; authReady = true;
+      if (u || was) afterSignIn(); else route();
+    });
+  } catch(e) { fbAuth = null; }   // Firebase didn't load (offline): returning users can still practise
+
+  // Which screen a page needs first: null (show it), 'wait', 'signin', 'verify' or 'profile'.
+  var OPEN_PAGES = { signin: 1, privacy: 1, terms: 1, help: 1 };
+  function gate(page){
+    if (OPEN_PAGES[page]) return null;
+    if (!fbAuth) return profile || getCode() ? null : 'signin';
+    if (!authReady || profileLoading) return 'wait';
+    if (!me) return getCode() ? null : 'signin';
+    if (!me.emailVerified) return 'verify';
+    if (!profile || profile.uid !== me.uid) return 'profile';
+    return null;
+  }
+  var AUTH_ERRORS = {
+    'auth/invalid-credential': 'That email and password don\'t match. Check them, or tap "Forgot password?".',
+    'auth/wrong-password': 'That email and password don\'t match. Check them, or tap "Forgot password?".',
+    'auth/user-not-found': 'There is no account with that email yet - tap "Create an account".',
+    'auth/email-already-in-use': 'This email already has an account - sign in instead.',
+    'auth/invalid-email': 'Please check the email address.',
+    'auth/missing-password': 'Please type your password.',
+    'auth/weak-password': 'Please use at least 6 characters for your password.',
+    'auth/too-many-requests': 'Too many tries. Please wait a few minutes and try again.',
+    'auth/network-request-failed': 'No internet connection. Please try again.',
+    'auth/user-disabled': 'This account has been switched off. Please contact Australian Jeevitham.'
+  };
+  function authError(e){
+    var c = e && e.code;
+    if (c === 'auth/popup-closed-by-user' || c === 'auth/cancelled-popup-request') return '';
+    return AUTH_ERRORS[c] || 'Something went wrong (' + esc(c || 'unknown') + '). Please try again.';
+  }
+  var GOOGLE_G = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+
+  function authShell(inner){
+    setTab('');
+    render('<div class="auth"><img src="icons/icon-192.png" alt="" width="72" height="72" class="auth-logo">' + inner +
+      '<p class="fine">By continuing you agree to the <a href="#/terms">Terms</a> and <a href="#/privacy">Privacy policy</a>. <a href="#/help">Help</a></p></div>');
+  }
+  function waitPage(){ setTab(''); render('<div class="auth"><div class="typing" style="margin:60px auto" aria-label="Loading"><i></i><i></i><i></i></div></div>'); }
+
+  // Sign in or create an account.
+  function signinPage(){
+    if (me && me.emailVerified && profile && profile.uid === me.uid) { location.hash = '#/'; return; }
+    var create = false;
+    authShell(
+      '<h1 class="title">Aussie English Coach</h1>' +
+      '<p class="lede">Practise the English Australian healthcare teams use, with an AI coach that listens and helps.</p>' +
+      '<button class="btn google" id="gBtn" type="button">' + GOOGLE_G + 'Continue with Google</button>' +
+      '<div class="or"><span>or use your email</span></div>' +
+      '<form id="ef" class="auth-form" novalidate>' +
+        '<label>Email<input id="em" type="email" autocomplete="email" inputmode="email" required></label>' +
+        '<label>Password<input id="pw" type="password" autocomplete="current-password" required></label>' +
+        '<p class="hint" id="pwHint" hidden>At least 6 characters.</p>' +
+        '<button class="btn primary" id="go" type="submit">Sign in</button>' +
+      '</form>' +
+      '<p class="auth-msg" id="msg" role="status"></p>' +
+      '<p class="switch"><span id="swTxt">New here?</span> <button type="button" class="link" id="sw">Create an account</button></p>' +
+      '<button type="button" class="link" id="forgot">Forgot password?</button>' +
+      (getCode() ? '<p class="notice">You are using an access code. Please create your account - access codes will stop working soon.</p>' : '')
+    );
+    var msg = app.querySelector('#msg'), em = app.querySelector('#em'), pw = app.querySelector('#pw'), go = app.querySelector('#go');
+    function say(t, good){ msg.innerHTML = t; msg.classList.toggle('good', !!good); }
+    if (!fbAuth) { say('Signing in needs internet. Please connect and reload the app.'); return; }
+    app.querySelector('#gBtn').onclick = function(){
+      say('');
+      var gp = new firebase.auth.GoogleAuthProvider();
+      gp.setCustomParameters({ prompt: 'select_account' });
+      fbAuth.signInWithPopup(gp).catch(function(e){
+        if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment') return fbAuth.signInWithRedirect(gp);
+        throw e;
+      }).catch(function(e){ say(authError(e)); });
+    };
+    app.querySelector('#sw').onclick = function(){
+      create = !create; say('');
+      go.textContent = create ? 'Create account' : 'Sign in';
+      pw.autocomplete = create ? 'new-password' : 'current-password';
+      app.querySelector('#pwHint').hidden = !create;
+      app.querySelector('#swTxt').textContent = create ? 'Already registered?' : 'New here?';
+      this.textContent = create ? 'Sign in' : 'Create an account';
+    };
+    app.querySelector('#ef').onsubmit = function(e){
+      e.preventDefault();
+      var email = em.value.trim(), pass = pw.value;
+      if (!email) { say('Please type your email.'); return; }
+      go.disabled = true; say('');
+      (create
+        ? fbAuth.createUserWithEmailAndPassword(email, pass).then(function(c){ return c.user.sendEmailVerification(); })
+        : fbAuth.signInWithEmailAndPassword(email, pass)
+      ).catch(function(e){ go.disabled = false; say(authError(e)); });
+    };
+    app.querySelector('#forgot').onclick = function(){
+      var email = em.value.trim();
+      if (!email) { say('Type your email above first, then tap "Forgot password?" again.'); em.focus(); return; }
+      fbAuth.sendPasswordResetEmail(email)
+        .then(function(){ say('We\'ve emailed a link to reset your password to <b>' + esc(email) + '</b>. Check your inbox and spam folder.', true); })
+        .catch(function(e){ say(authError(e)); });
+    };
+  }
+
+  // Email + password accounts confirm their email before using the coach.
+  function verifyPage(){
+    authShell(
+      '<h1 class="title">Check your email</h1>' +
+      '<p class="lede">We sent a link to <b>' + esc(me.email || '') + '</b>. Tap it to confirm your email, then come back and tap <b>Continue</b>.</p>' +
+      '<button class="btn primary wide" id="cont" type="button">I\'ve confirmed - Continue</button>' +
+      '<p class="auth-msg" id="msg" role="status"></p>' +
+      '<p class="switch">No email? Check your spam folder, or <button type="button" class="link" id="again">send it again</button>.</p>' +
+      '<button type="button" class="link" id="out">Use a different account</button>'
+    );
+    var msg = app.querySelector('#msg');
+    app.querySelector('#cont').onclick = function(){
+      me.reload().then(function(){
+        me = fbAuth.currentUser;
+        if (!me.emailVerified) { msg.textContent = 'Not confirmed yet. Tap the link in the email first.'; return; }
+        return me.getIdToken(true).then(afterSignIn);
+      }).catch(function(e){ msg.innerHTML = authError(e); });
+    };
+    app.querySelector('#again').onclick = function(){
+      me.sendEmailVerification().then(function(){ msg.textContent = 'Sent again - it can take a minute to arrive.'; }).catch(function(e){ msg.innerHTML = authError(e); });
+    };
+    app.querySelector('#out').onclick = signOut;
+  }
+
+  var COUNTRIES = ['India', 'Australia', 'United Arab Emirates', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Oman', 'Bahrain', 'United Kingdom', 'Ireland', 'New Zealand', 'Canada', 'Other'];
+  var JOBS = ['Registered Nurse', 'Enrolled Nurse', 'Aged care worker / PCA / AIN', 'Nursing student', 'Other healthcare role', 'Not in healthcare'];
+  var GOALS = ['IELTS', 'OET', 'Job interviews', 'Speaking confidently at work', 'Everyday English in Australia'];
+  function options(list, cur){ return '<option value="">Choose…</option>' + list.map(function(o){ return '<option' + (o === cur ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join(''); }
+
+  // The short profile: asked once after registering, and editable from My account.
+  function profilePage(){
+    var first = !profile || profile.uid !== me.uid, pr = first ? {} : profile;
+    authShell(
+      '<h1 class="title">' + (first ? 'Tell us about you' : 'Edit your profile') + '</h1>' +
+      '<p class="lede">' + (first ? 'This helps us make the app better for people like you.' : 'Update your details.') + '</p>' +
+      '<form id="pf" class="auth-form">' +
+        '<label>Your name<input id="nm" type="text" autocomplete="name" maxlength="60" required value="' + esc(pr.name || (me && me.displayName) || '') + '"></label>' +
+        '<label>Where do you live now?<select id="ct" required>' + options(COUNTRIES, pr.country) + '</select></label>' +
+        '<label>Your work<select id="jb" required>' + options(JOBS, pr.job) + '</select></label>' +
+        '<label>Your main goal<select id="gl" required>' + options(GOALS, pr.goal) + '</select></label>' +
+        (first ? '<label class="check"><input id="ok" type="checkbox" required> I am 18 or older and agree to the <a href="#/terms">Terms</a> and <a href="#/privacy">Privacy policy</a>.</label>' : '') +
+        '<button class="btn primary" id="sv" type="submit">' + (first ? 'Start practising' : 'Save') + '</button>' +
+      '</form>' +
+      '<p class="auth-msg" id="msg" role="status"></p>' +
+      (first ? '<button type="button" class="link" id="out">Sign out</button>' : '<a class="link" href="#/account">Cancel</a>')
+    );
+    var msg = app.querySelector('#msg'), sv = app.querySelector('#sv');
+    if (first) app.querySelector('#out').onclick = signOut;
+    app.querySelector('#pf').onsubmit = function(e){
+      e.preventDefault();
+      var body = { name: app.querySelector('#nm').value.trim(), country: app.querySelector('#ct').value, job: app.querySelector('#jb').value, goal: app.querySelector('#gl').value };
+      if (!body.name || !body.country || !body.job || !body.goal) { msg.textContent = 'Please fill in every question.'; return; }
+      if (first && !app.querySelector('#ok').checked) { msg.textContent = 'Please tick the box to agree to the Terms and Privacy policy.'; return; }
+      sv.disabled = true; msg.textContent = '';
+      apiFetch(TALK_API + '/profile', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          if (!d.profile) throw new Error(d.error || 'save');
+          saveProfile(Object.assign({ uid: me.uid }, d.profile));
+          if (location.hash === '#/' || location.hash === '' ) route(); else location.hash = first ? '#/' : '#/account';
+        })
+        .catch(function(){ sv.disabled = false; msg.textContent = 'Couldn\'t save - please check your internet and try again.'; });
+    };
+  }
+
+  function signOut(){
+    stopSpeech();
+    saveProfile(null);
+    var done = function(){ location.hash = '#/signin'; route(); };
+    if (fbAuth) fbAuth.signOut().then(done, done); else done();
+  }
+
+  // My account: profile, sign out, delete.
+  function accountPage(){
+    setTab('');
+    refreshQuota();
+    var pr = profile || {};
+    function row(k, v){ return '<div class="acct-row"><span>' + k + '</span><b>' + esc(v || '-') + '</b></div>'; }
+    render(
+      '<span class="eyebrow">My account</span>' +
+      '<h1 class="title">' + esc(pr.name || 'Your account') + '</h1>' +
+      (me ? '' : '<div class="notice">You are using an access code. Please <a href="#/signin">create your account</a> - access codes will stop working soon.</div>') +
+      (me ? '<div class="card pad" style="margin-top:16px">' + row('Email', me.email) + row('Lives in', pr.country) + row('Work', pr.job) + row('Main goal', pr.goal) + row('Member since', pr.created) +
+        '<a class="btn ghost sm" href="#/profile" style="margin-top:12px">' + I.pencil + 'Edit profile</a></div>' : '') +
+      (hasAccess() ? quotaHtml() : '') +
+      '<div class="list">' +
+        '<a class="card item" href="#/voice"><span class="t"><h2>Voice</h2><span class="sub">Choose the coach\'s voice</span></span><span class="chev">' + I.chev + '</span></a>' +
+        '<a class="card item" href="#/privacy"><span class="t"><h2>Privacy policy</h2><span class="sub">What we collect and why</span></span><span class="chev">' + I.chev + '</span></a>' +
+        '<a class="card item" href="#/terms"><span class="t"><h2>Terms of use</h2><span class="sub">The rules for using the app</span></span><span class="chev">' + I.chev + '</span></a>' +
+      '</div>' +
+      (me ? '<div class="acct-actions"><button class="btn" id="out" type="button">Sign out</button>' +
+        '<button class="btn danger-link" id="del" type="button">Delete my account</button></div><p class="auth-msg" id="msg" role="status"></p>' : '')
+    );
+    if (!me) return;
+    var msg = app.querySelector('#msg');
+    app.querySelector('#out').onclick = signOut;
+    app.querySelector('#del').onclick = function(){
+      if (!confirm('Delete your account and profile? This cannot be undone. (Your practice history on this phone stays until you clear it.)')) return;
+      apiFetch(TALK_API + '/deleteme', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' })
+        .then(function(){ return me.delete(); })
+        .then(function(){ saveProfile(null); location.hash = '#/signin'; })
+        .catch(function(e){
+          msg.textContent = e && e.code === 'auth/requires-recent-login'
+            ? 'For your safety, please sign out, sign in again, and then delete your account.'
+            : 'Couldn\'t delete your account - please check your internet and try again.';
+        });
+    };
+  }
+
+  // Feedback: a short form that goes to the server, which saves it and emails it to Australian Jeevitham.
+  var FEEDBACK_TYPES = [['bug', 'Something isn\'t working'], ['idea', 'An idea'], ['content', 'A mistake in the content'], ['praise', 'Something I like'], ['other', 'Other']];
+  function feedbackPage(){
+    setTab('feedback');
+    var rating = 0, type = '';
+    render(
+      '<span class="eyebrow">Feedback</span>' +
+      '<h1 class="title">Tell us what you think</h1>' +
+      '<p class="lede">You are one of our first testers - every message is read and helps make the app better.</p>' +
+      '<form id="fbf" class="card pad fb-form">' +
+        '<label class="fb-q">How do you like the app so far?</label>' +
+        '<div class="stars" role="radiogroup" aria-label="Rating">' + [1, 2, 3, 4, 5].map(function(n){ return '<button type="button" class="star" data-n="' + n + '" role="radio" aria-checked="false" aria-label="' + n + ' out of 5">' + I.star + '</button>'; }).join('') + '</div>' +
+        '<label class="fb-q">What is it about?</label>' +
+        '<div class="chips fb-types">' + FEEDBACK_TYPES.map(function(t){ return '<button type="button" class="chip" data-t="' + t[0] + '">' + esc(t[1]) + '</button>'; }).join('') + '</div>' +
+        '<label class="fb-q" for="fbm">Your message</label>' +
+        '<textarea id="fbm" rows="6" maxlength="2000" placeholder="What happened, what you expected, or your idea…"></textarea>' +
+        (me && me.email ? '<label class="check"><input id="fbr" type="checkbox" checked> You can email me back at ' + esc(me.email) + '</label>' : '') +
+        '<button class="btn primary" id="fbs" type="submit">' + I.send + 'Send feedback</button>' +
+        '<p class="auth-msg" id="msg" role="status"></p>' +
+      '</form>'
+    );
+    var stars = app.querySelectorAll('.star'), msg = app.querySelector('#msg'), btn = app.querySelector('#fbs');
+    stars.forEach(function(b){ b.onclick = function(){
+      rating = +b.dataset.n;
+      stars.forEach(function(x){ var on = +x.dataset.n <= rating; x.classList.toggle('on', on); x.setAttribute('aria-checked', +x.dataset.n === rating); });
+    }; });
+    app.querySelectorAll('.fb-types .chip').forEach(function(c){ c.onclick = function(){
+      type = c.dataset.t;
+      app.querySelectorAll('.fb-types .chip').forEach(function(x){ x.classList.toggle('on', x === c); });
+    }; });
+    app.querySelector('#fbf').onsubmit = function(e){
+      e.preventDefault();
+      var text = app.querySelector('#fbm').value.trim();
+      if (!text && !rating) { msg.textContent = 'Please choose a rating or write a message.'; return; }
+      btn.disabled = true; msg.textContent = '';
+      var reply = app.querySelector('#fbr');
+      apiFetch(TALK_API + '/feedback', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+        body: JSON.stringify({ rating: rating, type: type, message: text, reply: reply ? reply.checked : false,
+          page: lastPage, version: APP_VERSION ? 'v0.' + APP_VERSION : '', device: navigator.userAgent.slice(0, 200), installed: isInstalled() })
+      }).then(function(r){ return r.json(); }).then(function(d){
+        if (!d.ok) throw new Error(d.error || 'feedback');
+        render('<article class="card pad done"><span class="ic big-ic">' + I.check + '</span><h1 class="title">Thank you!</h1>' +
+          '<p class="lede">Your feedback has been sent to Australian Jeevitham.' + (reply && reply.checked ? ' We may email you back.' : '') + '</p>' +
+          '<div class="row" style="justify-content:center;margin-top:18px"><a class="btn ghost" href="#/feedback?r=' + Date.now() + '">Send more</a><a class="btn primary" href="#/">Home' + I.chev + '</a></div></article>');
+      }).catch(function(e){
+        btn.disabled = false;
+        msg.textContent = String(e.message) === 'too_many' ? 'Thanks - you\'ve sent a lot of feedback today. Please try again tomorrow.' : 'Couldn\'t send - please check your internet and try again.';
+      });
+    };
+  }
+
+  // Privacy policy and Terms (text in help.js).
+  function legalPage(id){
+    setTab('');
+    var d = LEGAL[id];
+    render('<span class="eyebrow">' + esc(d.eyebrow) + '</span><h1 class="title">' + esc(d.title) + '</h1>' +
+      '<p class="heard" style="text-align:left">Last updated ' + esc(d.updated) + '</p>' +
+      '<article class="card pad legal">' + d.html + '</article>' +
+      '<p style="margin-top:16px"><a class="btn ghost" href="' + (me || getCode() ? '#/account' : '#/signin') + '">' + I.back + 'Back</a></p>');
+  }
 
   function talkHome(){
     setTab('talk');
@@ -2186,7 +2570,7 @@
       history.push({ role: 'user', content: text });
       var dots = add(el('typing', '<i></i><i></i><i></i>'));
       setBusy(true);
-      fetch(TALK_API, {
+      apiFetch(TALK_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
         body: JSON.stringify({ level: LEVEL, scene: s.id, messages: history })
@@ -2228,8 +2612,9 @@
         return pump().then(function(d){ if (live) live.remove(); d.spoken = spoken; return d; });
       }).then(function(d){
         dots.remove(); setBusy(false);
-        if (d.error === 'access_code') { failed(b, 'Access code needed.'); askCode(text, b); return; }
-        if (d.error === 'daily_limit') { failed(b, 'You\'ve reached today\'s limit - come back tomorrow.'); return; }
+        if (d.error === 'access_code' || d.error === 'signin') { failed(b, 'Please sign in again.'); location.hash = '#/signin'; return; }
+        if (d.error === 'blocked') { failed(b, 'This account has been paused. Please contact Australian Jeevitham.'); return; }
+        if (d.error === 'daily_limit') { failed(b, 'You\'ve used all of today\'s AI actions - they reset tomorrow.'); return; }
         if (d.error === 'refused') { failed(b, 'Let\'s try saying that a different way.'); return; }
         if (d.error || !d.reply) { failed(b, 'Couldn\'t reach your coach. Please try again.'); input.value = text; return; }
         feedback(b, text, d);
@@ -2237,7 +2622,7 @@
         history.push({ role: 'assistant', content: d.raw });
         aiMsg(d.reply, LEVEL_MALAYALAM ? d.reply_ml : '', null, d.power_phrase, d.spoken);
         showChips(d.suggestions);
-        if (typeof d.remaining === 'number') note.textContent = d.remaining + ' messages left today';
+        if (typeof d.remaining === 'number') { note.textContent = d.remaining + ' AI action' + (d.remaining === 1 ? '' : 's') + ' left today'; setQuota(d.remaining); }
         var st = (d.feedback || {}).status;
         logDay({ turns: 1, fluSum: st === 'excellent' ? 100 : st === 'polish' ? 80 : 50, speakSec: Math.round(secs || 0) });
         if (d.scores) logDay({ gvN: 1, gramSum: +d.scores.grammar || 0, vocabSum: +d.scores.vocabulary || 0 });
@@ -2247,22 +2632,6 @@
         failed(b, 'No internet connection? Please try again.');
         input.value = text;
       });
-    }
-
-    function askCode(retryText, retryBubble){
-      if (document.getElementById('codeform')) return;
-      var f = document.createElement('form');
-      f.id = 'codeform'; f.className = 'msg ai codebox';
-      f.innerHTML = '<p><b>Enter your access code</b></p><div class="type-row"><input id="code" type="text" autocomplete="off" aria-label="Access code"><button class="send" type="submit" aria-label="OK">' + I.check + '</button></div>';
-      f.onsubmit = function(e){
-        e.preventDefault();
-        setCode(f.querySelector('#code').value.trim());
-        f.remove();
-        retryBubble.classList.remove('failed');
-        var c = retryBubble.querySelector('.coach'); if (c) c.remove();
-        send(retryText, retryBubble);
-      };
-      add(f); f.querySelector('#code').focus();
     }
 
     // Voice: tap to talk, tap again to stop. Words appear live in the chat as you speak.
@@ -2297,8 +2666,8 @@
 
     // Load this scene into the server's cache while the learner reads the opening line,
     // so their first reply comes back as quickly as later ones.
-    if (TALK_API && getCode()) {
-      fetch(TALK_API, {
+    if (TALK_API && hasAccess()) {
+      apiFetch(TALK_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
         body: JSON.stringify({ warm: true, level: LEVEL, scene: s.id })
@@ -2308,8 +2677,9 @@
 
   /* ---------- Slang ---------- */
   function slang(){
-    setTab('slang');
+    setTab('learn');
     render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
       '<span class="eyebrow">Aussie slang</span>' +
       '<h1 class="title">Words you\'ll hear every day</h1>' +
       '<p class="lede">Tap a card to see what it means.</p>' +
@@ -2354,7 +2724,15 @@
     stopSpeech();
     document.querySelectorAll('.sheet-bg').forEach(function(x){ x.remove(); });
     var parts = location.hash.replace(/^#\/?/, '').split('?')[0].split('/');
-    if (parts[0] === 'learn') learn();
+    var g = gate(parts[0]);
+    if (g === 'wait') return waitPage();
+    if (g === 'signin') return signinPage();
+    if (g === 'verify') return verifyPage();
+    if (g === 'profile' || (parts[0] === 'profile' && me)) return profilePage();
+    if (parts[0] === 'signin') signinPage();
+    else if (parts[0] === 'account') accountPage();
+    else if (parts[0] === 'privacy' || parts[0] === 'terms') legalPage(parts[0]);
+    else if (parts[0] === 'learn') learn();
     else if (parts[0] === 'lesson') lesson(parts[1], parseInt(parts[2], 10) || 0);
     else if (parts[0] === 'practise') practise();
     else if (parts[0] === 'help') help();
@@ -2373,9 +2751,16 @@
     else if (parts[0] === 'quiz') quiz(parts[1]);
     else if (parts[0] === 'talk') parts[1] ? talk(parts[1]) : talkHome();
     else if (parts[0] === 'slang') slang();
+    else if (parts[0] === 'everyday') everyday();
+    else if (parts[0] === 'feedback') feedbackPage();
     else if (parts[0] === 'tips') tips();
     else home();
   }
-  window.addEventListener('hashchange', route);
+  var lastPage = location.hash || '#/';
+  window.addEventListener('hashchange', function(e){
+    var from = (e.oldURL || '').split('#')[1];
+    if (from && from.indexOf('/feedback') !== 0) lastPage = '#' + from;
+    route();
+  });
   route();
 })();

@@ -5,8 +5,8 @@
 const HELP_STEPS = [
   { check: 'installed', title: 'Install the app on your phone',
     text: '<b>Android:</b> tap <b>Install</b> on the Home screen card (or Chrome menu, then <b>Install app</b>). <b>iPhone:</b> open this page in <b>Safari</b>, tap <b>Share</b>, then <b>Add to Home Screen</b>. From now on, open it from the round Aussie English icon.' },
-  { check: 'code', title: 'Enter your access code', href: '#/talk/general', go: 'Open a conversation',
-    text: 'Go to <b>Talk</b> and open <b>General conversation</b>. Say or type "Hi", and enter the access code you were given when the app asks. Tap <b>Allow</b> when your phone asks to use the microphone.' },
+  { check: 'code', title: 'Create your account', href: '#/account', go: 'My account',
+    text: 'Sign up with <b>Continue with Google</b> or your email and a password, and answer the four short questions about you. If you used email, tap the link we email you first. Tap <b>Allow</b> whenever your phone asks to use the microphone.' },
   { check: 'test', title: 'Take the speaking level test', href: '#/test', go: 'Start the test',
     text: 'Go to <b>Learn</b>, then <b>Speaking level test</b> (about 4 minutes). Read three sentences, then answer three questions. You get your level, an estimated IELTS band, and what to work on.' },
   { check: 'drill', title: 'Do your first sound drill', href: '#/sounds', go: 'Open sound drills',
@@ -33,7 +33,8 @@ const HELP = [
     { q: 'Vocabulary', a: '96 words and phrases in 8 themes: on the ward, medications, aged care, body and symptoms, leading a team, empathy and difficult talks, phone and admin, and everyday life in Australia. Tap a word to see its meaning, Malayalam and an example; tap the speaker to hear it, say the example with the microphone below, and tap <b>Mark as learnt</b>.' },
     { q: 'Practise any sentence', a: 'Type or paste anything - something you say at work, or a word you find hard. Tap <b>Listen</b> to hear it in an Australian voice, then tap the microphone and say it.' },
     { q: 'Speaking level test', a: 'About 4 minutes. Read three sentences aloud, then answer three questions as you would in a real conversation. Speak for 30 to 60 seconds per answer; the microphone stops by itself after a few seconds of silence, or tap it when you have finished. You get your level (A1 to C2), an estimated IELTS speaking band, your strengths and what to work on. There are 10 different versions, so each time you take the test you get new sentences and questions; your past results are listed on the test screen.' },
-    { q: 'Everyday lessons and quizzes', a: 'Eight lessons of everyday Australian English with Malayalam meanings. Listen to each phrase, say it, then take the quiz at the end.' }
+    { q: 'Everyday Australian English', a: 'Tap <b>Everyday Australian English</b> in Learn to see eight lessons of everyday phrases with Malayalam meanings. Listen to each phrase, say it, then take the quiz at the end.' },
+    { q: 'Aussie slang', a: 'In <b>Learn</b>, tap <b>Aussie slang</b>: about 70 words Australians use every day, from "arvo" to "ambo". Tap a card to see its meaning, an example and a Malayalam translation; tap the speaker to hear it.' }
   ] },
   { title: 'Reading your pronunciation scores', items: [
     { q: 'The four scores', a: '<b>Overall</b> - your total pronunciation score.<br><b>Accuracy</b> - how clearly you said each sound.<br><b>Fluency</b> - how smoothly you spoke, without long pauses.<br><b>Intonation</b> - stress, rhythm and the rise and fall of your voice.<br>Tap any score bar to see what it means, in English and Malayalam.' },
@@ -47,8 +48,8 @@ const HELP = [
     { q: 'General conversation', a: 'The first situation is an open chat with Alex, a friendly local. Talk about anything - family, travel, the weekend - to practise everyday English.' },
     { q: 'Start again', a: 'Tap the circular arrow at the top right of a conversation to start it over.' }
   ] },
-  { title: 'Slang and Tips', items: [
-    { q: 'Slang', a: 'About 70 words Australians use every day, from "arvo" to "ambo". Tap a card to see its meaning, an example and a Malayalam translation; tap the speaker to hear it.' },
+  { title: 'Tips and Feedback', items: [
+    { q: 'Feedback', a: 'Tap <b>Feedback</b> at the bottom of the screen to rate the app, tell us what isn\'t working, or share an idea. It goes straight to Australian Jeevitham.' },
     { q: 'Tips', a: 'The unwritten rules of Australian life and work, such as calling your boss by their first name and what "bring a plate" means.' }
   ] },
   { title: 'Getting the best results', items: [
@@ -59,12 +60,63 @@ const HELP = [
   { title: 'Problems and fixes', items: [
     { q: 'The microphone doesn\'t listen', a: 'Check that the microphone is allowed for this app: on Android open <b>Settings, Apps, Chrome, Permissions, Microphone</b> and choose <b>Allow</b>. Close other apps that use the microphone, such as a phone call or a voice recorder. Then close this app completely and open it again.' },
     { q: 'Changing the voice', a: 'Tap the speaker button at the top of the screen. Choose one of six natural Australian voices (Natasha, William, Annette, Darren, Carly or Ken) - tap <b>Listen</b> to hear each one. Natural voices need internet and your access code. You can also choose <b>Phone\'s own voice</b>, which works offline; if the phone has no Australian voice, Android can add one in <b>Settings, Text-to-speech</b>.' },
-    { q: '"Access code needed" or "today\'s limit"', a: 'Enter the access code you were given; it is saved on that phone. Each person has a daily limit on conversation messages, which resets every day.' },
+    { q: 'Signing in', a: 'Use <b>Continue with Google</b>, or your email and password. Forgot your password? Type your email on the sign-in screen and tap <b>Forgot password?</b> - we email you a link. If you signed up with email and see "Check your email", tap the link in our email (look in spam too), then tap <b>Continue</b>. You stay signed in on your phone; to sign out, open <b>My account</b> from Home.' },
+    { q: '"Today\'s limit" - 60 AI actions a day', a: 'During testing, each person has <b>60 AI actions a day</b>. One action is one reply from your coach in Talk, one patient reply in an OET role-play, one IELTS marking or Band 8 answer, one interview feedback, one 1-minute check or one level test. Talk shows how many you have left. The count resets every day. Sound drills, lessons, slang, tips and the voices have no limit.' },
     { q: 'Something looks out of date', a: 'Close the app completely and open it again; it updates itself. If it still looks old, open the web address in Chrome once and reload the page.' },
     { q: 'Using it offline', a: 'Lessons, slang and tips work without internet. Conversations, the level test and sound-by-sound scoring need internet.' }
   ] },
   { title: 'Your privacy', items: [
-    { q: 'What is saved, and where', a: 'Your progress (streak, scores, saved phrases) is saved only on your own phone. Clearing your browser data or changing phones starts fresh.' },
+    { q: 'What is saved, and where', a: 'Your account (name, email and the four profile answers) is saved securely so you can sign in on any phone. Your progress (streak, scores, saved phrases) is saved only on your own phone, so changing phones starts your progress fresh. You can edit your profile or delete your account in <b>My account</b>. Full details are in the <a href="#/privacy">Privacy policy</a>.' },
     { q: 'What is sent for scoring', a: 'What you say in conversations is sent to the AI coach (Anthropic\'s Claude) to reply and give feedback. For sound-by-sound scoring, your voice is sent to Microsoft Azure Speech. Never share real personal details such as passport, bank or patient information - use made-up details when you practise.' }
   ] }
 ];
+
+/* Privacy policy and Terms of use, shown at #/privacy and #/terms. */
+const LEGAL = {
+  privacy: {
+    eyebrow: 'Privacy', title: 'Privacy policy', updated: '3 November 2026',
+    html:
+      '<p>Aussie English Coach is made by Australian Jeevitham (australianjeevitham.com), based in Queensland, Australia. This page explains what we collect when you use the app, why, and your choices.</p>' +
+      '<h2>What we collect</h2><ul>' +
+        '<li><b>Your account:</b> your name, email address and how you sign in (Google or email and password). Passwords are handled by Google Firebase - we never see them.</li>' +
+        '<li><b>Your profile:</b> where you live, your work and your main goal.</li>' +
+        '<li><b>Usage counts:</b> how many AI coach messages you send each day, kept for 90 days to apply daily limits and plan the app.</li>' +
+        '<li><b>What you say or type to the AI features:</b> sent to the AI coach to reply and give feedback. We do not keep your conversations.</li>' +
+        '<li><b>Your voice recordings</b> in drills and speaking tests: sent for pronunciation scoring and not kept by us.</li>' +
+        '<li><b>Website statistics:</b> our website uses Google Analytics to count visits.</li>' +
+      '</ul>' +
+      '<p>Your practice progress (streak, scores, saved phrases) stays on your own phone.</p>' +
+      '<h2>Why we collect it</h2><p>To give you an account, run the AI coach and pronunciation scoring, keep the service fair with daily limits, contact you about your account, and understand who uses the app so we can improve it. We do not sell your information or use it for advertising.</p>' +
+      '<h2>Services we use</h2><p>These companies process information for us, and may do so outside Australia (for example in the United States):</p><ul>' +
+        '<li>Google Firebase - accounts and sign-in</li>' +
+        '<li>Cloudflare - our server and account storage</li>' +
+        '<li>Anthropic (Claude) - the AI coach replies and feedback</li>' +
+        '<li>Microsoft Azure - pronunciation scoring and the natural voices</li>' +
+        '<li>GitHub - hosts the app files; Google Analytics - website statistics</li>' +
+      '</ul>' +
+      '<h2>Please don\'t share private details</h2><p>Never type or say real patient information, passwords, bank details or ID numbers in the app. Use made-up names and details when you practise.</p>' +
+      '<h2>Your choices</h2><ul>' +
+        '<li>Edit your profile or <b>delete your account</b> at any time in My account. Deleting removes your account and profile; usage counts expire within 90 days.</li>' +
+        '<li>Ask us what we hold about you, or to correct it, by emailing <a href="mailto:australianjeevitham@gmail.com">australianjeevitham@gmail.com</a>.</li>' +
+      '</ul>' +
+      '<h2>Who the app is for</h2><p>The app is for adults aged 18 and over.</p>' +
+      '<h2>Changes</h2><p>We may update this policy as the app grows. The date at the top shows the latest version.</p>'
+  },
+  terms: {
+    eyebrow: 'Terms', title: 'Terms of use', updated: '3 November 2026',
+    html:
+      '<p>By using Aussie English Coach you agree to these terms. If you don\'t agree, please don\'t use the app.</p>' +
+      '<h2>A practice tool</h2><p>The app helps you practise English. Scores, bands and grades are estimates for practice only. The app is not connected with IELTS, OET, AHPRA or any employer, and does not guarantee any test result, registration or job.</p>' +
+      '<h2>The AI coach can make mistakes</h2><p>Feedback, corrections and example answers come from artificial intelligence and may sometimes be wrong. The healthcare situations are for communication practice only - they are not medical or clinical advice. Always follow your workplace policies and qualified professionals.</p>' +
+      '<h2>Testing (beta)</h2><p>The app is free while it is being tested. Features, daily limits and availability may change, and the service may sometimes be unavailable.</p>' +
+      '<h2>Your account</h2><ul>' +
+        '<li>You must be 18 or older and give true details.</li>' +
+        '<li>Keep your account to yourself - don\'t share it.</li>' +
+        '<li>Don\'t enter real patient information or other people\'s private details.</li>' +
+        '<li>Don\'t misuse the app, try to break its limits, or use it for anything unlawful or abusive.</li>' +
+      '</ul><p>We may pause or close accounts that break these terms.</p>' +
+      '<h2>Our content</h2><p>The lessons, drills and other content belong to Australian Jeevitham. You may use them for your own learning, but please don\'t copy or sell them.</p>' +
+      '<h2>Responsibility</h2><p>The app is provided "as is". To the extent the law allows, Australian Jeevitham is not responsible for losses from using it. Nothing in these terms removes your rights under the Australian Consumer Law.</p>' +
+      '<h2>Law and contact</h2><p>These terms are governed by the law of Queensland, Australia. Questions? Email <a href="mailto:australianjeevitham@gmail.com">australianjeevitham@gmail.com</a>.</p>'
+  }
+};
