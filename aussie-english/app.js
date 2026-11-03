@@ -10,9 +10,15 @@
   // by the placement test; the weekly level-up exam (80% to pass) moves them up. The server keeps
   // the level, so the app only shows it.
   var ENGLISHES = {
-    au: { name: 'Australian English', short: 'Australian', tag: 'AU', desc: 'For life and work in Australia', voice: 'en[-_]AU' },
-    uk: { name: 'British English', short: 'British', tag: 'UK', desc: 'For life and work in the United Kingdom', voice: 'en[-_]GB' },
-    in: { name: 'Indian English', short: 'Indian', tag: 'IN', desc: 'Clear, professional English for working in India', voice: 'en[-_]IN' }
+    au: { name: 'Australian English', short: 'Australian', tag: 'AU', desc: 'For life and work in Australia', voice: 'en[-_]AU', country: 'Australia',
+      everyday: 'Everyday Australian English', slang: 'Aussie slang', slangSub: 'words you\'ll hear every day, from "arvo" to "ambo"', older: 'Older Australians',
+      listenSub: 'Understand fast, informal Aussie patient talk', sample: 'G\'day! I\'m your English coach. Let\'s practise speaking together.' },
+    uk: { name: 'British English', short: 'British', tag: 'UK', desc: 'For life and work in the United Kingdom', voice: 'en[-_]GB', country: 'the UK',
+      everyday: 'Everyday British English', slang: 'British slang', slangSub: 'words you\'ll hear every day, from "cuppa" to "knackered"', older: 'Older British patients',
+      listenSub: 'Understand fast, informal British patient talk', sample: 'Hello! I\'m your English coach. Let\'s practise speaking together.' },
+    in: { name: 'Indian English', short: 'Indian', tag: 'IN', desc: 'Clear, professional English for working in India', voice: 'en[-_]IN', country: 'India',
+      everyday: 'Everyday English', slang: 'Everyday expressions', slangSub: 'words and expressions you\'ll hear every day', older: 'Older patients',
+      listenSub: 'Understand fast, informal patient talk', sample: 'Hello! I\'m your English coach. Let\'s practise speaking together.' }
   };
   var LEVELS = [
     { id: 'beginner', name: 'Beginner', cefr: 'A1-A2', about: 'Everyday words and simple sentences' },
@@ -34,6 +40,16 @@
     var t = nat(o, f); tag = tag || 'p';
     return t ? '<' + tag + ' class="' + cls + '" lang="' + nativeLang() + '">' + esc(t) + '</' + tag + '>' : '';
   }
+  // Labels for the learner's English (Australian when not chosen yet).
+  function eng(){ return ENGLISHES[myEnglish() || 'au']; }
+  // Learn content for the learner's English: Australian content is in lessons.js and vocab.js;
+  // other Englishes bring their own pack (uk.js) - anything a pack lacks falls back to Australian.
+  function pack(){ var e = myEnglish(); return e && typeof CONTENT_PACKS !== 'undefined' && CONTENT_PACKS[e] || {}; }
+  function curLessons(){ return pack().lessons || LESSONS; }
+  function curSlang(){ return pack().slang || SLANG; }
+  function curTips(){ return pack().tips || TIPS; }
+  function curListening(){ return pack().listening || LISTENING; }
+  function curVocab(){ var life = pack().life; return life ? VOCAB.map(function(t){ return t.id === 'life' ? life : t; }) : VOCAB; }
   function levelById(id){ return LEVELS.find(function(l){ return l.id === id; }) || null; }
   function myEnglish(){ return profile && ENGLISHES[profile.english] ? profile.english : null; }
   function myLevelInfo(){ var e = myEnglish(); return e && profile.levels && profile.levels[e] ? profile.levels[e] : null; }
@@ -194,7 +210,7 @@
             vs.find(function(v){ return /^en/i.test(v.lang); }) || null;
   }
   if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
-  function hasAussieVoice(){ return !!voice && /en[-_]AU/i.test(voice.lang); }
+  function hasAussieVoice(){ return !!voice && new RegExp(eng().voice, 'i').test(voice.lang); }
 
   // The phone's own voice. Voices read "G'day" letter by letter; "Gidday" sounds right.
   function phoneSpeak(text, rate, queue, done){
@@ -402,7 +418,7 @@
   /* ---------- Helpers ---------- */
   function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
   function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-  function lessonById(id){ return LESSONS.find(function(l){ return l.id === id; }); }
+  function lessonById(id){ return curLessons().find(function(l){ return l.id === id; }); }
   function initials(name){ return name.split(/[\s,]+/).filter(function(w){ return /^[A-Z]/.test(w); }).slice(0, 2).map(function(w){ return w[0]; }).join('') || name[0]; }
   function seenIn(l){ return l.phrases.filter(function(p, i){ return state.seen[l.id + ':' + i]; }).length; }
   function setTab(name){
@@ -864,7 +880,7 @@
       }).join('') + '</div>' +
       '<p class="heard" style="margin-top:18px;text-align:left">Natural voices need internet. If one can\'t play, the phone\'s voice reads it instead.</p>'
     );
-    var SAMPLE = 'G\'day! I\'m your Aussie English coach. Let\'s practise speaking together.';
+    var SAMPLE = eng().sample;
     app.querySelectorAll('.voice-opt').forEach(function(row){
       var id = row.dataset.v;
       row.querySelector('.voice-pick').onclick = function(){
@@ -949,12 +965,12 @@
     refreshQuota();
     var week = lastDays(7);
     var speakMin = Math.round(sumOver(week, 'speakSec') / 60);
-    var doneCount = LESSONS.filter(function(l){ return state.done[l.id]; }).length;
-    var next = LESSONS.find(function(l){ return !state.done[l.id]; }) || LESSONS[0];
+    var doneCount = curLessons().filter(function(l){ return state.done[l.id]; }).length;
+    var next = curLessons().find(function(l){ return !state.done[l.id]; }) || curLessons()[0];
     var hour = new Date().getHours();
     var notice = '';
-    if (!naturalVoice() && !canSpeak) notice += '<div class="notice">This browser can\'t play the Australian voice. Please open this page in Chrome.</div>';
-    else if (!naturalVoice() && voice && !hasAussieVoice()) notice += '<div class="notice">No Australian voice on this device, so a ' + esc(voice.lang) + ' English voice is used. Chrome usually has one.</div>';
+    if (!naturalVoice() && !canSpeak) notice += '<div class="notice">This browser can\'t play the coach\'s voice. Please open this page in Chrome.</div>';
+    else if (!naturalVoice() && voice && !hasAussieVoice()) notice += '<div class="notice">No ' + eng().short + ' voice on this device, so a ' + esc(voice.lang) + ' English voice is used. Chrome usually has one.</div>';
     if (!SR) notice += '<div class="notice">Speaking practice works in Chrome on Android or a computer. You can still type in conversations.</div>';
 
     function tile(k, v, unit, s){ return '<div class="card stat"><div class="k">' + k + '</div><div class="v">' + v + (unit ? '<small>' + unit + '</small>' : '') + '</div><div class="s">' + s + '</div></div>'; }
@@ -963,7 +979,7 @@
       '<span class="eyebrow">Australian Jeevitham Aussie English Coach</span>' +
       '<h1 class="title">' + (hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening') + (profile && profile.name ? ', ' + esc(profile.name.split(' ')[0]) : '') + '</h1>' +
       '<a class="acct-link" href="#/account"><span class="avatar sm">' + esc(((profile && profile.name) || '?').charAt(0).toUpperCase()) + '</span>My account</a>' +
-      '<p class="lede">Speak the English Australian healthcare leaders use, with a coach that listens and gives you feedback.</p>' +
+      '<p class="lede">Speak confident ' + eng().name + ' for life and work in ' + eng().country + ', with a coach that listens and gives you feedback.</p>' +
       (!me && getCode() ? '<a class="card cta signin-cta" href="#/signin"><span class="ic">' + I.check + '</span><span><b>Create your account</b><span>Sign in with Google or email to get your level, the placement test and weekly exams. Access codes will stop working soon.</span></span><span class="chev">' + I.chev + '</span></a>' : '') +
       levelCard() + installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
       planCard() + skillsCard() +
@@ -971,7 +987,7 @@
         tile('Day streak', currentStreak(), currentStreak() === 1 ? 'day' : 'days', 'Practise daily to keep it') +
         tile('Speaking time', speakMin, 'min', 'Last 7 days') +
         tile('Words used', Object.keys(state.vocab).length, '', 'Different words you\'ve spoken') +
-        tile('Lessons done', doneCount, '/ ' + LESSONS.length, 'Quizzes completed') +
+        tile('Lessons done', doneCount, '/ ' + curLessons().length, 'Quizzes completed') +
       '</div>' +
       '<div class="card chart-card"><div class="chart-head"><b>Speaking minutes</b><span>Last 7 days</span></div>' + chartSvg(week) + '</div>' +
       '<a class="card cta" href="#/lesson/' + next.id + '"><span class="ic">' + I.book + '</span><span><b>Continue lessons</b><span>' + esc(next.title) + '</span></span><span class="chev">' + I.chev + '</span></a>' +
@@ -996,7 +1012,7 @@
       '<h1 class="title">Learn</h1>' +
       '<div class="list two">' +
         '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
-        '<a class="card item" href="#/listen"><span class="num">' + I.speaker + '</span><span class="t"><h2>Listening: older patients</h2><span class="sub">Understand fast, informal Aussie patient talk' + (state.listenBest != null ? ' · best ' + state.listenBest + '%' : '') + '</span></span></a>' +
+        '<a class="card item" href="#/listen"><span class="num">' + I.speaker + '</span><span class="t"><h2>Listening: older patients</h2><span class="sub">' + eng().listenSub + (state.listenBest != null ? ' · best ' + state.listenBest + '%' : '') + '</span></span></a>' +
         '<a class="card item" href="#/fluency"><span class="num">' + I.mic + '</span><span class="t"><h2>1-minute speaking check</h2><span class="sub">Pronunciation, grammar, vocabulary, pace, pauses and fillers in one report</span></span></a>' +
         '<a class="card item" href="#/oet"><span class="num">' + I.check + '</span><span class="t"><h2>OET Speaking (Nursing)</h2><span class="sub">10 role-plays with a 3-minute prep and 5-minute talk, marked on all 9 criteria</span></span></a>' +
         '<a class="card item" href="#/ielts"><span class="num">' + I.check + '</span><span class="t"><h2>IELTS Speaking</h2><span class="sub">Parts 1-3, cue cards with timers, full mock test, band scores on the 4 criteria</span></span></a>' +
@@ -1004,22 +1020,22 @@
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">96 words for the ward, aged care, leading a team and everyday life</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
         '<a class="card item" href="#/exam"><span class="num">' + I.check + '</span><span class="t"><h2>Your level and exams</h2><span class="sub">' + (myLevelInfo() ? 'You are ' + esc(levelById(userLevel()).name) + (nextLevel() ? ' · ' + (nextExamDate() ? 'next exam ' + esc(niceDate(nextExamDate())) : 'exam ready now') : '') : 'Take the placement test') + '</span></span></a>' +
-        '<a class="card item" href="#/everyday"><span class="num">' + I.chat + '</span><span class="t"><h2>Everyday Australian English</h2><span class="sub">' + LESSONS.length + ' lessons of everyday phrases' + (nativeLang() !== 'en' ? ' with ' + NATIVES[nativeLang()] + ' meanings' : '') + (quizzesDone() ? ' · ' + quizzesDone() + '/' + LESSONS.length + ' quizzes done' : '') + '</span></span></a>' +
-        '<a class="card item" href="#/slang"><span class="num">' + I.cards + '</span><span class="t"><h2>Aussie slang</h2><span class="sub">' + SLANG.length + ' words you\'ll hear every day, from "arvo" to "ambo"</span></span></a>' +
+        '<a class="card item" href="#/everyday"><span class="num">' + I.chat + '</span><span class="t"><h2>' + eng().everyday + '</h2><span class="sub">' + curLessons().length + ' lessons of everyday phrases' + (nativeLang() !== 'en' ? ' with ' + NATIVES[nativeLang()] + ' meanings' : '') + (quizzesDone() ? ' · ' + quizzesDone() + '/' + curLessons().length + ' quizzes done' : '') + '</span></span></a>' +
+        '<a class="card item" href="#/slang"><span class="num">' + I.cards + '</span><span class="t"><h2>' + eng().slang + '</h2><span class="sub">' + curSlang().length + ' ' + eng().slangSub + '</span></span></a>' +
       '</div>'
     );
   }
-  function quizzesDone(){ return LESSONS.filter(function(l){ return state.done[l.id]; }).length; }
+  function quizzesDone(){ return curLessons().filter(function(l){ return state.done[l.id]; }).length; }
 
   // Everyday Australian English: the list of lessons, opened from Learn like Sound drills.
   function everyday(){
     setTab('learn');
     render(
       '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
-      '<span class="eyebrow">Everyday Australian English</span>' +
+      '<span class="eyebrow">' + eng().everyday + '</span>' +
       '<h1 class="title">Phrases for daily life</h1>' +
       '<p class="lede">Short lessons of everyday phrases' + (nativeLang() !== 'en' ? ' with ' + NATIVES[nativeLang()] + ' meanings' : '') + '. Listen, say each phrase, then take the quiz.</p>' +
-      '<div class="list two">' + LESSONS.map(function(l, i){
+      '<div class="list two">' + curLessons().map(function(l, i){
         var seen = seenIn(l);
         return '<a class="card item" href="#/lesson/' + l.id + '"><span class="num">' + (i + 1) + '</span><span class="t">' +
           '<h2>' + esc(l.title) + '</h2>' + natHtml(l, 'sub mal', 'span') +
@@ -1174,15 +1190,15 @@
   /* ---------- Listening: older Australian patients ---------- */
   function listening(){
     setTab('learn');
-    var order = shuffle(LISTENING.map(function(c, i){ return i; })), n = 0, right = 0;
+    var order = shuffle(curListening().map(function(c, i){ return i; })), n = 0, right = 0;
     function show(){
-      var c = LISTENING[order[n]];
+      var c = curListening()[order[n]];
       render(
         '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
         '<span class="eyebrow">Listening · older patients · ' + (n + 1) + ' of ' + order.length + '</span>' +
         '<div class="progress"><i style="width:' + Math.round(n / order.length * 100) + '%"></i></div>' +
         '<article class="card pad"><p class="q-prompt">What is the patient telling you?</p>' +
-          '<p class="q-sub">Older Australians often speak fast and use slang. Listen at full speed first.</p>' +
+          '<p class="q-sub">' + eng().older + ' often speak fast and use slang. Listen at full speed first.</p>' +
           '<div class="listen-row" style="margin:0 0 14px"><button class="btn primary" id="fast">' + I.speaker + 'Play</button><button class="btn" id="norm">' + I.speaker + 'Normal</button><button class="btn" id="slow">' + I.speaker + 'Slow</button></div>' +
           '<div class="opts">' + c.options.map(function(o, i){ return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join('') + '</div>' +
           '<div id="after"></div></article>'
@@ -1215,7 +1231,7 @@
   }
 
   /* ---------- 1-minute speaking check (6-part fluency report) ---------- */
-  var CHECK_TOPICS = ['Describe your typical day at work.', 'Talk about the best thing about living in Australia.', 'Describe a patient or person who taught you something.',
+  var CHECK_TOPICS = ['Describe your typical day at work.', 'Talk about the best thing about the place where you live.', 'Describe a patient or person who taught you something.',
     'Talk about your hometown in Kerala.', 'Describe how you spend your weekends.', 'Talk about a goal you are working towards.', 'Explain how you deal with stress.',
     'Describe a good team you have worked in.', 'Talk about a festival you enjoy.', 'Describe a challenge you faced when you moved to a new place.',
     'Talk about your favourite food and how to cook it.', 'Explain why you chose your career.'];
@@ -1725,7 +1741,7 @@
       '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
       '<span class="eyebrow">Interview preparation · ' + done + ' of ' + all + ' practised</span>' +
       '<h1 class="title">Get ready for your job interview</h1>' +
-      '<p class="lede">Common Australian healthcare interview questions with model answers. Say your own answer and the AI coach scores it the way an Australian panel would.</p>' +
+      '<p class="lede">Common healthcare interview questions with model answers. Say your own answer and the AI coach scores it the way a ' + eng().short + ' panel would.</p>' +
       '<div class="card pad" style="margin-top:14px"><label class="count" for="role">The job you are applying for</label>' +
         '<select id="role" class="ref" style="margin-top:6px">' + INTERVIEW.roles.map(function(r){ return '<option' + (prefs.role === r ? ' selected' : '') + '>' + esc(r) + '</option>'; }).join('') + '</select></div>' +
       '<h2 class="section-title">Practise questions</h2>' +
@@ -1737,14 +1753,14 @@
       }).join('') + '</div>' +
       '<h2 class="section-title">Full mock interview</h2>' +
       '<div class="list">' + ['rn_interview', 'aged_interview', 'panel'].map(function(id){
-        var s = SCENES.find(function(x){ return x.id === id; });
+        var s = sceneById(id);
         return s ? '<a class="card item" href="#/talk/' + s.id + '"><span class="avatar">' + esc(initials(s.who)) + '</span><span class="t"><h2>' + esc(s.title) + '</h2><span class="sub">with ' + esc(s.who) + '</span></span><span class="muted">' + I.chev + '</span></a>' : '';
       }).join('') + '</div>' +
       '<h2 class="section-title">Questions to ask the panel</h2>' +
       '<div class="phrase-list">' + INTERVIEW.ask.map(function(q){
         return '<div class="card phrase"><div><b>' + esc(q) + '</b></div><button class="icon-btn" data-say="' + esc(q) + '" aria-label="Listen">' + I.speaker + '</button></div>';
       }).join('') + '</div>' +
-      '<h2 class="section-title">Australian interview tips</h2>' +
+      '<h2 class="section-title">Interview tips</h2>' +
       '<div class="faq">' + INTERVIEW.tips.map(function(t){ return '<details class="card"><summary>' + esc(t.t) + '</summary><div class="a">' + esc(t.d) + '</div></details>'; }).join('') + '</div>'
     );
     document.getElementById('role').onchange = function(){ prefs.role = this.value; savePrefs(); };
@@ -1823,13 +1839,13 @@
   function learntIn(t){ return t.words.filter(function(w, i){ return (state.learnt || {})[t.id + ':' + i]; }).length; }
   function vocab(){
     setTab('learn');
-    var total = VOCAB.reduce(function(a, t){ return a + t.words.length; }, 0), got = VOCAB.reduce(function(a, t){ return a + learntIn(t); }, 0);
+    var total = curVocab().reduce(function(a, t){ return a + t.words.length; }, 0), got = curVocab().reduce(function(a, t){ return a + learntIn(t); }, 0);
     render(
       '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
       '<span class="eyebrow">Vocabulary · ' + got + ' of ' + total + ' learnt</span>' +
       '<h1 class="title">Words for work and life</h1>' +
       '<p class="lede">Healthcare, leadership and everyday words, each with a meaning and an example. Hear them, say them, and mark them as learnt.</p>' +
-      '<div class="list two">' + VOCAB.map(function(t, i){
+      '<div class="list two">' + curVocab().map(function(t, i){
         var n = learntIn(t);
         return '<a class="card item" href="#/words/' + t.id + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(t.title) + '</h2>' +
           '<span class="sub">' + t.words.slice(0, 3).map(function(w){ return esc(w.w); }).join(' · ') + '</span>' +
@@ -1838,7 +1854,7 @@
     );
   }
   function wordsPage(id){
-    var t = VOCAB.find(function(x){ return x.id === id; });
+    var t = curVocab().find(function(x){ return x.id === id; });
     if (!t) return vocab();
     setTab('learn');
     var cur = 0;
@@ -2139,7 +2155,7 @@
       state.done[l.id] = true;
       state.best[l.id] = Math.max(state.best[l.id] || 0, pct);
       save(); markActive();
-      var i = LESSONS.indexOf(l), nextL = LESSONS[i + 1];
+      var i = curLessons().indexOf(l), nextL = curLessons()[i + 1];
       render(
         '<article class="card pad done">' +
           '<span class="eyebrow">Quiz complete</span>' +
@@ -2308,7 +2324,7 @@
     var create = false;
     authShell(
       '<h1 class="title">Aussie English Coach</h1>' +
-      '<p class="lede">Practise the English Australian healthcare teams use, with an AI coach that listens and helps.</p>' +
+      '<p class="lede">Practise Australian, British or Indian English for life and work, with an AI coach that listens and helps.</p>' +
       '<button class="btn google" id="gBtn" type="button">' + GOOGLE_G + 'Continue with Google</button>' +
       '<div class="or"><span>or use your email</span></div>' +
       '<form id="ef" class="auth-form" novalidate>' +
@@ -2563,7 +2579,11 @@
     { id: 'interview', icon: '🎤', title: 'Mock Interview', about: 'Full job interviews for nurses, care workers, IT, engineers, teachers and office roles',
       scenes: ['rn_interview', 'aged_interview', 'panel', 'mi_it', 'mi_eng', 'mi_teacher', 'mi_office'] }
   ];
-  function sceneById(id){ return SCENES.find(function(x){ return x.id === id; }); }
+  // A conversation with the learner's English applied (pack().scenes changes Australian openings).
+  function sceneById(id){
+    var s = SCENES.find(function(x){ return x.id === id; }), o = s && (pack().scenes || {})[id];
+    return o ? Object.assign({}, s, { say: '' }, o) : s;
+  }
   function sectionScenes(sec){ return sec.subs ? [].concat.apply([], sec.subs.map(function(x){ return x.scenes; })) : sec.scenes; }
   // The learner's own section (from their field) and, in Healthcare, their role's sub-menu.
   function mySection(){ var f = profile && profile.field; return TALK_MENU.find(function(x){ return x.field && x.field === f; }) || null; }
@@ -2618,7 +2638,7 @@
   }
 
   function talk(id){
-    var s = SCENES.find(function(x){ return x.id === id; });
+    var s = sceneById(id);
     if (!s) return talkHome();
     setTab('talk');
     var history = [];   // what the server sees: learner turns and the character's raw replies
@@ -2676,7 +2696,7 @@
     function aiMsg(text, ml, spoken, phrase, quiet){
       var b = add(el('msg ai', '<p>' + esc(text) + '</p>' +
         '<div class="msg-tools"><button type="button" data-a="say">' + I.speaker + 'Play</button><button type="button" data-a="slow">Slow</button>' +
-        (ml ? '<button type="button" data-a="ml">മലയാളം</button>' : '') + '</div>' +
+        (ml ? '<button type="button" data-a="ml" lang="' + nativeLang() + '">' + ({ ml: 'മലയാളം', hi: 'हिंदी', ta: 'தமிழ்' }[nativeLang()] || 'Translation') + '</button>' : '') + '</div>' +
         (ml ? '<p class="coach mal" lang="' + nativeLang() + '" hidden>' + esc(ml) + '</p>' : '')));
       b.querySelector('[data-a=say]').onclick = function(){ speak(spoken || text); };
       b.querySelector('[data-a=slow]').onclick = function(){ speak(spoken || text, true); };
@@ -2811,7 +2831,7 @@
       apiFetch(TALK_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
-        body: JSON.stringify({ level: userLevel(), scene: s.id, messages: history })
+        body: JSON.stringify({ level: userLevel(), scene: s.id, opening: s.opening, messages: history })
       }).then(function(r){
         if (!r.body || (r.headers.get('Content-Type') || '').indexOf('ndjson') < 0) {
           return r.json().catch(function(){ return { error: 'ai_error' }; });
@@ -2908,7 +2928,7 @@
       apiFetch(TALK_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
-        body: JSON.stringify({ warm: true, level: userLevel(), scene: s.id })
+        body: JSON.stringify({ warm: true, level: userLevel(), scene: s.id, opening: s.opening })
       }).catch(function(){});
     }
   }
@@ -2918,10 +2938,10 @@
     setTab('learn');
     render(
       '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
-      '<span class="eyebrow">Aussie slang</span>' +
+      '<span class="eyebrow">' + eng().slang + '</span>' +
       '<h1 class="title">Words you\'ll hear every day</h1>' +
       '<p class="lede">Tap a card to see what it means.</p>' +
-      '<div class="slang">' + SLANG.map(function(s, i){
+      '<div class="slang">' + curSlang().map(function(s, i){
         return '<div class="card flip" role="button" tabindex="0" aria-expanded="false" data-i="' + i + '">' +
           '<button class="say" type="button" data-i="' + i + '" aria-label="Listen to ' + esc(s.word) + '">' + I.speaker + '</button>' +
           '<div class="w">' + esc(s.word) + '</div>' +
@@ -2934,13 +2954,13 @@
       function toggle(){
         var open = card.classList.toggle('open');
         card.setAttribute('aria-expanded', open);
-        if (open) { speak(SLANG[+card.dataset.i].ex); markActive(); }
+        if (open) { speak(curSlang()[+card.dataset.i].ex); markActive(); }
       }
       card.onclick = toggle;
       card.onkeydown = function(e){ if (e.target === card && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); toggle(); } };
     });
     app.querySelectorAll('.say').forEach(function(b){
-      b.onclick = function(e){ e.stopPropagation(); speak(SLANG[+b.dataset.i].word); };
+      b.onclick = function(e){ e.stopPropagation(); speak(curSlang()[+b.dataset.i].word); };
     });
   }
 
@@ -2949,9 +2969,9 @@
     setTab('tips');
     render(
       '<span class="eyebrow">Culture</span>' +
-      '<h1 class="title">Working and living in Australia</h1>' +
+      '<h1 class="title">Working and living in ' + eng().country + '</h1>' +
       '<p class="lede">The unwritten rules that help you fit in from day one.</p>' +
-      '<div class="tips">' + TIPS.map(function(t){
+      '<div class="tips">' + curTips().map(function(t){
         return '<div class="card tipcard"><h2>' + esc(t.title) + '</h2>' + (t.en ? '<p>' + esc(t.en) + '</p>' : '') + natHtml(t, '') + '</div>';
       }).join('') + '</div>'
     );
