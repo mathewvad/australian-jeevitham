@@ -986,6 +986,11 @@
       }).join('') + '</div>';
   }
 
+  // Beta: a standing invitation to report problems, shown on Home.
+  function fixCard(){
+    return '<a class="card cta fix-cta" href="#/feedback"><span class="ic">' + I.send + '</span><span><b>Tell us what to fix</b><span>English Coach is in beta. Something wrong, confusing or missing? Tell us - every message is read.</span></span><span class="chev">' + I.chev + '</span></a>';
+  }
+
   function home(){
     setTab('home');
     refreshQuota();
@@ -1008,7 +1013,7 @@
       '<p class="lede">Speak confident ' + eng().name + ' for life and work in ' + eng().country + ', with a coach that listens and gives you feedback.</p>' +
       (!me && getCode() ? '<a class="card cta signin-cta" href="#/signin"><span class="ic">' + I.check + '</span><span><b>Create your account</b><span>Sign in with Google or email to get your level, the placement test and weekly exams. Access codes will stop working soon.</span></span><span class="chev">' + I.chev + '</span></a>' : '') +
       levelCard() + installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
-      planCard() + skillsCard() +
+      planCard() + skillsCard() + fixCard() +
       '<div class="stats">' +
         tile('Day streak', currentStreak(), currentStreak() === 1 ? 'day' : 'days', 'Practise daily to keep it') +
         tile('Speaking time', speakMin, 'min', 'Last 7 days') +
@@ -2028,7 +2033,7 @@
         '<div class="card pad exam-parts">' +
           '<div><span class="num">1</span><span><b>Listening and vocabulary quiz</b><span>' + (placement ? '12' : '10') + ' questions - tap the answer</span></span></div>' +
           '<div><span class="num">2</span><span><b>Read aloud</b><span>3 sentences, scored for pronunciation</span></span></div>' +
-          '<div><span class="num">3</span><span><b>Speak</b><span>Answer 3 questions out loud, 30 to 60 seconds each</span></span></div>' +
+          '<div><span class="num">3</span><span><b>Speak</b><span>Answer 3 questions out loud. You have 1 minute for each answer - aim for 30 to 60 seconds. A timer shows the time left.</span></span></div>' +
         '</div>' +
         '<p class="heard" style="text-align:left;margin-top:12px">Find a quiet place, hold the phone about 20 cm away, and use headphones for the listening questions if you can.</p>' +
         '<div class="row" style="margin-top:16px"><button class="btn primary" id="start">Start' + I.chev + '</button></div>' +
@@ -2086,16 +2091,38 @@
     function speakStep(){
       var q = paper.speak[step], n = paper.quiz.length + paper.read.length + step + 1;
       render(header(n, 'Speak ' + (step + 1) + ' of ' + paper.speak.length) +
-        '<article class="card pad"><span class="count">Answer out loud - aim for 30 to 60 seconds</span><p class="q-prompt">' + esc(q) + '</p>' +
+        '<article class="card pad"><span class="count">Answer out loud - you have 1 minute (aim for 30 to 60 seconds)</span><p class="q-prompt">' + esc(q) + '</p>' +
+        '<div class="timer big" id="atimer">1:00</div>' +
         '<div class="listen-row" style="margin:0 0 6px"><button class="btn" id="play">' + I.speaker + 'Hear the question</button></div>' +
         '<div class="speak-zone">' + (SR ? micButton('amic') + '<span class="mic-label" id="alabel">Tap and start speaking</span>' : '') +
-        '<textarea id="ans" class="ref" rows="4" placeholder="' + (SR ? 'Your words appear here. You can also type.' : 'Type your answer') + '"></textarea></div>' +
+        '<textarea id="ans" class="ref" rows="4" maxlength="1500" placeholder="' + (SR ? 'Your words appear here. You can also type.' : 'Type your answer') + '"></textarea></div>' +
         '<div class="nav"><span></span><button class="btn primary" id="next">' + (step === paper.speak.length - 1 ? 'Finish' : 'Next') + I.chev + '</button></div></article>');
       var ans = document.getElementById('ans'), mic = document.getElementById('amic'), label = document.getElementById('alabel');
       document.getElementById('play').onclick = function(){ speak(q); };
       speak(q);
       var la = longAnswer(mic, label, ans);
+      // The 1-minute clock starts the first time they tap the microphone (or start typing).
+      var tEl = document.getElementById('atimer'), left = 60, clock = null;
+      function startClock(){
+        if (clock || left <= 0) return;
+        clock = setInterval(function(){
+          if (!document.body.contains(tEl)) { clearInterval(clock); return; }
+          left--;
+          tEl.textContent = '0:' + ('0' + Math.max(0, left)).slice(-2);
+          tEl.classList.toggle('low', left <= 10);
+          if (left <= 0) {
+            clearInterval(clock);
+            la.stop();
+            if (mic) mic.disabled = true;
+            ans.readOnly = true;
+            if (label) label.textContent = 'Time is up - tap ' + (step === paper.speak.length - 1 ? 'Finish' : 'Next') + ' to continue';
+          }
+        }, 1000);
+      }
+      if (mic) mic.addEventListener('click', startClock);
+      ans.addEventListener('input', startClock);
       document.getElementById('next').onclick = function(){
+        if (clock) clearInterval(clock);
         la.stop();
         var text = ans.value.trim();
         if (!text) { if (label) label.textContent = 'Please answer the question first'; return; }
@@ -2248,7 +2275,9 @@
 
   /* ---------- Talk (AI role-play) ---------- */
   var CODE_KEY = 'aj-english-code';
-  function getCode(){ try { return localStorage.getItem(CODE_KEY) || ''; } catch(e) { return ''; } }
+  // Access codes were switched off on 5 Nov 2026 (the app went public); any old code is forgotten.
+  try { localStorage.removeItem('aj-english-code'); } catch(e) {}
+  function getCode(){ return ''; }
   function setCode(c){ try { localStorage.setItem(CODE_KEY, c); } catch(e) {} }
 
   /* ---------- Accounts (Firebase Authentication) ---------- */
@@ -2282,6 +2311,7 @@
       }
       // Today's allowance used up: say so, whichever feature asked.
       if (r.status === 429) r.clone().json().then(function(d){
+        if (d.error === 'busy_today') toast('English Coach is very busy today and the AI coach has paused until tomorrow. Lessons, slang and sound drills still work.');
         if (d.error === 'daily_limit') toast(/\/pron$/.test(url)
           ? 'You\'ve reached today\'s limit for pronunciation checks. It resets tomorrow.'
           : 'You\'ve used all of today\'s AI actions. They reset tomorrow - meanwhile, sound drills, lessons and slang still work.');
@@ -2582,7 +2612,7 @@
     render(
       '<span class="eyebrow">Feedback</span>' +
       '<h1 class="title">Tell us what you think</h1>' +
-      '<p class="lede">You are one of our first testers - every message is read and helps make the app better.</p>' +
+      '<p class="lede">English Coach is in beta, so you are one of our first users. Tell us what to fix, what is confusing or what you would like added - every message is read.</p>' +
       '<form id="fbf" class="card pad fb-form">' +
         '<label class="fb-q">How do you like the app so far?</label>' +
         '<div class="stars" role="radiogroup" aria-label="Rating">' + [1, 2, 3, 4, 5].map(function(n){ return '<button type="button" class="star" data-n="' + n + '" role="radio" aria-checked="false" aria-label="' + n + ' out of 5">' + I.star + '</button>'; }).join('') + '</div>' +
@@ -2979,6 +3009,7 @@
         if (d.error === 'access_code' || d.error === 'signin') { failed(b, 'Please sign in again.'); location.hash = '#/signin'; return; }
         if (d.error === 'blocked') { failed(b, 'This account has been paused. Please contact Australian Jeevitham.'); return; }
         if (d.error === 'daily_limit') { failed(b, 'You\'ve used all of today\'s AI actions - they reset tomorrow.'); return; }
+        if (d.error === 'busy_today') { failed(b, 'The coach is very busy today - please try again tomorrow.'); return; }
         if (d.error === 'refused') { failed(b, 'Let\'s try saying that a different way.'); return; }
         if (d.error || !d.reply) { failed(b, 'Couldn\'t reach your coach. Please try again.'); input.value = text; return; }
         feedback(b, text, d);
