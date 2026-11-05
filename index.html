@@ -41,13 +41,13 @@
   <!-- Lean Font Loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Dancing+Script:wght@600;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600;700&family=Dancing+Script:wght@600;700&family=Noto+Sans+Malayalam:wght@400;600;700&display=swap">
   </noscript>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/home.css">
 </head>
-<body>
+<body class="d7">
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
 <nav>
@@ -70,6 +70,9 @@
 <main id="main-content">
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
+  <div class="d-wash" aria-hidden="true"><i></i><i></i><i></i></div>
+  <svg class="d-birds" viewBox="0 0 220 90" aria-hidden="true" focusable="false"><g fill="none" stroke="#5E7391" stroke-width="2.2" stroke-linecap="round"><path d="M10 40q14-14 26 0q12-14 26 0"/><path d="M90 20q10-10 19 0q9-10 19 0"/><path d="M150 60q8-8 15 0q7-8 15 0"/></g></svg>
+  <svg class="d-shore" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 80C120 60 220 90 340 74S560 40 700 62 960 96 1100 70 1320 50 1440 66" fill="none" stroke="#8FC3E6" stroke-width="2"/><path d="M0 98C160 84 300 104 460 92S760 74 920 90 1240 104 1440 88" fill="none" stroke="#8FC3E6" stroke-width="1.4" opacity=".7"/></svg>
   <div class="wrap">
       <div>
       <span class="stamp">📍 Queensland, Australia</span>
@@ -82,10 +85,11 @@
         <a class="hero-cta" href="https://www.youtube.com/@AustralianJeevitham" target="_blank" rel="noopener noreferrer">▶ Watch on YouTube</a>
         <a class="hero-cta instagram" href="https://www.instagram.com/australianjeevitham/" target="_blank" rel="noopener noreferrer">▶ Watch on Instagram</a>
       </div>
+      <p class="hero-hobby">A hobby channel, made with love after work</p>
     </div>
     <div class="hero-photo-order">
       <div class="postcard">
-        <img src="images/australian-jeevitham-binu-holding-youtube-100k-award.webp" alt="Binu Vadakkedath, creator of Australian Jeevitham, holding his YouTube 100K Silver Play Button award" width="450" height="597" loading="eager" decoding="async" fetchpriority="high">
+        <img src="images/australian-jeevitham-binu.webp" alt="Binu Vadakkedath, creator of Australian Jeevitham, in his backyard garden under a coconut palm in Queensland" width="1080" height="1920" loading="eager" decoding="async" fetchpriority="high">
         <span class="corner-stamp">NEW<br>EPS<br>BIWEEKLY</span>
       </div>
     </div>
@@ -112,10 +116,14 @@
       </div>
       <div class="reveal">
         <span class="stamp coral">Meet the Creator</span>
-        <div class="section-head" style="margin-top:20px; margin-bottom:20px;">
+        <div class="section-head">
           <h2>The face behind Australian Jeevitham</h2>
         </div>
         <p class="about-lede">Binu Vadakkedath - software engineer by day, content creator by evening.</p>
+        <div class="hobby-note">
+          <p>Australian Jeevitham is my hobby, not my business. I make these videos in my spare time, simply because I love sharing real Malayali life in Australia.</p>
+          <p><span class="mal" lang="ml">ഓസ്‌ട്രേലിയൻ ജീവിതം എൻ്റെ ഒരു ഹോബിയാണ്. ജോലി കഴിഞ്ഞുള്ള ഒഴിവു സമയത്ത്, ഇഷ്ടം കൊണ്ട് മാത്രം ചെയ്യുന്നതാണ് ഈ വീഡിയോകൾ.</span></p>
+        </div>
         <div class="about-body">
           <p>Since starting the channel, I have shared an honest, unscripted look at everyday Malayali life in Australia - jobs, migration, settlement, and backyard farming - all filmed from Queensland.</p>
         </div>
@@ -133,9 +141,9 @@
     <div class="about-grid">
       <div>
         <span class="stamp coral">Filmed in Queensland, Australia</span>
-        <div class="section-head" style="margin-top:20px; margin-bottom:28px;">
-          <div class="kicker"><span style="font-family:var(--mono); font-size:0.78rem; color:var(--fg-muted); text-transform:uppercase; letter-spacing:0.08em;">Our Story</span></div>
-          <h2><span class="mal" lang="ml">എന്തുകൊണ്ട്‌ <span style="color:var(--coral);">ഓസ്‌ട്രേലിയൻ ജീവിതം</span> എന്ന ഈ ചാനൽ ഞാൻ തുടങ്ങി.</span></h2>
+        <div class="section-head">
+          <div class="kicker"><span>Our Story</span></div>
+          <h2><span class="mal" lang="ml">എന്തുകൊണ്ട്‌ <span class="accent">ഓസ്‌ട്രേലിയൻ ജീവിതം</span> എന്ന ഈ ചാനൽ ഞാൻ തുടങ്ങി.</span></h2>
         </div>
         <p class="about-lede"><span class="mal" lang="ml">ആകസ്മികമായി തുടങ്ങി, പക്ഷെ...</span></p>
         <div class="about-body">
@@ -154,11 +162,11 @@
 </section>
 
 <!-- ============ VIDEOS ============ -->
-<section class="videos section" id="videos" style="background:var(--bg-alt); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
+<section class="videos section" id="videos">
   <div class="wrap">
     <div class="section-head">
       <span class="stamp grape">Featured Content</span>
-      <h2 style="margin-top:16px;">Catch up on the latest stories, vlogs, and adventures</h2>
+      <h2>Catch up on the latest stories, vlogs, and adventures</h2>
     </div>
 
     <div class="video-grid">
@@ -193,18 +201,18 @@
       </article>
     </div>
 
-    <p class="link-row" style="margin-top:36px;">
+    <p class="link-row">
       <a href="australian-malayalam-videos.html">Watch all videos →</a>
     </p>
   </div>
 </section>
 
 <!-- ============ RESOURCES ============ -->
-<section class="resources section" id="topics" style="background:var(--bg-alt); border-top:3px solid var(--border); border-bottom:3px solid var(--border);">
+<section class="resources section" id="topics">
   <div class="wrap">
     <div class="section-head">
       <span class="stamp grape">Community &amp; Guides</span>
-      <h2 style="margin-top:16px;">Explore our community and detailed guides</h2>
+      <h2>Explore our community and detailed guides</h2>
     </div>
     <div class="crosslink-grid">
       <!-- Card 1: Facebook Community Group -->
@@ -215,7 +223,7 @@
         </div>
         <h3>Facebook Community Group</h3>
         <p>Join 110,000+ Malayalis sharing first-hand advice, verifying genuine job offers, and helping newcomers settle in Australia.</p>
-        <ul class="badge-list" style="margin-top:auto;">
+        <ul class="badge-list">
           <li>110K+ Members</li>
           <li>Community</li>
           <li>Peer Help</li>
@@ -229,7 +237,7 @@
         </div>
         <h3>Malayalam Resources Hub</h3>
         <p>A comprehensive directory of guides covering visas, driving licence conversion, superannuation, and settling into Australia.</p>
-        <ul class="badge-list" style="margin-top:auto;">
+        <ul class="badge-list">
           <li>Guides</li>
           <li>Checklists</li>
           <li>Official Links</li>
@@ -243,7 +251,7 @@
         </div>
         <h3>AHPRA Nursing Registration</h3>
         <p>A step-by-step roadmap for internationally qualified nurses covering Stream B, OBA, NCLEX-RN, OSCE, and English requirements.</p>
-        <ul class="badge-list" style="margin-top:auto;">
+        <ul class="badge-list">
           <li>AHPRA / NMBA</li>
           <li>NCLEX &amp; OSCE</li>
           <li>Healthcare</li>
@@ -259,7 +267,7 @@
   <div class="wrap">
     <div class="section-head">
       <span class="stamp">Connect With Us</span>
-      <h2 style="margin-top:16px;">Stay updated and join our growing global community</h2>
+      <h2>Stay updated and join our growing global community</h2>
     </div>
 
     <div class="connect-grid">
@@ -312,6 +320,14 @@
           <span class="handle">Get in touch</span>
         </span>
       </a>
+    </div>
+
+    <div class="disclaimer">
+      <span class="icon" aria-hidden="true">⚠️</span>
+      <div>
+        <p>Australian Jeevitham is a hobby channel and is <strong>not a registered migration agent</strong>. The videos and articles share personal experience and general information only - not migration or legal advice. For advice about your own visa, please consult an OMARA-registered migration agent. You can find or verify one through the <a href="https://www.mara.gov.au/" target="_blank" rel="noopener noreferrer">Office of the Migration Agents Registration Authority (OMARA)</a>.</p>
+        <p><span class="mal" lang="ml">ഞാൻ ഒരു രജിസ്റ്റേർഡ് മൈഗ്രേഷൻ ഏജന്റ് അല്ല. ഈ വീഡിയോകളും ലേഖനങ്ങളും എൻ്റെ വ്യക്തിപരമായ അനുഭവങ്ങളും പൊതുവായ വിവരങ്ങളും മാത്രമാണ്. നിങ്ങളുടെ വിസ സംബന്ധമായ ഉപദേശത്തിന് ഒരു OMARA-രജിസ്റ്റേർഡ് മൈഗ്രേഷൻ ഏജന്റിനെ സമീപിക്കുക.</span></p>
+      </div>
     </div>
 
     <p class="records">
@@ -588,7 +604,7 @@
     });
   })();
 </script>
-<script src="js/main.js" defer></script>
+<script src="js/home.js" defer></script>
 
 </body>
 </html>
