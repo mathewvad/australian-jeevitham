@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colour Converter (HEX, RGB, HSL) &amp; Contrast Checker | Australian Jeevitham Tech</title>
+  <meta name="description" content="Convert colours between HEX, RGB and HSL, make tints and shades, and check text contrast against WCAG AA and AAA. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/colour-converter.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Colour Converter (HEX, RGB, HSL) &amp; Contrast Checker | Australian Jeevitham Tech">
+  <meta property="og:description" content="Convert colours between HEX, RGB and HSL, make tints and shades, and check text contrast against WCAG AA and AAA. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/colour-converter.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Colour Converter (HEX, RGB, HSL) &amp; Contrast Checker | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Convert colours between HEX, RGB and HSL, make tints and shades, and check text contrast against WCAG AA and AAA. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Colour Converter (HEX, RGB, HSL) & Contrast Checker",
+  "url": "https://www.australianjeevitham.com/tech/colour-converter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Convert colours between HEX, RGB and HSL, make tints and shades, and check text contrast against WCAG AA and AAA. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Colour Converter &amp; Contrast</p>
+    <h1>Colour <span class="hl">Converter</span> &amp; Contrast</h1>
+    <p>Convert any colour between HEX, RGB and HSL, get tints and shades, and check whether text and background colours pass accessibility contrast rules.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-row">
+      <div class="tl-card">
+        <h2>Colour</h2>
+        <div class="jp-bar">
+          <input type="color" id="pick" value="#ee4a23" aria-label="Pick a colour" style="width:56px; height:44px; border:0; background:none; cursor:pointer;">
+          <input class="tl-input" id="any" spellcheck="false" placeholder="#EE4A23, rgb(238 74 35), hsl(12 85% 54%), tomato" style="flex:1; min-width:200px;">
+        </div>
+        <div class="tl-swatch" id="sw">Aa</div>
+        <div class="tl-table-wrap tl-mt"><table class="tl-table"><tbody id="vals"></tbody></table></div>
+        <div class="jp-status" id="status" role="status" style="display:none;"></div>
+      </div>
+      <div class="tl-card">
+        <h2>Contrast checker (WCAG)</h2>
+        <div class="tl-row">
+          <label class="tl-field"><span>Text colour</span><div class="jp-bar" style="margin:0;"><input type="color" id="fgPick" value="#ffffff" aria-label="Text colour"><input class="tl-input" id="fg" value="#FFFFFF" spellcheck="false" style="flex:1;"></div></label>
+          <label class="tl-field"><span>Background</span><div class="jp-bar" style="margin:0;"><input type="color" id="bgPick" value="#ee4a23" aria-label="Background colour"><input class="tl-input" id="bg" value="#EE4A23" spellcheck="false" style="flex:1;"></div></label>
+        </div>
+        <div class="tl-swatch tl-mt" id="pair" style="height:auto; padding:22px; display:block; text-align:left;">
+          <div style="font:700 1.5rem var(--display);">Large heading text</div>
+          <div style="font:400 1rem var(--body); margin-top:6px;">Normal body text should be easy to read for everyone.</div>
+        </div>
+        <div class="tl-big tl-mt" id="ratio" style="text-align:center; font-size:1.6rem;"></div>
+        <div class="tl-table-wrap tl-mt"><table class="tl-table"><thead><tr><th>Use</th><th>AA</th><th>AAA</th></tr></thead><tbody id="wcag"></tbody></table></div>
+        <button type="button" class="jp-btn tl-mt" id="swapC">⇄ Swap colours</button>
+      </div>
+    </div>
+    <div class="tl-card tl-mt">
+      <h2>Tints &amp; shades <span class="tl-note" style="font:400 .85rem var(--body); margin:0;">(click one to use it)</span></h2>
+      <div class="tl-shades" id="shades"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, cur = { r: 238, g: 74, b: 35, a: 1 };
+
+  // Parse any CSS colour by letting the browser do it on a 1x1 canvas
+  var cx = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+  function parse(str) {
+    str = String(str).trim(); if (!str) return null;
+    if (/^[0-9a-f]{3,8}$/i.test(str)) str = '#' + str;
+    if (!CSS.supports('color', str)) return null;
+    cx.clearRect(0, 0, 1, 1); cx.fillStyle = '#000'; cx.fillStyle = str; cx.fillRect(0, 0, 1, 1);
+    var d = cx.getImageData(0, 0, 1, 1).data;
+    return { r: d[0], g: d[1], b: d[2], a: Math.round(d[3] / 255 * 100) / 100 };
+  }
+  var h2 = function (n) { return ('0' + n.toString(16)).slice(-2).toUpperCase(); };
+  function hex(c) { return '#' + h2(c.r) + h2(c.g) + h2(c.b) + (c.a < 1 ? h2(Math.round(c.a * 255)) : ''); }
+  function hsl(c) {
+    var r = c.r / 255, g = c.g / 255, b = c.b / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), h = 0, s = 0, l = (mx + mn) / 2, d = mx - mn;
+    if (d) { s = d / (1 - Math.abs(2 * l - 1)); h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h = Math.round(h * 60); if (h < 0) h += 360; }
+    return { h: h, s: Math.round(s * 100), l: Math.round(l * 100) };
+  }
+  function hsv(c) {
+    var r = c.r / 255, g = c.g / 255, b = c.b / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+    return { s: Math.round(mx ? (mx - mn) / mx * 100 : 0), v: Math.round(mx * 100) };
+  }
+  function cmyk(c) {
+    var r = c.r / 255, g = c.g / 255, b = c.b / 255, k = 1 - Math.max(r, g, b);
+    if (k === 1) return '0%, 0%, 0%, 100%';
+    return [r, g, b].map(function (x) { return Math.round((1 - x - k) / (1 - k) * 100) + '%'; }).join(', ') + ', ' + Math.round(k * 100) + '%';
+  }
+  function lum(c) {
+    return [c.r, c.g, c.b].map(function (v) { v /= 255; return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); })
+      .reduce(function (s, v, i) { return s + v * [0.2126, 0.7152, 0.0722][i]; }, 0);
+  }
+  function ratio(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function mix(c, w, t) { return { r: Math.round(c.r + (w.r - c.r) * t), g: Math.round(c.g + (w.g - c.g) * t), b: Math.round(c.b + (w.b - c.b) * t), a: 1 }; }
+
+  function show(c, from) {
+    cur = c;
+    var H = hsl(c), V = hsv(c), hx = hex(c), rgbS = c.a < 1 ? 'rgb(' + c.r + ' ' + c.g + ' ' + c.b + ' / ' + c.a + ')' : 'rgb(' + c.r + ', ' + c.g + ', ' + c.b + ')';
+    var rows = [['HEX', hx], ['RGB', rgbS], ['HSL', 'hsl(' + H.h + ', ' + H.s + '%, ' + H.l + '%)'], ['HSV / HSB', H.h + '°, ' + V.s + '%, ' + V.v + '%'], ['CMYK', cmyk(c)], ['CSS variable', '--brand: ' + hx + ';']];
+    $('vals').innerHTML = rows.map(function (r) { return '<tr><th scope="row" style="width:120px;">' + r[0] + '</th><td><code>' + T.esc(r[1]) + '</code></td><td style="width:60px;"><button type="button" class="tl-copy" data-v="' + T.esc(r[1]) + '">Copy</button></td></tr>'; }).join('');
+    var sw = $('sw'); sw.style.background = rgbS; sw.style.color = lum(c) > 0.4 ? '#1B2A4A' : '#FFFFFF';
+    if (from !== 'pick') $('pick').value = hex({ r: c.r, g: c.g, b: c.b, a: 1 }).toLowerCase();
+    if (from !== 'any') $('any').value = hx;
+    var W = { r: 255, g: 255, b: 255 }, B = { r: 0, g: 0, b: 0 }, steps = [0.9, 0.75, 0.6, 0.45, 0.3, 0.15, 0, -0.15, -0.3, -0.45, -0.6, -0.75];
+    $('shades').innerHTML = steps.map(function (t) {
+      var m = t >= 0 ? mix(c, W, t) : mix(c, B, -t), x = hex(m);
+      return '<button type="button" data-use="' + x + '" style="background:' + x + '; color:' + (lum(m) > 0.4 ? '#1B2A4A' : '#fff') + ';' + (t === 0 ? 'outline:3px solid var(--navy); outline-offset:2px;' : '') + '" title="' + x + '">' + x + '</button>';
+    }).join('');
+    $('status').style.display = 'none';
+  }
+  function contrast() {
+    var f = parse($('fg').value), b = parse($('bg').value);
+    if (!f || !b) { $('ratio').textContent = 'Enter two valid colours'; $('wcag').innerHTML = ''; return; }
+    var r = ratio(f, b), p = $('pair');
+    p.style.color = hex(f); p.style.background = hex(b);
+    $('fgPick').value = hex({ r: f.r, g: f.g, b: f.b, a: 1 }).toLowerCase(); $('bgPick').value = hex({ r: b.r, g: b.g, b: b.b, a: 1 }).toLowerCase();
+    $('ratio').textContent = (Math.floor(r * 100) / 100).toFixed(2) + ' : 1';
+    var pill = function (ok) { return ok ? '<span class="tl-pill ok">✓ Pass</span>' : '<span class="tl-pill err">✗ Fail</span>'; };
+    $('wcag').innerHTML = [['Normal text', 4.5, 7], ['Large text (24px+, or 19px bold)', 3, 4.5], ['Icons &amp; buttons (UI)', 3, null]].map(function (x) {
+      return '<tr><td>' + x[0] + '</td><td>' + pill(r >= x[1]) + ' <span class="tl-note" style="margin:0;">≥ ' + x[1] + '</span></td><td>' + (x[2] ? pill(r >= x[2]) + ' <span class="tl-note" style="margin:0;">≥ ' + x[2] + '</span>' : '-') + '</td></tr>';
+    }).join('');
+  }
+
+  T.onInput([$('any')], function () {
+    var c = parse($('any').value);
+    if (c) show(c, 'any'); else if ($('any').value.trim()) { var s = $('status'); s.style.display = ''; T.status(s, 'err', '✗ Not a colour the browser understands'); }
+  }, 150);
+  $('pick').addEventListener('input', function () { show(parse(this.value), 'pick'); });
+  T.onInput([$('fg'), $('bg')], contrast, 120);
+  $('fgPick').addEventListener('input', function () { $('fg').value = this.value.toUpperCase(); contrast(); });
+  $('bgPick').addEventListener('input', function () { $('bg').value = this.value.toUpperCase(); contrast(); });
+  $('swapC').addEventListener('click', function () { var t = $('fg').value; $('fg').value = $('bg').value; $('bg').value = t; contrast(); });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-v]'); if (b) { T.copy(b.getAttribute('data-v'), 'Copied'); return; }
+    var u = e.target.closest('[data-use]'); if (u) { show(parse(u.getAttribute('data-use'))); $('bg').value = u.getAttribute('data-use'); contrast(); }
+  });
+  show(cur); contrast();
+})();
+</script>
+</body>
+</html>

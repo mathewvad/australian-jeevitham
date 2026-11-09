@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Encoder, Decoder &amp; Query String Parser | Australian Jeevitham Tech</title>
+  <meta name="description" content="Encode or decode URL text, and split any URL into protocol, host, path, query parameters and hash. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/url-encoder.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="URL Encoder, Decoder &amp; Query String Parser | Australian Jeevitham Tech">
+  <meta property="og:description" content="Encode or decode URL text, and split any URL into protocol, host, path, query parameters and hash. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/url-encoder.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="URL Encoder, Decoder &amp; Query String Parser | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Encode or decode URL text, and split any URL into protocol, host, path, query parameters and hash. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "URL Encoder, Decoder & Query String Parser",
+  "url": "https://www.australianjeevitham.com/tech/url-encoder.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Encode or decode URL text, and split any URL into protocol, host, path, query parameters and hash. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / URL Encoder &amp; Parser</p>
+    <h1>URL <span class="hl">Encode</span>, Decode &amp; Parse</h1>
+    <p>Percent-encode or decode text, and break any URL into its parts with a readable table of query parameters.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Encode / decode</h2>
+      <div class="jp-bar">
+        <button type="button" class="jp-btn primary" id="enc">Encode →</button>
+        <button type="button" class="jp-btn" id="dec">← Decode</button>
+        <label class="jp-check" for="mode">Mode
+          <select class="jp-select" id="mode">
+            <option value="component">Component (one value)</option>
+            <option value="uri">Full URL (keeps : / ? &amp;)</option>
+            <option value="form">Form (+ for spaces)</option>
+          </select>
+        </label>
+        <label class="jp-check"><input type="checkbox" id="live" checked> Live</label>
+        <button type="button" class="jp-btn" id="clear">Clear</button>
+      </div>
+      <div class="tl-row">
+        <label class="tl-field"><span>Plain text</span><textarea class="tl-text wrap short" id="plain" spellcheck="false" placeholder="e.g. jobs in Townsville & Cairns"></textarea></label>
+        <label class="tl-field"><span>Encoded</span><textarea class="tl-text wrap short" id="coded" spellcheck="false" placeholder="e.g. jobs%20in%20Townsville%20%26%20Cairns"></textarea></label>
+      </div>
+      <div class="jp-status" id="status" role="status">Type in either box to encode or decode.</div>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>URL parser</h2>
+      <label class="tl-field"><span>URL</span><input class="tl-input" id="url" spellcheck="false" placeholder="https://www.example.com:8080/path/page?city=Townsville&amp;tag=jobs&amp;tag=it#top"></label>
+      <div id="parts" class="tl-mt"></div>
+      <div class="tl-mt" id="paramsWrap" hidden>
+        <span class="tl-lbl">Query parameters</span>
+        <div class="tl-table-wrap tl-mt" style="margin-top:8px;"><table class="tl-table"><thead><tr><th>#</th><th>Name</th><th>Value (decoded)</th><th></th></tr></thead><tbody id="params"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, plain = $('plain'), coded = $('coded'), st = $('status');
+
+  function encode() {
+    var v = plain.value, m = $('mode').value, r;
+    if (m === 'uri') r = encodeURI(v);
+    else if (m === 'form') r = encodeURIComponent(v).replace(/%20/g, '+');
+    else r = encodeURIComponent(v);
+    coded.value = r;
+    T.status(st, v ? 'ok' : '', v ? '✓ Encoded (' + r.length + ' characters)' : 'Type in either box to encode or decode.');
+  }
+  function decode() {
+    var v = coded.value, m = $('mode').value;
+    try {
+      if (m === 'form') v = v.replace(/\+/g, ' ');
+      plain.value = m === 'uri' ? decodeURI(v) : decodeURIComponent(v);
+      T.status(st, v ? 'ok' : '', v ? '✓ Decoded' : 'Type in either box to encode or decode.');
+    } catch (e) { T.status(st, 'err', '✗ Could not decode: a % code is invalid or incomplete (each % needs two hex digits, like %20, and multi-byte characters need all their codes)'); }
+  }
+  plain.addEventListener('input', function () { if ($('live').checked) encode(); });
+  coded.addEventListener('input', function () { if ($('live').checked) decode(); });
+  $('enc').addEventListener('click', encode);
+  $('dec').addEventListener('click', decode);
+  $('mode').addEventListener('change', function () { if (plain.value) encode(); });
+  $('clear').addEventListener('click', function () { plain.value = coded.value = ''; T.status(st, '', 'Type in either box to encode or decode.'); plain.focus(); });
+
+  function row(label, value) {
+    return '<tr><th scope="row" style="width:150px;">' + label + '</th><td><code>' + (value ? T.esc(value) : '<span style="color:#9AA5B6">(none)</span>') + '</code></td><td style="width:60px;">' + (value ? '<button type="button" class="tl-copy" data-v="' + T.esc(value) + '">Copy</button>' : '') + '</td></tr>';
+  }
+  function parse() {
+    var v = $('url').value.trim(), parts = $('parts');
+    if (!v) { parts.innerHTML = ''; $('paramsWrap').hidden = true; return; }
+    var u;
+    try { u = new URL(v); }
+    catch (e) { try { u = new URL('https://' + v); } catch (e2) { parts.innerHTML = '<div class="jp-status err">✗ This does not look like a URL</div>'; $('paramsWrap').hidden = true; return; } }
+    parts.innerHTML = '<div class="tl-table-wrap"><table class="tl-table"><tbody>' +
+      row('Protocol', u.protocol.replace(':', '')) + row('Host', u.hostname) + row('Port', u.port) +
+      row('Path', decodeURIComponent(u.pathname)) + row('Query string', u.search.replace(/^\?/, '')) + row('Hash', u.hash.replace(/^#/, '')) +
+      row('Origin', u.origin) + (u.username ? row('Username', u.username) : '') + '</tbody></table></div>';
+    var ps = Array.from(u.searchParams.entries());
+    $('paramsWrap').hidden = !ps.length;
+    $('params').innerHTML = ps.map(function (p, i) {
+      return '<tr><td>' + (i + 1) + '</td><td><code>' + T.esc(p[0]) + '</code></td><td><code>' + T.esc(p[1]) + '</code></td><td style="width:60px;"><button type="button" class="tl-copy" data-v="' + T.esc(p[1]) + '">Copy</button></td></tr>';
+    }).join('');
+  }
+  T.onInput([$('url')], parse, 150);
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Copied'); });
+  $('url').value = 'https://www.australianjeevitham.com/tech/url-encoder.html?city=Townsville&tag=jobs&tag=it%20support&q=caf%C3%A9#top';
+  parse();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unix Timestamp Converter &amp; Time Zones | Australian Jeevitham Tech</title>
+  <meta name="description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC, Australia, India, the Gulf and other time zones. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/timestamp-converter.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Unix Timestamp Converter &amp; Time Zones | Australian Jeevitham Tech">
+  <meta property="og:description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC, Australia, India, the Gulf and other time zones. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/timestamp-converter.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Unix Timestamp Converter &amp; Time Zones | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC, Australia, India, the Gulf and other time zones. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Unix Timestamp Converter & Time Zones",
+  "url": "https://www.australianjeevitham.com/tech/timestamp-converter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC, Australia, India, the Gulf and other time zones. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Timestamp Converter</p>
+    <h1>Timestamp <span class="hl">Converter</span></h1>
+    <p>Convert Unix time to readable dates and back, and see the same moment across time zones - including Australia, India and the Gulf.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Right now</h2>
+      <div class="tl-row three">
+        <div><span class="tl-lbl">Unix seconds</span><div class="tl-big" id="nowS"></div></div>
+        <div><span class="tl-lbl">Unix milliseconds</span><div class="tl-big" id="nowMs"></div></div>
+        <div><span class="tl-lbl">ISO 8601 (UTC)</span><div class="tl-big" id="nowIso" style="font-size:.92rem;"></div></div>
+      </div>
+    </div>
+
+    <div class="tl-row tl-mt">
+      <div class="tl-card">
+        <h2>Timestamp → date</h2>
+        <label class="tl-field"><span>Unix timestamp (seconds or milliseconds)</span><input class="tl-input" id="ts" inputmode="numeric" spellcheck="false" placeholder="e.g. 1767225600"></label>
+        <div class="jp-bar tl-mt" style="margin-bottom:0;">
+          <label class="jp-check" for="unit">Unit
+            <select class="jp-select" id="unit"><option value="auto">Detect automatically</option><option value="s">Seconds</option><option value="ms">Milliseconds</option><option value="us">Microseconds</option></select>
+          </label>
+          <button type="button" class="jp-btn" id="useNow">Use now</button>
+        </div>
+        <p class="tl-note" id="tsInfo"></p>
+      </div>
+      <div class="tl-card">
+        <h2>Date → timestamp</h2>
+        <label class="tl-field"><span>Date and time</span><input class="tl-input" id="dt" type="datetime-local" step="1"></label>
+        <label class="tl-field tl-mt"><span>…in this time zone</span><select class="jp-select" id="dtz"></select></label>
+        <p class="tl-note">Or type any date text, e.g. <code>2026-12-25T09:00:00+10:00</code>:</p>
+        <input class="tl-input" id="dtText" spellcheck="false" placeholder="2026-12-25T09:00:00+10:00">
+      </div>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>The same moment around the world <span class="tl-pill" id="rel"></span></h2>
+      <div class="tl-table-wrap"><table class="tl-table"><thead><tr><th>Time zone</th><th>Date &amp; time</th><th>Offset</th><th></th></tr></thead><tbody id="zones"></tbody></table></div>
+      <div class="jp-bar tl-mt" style="margin-bottom:0;">
+        <label class="jp-check" for="addZone">Add a time zone <select class="jp-select" id="addZone"></select></label>
+      </div>
+      <div class="tl-table-wrap tl-mt"><table class="tl-table"><tbody id="formats"></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, moment = new Date();
+  var LOCAL = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+  var ZONES = ['UTC', 'Australia/Brisbane', 'Australia/Sydney', 'Australia/Perth', 'Asia/Kolkata', 'Asia/Dubai', 'Europe/London', 'America/New_York'];
+  if (ZONES.indexOf(LOCAL) < 0) ZONES.splice(1, 0, LOCAL);
+  var ALL = (Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : []).slice();
+  ZONES.forEach(function (z) { if (ALL.indexOf(z) < 0) ALL.push(z); }); // e.g. Asia/Kolkata is listed as Asia/Calcutta in some browsers
+  ALL = ALL.filter(function (z) { return z !== 'UTC'; }).sort(); ALL.unshift('UTC');
+
+  function fmt(d, tz) {
+    return new Intl.DateTimeFormat('en-AU', { timeZone: tz, weekday: 'short', day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).format(d);
+  }
+  function offset(d, tz) {
+    var p = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'longOffset' }).formatToParts(d).find(function (x) { return x.type === 'timeZoneName'; });
+    var s = p ? p.value.replace('GMT', 'UTC') : 'UTC';
+    return s === 'UTC' ? 'UTC+00:00' : s;
+  }
+  function offMinutes(d, tz) {
+    var m = /UTC([+-])(\d{2}):(\d{2})/.exec(offset(d, tz));
+    return m ? (m[1] === '-' ? -1 : 1) * (+m[2] * 60 + +m[3]) : 0;
+  }
+  function rel(d) {
+    var s = Math.round((d - Date.now()) / 1000), a = Math.abs(s), u;
+    if (a < 45) return 'right now';
+    if (a < 3600) u = Math.round(a / 60) + ' min'; else if (a < 86400) u = Math.round(a / 3600) + ' hours'; else if (a < 86400 * 365) u = Math.round(a / 86400) + ' days'; else u = (a / 86400 / 365.25).toFixed(1) + ' years';
+    return s > 0 ? 'in ' + u : u + ' ago';
+  }
+  function zoneName(z) { return z === LOCAL ? z.replace(/_/g, ' ') + ' (your device)' : z.replace(/_/g, ' '); }
+
+  function render() {
+    var d = moment;
+    if (isNaN(d)) return;
+    $('rel').textContent = rel(d);
+    $('zones').innerHTML = ZONES.map(function (z) {
+      var v = fmt(d, z);
+      return '<tr><td><b>' + T.esc(zoneName(z)) + '</b></td><td>' + T.esc(v) + '</td><td><code>' + offset(d, z) + '</code></td><td style="width:60px;"><button type="button" class="tl-copy" data-v="' + T.esc(v) + '">Copy</button></td></tr>';
+    }).join('');
+    var rows = [
+      ['Unix seconds', String(Math.floor(d.getTime() / 1000))], ['Unix milliseconds', String(d.getTime())],
+      ['ISO 8601 (UTC)', d.toISOString()], ['RFC 2822 / HTTP date', d.toUTCString()],
+      ['Day of year', String(Math.floor((Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) - Date.UTC(d.getUTCFullYear(), 0, 0)) / 86400000)) + ' (UTC)']
+    ];
+    $('formats').innerHTML = rows.map(function (r) { return '<tr><th scope="row" style="width:190px;">' + r[0] + '</th><td><code>' + T.esc(r[1]) + '</code></td><td style="width:60px;"><button type="button" class="tl-copy" data-v="' + T.esc(r[1]) + '">Copy</button></td></tr>'; }).join('');
+  }
+
+  function fromTs() {
+    var v = $('ts').value.trim(), info = $('tsInfo');
+    if (!v) { info.textContent = ''; return; }
+    if (!/^-?\d+(\.\d+)?$/.test(v)) { info.innerHTML = '<span class="tl-pill err">Numbers only</span>'; return; }
+    var n = Number(v), unit = $('unit').value;
+    if (unit === 'auto') unit = Math.abs(n) >= 1e14 ? 'us' : Math.abs(n) >= 1e11 ? 'ms' : 's';
+    var ms = unit === 's' ? n * 1000 : unit === 'us' ? n / 1000 : n;
+    var d = new Date(ms);
+    if (isNaN(d)) { info.innerHTML = '<span class="tl-pill err">Out of range</span>'; return; }
+    moment = d;
+    info.innerHTML = 'Read as <b>' + ({ s: 'seconds', ms: 'milliseconds', us: 'microseconds' })[unit] + '</b> → ' + T.esc(d.toISOString());
+    render();
+  }
+  function fromDate() {
+    var v = $('dt').value; if (!v) return;
+    var tz = $('dtz').value || LOCAL;
+    var m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2}))?/.exec(v); if (!m) return;
+    var guess = Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], +(m[6] || 0));
+    var d = new Date(guess - offMinutes(new Date(guess), tz) * 60000);
+    d = new Date(guess - offMinutes(d, tz) * 60000); // second pass handles daylight-saving edges
+    moment = d; $('ts').value = Math.floor(d.getTime() / 1000); $('tsInfo').innerHTML = 'From the date above → <b>' + T.esc(d.toISOString()) + '</b>';
+    render();
+  }
+  function fromText() {
+    var v = $('dtText').value.trim(); if (!v) return;
+    var d = new Date(v);
+    if (isNaN(d)) { $('tsInfo').innerHTML = '<span class="tl-pill err">Could not read that date text</span>'; return; }
+    moment = d; $('ts').value = Math.floor(d.getTime() / 1000); $('tsInfo').innerHTML = 'From the date text → <b>' + T.esc(d.toISOString()) + '</b>';
+    render();
+  }
+
+  function tick() {
+    var n = Date.now();
+    $('nowS').textContent = Math.floor(n / 1000); $('nowMs').textContent = n; $('nowIso').textContent = new Date(n).toISOString();
+  }
+  [$('nowS'), $('nowMs'), $('nowIso')].forEach(function (el) { el.style.cursor = 'pointer'; el.title = 'Click to copy'; el.addEventListener('click', function () { T.copy(el.textContent, 'Copied'); }); });
+  setInterval(tick, 1000); tick();
+
+  $('dtz').innerHTML = ALL.map(function (z) { return '<option value="' + z + '"' + (z === LOCAL ? ' selected' : '') + '>' + T.esc(zoneName(z)) + '</option>'; }).join('');
+  $('addZone').innerHTML = '<option value="">Choose…</option>' + ALL.map(function (z) { return '<option value="' + z + '">' + T.esc(z.replace(/_/g, ' ')) + '</option>'; }).join('');
+  $('addZone').addEventListener('change', function () { if (this.value && ZONES.indexOf(this.value) < 0) { ZONES.push(this.value); render(); } this.value = ''; });
+  T.onInput([$('ts')], fromTs, 150); $('unit').addEventListener('change', fromTs);
+  T.onInput([$('dt'), $('dtz')], fromDate, 150);
+  T.onInput([$('dtText')], fromText, 300);
+  $('useNow').addEventListener('click', function () { $('ts').value = Math.floor(Date.now() / 1000); fromTs(); });
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Copied'); });
+  $('ts').value = Math.floor(Date.now() / 1000); fromTs();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base64 Encode &amp; Decode (Text, Files &amp; Images) | Australian Jeevitham Tech</title>
+  <meta name="description" content="Encode text or files to Base64, decode Base64 back to text or a downloadable file, make image data URLs, and use URL-safe Base64. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/base64.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Base64 Encode &amp; Decode (Text, Files &amp; Images) | Australian Jeevitham Tech">
+  <meta property="og:description" content="Encode text or files to Base64, decode Base64 back to text or a downloadable file, make image data URLs, and use URL-safe Base64. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/base64.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Base64 Encode &amp; Decode (Text, Files &amp; Images) | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Encode text or files to Base64, decode Base64 back to text or a downloadable file, make image data URLs, and use URL-safe Base64. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Base64 Encode & Decode (Text, Files & Images)",
+  "url": "https://www.australianjeevitham.com/tech/base64.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Encode text or files to Base64, decode Base64 back to text or a downloadable file, make image data URLs, and use URL-safe Base64. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Base64 Encoder / Decoder</p>
+    <h1>Base64 <span class="hl">Encode</span> &amp; Decode</h1>
+    <p>Encode and decode Base64 for text (full Unicode, including Malayalam) and files. Make image data URLs or turn Base64 back into a file - all in your browser.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Text</h2>
+      <div class="jp-bar">
+        <button type="button" class="jp-btn primary" id="enc">Encode →</button>
+        <button type="button" class="jp-btn" id="dec">← Decode</button>
+        <label class="jp-check"><input type="checkbox" id="urlsafe"> URL-safe (- and _ , no padding)</label>
+        <label class="jp-check"><input type="checkbox" id="live" checked> Live</label>
+        <button type="button" class="jp-btn" id="swap">⇄ Swap</button>
+        <button type="button" class="jp-btn" id="clear">Clear</button>
+      </div>
+      <div class="tl-row">
+        <label class="tl-field"><span>Plain text</span><textarea class="tl-text wrap" id="plain" spellcheck="false" placeholder="Type or paste text - any language works, e.g. ഓസ്‌ട്രേലിയൻ ജീവിതം"></textarea>
+          <button type="button" class="tl-copy" data-copy="plain" style="align-self:flex-start;">Copy text</button></label>
+        <label class="tl-field"><span>Base64</span><textarea class="tl-text wrap" id="b64" spellcheck="false" placeholder="Paste Base64 here to decode it"></textarea>
+          <button type="button" class="tl-copy" data-copy="b64" style="align-self:flex-start;">Copy Base64</button></label>
+      </div>
+      <div class="jp-status" id="status" role="status">Type in either box. Text is encoded as UTF-8, so Malayalam, Hindi, Tamil and emoji all work.</div>
+    </div>
+
+    <div class="tl-row tl-mt">
+      <div class="tl-card">
+        <h2>File → Base64</h2>
+        <div class="jp-bar">
+          <button type="button" class="jp-btn primary" id="pick">Choose a file</button>
+          <input type="file" id="file" hidden>
+          <button type="button" class="jp-btn" id="copyRaw">Copy Base64</button>
+          <button type="button" class="jp-btn" id="copyUrl">Copy data URL</button>
+        </div>
+        <p class="tl-note" id="fileInfo" style="margin-top:0;">Pick any file (image, PDF, font...) to get its Base64 text or a data URL you can paste into HTML or CSS.</p>
+        <div id="preview" class="tl-mt" hidden></div>
+        <textarea class="tl-text wrap short tl-mt" id="fileOut" readonly aria-label="File as Base64" hidden></textarea>
+      </div>
+      <div class="tl-card">
+        <h2>Base64 → File</h2>
+        <label class="tl-field"><span>Base64 or data URL</span><textarea class="tl-text wrap short" id="toFile" spellcheck="false" placeholder="data:image/png;base64,iVBORw0... or plain Base64"></textarea></label>
+        <div class="jp-bar tl-mt">
+          <label class="jp-check" for="fname">File name <input class="tl-input" id="fname" value="decoded.bin" style="width:180px;"></label>
+          <button type="button" class="jp-btn primary" id="save">Download file</button>
+        </div>
+        <div id="preview2" hidden></div>
+        <p class="tl-note" id="info2"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, plain = $('plain'), b64 = $('b64'), st = $('status');
+  var enc = new TextEncoder(), dec = new TextDecoder('utf-8', { fatal: true });
+
+  function toB64(u8) {
+    var s = T.bytesToB64(u8);
+    return $('urlsafe').checked ? s.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '') : s;
+  }
+  function encode() {
+    var s = toB64(enc.encode(plain.value)); b64.value = s;
+    T.status(st, plain.value ? 'ok' : '', plain.value ? '✓ Encoded ' + T.bytes(enc.encode(plain.value).length) + ' of text into ' + s.length + ' Base64 characters' : 'Type in either box.');
+  }
+  function decode() {
+    var v = b64.value.trim();
+    if (!v) { plain.value = ''; T.status(st, '', 'Type in either box.'); return; }
+    v = v.replace(/^data:[^,]*;base64,/, '');
+    try {
+      var u8 = T.b64ToBytes(v);
+      try { plain.value = dec.decode(u8); T.status(st, 'ok', '✓ Decoded ' + T.bytes(u8.length) + ' of UTF-8 text'); }
+      catch (e) { plain.value = ''; T.status(st, 'err', '✗ This Base64 is valid, but it is binary data (' + T.bytes(u8.length) + '), not text. Use “Base64 → File” below to download it.'); }
+    } catch (e) { T.status(st, 'err', '✗ Not valid Base64: ' + T.esc(e.message)); }
+  }
+  var last = 'plain';
+  plain.addEventListener('input', function () { last = 'plain'; if ($('live').checked) encode(); });
+  b64.addEventListener('input', function () { last = 'b64'; if ($('live').checked) decode(); });
+  $('enc').addEventListener('click', encode);
+  $('dec').addEventListener('click', decode);
+  $('urlsafe').addEventListener('change', function () { if (last === 'plain') encode(); });
+  $('swap').addEventListener('click', function () { var a = plain.value; plain.value = b64.value; b64.value = a; T.status(st, '', 'Swapped the two boxes.'); });
+  $('clear').addEventListener('click', function () { plain.value = ''; b64.value = ''; T.status(st, '', 'Type in either box.'); plain.focus(); });
+  document.querySelectorAll('[data-copy]').forEach(function (b) { b.addEventListener('click', function (e) { e.preventDefault(); T.copy($(b.getAttribute('data-copy')).value, 'Copied'); }); });
+
+  // File -> Base64
+  var fileB64 = '', fileUrl = '';
+  $('pick').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function () {
+    var f = this.files[0]; if (!f) return;
+    if (f.size > 25 * 1048576) { T.toast('Please choose a file under 25 MB'); this.value = ''; return; }
+    T.readFile(f, 'dataurl').then(function (url) {
+      fileUrl = url; fileB64 = url.slice(url.indexOf(',') + 1);
+      $('fileOut').hidden = false; $('fileOut').value = fileB64;
+      $('fileInfo').innerHTML = '<b>' + T.esc(f.name) + '</b> · ' + T.esc(f.type || 'unknown type') + ' · ' + T.bytes(f.size) + ' → ' + T.bytes(fileB64.length) + ' as Base64';
+      var p = $('preview'); p.innerHTML = '';
+      if (/^image\//.test(f.type)) { var im = new Image(); im.src = url; im.alt = 'Preview of ' + f.name; im.style.maxHeight = '160px'; im.style.borderRadius = '12px'; p.appendChild(im); p.hidden = false; } else p.hidden = true;
+    });
+    this.value = '';
+  });
+  $('copyRaw').addEventListener('click', function () { T.copy(fileB64, 'Base64 copied'); });
+  $('copyUrl').addEventListener('click', function () { T.copy(fileUrl, 'Data URL copied'); });
+
+  // Base64 -> File
+  var EXT = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/gif': 'gif', 'image/webp': 'webp', 'image/svg+xml': 'svg', 'application/pdf': 'pdf', 'application/json': 'json', 'text/plain': 'txt', 'application/zip': 'zip' };
+  function sniff(u8) {
+    var h = Array.prototype.map.call(u8.subarray(0, 8), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+    if (h.indexOf('89504e47') === 0) return 'image/png';
+    if (h.indexOf('ffd8ff') === 0) return 'image/jpeg';
+    if (h.indexOf('47494638') === 0) return 'image/gif';
+    if (h.indexOf('25504446') === 0) return 'application/pdf';
+    if (h.indexOf('504b0304') === 0) return 'application/zip';
+    if (h.indexOf('52494646') === 0 && String.fromCharCode.apply(null, u8.subarray(8, 12)) === 'WEBP') return 'image/webp';
+    return '';
+  }
+  function inspect() {
+    var v = $('toFile').value.trim(), info = $('info2'), p = $('preview2');
+    p.hidden = true; p.innerHTML = '';
+    if (!v) { info.textContent = ''; return null; }
+    var m = /^data:([^;,]+)?(;base64)?,/.exec(v), type = m && m[1] ? m[1] : '';
+    try {
+      var u8 = T.b64ToBytes(m ? v.slice(m[0].length) : v);
+      type = type || sniff(u8);
+      info.textContent = T.bytes(u8.length) + (type ? ' · ' + type : ' · type unknown');
+      if (EXT[type] && /^decoded\./.test($('fname').value)) $('fname').value = 'decoded.' + EXT[type];
+      if (/^image\//.test(type)) { var im = new Image(); im.src = URL.createObjectURL(new Blob([u8], { type: type })); im.alt = 'Decoded image preview'; im.style.maxHeight = '160px'; im.style.borderRadius = '12px'; im.style.marginTop = '14px'; p.appendChild(im); p.hidden = false; }
+      return { u8: u8, type: type };
+    } catch (e) { info.textContent = '✗ Not valid Base64: ' + e.message; return null; }
+  }
+  T.onInput([$('toFile')], inspect, 250);
+  $('save').addEventListener('click', function () {
+    var r = inspect(); if (!r) return T.toast('Paste valid Base64 first');
+    T.download(new Blob([r.u8], { type: r.type || 'application/octet-stream' }), $('fname').value || 'decoded.bin');
+  });
+})();
+</script>
+</body>
+</html>

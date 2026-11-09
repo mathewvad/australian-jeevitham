@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hash Generator - SHA-256, SHA-512, SHA-1 &amp; MD5 | Australian Jeevitham Tech</title>
+  <meta name="description" content="Make SHA-256, SHA-384, SHA-512, SHA-1 and MD5 hashes of text or files, in hex or Base64, plus HMAC-SHA256. Uses your browser&#x27;s built-in crypto - nothing is uploaded.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/hash-generator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Hash Generator - SHA-256, SHA-512, SHA-1 &amp; MD5 | Australian Jeevitham Tech">
+  <meta property="og:description" content="Make SHA-256, SHA-384, SHA-512, SHA-1 and MD5 hashes of text or files, in hex or Base64, plus HMAC-SHA256. Uses your browser&#x27;s built-in crypto - nothing is uploaded.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/hash-generator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Hash Generator - SHA-256, SHA-512, SHA-1 &amp; MD5 | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Make SHA-256, SHA-384, SHA-512, SHA-1 and MD5 hashes of text or files, in hex or Base64, plus HMAC-SHA256. Uses your browser&#x27;s built-in crypto - nothing is uploaded.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Hash Generator - SHA-256, SHA-512, SHA-1 & MD5",
+  "url": "https://www.australianjeevitham.com/tech/hash-generator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Make SHA-256, SHA-384, SHA-512, SHA-1 and MD5 hashes of text or files, in hex or Base64, plus HMAC-SHA256. Uses your browser's built-in crypto - nothing is uploaded.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Hash Generator</p>
+    <h1>Hash <span class="hl">Generator</span></h1>
+    <p>Make SHA-256, SHA-384, SHA-512, SHA-1 and MD5 hashes of text or files, and compare a file against a published checksum. Uses your browser&#x27;s built-in crypto.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <div class="jp-bar">
+        <button type="button" class="jp-tab" role="tab" aria-selected="true" id="tabText">Text</button>
+        <button type="button" class="jp-tab" role="tab" aria-selected="false" id="tabFile">File</button>
+        <label class="jp-check" for="fmt" style="margin-left:auto;">Output
+          <select class="jp-select" id="fmt"><option value="hex">hex (lowercase)</option><option value="HEX">HEX (uppercase)</option><option value="b64">Base64</option></select>
+        </label>
+      </div>
+      <div id="textBox">
+        <label class="tl-field"><span>Text</span><textarea class="tl-text wrap short" id="txt" spellcheck="false" placeholder="Type or paste text - hashes update as you type"></textarea></label>
+      </div>
+      <div id="fileBox" hidden>
+        <div class="jp-bar" style="margin-bottom:0;">
+          <button type="button" class="jp-btn primary" id="pick">Choose a file</button>
+          <input type="file" id="file" hidden>
+          <span class="tl-note" id="fileInfo" style="margin:0;">Files are read on your device only. Up to 500 MB.</span>
+        </div>
+      </div>
+      <div class="tl-table-wrap tl-mt"><table class="tl-table"><thead><tr><th style="width:110px;">Algorithm</th><th>Hash</th><th style="width:70px;"></th></tr></thead><tbody id="rows"></tbody></table></div>
+    </div>
+
+    <div class="tl-row tl-mt">
+      <div class="tl-card">
+        <h2>Compare with a checksum</h2>
+        <label class="tl-field"><span>Expected hash (from a download page)</span><input class="tl-input" id="expect" spellcheck="false" placeholder="Paste any MD5 / SHA hash"></label>
+        <p class="tl-mt" id="match" aria-live="polite"></p>
+      </div>
+      <div class="tl-card">
+        <h2>HMAC</h2>
+        <div class="jp-bar">
+          <input class="tl-input" id="hkey" spellcheck="false" placeholder="Secret key" style="flex:1; min-width:160px;">
+          <select class="jp-select" id="halg"><option>SHA-256</option><option>SHA-384</option><option>SHA-512</option><option>SHA-1</option></select>
+        </div>
+        <div class="tl-big" id="hout" style="min-height:52px;">-</div>
+        <p class="tl-note">HMAC signs the text above (Text tab) with your secret key - used for webhooks and API signatures.</p>
+      </div>
+    </div>
+    <p class="jp-note">MD5 and SHA-1 are fine for checksums but are no longer safe for passwords or signatures. Use SHA-256 or stronger for anything security related.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, ALGS = ['MD5', 'SHA-1', 'SHA-256', 'SHA-384', 'SHA-512'], mode = 'text', current = {};
+
+  // ---- MD5 (RFC 1321) on a Uint8Array; returns ArrayBuffer ----
+  function md5(u8) {
+    var K = [], S = [7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21];
+    for (var i = 0; i < 64; i++) K[i] = Math.floor(Math.abs(Math.sin(i + 1)) * 4294967296) >>> 0;
+    var len = u8.length, n = ((len + 8) >>> 6) + 1, words = new Uint32Array(n * 16);
+    for (i = 0; i < len; i++) words[i >> 2] |= u8[i] << ((i % 4) * 8);
+    words[len >> 2] |= 0x80 << ((len % 4) * 8);
+    words[n * 16 - 2] = (len * 8) >>> 0; words[n * 16 - 1] = Math.floor(len / 536870912);
+    var a0 = 0x67452301, b0 = 0xefcdab89, c0 = 0x98badcfe, d0 = 0x10325476;
+    for (var blk = 0; blk < n * 16; blk += 16) {
+      var A = a0, B = b0, C = c0, D = d0;
+      for (i = 0; i < 64; i++) {
+        var F, g;
+        if (i < 16) { F = (B & C) | (~B & D); g = i; }
+        else if (i < 32) { F = (D & B) | (~D & C); g = (5 * i + 1) % 16; }
+        else if (i < 48) { F = B ^ C ^ D; g = (3 * i + 5) % 16; }
+        else { F = C ^ (B | ~D); g = (7 * i) % 16; }
+        F = (F + A + K[i] + words[blk + g]) >>> 0;
+        A = D; D = C; C = B;
+        B = (B + ((F << S[i]) | (F >>> (32 - S[i])))) >>> 0;
+      }
+      a0 = (a0 + A) >>> 0; b0 = (b0 + B) >>> 0; c0 = (c0 + C) >>> 0; d0 = (d0 + D) >>> 0;
+    }
+    var out = new Uint8Array(16), v = [a0, b0, c0, d0];
+    for (i = 0; i < 16; i++) out[i] = (v[i >> 2] >>> ((i % 4) * 8)) & 255;
+    return out.buffer;
+  }
+
+  function fmt(buf) {
+    var f = $('fmt').value;
+    if (f === 'b64') return T.bytesToB64(new Uint8Array(buf));
+    var h = T.hex(buf); return f === 'HEX' ? h.toUpperCase() : h;
+  }
+  function hashAll(u8) {
+    var subtle = window.crypto && crypto.subtle;
+    return Promise.all(ALGS.map(function (a) {
+      if (a === 'MD5') return Promise.resolve(md5(u8));
+      return subtle ? subtle.digest(a, u8) : Promise.resolve(null);
+    })).then(function (res) { var o = {}; ALGS.forEach(function (a, i) { o[a] = res[i]; }); return o; });
+  }
+  function show() {
+    $('rows').innerHTML = ALGS.map(function (a) {
+      var v = current[a] ? fmt(current[a]) : '';
+      return '<tr><td><b>' + a + '</b></td><td><code>' + (v ? T.esc(v) : '<span style="color:#9AA5B6">-</span>') + '</code></td><td>' + (v ? '<button type="button" class="tl-copy" data-v="' + v + '">Copy</button>' : '') + '</td></tr>';
+    }).join('');
+    compare();
+  }
+  function compare() {
+    var e = $('expect').value.trim().replace(/\s+/g, ''), m = $('match');
+    if (!e) { m.innerHTML = ''; return; }
+    var hit = ALGS.find(function (a) {
+      if (!current[a]) return false;
+      return T.hex(current[a]) === e.toLowerCase() || T.bytesToB64(new Uint8Array(current[a])) === e;
+    });
+    m.innerHTML = hit ? '<span class="tl-pill ok">✓ Match - same as the ' + hit + ' hash</span>' : '<span class="tl-pill err">✗ No match with any hash above</span>';
+  }
+  function fromText() {
+    if (mode !== 'text') return;
+    hashAll(new TextEncoder().encode($('txt').value)).then(function (o) { current = o; show(); });
+    hmac();
+  }
+  function hmac() {
+    var k = $('hkey').value, out = $('hout');
+    if (!k) { out.textContent = '-'; return; }
+    if (!(window.crypto && crypto.subtle)) { out.textContent = 'Not supported in this browser'; return; }
+    var enc = new TextEncoder();
+    crypto.subtle.importKey('raw', enc.encode(k), { name: 'HMAC', hash: $('halg').value }, false, ['sign'])
+      .then(function (key) { return crypto.subtle.sign('HMAC', key, enc.encode($('txt').value)); })
+      .then(function (sig) { out.textContent = fmt(sig); });
+  }
+
+  function setMode(m) {
+    mode = m; $('tabText').setAttribute('aria-selected', m === 'text'); $('tabFile').setAttribute('aria-selected', m === 'file');
+    $('textBox').hidden = m !== 'text'; $('fileBox').hidden = m !== 'file';
+    current = {}; show(); if (m === 'text') fromText();
+  }
+  $('tabText').addEventListener('click', function () { setMode('text'); });
+  $('tabFile').addEventListener('click', function () { setMode('file'); });
+  $('pick').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function () {
+    var f = this.files[0]; if (!f) return; this.value = '';
+    if (f.size > 500 * 1048576) { T.toast('Please choose a file under 500 MB'); return; }
+    $('fileInfo').textContent = 'Reading ' + f.name + '…';
+    T.readFile(f, 'buffer').then(function (buf) {
+      return hashAll(new Uint8Array(buf));
+    }).then(function (o) { current = o; show(); $('fileInfo').innerHTML = '<b>' + T.esc(f.name) + '</b> · ' + T.bytes(f.size); });
+  });
+  T.onInput([$('txt')], fromText, 120);
+  T.onInput([$('hkey'), $('halg')], hmac, 120);
+  $('fmt').addEventListener('change', function () { show(); hmac(); });
+  T.onInput([$('expect')], compare, 100);
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Hash copied'); });
+  fromText();
+})();
+</script>
+</body>
+</html>

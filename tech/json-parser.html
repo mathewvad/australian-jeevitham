@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Parser, Formatter &amp; Validator | Australian Jeevitham Tech</title>
+  <meta name="description" content="Paste JSON to check it, format it, minify it or explore it as a tree. Finds the exact line and column of errors. Runs in your browser - nothing is uploaded.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/json-parser.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="JSON Parser, Formatter &amp; Validator | Australian Jeevitham Tech">
+  <meta property="og:description" content="Paste JSON to check it, format it, minify it or explore it as a tree. Finds the exact line and column of errors. Runs in your browser - nothing is uploaded.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/json-parser.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="JSON Parser, Formatter &amp; Validator | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Paste JSON to check it, format it, minify it or explore it as a tree. Finds the exact line and column of errors. Runs in your browser - nothing is uploaded.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON Parser, Formatter & Validator",
+  "url": "https://www.australianjeevitham.com/tech/json-parser.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Paste JSON to check it, format it, minify it or explore it as a tree. Finds the exact line and column of errors. Runs in your browser - nothing is uploaded.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / JSON Parser &amp; Formatter</p>
+    <h1>JSON <span class="hl">Parser</span> &amp; Formatter</h1>
+    <p>Paste or open JSON to check it, format it, minify it or explore it as a tree. Errors show the exact line and column. Everything runs in your browser - your data is never uploaded.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="jp-bar" role="toolbar" aria-label="JSON actions">
+      <button type="button" class="jp-btn primary" id="btnFormat">Format</button>
+      <button type="button" class="jp-btn" id="btnMinify">Minify</button>
+      <label class="jp-check" for="indent">Indent
+        <select class="jp-select" id="indent">
+          <option value="2">2 spaces</option>
+          <option value="4">4 spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+      </label>
+      <label class="jp-check"><input type="checkbox" id="sortKeys"> Sort keys</label>
+      <button type="button" class="jp-btn" id="btnCopy">Copy result</button>
+      <button type="button" class="jp-btn" id="btnDownload">Download</button>
+      <button type="button" class="jp-btn" id="btnOpen">Open file</button>
+      <input type="file" id="fileIn" accept=".json,application/json,text/plain" hidden>
+      <button type="button" class="jp-btn" id="btnSample">Sample</button>
+      <button type="button" class="jp-btn" id="btnClear">Clear</button>
+    </div>
+
+    <div class="jp-grid">
+      <div class="jp-panel">
+        <div class="jp-head"><label for="input">Input</label><span id="inSize">0 B</span></div>
+        <textarea class="jp-area" id="input" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder='Paste JSON here, e.g. {"name": "Binu", "city": "Townsville"}'></textarea>
+      </div>
+      <div class="jp-panel">
+        <div class="jp-head">
+          <span>Result</span>
+          <div class="jp-tabs" role="tablist" aria-label="Result view">
+            <button type="button" class="jp-tab" role="tab" aria-selected="true" id="tabCode">Code</button>
+            <button type="button" class="jp-tab" role="tab" aria-selected="false" id="tabTree">Tree</button>
+          </div>
+        </div>
+        <pre class="jp-out" id="outCode" aria-live="polite"></pre>
+        <div class="jp-out jp-tree" id="outTree" hidden></div>
+        <div class="jp-path" id="pathBar" hidden><span>Path</span><code id="pathText"></code><button type="button" class="jp-btn" id="btnPath" style="padding:6px 12px;">Copy</button></div>
+      </div>
+    </div>
+
+    <div class="jp-status" id="status" role="status">Paste some JSON to begin.</div>
+
+    <p class="jp-note">Tip: in the Tree view, click any key to see and copy its path (for example <code>items[0].name</code>). Files up to a few megabytes work smoothly on a phone.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<div class="jp-toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var input = $('input'), outCode = $('outCode'), outTree = $('outTree'), status = $('status');
+  var lastText = '', lastValue, lastOk = false, view = 'code', timer;
+
+  var SAMPLE = {
+    channel: 'Australian Jeevitham',
+    creator: { name: 'Binu Vadakkedath', city: 'Townsville', state: 'QLD' },
+    languages: ['Malayalam', 'English'],
+    followers: 547000,
+    verified: true,
+    guides: [
+      { title: 'Find Jobs in Australia', url: 'jobs-in-australia.html', year: 2026 },
+      { title: 'PR Points Guide', url: 'pr-points-calculator-australia.html', year: 2026 }
+    ],
+    nextVideo: null
+  };
+
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function bytes(n) { return n < 1024 ? n + ' B' : n < 1048576 ? (n / 1024).toFixed(1) + ' KB' : (n / 1048576).toFixed(2) + ' MB'; }
+  function size(s) { return new Blob([s]).size; }
+  function indentVal() { var v = $('indent').value; return v === 'tab' ? '\t' : Number(v); }
+
+  function sortDeep(v) {
+    if (Array.isArray(v)) return v.map(sortDeep);
+    if (v && typeof v === 'object') {
+      var o = {};
+      Object.keys(v).sort(function (a, b) { return a.localeCompare(b); }).forEach(function (k) { o[k] = sortDeep(v[k]); });
+      return o;
+    }
+    return v;
+  }
+
+  // Colour a JSON string produced by JSON.stringify
+  function highlight(json) {
+    return esc(json).replace(/("(?:\\u[a-fA-F0-9]{4}|\\[^u]|[^\\"])*")(\s*:)?|\b(true|false)\b|\bnull\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+      function (m, str, colon, bool) {
+        if (str) return colon ? '<span class="k">' + str + '</span>' + colon : '<span class="s">' + str + '</span>';
+        if (bool) return '<span class="b">' + m + '</span>';
+        if (m === 'null') return '<span class="z">null</span>';
+        return '<span class="n">' + m + '</span>';
+      });
+  }
+
+  // Work out line/column for an error message
+  function errorWhere(text, msg) {
+    var m = /line (\d+) column (\d+)/i.exec(msg);
+    if (m) return { line: +m[1], col: +m[2] };
+    m = /position (\d+)/i.exec(msg);
+    var pos = m ? +m[1] : (/unexpected end/i.test(msg) ? text.length : -1);
+    if (pos < 0) return null;
+    var before = text.slice(0, pos).split('\n');
+    return { line: before.length, col: before[before.length - 1].length + 1 };
+  }
+
+  // Small strict scanner, used only when JSON.parse fails, to find where and why.
+  function findError(t) {
+    var i = 0, n = t.length;
+    function fail(msg, at) { throw { pos: at === undefined ? i : at, msg: msg }; }
+    function ws() { while (i < n && ' \t\n\r'.indexOf(t[i]) >= 0) i++; }
+    function show(c) { return c === undefined ? 'end of text' : c === '\n' ? 'a new line' : "'" + c + "'"; }
+    function str() {
+      if (t[i] === "'") fail('Strings and keys must use double quotes ("), not single quotes');
+      if (t[i] !== '"') fail('Expected a string in double quotes but found ' + show(t[i]));
+      var start = i++;
+      while (i < n && t[i] !== '"') {
+        if (t[i] === '\\') { i++; if ('"\\/bfnrtu'.indexOf(t[i]) < 0) fail('Invalid escape \\' + (t[i] || '')); if (t[i] === 'u') { if (!/^[0-9a-fA-F]{4}$/.test(t.substr(i + 1, 4))) fail('\\u must be followed by 4 hex digits'); i += 4; } }
+        else if (t.charCodeAt(i) < 32) fail('Line breaks and tabs inside a string must be written as \\n or \\t');
+        i++;
+      }
+      if (i >= n) fail('This string is never closed - missing "', start);
+      i++;
+    }
+    function value() {
+      ws(); var c = t[i];
+      if (c === '{') { obj(); } else if (c === '[') { arr(); }
+      else if (c === '"' || c === "'") { str(); }
+      else if (c === '-' || (c >= '0' && c <= '9')) {
+        var m = /^-?(0|[1-9]\d*)(\.\d+)?([eE][+\-]?\d+)?/.exec(t.slice(i));
+        if (!m) fail('Invalid number');
+        i += m[0].length;
+        if (/^[0-9.]/.test(t[i] || '')) fail('Invalid number (numbers cannot have leading zeros or extra dots)');
+      }
+      else if (t.startsWith('true', i)) i += 4; else if (t.startsWith('false', i)) i += 5; else if (t.startsWith('null', i)) i += 4;
+      else if (c === undefined) fail('Unexpected end of text - a value is missing');
+      else if (c === ',' ) fail('Unexpected comma - a value is missing here');
+      else if (c === '}' || c === ']') fail('Unexpected ' + show(c) + ' - a value is missing (trailing comma?)');
+      else if (/[A-Za-z_]/.test(c)) { var w = /^[A-Za-z_]\w*/.exec(t.slice(i))[0]; fail('Unknown word "' + w + '" - text values need double quotes; use true, false or null for those values'); }
+      else fail('Unexpected ' + show(c));
+    }
+    function obj() {
+      var open = i++; ws();
+      if (t[i] === '}') { i++; return; }
+      for (;;) {
+        ws();
+        if (t[i] === '}') fail('Trailing comma before } is not allowed in JSON');
+        if (/[A-Za-z_$]/.test(t[i] || '')) fail('Keys must be in double quotes');
+        str(); ws();
+        if (t[i] !== ':') fail('Expected : after the key but found ' + show(t[i]));
+        i++; value(); ws();
+        if (t[i] === ',') { i++; continue; }
+        if (t[i] === '}') { i++; return; }
+        if (i >= n) fail('Missing } to close the object opened here', open);
+        fail('Expected , or } but found ' + show(t[i]) + ' - is a comma missing?');
+      }
+    }
+    function arr() {
+      var open = i++; ws();
+      if (t[i] === ']') { i++; return; }
+      for (;;) {
+        ws();
+        if (t[i] === ']') fail('Trailing comma before ] is not allowed in JSON');
+        value(); ws();
+        if (t[i] === ',') { i++; continue; }
+        if (t[i] === ']') { i++; return; }
+        if (i >= n) fail('Missing ] to close the list opened here', open);
+        fail('Expected , or ] but found ' + show(t[i]) + ' - is a comma missing?');
+      }
+    }
+    try {
+      if (t.charCodeAt(0) === 0xFEFF) i = 1;
+      value(); ws();
+      if (i < n) fail('Extra text after the end of the JSON - only one top-level value is allowed');
+      return null;
+    } catch (e) { return e && e.msg ? e : null; }
+  }
+  function lineCol(text, pos) {
+    var before = text.slice(0, pos).split('\n');
+    return { line: before.length, col: before[before.length - 1].length + 1 };
+  }
+
+  function stats(v) {
+    var keys = 0, depth = 0, values = 0;
+    (function walk(x, d) {
+      if (d > depth) depth = d;
+      if (Array.isArray(x)) { x.forEach(function (y) { walk(y, d + 1); }); }
+      else if (x && typeof x === 'object') { Object.keys(x).forEach(function (k) { keys++; walk(x[k], d + 1); }); }
+      else values++;
+    })(v, 0);
+    return { keys: keys, depth: depth, values: values };
+  }
+
+  function typeName(v) { return v === null ? 'null' : Array.isArray(v) ? 'array' : typeof v; }
+
+  function setStatus(kind, html) { status.className = 'jp-status' + (kind ? ' ' + kind : ''); status.innerHTML = html; }
+
+  function parse() {
+    var text = input.value;
+    $('inSize').textContent = bytes(size(text));
+    if (!text.trim()) {
+      lastOk = false; outCode.textContent = ''; outTree.innerHTML = ''; $('pathBar').hidden = true;
+      setStatus('', 'Paste some JSON to begin.'); return false;
+    }
+    try {
+      lastValue = JSON.parse(text);
+      lastOk = true;
+      var st = stats(lastValue), t = typeName(lastValue);
+      setStatus('ok', '✓ Valid JSON' +
+        '<div class="jp-stats"><span>Top level: ' + t + '</span><span>' + st.keys + ' keys</span><span>' + st.values + ' values</span><span>Depth ' + st.depth + '</span><span>' + bytes(size(text)) + '</span></div>');
+      return true;
+    } catch (e) {
+      lastOk = false;
+      var found = findError(text), w, why;
+      if (found) { w = lineCol(text, found.pos); why = found.msg; }
+      else { w = errorWhere(text, e.message); why = e.message.replace(/^JSON\.parse: /, '').replace(/ in JSON at position \d+( \(line \d+ column \d+\))?/, ''); }
+      var extra = '';
+      if (w) {
+        var lines = text.split('\n'), ln = lines[w.line - 1] || '';
+        var start = Math.max(0, w.col - 40), shown = ln.slice(start, start + 80);
+        extra = '<pre>' + esc(w.line + ' | ' + shown) + '\n' + ' '.repeat(String(w.line).length + 3 + (w.col - 1 - start)) + '^</pre>';
+      }
+      setStatus('err', '✗ Not valid JSON' + (w ? ' - line ' + w.line + ', column ' + w.col : '') + ': ' + esc(why) + extra);
+      outCode.textContent = ''; outTree.innerHTML = ''; $('pathBar').hidden = true;
+      return false;
+    }
+  }
+
+  function render(minify) {
+    if (!lastOk) return;
+    var v = $('sortKeys').checked ? sortDeep(lastValue) : lastValue;
+    lastText = minify ? JSON.stringify(v) : JSON.stringify(v, null, indentVal());
+    // Large results: skip colouring to stay fast
+    if (lastText.length > 600000) outCode.textContent = lastText; else outCode.innerHTML = highlight(lastText);
+    buildTree(v);
+  }
+
+  // ---- Tree view ----
+  function pathJoin(base, key, isIndex) {
+    if (isIndex) return base + '[' + key + ']';
+    return /^[A-Za-z_$][\w$]*$/.test(key) ? (base ? base + '.' + key : key) : base + '[' + JSON.stringify(key) + ']';
+  }
+  function leafHtml(v) {
+    if (v === null) return '<span class="z">null</span>';
+    if (typeof v === 'string') return '<span class="s">' + esc(JSON.stringify(v)) + '</span>';
+    if (typeof v === 'number') return '<span class="n">' + v + '</span>';
+    return '<span class="b">' + v + '</span>';
+  }
+  function node(key, v, path, open, label) {
+    var keyHtml = label === undefined ? '' : '<span class="key k" data-path="' + esc(path) + '">' + esc(label) + '</span>: ';
+    if (v && typeof v === 'object') {
+      var isArr = Array.isArray(v), ks = isArr ? v.map(function (_, i) { return i; }) : Object.keys(v);
+      var d = document.createElement('details'); if (open) d.open = true;
+      d.innerHTML = '<summary>' + keyHtml + '<span class="meta">' + (isArr ? '[ ' + ks.length + ' items ]' : '{ ' + ks.length + ' keys }') + '</span></summary>';
+      var filled = false;
+      var fill = function () {
+        if (filled) return; filled = true;
+        ks.forEach(function (k) {
+          var p = pathJoin(path, String(k), isArr);
+          d.appendChild(node(k, v[k], p, false, isArr ? String(k) : String(k)));
+        });
+      };
+      if (open) fill(); else d.addEventListener('toggle', fill);
+      return d;
+    }
+    var div = document.createElement('div'); div.className = 'jp-leaf';
+    div.innerHTML = keyHtml + leafHtml(v);
+    return div;
+  }
+  function buildTree(v) {
+    outTree.innerHTML = '';
+    outTree.appendChild(node(null, v, '', true, undefined));
+  }
+  outTree.addEventListener('click', function (e) {
+    var k = e.target.closest('.key'); if (!k) return;
+    e.preventDefault();
+    $('pathText').textContent = k.getAttribute('data-path') || '(root)';
+    $('pathBar').hidden = false;
+  });
+
+  function setView(v) {
+    view = v;
+    $('tabCode').setAttribute('aria-selected', v === 'code'); $('tabTree').setAttribute('aria-selected', v === 'tree');
+    outCode.hidden = v !== 'code'; outTree.hidden = v !== 'tree';
+    if (v !== 'tree') $('pathBar').hidden = true;
+  }
+
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove('show'); }, 1600); }
+  function copy(text, msg) {
+    if (!text) return toast('Nothing to copy yet');
+    (navigator.clipboard ? navigator.clipboard.writeText(text) : Promise.reject()).then(function () { toast(msg); }, function () {
+      var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast(msg); } catch (e) { toast('Copy failed'); } ta.remove();
+    });
+  }
+
+  // ---- Events ----
+  input.addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { if (parse()) render(false); }, 250); });
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab') { e.preventDefault(); var s = input.selectionStart; input.setRangeText('  ', s, input.selectionEnd, 'end'); }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); $('btnFormat').click(); }
+  });
+  $('btnFormat').addEventListener('click', function () { if (parse()) { render(false); input.value = lastText; parse(); } });
+  $('btnMinify').addEventListener('click', function () { if (parse()) { render(true); input.value = lastText; parse(); } });
+  $('indent').addEventListener('change', function () { if (lastOk) render(false); });
+  $('sortKeys').addEventListener('change', function () { if (lastOk) render(false); });
+  $('btnCopy').addEventListener('click', function () { copy(lastOk ? lastText : '', 'Result copied'); });
+  $('btnPath').addEventListener('click', function () { copy($('pathText').textContent, 'Path copied'); });
+  $('btnDownload').addEventListener('click', function () {
+    if (!lastOk) return toast('Nothing valid to download yet');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([lastText], { type: 'application/json' }));
+    a.download = 'formatted.json'; document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  });
+  $('btnOpen').addEventListener('click', function () { $('fileIn').click(); });
+  $('fileIn').addEventListener('change', function () {
+    var f = this.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function () { input.value = r.result; if (parse()) render(false); };
+    r.readAsText(f); this.value = '';
+  });
+  $('btnSample').addEventListener('click', function () { input.value = JSON.stringify(SAMPLE); if (parse()) render(false); });
+  $('btnClear').addEventListener('click', function () { input.value = ''; parse(); input.focus(); });
+  $('tabCode').addEventListener('click', function () { setView('code'); });
+  $('tabTree').addEventListener('click', function () { setView('tree'); });
+})();
+</script>
+</body>
+</html>

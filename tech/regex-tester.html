@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regex Tester - Test JavaScript Regular Expressions | Australian Jeevitham Tech</title>
+  <meta name="description" content="Test JavaScript regular expressions with live match highlighting, capture groups, named groups and replace preview, plus a quick cheat sheet. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/regex-tester.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Regex Tester - Test JavaScript Regular Expressions | Australian Jeevitham Tech">
+  <meta property="og:description" content="Test JavaScript regular expressions with live match highlighting, capture groups, named groups and replace preview, plus a quick cheat sheet. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/regex-tester.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Regex Tester - Test JavaScript Regular Expressions | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Test JavaScript regular expressions with live match highlighting, capture groups, named groups and replace preview, plus a quick cheat sheet. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Regex Tester - Test JavaScript Regular Expressions",
+  "url": "https://www.australianjeevitham.com/tech/regex-tester.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Test JavaScript regular expressions with live match highlighting, capture groups, named groups and replace preview, plus a quick cheat sheet. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Regex Tester</p>
+    <h1>Regex <span class="hl">Tester</span></h1>
+    <p>Test a JavaScript regular expression against your text with live highlighting, capture groups and a replace preview. Includes a quick cheat sheet.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <label class="tl-field"><span>Regular expression</span>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <code style="font-size:1.2rem; color:var(--muted);">/</code>
+          <input class="tl-input" id="pat" spellcheck="false" autocomplete="off" placeholder="e.g. (\d{3})-(\d{4})" style="flex:1;">
+          <code style="font-size:1.2rem; color:var(--muted);">/</code>
+          <input class="tl-input" id="flagsTxt" spellcheck="false" style="width:80px;" aria-label="Flags" value="g">
+        </div>
+      </label>
+      <div class="rx-flags tl-mt">
+        <label class="jp-check"><input type="checkbox" data-f="g" checked> g · all matches</label>
+        <label class="jp-check"><input type="checkbox" data-f="i"> i · ignore case</label>
+        <label class="jp-check"><input type="checkbox" data-f="m"> m · ^ $ per line</label>
+        <label class="jp-check"><input type="checkbox" data-f="s"> s · dot matches newline</label>
+        <label class="jp-check"><input type="checkbox" data-f="u"> u · unicode</label>
+      </div>
+      <div class="jp-status" id="status" role="status">Type a pattern and some test text.</div>
+    </div>
+
+    <div class="tl-row tl-mt">
+      <div class="tl-card">
+        <h2>Test text</h2>
+        <textarea class="tl-text wrap" id="txt" spellcheck="false" style="min-height:220px;"></textarea>
+      </div>
+      <div class="tl-card">
+        <h2>Matches highlighted</h2>
+        <div class="rx-out" id="hl" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Match details</h2>
+      <div class="tl-table-wrap"><table class="tl-table"><thead><tr><th>#</th><th>Match</th><th>Position</th><th>Groups</th></tr></thead><tbody id="list"></tbody></table></div>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Replace</h2>
+      <label class="tl-field"><span>Replace with (use $1, $2 or $&lt;name&gt;)</span><input class="tl-input" id="rep" spellcheck="false" placeholder="e.g. ($1) $2"></label>
+      <textarea class="tl-text wrap short tl-mt" id="repOut" readonly aria-label="Replace result"></textarea>
+      <button type="button" class="tl-copy tl-mt" id="copyRep">Copy result</button>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Cheat sheet</h2>
+      <div class="rx-cheat">
+        <div><code>.</code> any character</div><div><code>\d</code> digit 0-9</div><div><code>\w</code> letter, digit or _</div><div><code>\s</code> space, tab, newline</div>
+        <div><code>\D \W \S</code> NOT digit / word / space</div><div><code>[abc]</code> a, b or c</div><div><code>[^abc]</code> not a, b or c</div><div><code>[a-z]</code> range</div>
+        <div><code>^ $</code> start / end</div><div><code>\b</code> word boundary</div><div><code>*</code> 0 or more</div><div><code>+</code> 1 or more</div>
+        <div><code>?</code> 0 or 1</div><div><code>{2,5}</code> 2 to 5 times</div><div><code>*? +?</code> as few as possible</div><div><code>a|b</code> a or b</div>
+        <div><code>( )</code> capture group</div><div><code>(?:)</code> group, no capture</div><div><code>(?&lt;n&gt;)</code> named group</div><div><code>\1</code> repeat group 1</div>
+        <div><code>(?=)</code> followed by</div><div><code>(?!)</code> not followed by</div><div><code>(?&lt;=)</code> preceded by</div><div><code>\p{L}</code> any letter (u flag)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), worker = null, timer = null, job = 0;
+  var MAX = 5000;
+
+  // Matching runs in a Web Worker so a runaway pattern cannot freeze the page.
+  var SRC = 'onmessage=function(e){var d=e.data,r,out=[],rep=null;try{r=new RegExp(d.p,d.f)}catch(x){postMessage({id:d.id,err:x.message});return}' +
+    'if(d.f.indexOf("g")>=0){var m;r.lastIndex=0;while((m=r.exec(d.t))!==null){out.push({i:m.index,v:m[0],g:m.slice(1),n:m.groups||null});if(m[0]==="")r.lastIndex++;if(out.length>=' + MAX + ')break}}' +
+    'else{var m1=r.exec(d.t);if(m1)out.push({i:m1.index,v:m1[0],g:m1.slice(1),n:m1.groups||null})}' +
+    'if(d.r!==null){try{rep=d.t.replace(new RegExp(d.p,d.f),d.r)}catch(y){rep=null}}postMessage({id:d.id,m:out,rep:rep})}';
+  var URLW = URL.createObjectURL(new Blob([SRC], { type: 'text/javascript' }));
+  function newWorker() { if (worker) worker.terminate(); worker = new Worker(URLW); worker.onmessage = done; }
+
+  function flags() { return $('flagsTxt').value.replace(/[^dgimsuyv]/g, ''); }
+  function syncBoxes() { var f = flags(); document.querySelectorAll('[data-f]').forEach(function (c) { c.checked = f.indexOf(c.getAttribute('data-f')) >= 0; }); }
+  document.querySelectorAll('[data-f]').forEach(function (c) {
+    c.addEventListener('change', function () {
+      var f = flags().replace(c.getAttribute('data-f'), '');
+      if (c.checked) f += c.getAttribute('data-f');
+      $('flagsTxt').value = f.split('').sort().join(''); run();
+    });
+  });
+
+  function run() {
+    var p = $('pat').value, t = $('txt').value;
+    if (!p) { $('hl').textContent = t; $('list').innerHTML = ''; $('repOut').value = ''; T.status(st, '', 'Type a pattern and some test text.'); return; }
+    var f = flags(), uniq = f.split('').filter(function (c, i, a) { return a.indexOf(c) === i; }).join('');
+    if (uniq !== f) { $('flagsTxt').value = uniq; f = uniq; }
+    job++; if (!worker) newWorker();
+    clearTimeout(timer);
+    timer = setTimeout(function () { newWorker(); T.status(st, 'err', '✗ This pattern took too long (over 1.5 seconds) - it may be stuck in “catastrophic backtracking”. Try making repeated groups more specific.'); }, 1500);
+    worker.postMessage({ id: job, p: p, f: f, t: t, r: $('rep').value === '' ? null : $('rep').value });
+  }
+  function done(e) {
+    var d = e.data; if (d.id !== job) return;
+    clearTimeout(timer);
+    var t = $('txt').value;
+    if (d.err) { $('hl').textContent = t; $('list').innerHTML = ''; $('repOut').value = ''; T.status(st, 'err', '✗ ' + T.esc(d.err)); return; }
+    var html = '', pos = 0;
+    d.m.forEach(function (m) { if (m.v === '') return; html += T.esc(t.slice(pos, m.i)) + '<mark>' + T.esc(m.v) + '</mark>'; pos = m.i + m.v.length; });
+    $('hl').innerHTML = html + T.esc(t.slice(pos)) || ' ';
+    $('list').innerHTML = d.m.slice(0, 500).map(function (m, i) {
+      var g = m.g.map(function (v, k) { return '<div><b>$' + (k + 1) + '</b> ' + (v === undefined ? '<i style="color:#9AA5B6">undefined</i>' : '<code>' + T.esc(v) + '</code>') + '</div>'; }).join('');
+      if (m.n) g += Object.keys(m.n).map(function (k) { return '<div><b>' + T.esc(k) + '</b> <code>' + T.esc(m.n[k] === undefined ? '' : m.n[k]) + '</code></div>'; }).join('');
+      return '<tr><td>' + (i + 1) + '</td><td><code>' + (m.v === '' ? '<i style="color:#9AA5B6">(empty)</i>' : T.esc(m.v)) + '</code></td><td>' + m.i + '-' + (m.i + m.v.length) + '</td><td>' + (g || '<span style="color:#9AA5B6">-</span>') + '</td></tr>';
+    }).join('');
+    $('repOut').value = d.rep === null ? '' : d.rep;
+    var n = d.m.length;
+    T.status(st, n ? 'ok' : '', n ? '✓ ' + (n >= MAX ? MAX + '+' : n) + ' match' + (n === 1 ? '' : 'es') + (n > 500 ? ' (table shows the first 500)' : '') : 'No matches.');
+  }
+
+  T.onInput([$('pat'), $('txt'), $('rep')], run, 150);
+  $('flagsTxt').addEventListener('input', function () { syncBoxes(); run(); });
+  $('copyRep').addEventListener('click', function () { T.copy($('repOut').value, 'Result copied'); });
+
+  $('pat').value = '(?<area>\\(?0\\d\\)?)\\s?(\\d{4})\\s?(\\d{4})';
+  $('txt').value = 'Office: (07) 4771 5000\nMobile: 0412 345 678\nSydney: 02 9876 5432\nNot a number: 12-34';
+  $('rep').value = '$<area> ****-$3';
+  syncBoxes(); run();
+})();
+</script>
+</body>
+</html>

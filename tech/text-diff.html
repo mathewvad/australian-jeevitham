@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Diff Checker - Compare Two Texts | Australian Jeevitham Tech</title>
+  <meta name="description" content="Compare two pieces of text or code and see added, removed and changed lines, with the exact changed words highlighted. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/text-diff.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Text Diff Checker - Compare Two Texts | Australian Jeevitham Tech">
+  <meta property="og:description" content="Compare two pieces of text or code and see added, removed and changed lines, with the exact changed words highlighted. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/text-diff.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Text Diff Checker - Compare Two Texts | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Compare two pieces of text or code and see added, removed and changed lines, with the exact changed words highlighted. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Text Diff Checker - Compare Two Texts",
+  "url": "https://www.australianjeevitham.com/tech/text-diff.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Compare two pieces of text or code and see added, removed and changed lines, with the exact changed words highlighted. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Text Diff Checker</p>
+    <h1>Text <span class="hl">Diff</span> Checker</h1>
+    <p>Paste two versions of text or code to see what was added, removed or changed - line by line, with the changed words highlighted.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="jp-bar">
+      <button type="button" class="jp-btn primary" id="run">Compare</button>
+      <label class="jp-check"><input type="checkbox" id="ws"> Ignore spaces</label>
+      <label class="jp-check"><input type="checkbox" id="cs"> Ignore upper/lower case</label>
+      <label class="jp-check"><input type="checkbox" id="ctx" checked> Hide unchanged lines</label>
+      <button type="button" class="jp-btn" id="swap">⇄ Swap</button>
+      <button type="button" class="jp-btn" id="sample">Sample</button>
+      <button type="button" class="jp-btn" id="clear">Clear</button>
+    </div>
+    <div class="jp-grid">
+      <div class="jp-panel">
+        <div class="jp-head"><label for="a">Original</label><span id="aInfo">0 lines</span></div>
+        <textarea class="jp-area" id="a" data-tabs spellcheck="false" style="min-height:260px;" placeholder="Paste the original text"></textarea>
+      </div>
+      <div class="jp-panel">
+        <div class="jp-head"><label for="b">Changed</label><span id="bInfo">0 lines</span></div>
+        <textarea class="jp-area" id="b" data-tabs spellcheck="false" style="min-height:260px;" placeholder="Paste the changed text"></textarea>
+      </div>
+    </div>
+    <div class="jp-status" id="status" role="status">Paste two versions to see the differences.</div>
+    <div class="df tl-mt" id="out" hidden></div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), out = $('out');
+
+  // Myers O(ND) diff on arrays of keys. Returns list of ['=',i,j] | ['-',i] | ['+',j]
+  function diff(a, b) {
+    var n = a.length, m = b.length, max = n + m, v = { 1: 0 }, trace = [];
+    for (var d = 0; d <= max; d++) {
+      trace.push(Object.assign({}, v));
+      for (var k = -d; k <= d; k += 2) {
+        var x = (k === -d || (k !== d && v[k - 1] < v[k + 1])) ? v[k + 1] : v[k - 1] + 1, y = x - k;
+        while (x < n && y < m && a[x] === b[y]) { x++; y++; }
+        v[k] = x;
+        if (x >= n && y >= m) return back(trace, a, b, d);
+      }
+      if (d > 2500) return null; // too different - give up (keeps memory small)
+    }
+    return null;
+  }
+  function back(trace, a, b, D) {
+    var x = a.length, y = b.length, ops = [];
+    for (var d = D; d > 0; d--) {
+      var v = trace[d], k = x - y;
+      var pk = (k === -d || (k !== d && v[k - 1] < v[k + 1])) ? k + 1 : k - 1;
+      var px = v[pk], py = px - pk;
+      while (x > px && y > py) { ops.push(['=', x - 1, y - 1]); x--; y--; }
+      if (x === px) ops.push(['+', y - 1]); else ops.push(['-', x - 1]);
+      x = px; y = py;
+    }
+    while (x > 0 && y > 0) { ops.push(['=', x - 1, y - 1]); x--; y--; }
+    return ops.reverse();
+  }
+  function key(s) {
+    if ($('ws').checked) s = s.replace(/\s+/g, ' ').trim();
+    if ($('cs').checked) s = s.toLowerCase();
+    return s;
+  }
+  // word-level highlight for a changed pair of lines
+  function words(oldL, newL) {
+    var ta = oldL.match(/\s+|[\w\u0080-￿]+|[^\s\w]/g) || [], tb = newL.match(/\s+|[\w\u0080-￿]+|[^\s\w]/g) || [];
+    if (ta.length * tb.length > 250000) return [T.esc(oldL), T.esc(newL)];
+    var ops = diff(ta.map(key), tb.map(key));
+    if (!ops) return [T.esc(oldL), T.esc(newL)];
+    var A = '', B = '';
+    ops.forEach(function (o) {
+      if (o[0] === '=') { A += T.esc(ta[o[1]]); B += T.esc(tb[o[2]]); }
+      else if (o[0] === '-') A += '<del>' + T.esc(ta[o[1]]) + '</del>';
+      else B += '<ins>' + T.esc(tb[o[1]]) + '</ins>';
+    });
+    return [A, B];
+  }
+  function line(cls, an, bn, sig, html) {
+    return '<div class="df-line ' + cls + '"><span class="no">' + (an || '') + '</span><span class="no">' + (bn || '') + '</span><span class="sig">' + sig + '</span><span>' + (html || ' ') + '</span></div>';
+  }
+
+  function run() {
+    var A = $('a').value, B = $('b').value;
+    var la = A === '' ? [] : A.replace(/\r\n?/g, '\n').split('\n'), lb = B === '' ? [] : B.replace(/\r\n?/g, '\n').split('\n');
+    $('aInfo').textContent = la.length + ' lines'; $('bInfo').textContent = lb.length + ' lines';
+    if (!A && !B) { out.hidden = true; T.status(st, '', 'Paste two versions to see the differences.'); return; }
+    var ops = diff(la.map(key), lb.map(key));
+    if (!ops) { out.hidden = true; T.status(st, 'err', '✗ These texts are too different to compare line by line.'); return; }
+    // group consecutive -/+ runs to pair them for word highlighting
+    var rows = [], i = 0, adds = 0, dels = 0;
+    while (i < ops.length) {
+      if (ops[i][0] === '=') { rows.push({ t: '=', a: ops[i][1], b: ops[i][2] }); i++; continue; }
+      var D = [], P = [];
+      while (i < ops.length && ops[i][0] !== '=') { if (ops[i][0] === '-') D.push(ops[i][1]); else P.push(ops[i][1]); i++; }
+      dels += D.length; adds += P.length;
+      var pairs = Math.min(D.length, P.length);
+      for (var p = 0; p < D.length; p++) rows.push({ t: '-', a: D[p], pair: p < pairs ? P[p] : null });
+      for (p = 0; p < P.length; p++) rows.push({ t: '+', b: P[p], pair: p < pairs ? D[p] : null });
+    }
+    if (!adds && !dels) { out.hidden = true; T.status(st, 'ok', '✓ No differences' + ($('ws').checked || $('cs').checked ? ' (with your ignore options)' : '') + ' - the two texts are the same.'); return; }
+    var wcache = {}, html = '', hide = $('ctx').checked, CTX = 3;
+    var show = rows.map(function (r, idx) {
+      if (r.t !== '=' || !hide) return true;
+      for (var j = Math.max(0, idx - CTX); j <= Math.min(rows.length - 1, idx + CTX); j++) if (rows[j].t !== '=') return true;
+      return false;
+    });
+    var skipped = 0;
+    rows.forEach(function (r, idx) {
+      if (!show[idx]) { skipped++; return; }
+      if (skipped) { html += '<div class="df-skip">… ' + skipped + ' unchanged line' + (skipped > 1 ? 's' : '') + ' …</div>'; skipped = 0; }
+      if (r.t === '=') html += line('', r.a + 1, r.b + 1, ' ', T.esc(la[r.a]));
+      else if (r.t === '-') {
+        var w = r.pair !== null ? (wcache[r.a + ':' + r.pair] = wcache[r.a + ':' + r.pair] || words(la[r.a], lb[r.pair])) : null;
+        html += line('df-del', r.a + 1, '', '−', w ? w[0] : T.esc(la[r.a]));
+      } else {
+        var w2 = r.pair !== null ? (wcache[r.pair + ':' + r.b] = wcache[r.pair + ':' + r.b] || words(la[r.pair], lb[r.b])) : null;
+        html += line('df-add', '', r.b + 1, '+', w2 ? w2[1] : T.esc(lb[r.b]));
+      }
+    });
+    if (skipped) html += '<div class="df-skip">… ' + skipped + ' unchanged line' + (skipped > 1 ? 's' : '') + ' …</div>';
+    out.innerHTML = html; out.hidden = false;
+    T.status(st, 'ok', '<span class="tl-pill err">− ' + dels + ' removed</span> <span class="tl-pill ok">+ ' + adds + ' added</span> <span class="tl-pill">' + (la.length - dels) + ' unchanged</span>');
+  }
+
+  T.onInput([$('a'), $('b')], run, 300);
+  ['ws', 'cs', 'ctx'].forEach(function (id) { $(id).addEventListener('change', run); });
+  $('run').addEventListener('click', run);
+  $('swap').addEventListener('click', function () { var t = $('a').value; $('a').value = $('b').value; $('b').value = t; run(); });
+  $('clear').addEventListener('click', function () { $('a').value = ''; $('b').value = ''; run(); $('a').focus(); });
+  $('sample').addEventListener('click', function () {
+    $('a').value = 'function greet(name) {\n  const message = "Hello, " + name;\n  console.log(message);\n  return message;\n}\n\ngreet("Binu");\n// Townsville, QLD';
+    $('b').value = 'function greet(name, city) {\n  const message = `Hello, ${name} from ${city}`;\n  console.log(message);\n  return message;\n}\n\ngreet("Binu", "Townsville");\n// Townsville, Queensland';
+    run();
+  });
+})();
+</script>
+</body>
+</html>

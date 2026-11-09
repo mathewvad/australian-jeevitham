@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON to CSV &amp; YAML Converter (and back) | Australian Jeevitham Tech</title>
+  <meta name="description" content="Convert JSON to CSV or YAML and back again. Flattens nested objects into columns, handles quotes and commas, and downloads the result. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/json-csv-yaml.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="JSON to CSV &amp; YAML Converter (and back) | Australian Jeevitham Tech">
+  <meta property="og:description" content="Convert JSON to CSV or YAML and back again. Flattens nested objects into columns, handles quotes and commas, and downloads the result. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/json-csv-yaml.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="JSON to CSV &amp; YAML Converter (and back) | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Convert JSON to CSV or YAML and back again. Flattens nested objects into columns, handles quotes and commas, and downloads the result. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js" integrity="sha384-+pxiN6T7yvpryuJmE1gM9PX7yQit15auDb+ZwwvJOd/4be2Cie5/IuVXgQb/S9du" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON to CSV & YAML Converter (and back)",
+  "url": "https://www.australianjeevitham.com/tech/json-csv-yaml.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Convert JSON to CSV or YAML and back again. Flattens nested objects into columns, handles quotes and commas, and downloads the result. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / JSON ⇄ CSV / YAML Converter</p>
+    <h1>JSON ⇄ <span class="hl">CSV</span> / YAML</h1>
+    <p>Convert between JSON, CSV and YAML in either direction. Nested objects become dotted column names in CSV. Nothing leaves your browser.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="jp-bar" role="toolbar" aria-label="Conversion">
+      <label class="jp-check" for="from">From
+        <select class="jp-select" id="from">
+          <option value="json">JSON</option>
+          <option value="csv">CSV</option>
+          <option value="yaml">YAML</option>
+        </select>
+      </label>
+      <button type="button" class="jp-btn" id="swap" aria-label="Swap input and output formats">⇄</button>
+      <label class="jp-check" for="to">To
+        <select class="jp-select" id="to">
+          <option value="csv">CSV</option>
+          <option value="yaml">YAML</option>
+          <option value="json">JSON</option>
+        </select>
+      </label>
+      <label class="jp-check" for="delim">CSV separator
+        <select class="jp-select" id="delim">
+          <option value=",">Comma ,</option>
+          <option value=";">Semicolon ;</option>
+          <option value="&#9;">Tab</option>
+          <option value="|">Pipe |</option>
+        </select>
+      </label>
+      <label class="jp-check"><input type="checkbox" id="flatten" checked> Flatten nested objects</label>
+      <label class="jp-check"><input type="checkbox" id="types" checked> Detect numbers &amp; true/false</label>
+    </div>
+    <div class="jp-bar">
+      <button type="button" class="jp-btn primary" id="convert">Convert</button>
+      <button type="button" class="jp-btn" id="copy">Copy result</button>
+      <button type="button" class="jp-btn" id="dl">Download</button>
+      <button type="button" class="jp-btn" id="open">Open file</button>
+      <input type="file" id="file" accept=".json,.csv,.tsv,.yaml,.yml,.txt" hidden>
+      <button type="button" class="jp-btn" id="sample">Sample</button>
+      <button type="button" class="jp-btn" id="clear">Clear</button>
+    </div>
+    <div class="jp-grid">
+      <div class="jp-panel">
+        <div class="jp-head"><label for="in" id="inLabel">Input (JSON)</label><span id="inSize">0 B</span></div>
+        <textarea class="jp-area" id="in" data-tabs spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Paste JSON, CSV or YAML here"></textarea>
+      </div>
+      <div class="jp-panel">
+        <div class="jp-head"><span id="outLabel">Result (CSV)</span><span id="outSize">0 B</span></div>
+        <textarea class="jp-area" id="out" spellcheck="false" readonly aria-label="Result"></textarea>
+      </div>
+    </div>
+    <div class="jp-status" id="status" role="status">Paste some data, then press Convert (or just start typing).</div>
+    <p class="jp-note">JSON to CSV works best with a list of objects, like <code>[{"name":"A","age":30}, ...]</code>. Each object becomes a row; nested objects become columns such as <code>address.city</code>, and lists are kept as JSON text in one cell.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, inp = $('in'), out = $('out'), st = $('status');
+  var NAMES = { json: 'JSON', csv: 'CSV', yaml: 'YAML' };
+  var EXT = { json: 'json', csv: 'csv', yaml: 'yaml' };
+  var MIME = { json: 'application/json', csv: 'text/csv', yaml: 'application/yaml' };
+
+  // ---------- CSV ----------
+  function parseCSV(text, d) {
+    var rows = [], row = [], f = '', i = 0, q = false, n = text.length;
+    if (text.charCodeAt(0) === 0xFEFF) i = 1;
+    for (; i < n; i++) {
+      var c = text[i];
+      if (q) {
+        if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; }
+        else f += c;
+      } else if (c === '"' && f === '') q = true;
+      else if (c === d) { row.push(f); f = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(f); rows.push(row); row = []; f = '';
+      } else f += c;
+    }
+    if (q) throw new Error('A quoted value is never closed (missing ")');
+    if (f !== '' || row.length) { row.push(f); rows.push(row); }
+    return rows.filter(function (r) { return !(r.length === 1 && r[0] === ''); });
+  }
+  function typed(v) {
+    if (!$('types').checked) return v;
+    if (v === '') return '';
+    if (v === 'true') return true; if (v === 'false') return false; if (v === 'null') return null;
+    if (/^-?(0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?$/.test(v) && v.length < 16) return Number(v);
+    return v;
+  }
+  function unflatten(obj) {
+    var res = {};
+    Object.keys(obj).forEach(function (k) {
+      var parts = k.split('.'), cur = res;
+      for (var i = 0; i < parts.length - 1; i++) {
+        if (typeof cur[parts[i]] !== 'object' || cur[parts[i]] === null) cur[parts[i]] = {};
+        cur = cur[parts[i]];
+      }
+      cur[parts[parts.length - 1]] = obj[k];
+    });
+    return res;
+  }
+  function csvToData(text) {
+    var rows = parseCSV(text, $('delim').value);
+    if (!rows.length) throw new Error('No rows found');
+    var head = rows[0].map(function (h, i) { return h.trim() || 'column' + (i + 1); });
+    return rows.slice(1).map(function (r) {
+      var o = {};
+      head.forEach(function (h, i) {
+        var v = r[i] === undefined ? '' : r[i];
+        if (/^[\[{]/.test(v.trim())) { try { o[h] = JSON.parse(v); return; } catch (e) {} }
+        o[h] = typed(v);
+      });
+      return $('flatten').checked ? unflatten(o) : o;
+    });
+  }
+  function flatten(o, pre, res) {
+    Object.keys(o).forEach(function (k) {
+      var v = o[k], key = pre ? pre + '.' + k : k;
+      if (v && typeof v === 'object' && !Array.isArray(v) && $('flatten').checked && Object.keys(v).length) flatten(v, key, res);
+      else res[key] = v;
+    });
+    return res;
+  }
+  function cell(v, d) {
+    if (v === null || v === undefined) v = '';
+    else if (typeof v === 'object') v = JSON.stringify(v);
+    else v = String(v);
+    return (v.indexOf(d) >= 0 || /["\r\n]/.test(v) || /^\s|\s$/.test(v)) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  }
+  function dataToCSV(data) {
+    var d = $('delim').value;
+    if (!Array.isArray(data)) data = (data && typeof data === 'object') ? (function () {
+      var arr = Object.values(data).filter(Array.isArray); return arr.length === 1 ? arr[0] : [data];
+    })() : [{ value: data }];
+    var rows = data.map(function (r) { return (r && typeof r === 'object' && !Array.isArray(r)) ? flatten(r, '', {}) : { value: r }; });
+    var cols = [];
+    rows.forEach(function (r) { Object.keys(r).forEach(function (k) { if (cols.indexOf(k) < 0) cols.push(k); }); });
+    return [cols.map(function (c) { return cell(c, d); }).join(d)].concat(rows.map(function (r) {
+      return cols.map(function (c) { return cell(r[c], d); }).join(d);
+    })).join('\r\n');
+  }
+
+  // ---------- Convert ----------
+  function parseIn(fmt, text) {
+    if (fmt === 'json') return JSON.parse(text);
+    if (fmt === 'csv') return csvToData(text);
+    if (!window.jsyaml) throw new Error('The YAML reader is still loading - try again in a moment');
+    return jsyaml.load(text);
+  }
+  function write(fmt, data) {
+    if (fmt === 'json') return JSON.stringify(data, null, 2);
+    if (fmt === 'csv') return dataToCSV(data);
+    if (!window.jsyaml) throw new Error('The YAML writer is still loading - try again in a moment');
+    return jsyaml.dump(data, { lineWidth: -1, noRefs: true });
+  }
+  function labels() {
+    $('inLabel').textContent = 'Input (' + NAMES[$('from').value] + ')';
+    $('outLabel').textContent = 'Result (' + NAMES[$('to').value] + ')';
+    $('in').placeholder = 'Paste ' + NAMES[$('from').value] + ' here';
+  }
+  function convert() {
+    labels();
+    var text = inp.value; $('inSize').textContent = T.bytes(T.size(text));
+    if (!text.trim()) { out.value = ''; $('outSize').textContent = '0 B'; T.status(st, '', 'Paste some data, then press Convert (or just start typing).'); return; }
+    var from = $('from').value, to = $('to').value;
+    try {
+      var data = parseIn(from, text), res = write(to, data);
+      out.value = res; $('outSize').textContent = T.bytes(T.size(res));
+      var n = Array.isArray(data) ? data.length + ' rows/items' : (data && typeof data === 'object' ? Object.keys(data).length + ' top-level keys' : 'single value');
+      T.status(st, 'ok', '✓ Converted ' + NAMES[from] + ' to ' + NAMES[to] + ' <span class="tl-pill">' + n + '</span>');
+    } catch (err) {
+      out.value = ''; $('outSize').textContent = '0 B';
+      var msg = err && err.message ? err.message : String(err);
+      if (err && err.mark) msg = 'line ' + (err.mark.line + 1) + ', column ' + (err.mark.column + 1) + ': ' + err.reason;
+      T.status(st, 'err', '✗ Could not read the ' + NAMES[from] + ': ' + T.esc(msg.split('\n')[0].replace(/ in JSON at position \d+( \(line \d+ column \d+\))?/, '')));
+    }
+  }
+
+  var SAMPLE = [
+    { name: 'Binu', city: 'Townsville', address: { state: 'QLD', country: 'Australia' }, skills: ['JavaScript', 'SQL'], active: true, followers: 547000 },
+    { name: 'Anu', city: 'Dubai', address: { state: 'Dubai', country: 'UAE' }, skills: ['Python'], active: false, followers: 1200 },
+    { name: 'Rahul, K', city: 'Kochi', address: { state: 'Kerala', country: 'India' }, skills: [], active: true, followers: 98 }
+  ];
+
+  T.onInput([inp], convert, 300);
+  ['from', 'to', 'delim', 'flatten', 'types'].forEach(function (id) { $(id).addEventListener('change', convert); });
+  $('convert').addEventListener('click', convert);
+  $('swap').addEventListener('click', function () {
+    var f = $('from').value, t = $('to').value;
+    if (out.value) inp.value = out.value;
+    $('from').value = t; $('to').value = f; convert();
+  });
+  $('copy').addEventListener('click', function () { T.copy(out.value, 'Result copied'); });
+  $('dl').addEventListener('click', function () {
+    if (!out.value) return T.toast('Nothing to download yet');
+    T.download(out.value, 'converted.' + EXT[$('to').value], MIME[$('to').value]);
+  });
+  $('open').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function () {
+    var f = this.files[0]; if (!f) return;
+    var ext = (f.name.split('.').pop() || '').toLowerCase();
+    if (ext === 'json') $('from').value = 'json';
+    else if (ext === 'csv') $('from').value = 'csv';
+    else if (ext === 'tsv') { $('from').value = 'csv'; $('delim').value = '\t'; }
+    else if (ext === 'yaml' || ext === 'yml') $('from').value = 'yaml';
+    if ($('to').value === $('from').value) $('to').value = $('from').value === 'json' ? 'csv' : 'json';
+    T.readFile(f).then(function (t) { inp.value = t; convert(); });
+    this.value = '';
+  });
+  $('sample').addEventListener('click', function () { $('from').value = 'json'; $('to').value = 'csv'; inp.value = JSON.stringify(SAMPLE, null, 2); convert(); });
+  $('clear').addEventListener('click', function () { inp.value = ''; convert(); inp.focus(); });
+  labels();
+})();
+</script>
+</body>
+</html>

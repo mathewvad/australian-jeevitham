@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JWT Decoder - Read Token Header, Payload &amp; Expiry | Australian Jeevitham Tech</title>
+  <meta name="description" content="Decode a JSON Web Token to read its header and payload, see when it was issued and when it expires. Optional HS256 signature check. Runs in your browser - tokens are never sent anywhere.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/jwt-decoder.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="JWT Decoder - Read Token Header, Payload &amp; Expiry | Australian Jeevitham Tech">
+  <meta property="og:description" content="Decode a JSON Web Token to read its header and payload, see when it was issued and when it expires. Optional HS256 signature check. Runs in your browser - tokens are never sent anywhere.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/jwt-decoder.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="JWT Decoder - Read Token Header, Payload &amp; Expiry | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Decode a JSON Web Token to read its header and payload, see when it was issued and when it expires. Optional HS256 signature check. Runs in your browser - tokens are never sent anywhere.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JWT Decoder - Read Token Header, Payload & Expiry",
+  "url": "https://www.australianjeevitham.com/tech/jwt-decoder.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Decode a JSON Web Token to read its header and payload, see when it was issued and when it expires. Optional HS256 signature check. Runs in your browser - tokens are never sent anywhere.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / JWT Decoder</p>
+    <h1>JWT <span class="hl">Decoder</span></h1>
+    <p>Paste a JSON Web Token to read its header and payload, with issued, not-before and expiry times in plain dates. Your token never leaves this page.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <label class="tl-field"><span>Encoded token</span>
+        <textarea class="tl-text wrap short" id="tok" spellcheck="false" autocomplete="off" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0In0.signature"></textarea>
+      </label>
+      <div class="jp-bar tl-mt" style="margin-bottom:0;">
+        <button type="button" class="jp-btn" id="sample">Sample token</button>
+        <button type="button" class="jp-btn" id="clear">Clear</button>
+      </div>
+      <div class="jp-status" id="status" role="status">Paste a JWT. It is decoded only on this page and never sent anywhere.</div>
+    </div>
+
+    <div class="tl-row tl-mt">
+      <div class="tl-card">
+        <h2>Header <span class="tl-pill" id="alg"></span></h2>
+        <pre class="jp-out" id="hdr" style="min-height:120px; padding:0;"></pre>
+      </div>
+      <div class="tl-card">
+        <h2>Payload</h2>
+        <pre class="jp-out" id="pay" style="min-height:120px; padding:0;"></pre>
+      </div>
+    </div>
+
+    <div class="tl-card tl-mt" id="timesCard" hidden>
+      <h2>Times</h2>
+      <div class="tl-table-wrap"><table class="tl-table"><thead><tr><th>Claim</th><th>Value</th><th>Your local time</th><th>UTC</th><th>Relative</th></tr></thead><tbody id="times"></tbody></table></div>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Check an HS256 signature (optional)</h2>
+      <div class="jp-bar">
+        <input class="tl-input" id="secret" type="password" autocomplete="off" placeholder="Shared secret" style="max-width:360px;">
+        <label class="jp-check"><input type="checkbox" id="secretB64"> Secret is Base64</label>
+        <button type="button" class="jp-btn primary" id="verify">Check signature</button>
+        <span id="verifyOut"></span>
+      </div>
+      <p class="tl-note" style="margin-top:0;">Only HMAC tokens (HS256, HS384, HS512) can be checked here. Tokens signed with RS/ES keys need the issuer's public key. Never paste a production secret into any website you do not trust.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), parsed = null;
+  var dec = new TextDecoder();
+
+  function b64urlJSON(part, name) {
+    var u8;
+    try { u8 = T.b64ToBytes(part); } catch (e) { throw new Error('The ' + name + ' is not valid Base64URL'); }
+    try { return JSON.parse(dec.decode(u8)); } catch (e) { throw new Error('The ' + name + ' is not valid JSON'); }
+  }
+  function colour(obj) {
+    return T.esc(JSON.stringify(obj, null, 2)).replace(/(&quot;(?:[^&]|&(?!quot;))*?&quot;)(\s*:)?|\b(true|false)\b|\bnull\b|-?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?/g, function (m, s, c, b) {
+      if (s) return c ? '<span class="k">' + s + '</span>' + c : '<span class="s">' + s + '</span>';
+      if (b) return '<span class="b">' + m + '</span>';
+      if (m === 'null') return '<span class="z">null</span>';
+      return '<span class="n">' + m + '</span>';
+    });
+  }
+  function rel(sec) {
+    var d = Math.round(sec - Date.now() / 1000), a = Math.abs(d), u;
+    if (a < 60) u = a + ' seconds'; else if (a < 3600) u = Math.round(a / 60) + ' minutes'; else if (a < 86400) u = Math.round(a / 3600) + ' hours'; else u = Math.round(a / 86400) + ' days';
+    return d >= 0 ? 'in ' + u : u + ' ago';
+  }
+  var LABEL = { iat: 'Issued at (iat)', nbf: 'Not before (nbf)', exp: 'Expires (exp)', auth_time: 'Signed in (auth_time)' };
+
+  function run() {
+    var v = $('tok').value.trim().replace(/^Bearer\s+/i, '');
+    $('hdr').innerHTML = ''; $('pay').innerHTML = ''; $('alg').textContent = ''; $('timesCard').hidden = true; $('verifyOut').innerHTML = ''; parsed = null;
+    if (!v) { T.status(st, '', 'Paste a JWT. It is decoded only on this page and never sent anywhere.'); return; }
+    var parts = v.split('.');
+    if (parts.length === 5) { T.status(st, 'err', '✗ This is an encrypted token (JWE, 5 parts). Its payload cannot be read without the decryption key.'); return; }
+    if (parts.length !== 3) { T.status(st, 'err', '✗ A JWT has 3 parts separated by dots - this has ' + parts.length + '.'); return; }
+    try {
+      var h = b64urlJSON(parts[0], 'header'), p = b64urlJSON(parts[1], 'payload');
+      parsed = { h: h, p: p, parts: parts };
+      $('hdr').innerHTML = colour(h); $('pay').innerHTML = colour(p); $('alg').textContent = h.alg || 'no alg';
+      var now = Date.now() / 1000, notes = [];
+      if (typeof p.exp === 'number') notes.push(p.exp < now ? '<span class="tl-pill err">Expired ' + rel(p.exp) + '</span>' : '<span class="tl-pill ok">Valid until ' + new Date(p.exp * 1000).toLocaleString() + '</span>');
+      else notes.push('<span class="tl-pill warn">No expiry (exp)</span>');
+      if (typeof p.nbf === 'number' && p.nbf > now) notes.push('<span class="tl-pill warn">Not valid yet</span>');
+      if (String(h.alg).toLowerCase() === 'none') notes.push('<span class="tl-pill err">alg “none” - unsigned token</span>');
+      T.status(st, 'ok', '✓ Decoded. ' + notes.join(' ') + ' <span class="tl-note" style="display:block;margin-top:6px;">Decoding does not prove the token is genuine - only the signature check does.</span>');
+      var rows = ['iat', 'nbf', 'exp', 'auth_time'].filter(function (k) { return typeof p[k] === 'number'; }).map(function (k) {
+        var d = new Date(p[k] * 1000);
+        return '<tr><td>' + LABEL[k] + '</td><td><code>' + p[k] + '</code></td><td>' + d.toLocaleString() + '</td><td><code>' + d.toISOString() + '</code></td><td>' + rel(p[k]) + '</td></tr>';
+      });
+      $('times').innerHTML = rows.join(''); $('timesCard').hidden = !rows.length;
+    } catch (e) { T.status(st, 'err', '✗ ' + T.esc(e.message)); }
+  }
+
+  $('verify').addEventListener('click', function () {
+    var o = $('verifyOut');
+    if (!parsed) { o.innerHTML = '<span class="tl-pill warn">Paste a token first</span>'; return; }
+    var alg = String(parsed.h.alg || ''), m = /^HS(256|384|512)$/.exec(alg);
+    if (!m) { o.innerHTML = '<span class="tl-pill warn">' + T.esc(alg || 'This') + ' tokens cannot be checked with a shared secret</span>'; return; }
+    if (!window.crypto || !crypto.subtle) { o.innerHTML = '<span class="tl-pill warn">Your browser does not support this check</span>'; return; }
+    var keyBytes;
+    try { keyBytes = $('secretB64').checked ? T.b64ToBytes($('secret').value) : new TextEncoder().encode($('secret').value); }
+    catch (e) { o.innerHTML = '<span class="tl-pill err">Secret is not valid Base64</span>'; return; }
+    crypto.subtle.importKey('raw', keyBytes, { name: 'HMAC', hash: 'SHA-' + m[1] }, false, ['sign']).then(function (k) {
+      return crypto.subtle.sign('HMAC', k, new TextEncoder().encode(parsed.parts[0] + '.' + parsed.parts[1]));
+    }).then(function (sig) {
+      var s = T.bytesToB64(new Uint8Array(sig)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      o.innerHTML = s === parsed.parts[2] ? '<span class="tl-pill ok">✓ Signature is valid</span>' : '<span class="tl-pill err">✗ Signature does not match</span>';
+    }, function () { o.innerHTML = '<span class="tl-pill err">Could not run the check</span>'; });
+  });
+
+  // Sample: HS256 with secret "australian-jeevitham", expires in 2 hours
+  $('sample').addEventListener('click', function () {
+    var b = function (o) { return T.bytesToB64(new TextEncoder().encode(JSON.stringify(o))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
+    var now = Math.floor(Date.now() / 1000);
+    var head = b({ alg: 'HS256', typ: 'JWT' }), body = b({ sub: '1234567890', name: 'Binu Vadakkedath', role: 'admin', iat: now, exp: now + 7200 });
+    crypto.subtle.importKey('raw', new TextEncoder().encode('australian-jeevitham'), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+      .then(function (k) { return crypto.subtle.sign('HMAC', k, new TextEncoder().encode(head + '.' + body)); })
+      .then(function (sig) {
+        $('tok').value = head + '.' + body + '.' + T.bytesToB64(new Uint8Array(sig)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        $('secret').value = 'australian-jeevitham'; run();
+      });
+  });
+  $('clear').addEventListener('click', function () { $('tok').value = ''; $('secret').value = ''; run(); $('tok').focus(); });
+  T.onInput([$('tok')], run, 150);
+})();
+</script>
+</body>
+</html>
