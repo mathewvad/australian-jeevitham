@@ -112,7 +112,7 @@ const LEGAL = {
       '<p>By using English Coach you agree to these terms. If you don\'t agree, please don\'t use the app.</p>' +
       '<h2>A practice tool</h2><p>The app helps you practise English. Scores, bands and grades are estimates for practice only. The app is not connected with IELTS, OET, AHPRA or any employer, and does not guarantee any test result, registration or job.</p>' +
       '<h2>The AI coach can make mistakes</h2><p>Feedback, corrections and example answers come from artificial intelligence and may sometimes be wrong. The healthcare situations are for communication practice only - they are not medical or clinical advice. Always follow your workplace policies and qualified professionals.</p>' +
-      '<h2>Testing (beta)</h2><p>The app is free while it is being tested. Features, daily limits and availability may change, and the service may sometimes be unavailable.</p>' +
+      '<h2>Testing (beta)</h2><p>The app is free to use during the trial period. Features, daily limits and availability may change, and the service may sometimes be unavailable.</p>' +
       '<h2>Your account</h2><ul>' +
         '<li>You must be 18 or older and give true details.</li>' +
         '<li>Keep your account to yourself - don\'t share it.</li>' +
