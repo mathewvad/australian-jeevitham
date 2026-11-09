@@ -134,7 +134,7 @@
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/tech/</loc>
-    <lastmod>2026-11-09</lastmod>
+    <lastmod>2026-11-10</lastmod>
   </url>
   <url>
     <loc>https://www.australianjeevitham.com/tech/json-parser.html</loc>
@@ -179,5 +179,85 @@
   <url>
     <loc>https://www.australianjeevitham.com/tech/colour-converter.html</loc>
     <lastmod>2026-11-09</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/number-base-converter.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/xml-formatter.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/json-to-typescript.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/jsonpath-tester.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/html-entities.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/markdown-preview.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/qr-code-generator.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/totp-generator.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/cidr-calculator.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/chmod-calculator.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/password-strength.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/text-case-tools.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/string-escape.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/lorem-ipsum.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/slug-generator.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/cron-explainer.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/date-calculator.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/image-resizer.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/css-gradient-shadow.html</loc>
+    <lastmod>2026-11-10</lastmod>
+  </url>
+  <url>
+    <loc>https://www.australianjeevitham.com/tech/px-rem-converter.html</loc>
+    <lastmod>2026-11-10</lastmod>
   </url>
 </urlset>
