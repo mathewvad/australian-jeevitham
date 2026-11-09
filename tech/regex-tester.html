@@ -205,9 +205,9 @@
   $('flagsTxt').addEventListener('input', function () { syncBoxes(); run(); });
   $('copyRep').addEventListener('click', function () { T.copy($('repOut').value, 'Result copied'); });
 
-  $('pat').value = '(?<area>\\(?0\\d\\)?)\\s?(\\d{4})\\s?(\\d{4})';
-  $('txt').value = 'Office: (07) 4771 5000\nMobile: 0412 345 678\nSydney: 02 9876 5432\nNot a number: 12-34';
-  $('rep').value = '$<area> ****-$3';
+  $('pat').value = '(?<level>ERROR|WARN)\\s+\\[(\\w+)\\]\\s+(.+)';
+  $('txt').value = '2026-11-09 10:15:02 INFO  [auth] Login succeeded\n2026-11-09 10:15:07 WARN  [db] Slow query took 1840 ms\n2026-11-09 10:16:11 ERROR [api] Timeout calling /v1/orders\n2026-11-09 10:16:12 INFO  [cache] Cache warmed';
+  $('rep').value = '$<level> in $2: $3';
   syncBoxes(); run();
 })();
 </script>

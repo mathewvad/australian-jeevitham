@@ -88,8 +88,8 @@
       <div class="tl-card">
         <h2>Colour</h2>
         <div class="jp-bar">
-          <input type="color" id="pick" value="#ee4a23" aria-label="Pick a colour" style="width:56px; height:44px; border:0; background:none; cursor:pointer;">
-          <input class="tl-input" id="any" spellcheck="false" placeholder="#EE4A23, rgb(238 74 35), hsl(12 85% 54%), tomato" style="flex:1; min-width:200px;">
+          <input type="color" id="pick" value="#2563eb" aria-label="Pick a colour" style="width:56px; height:44px; border:0; background:none; cursor:pointer;">
+          <input class="tl-input" id="any" spellcheck="false" placeholder="#2563EB, rgb(37 99 235), hsl(221 83% 53%), tomato" style="flex:1; min-width:200px;">
         </div>
         <div class="tl-swatch" id="sw">Aa</div>
         <div class="tl-table-wrap tl-mt"><table class="tl-table"><tbody id="vals"></tbody></table></div>
@@ -99,7 +99,7 @@
         <h2>Contrast checker (WCAG)</h2>
         <div class="tl-row">
           <label class="tl-field"><span>Text colour</span><div class="jp-bar" style="margin:0;"><input type="color" id="fgPick" value="#ffffff" aria-label="Text colour"><input class="tl-input" id="fg" value="#FFFFFF" spellcheck="false" style="flex:1;"></div></label>
-          <label class="tl-field"><span>Background</span><div class="jp-bar" style="margin:0;"><input type="color" id="bgPick" value="#ee4a23" aria-label="Background colour"><input class="tl-input" id="bg" value="#EE4A23" spellcheck="false" style="flex:1;"></div></label>
+          <label class="tl-field"><span>Background</span><div class="jp-bar" style="margin:0;"><input type="color" id="bgPick" value="#2563eb" aria-label="Background colour"><input class="tl-input" id="bg" value="#2563EB" spellcheck="false" style="flex:1;"></div></label>
         </div>
         <div class="tl-swatch tl-mt" id="pair" style="height:auto; padding:22px; display:block; text-align:left;">
           <div style="font:700 1.5rem var(--display);">Large heading text</div>
@@ -129,7 +129,7 @@
 <script>
 (function () {
   'use strict';
-  var T = AJT, $ = T.$, cur = { r: 238, g: 74, b: 35, a: 1 };
+  var T = AJT, $ = T.$, cur = { r: 37, g: 99, b: 235, a: 1 };
 
   // Parse any CSS colour by letting the browser do it on a 1x1 canvas
   var cx = document.createElement('canvas').getContext('2d', { willReadFrequently: true });

@@ -270,9 +270,9 @@
   }
 
   var SAMPLE = [
-    { name: 'Binu', city: 'Townsville', address: { state: 'QLD', country: 'Australia' }, skills: ['JavaScript', 'SQL'], active: true, followers: 547000 },
-    { name: 'Anu', city: 'Dubai', address: { state: 'Dubai', country: 'UAE' }, skills: ['Python'], active: false, followers: 1200 },
-    { name: 'Rahul, K', city: 'Kochi', address: { state: 'Kerala', country: 'India' }, skills: [], active: true, followers: 98 }
+    { id: 1, username: 'alice_dev', role: 'admin', profile: { language: 'TypeScript', editor: 'VS Code' }, tags: ['backend', 'api'], active: true, commits: 1284 },
+    { id: 2, username: 'bob.ops', role: 'devops', profile: { language: 'Go', editor: 'Vim' }, tags: ['infra'], active: false, commits: 342 },
+    { id: 3, username: 'carol, qa', role: 'tester', profile: { language: 'Python', editor: 'PyCharm' }, tags: [], active: true, commits: 97 }
   ];
 
   T.onInput([inp], convert, 300);

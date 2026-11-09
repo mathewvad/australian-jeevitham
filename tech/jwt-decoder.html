@@ -201,16 +201,16 @@
     }, function () { o.innerHTML = '<span class="tl-pill err">Could not run the check</span>'; });
   });
 
-  // Sample: HS256 with secret "australian-jeevitham", expires in 2 hours
+  // Sample: HS256 with secret "your-256-bit-secret", expires in 2 hours
   $('sample').addEventListener('click', function () {
     var b = function (o) { return T.bytesToB64(new TextEncoder().encode(JSON.stringify(o))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); };
     var now = Math.floor(Date.now() / 1000);
-    var head = b({ alg: 'HS256', typ: 'JWT' }), body = b({ sub: '1234567890', name: 'Binu Vadakkedath', role: 'admin', iat: now, exp: now + 7200 });
-    crypto.subtle.importKey('raw', new TextEncoder().encode('australian-jeevitham'), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+    var head = b({ alg: 'HS256', typ: 'JWT' }), body = b({ sub: 'user_8f3a2c', name: 'Test User', role: 'admin', scope: 'read:items write:items', iat: now, exp: now + 7200 });
+    crypto.subtle.importKey('raw', new TextEncoder().encode('your-256-bit-secret'), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
       .then(function (k) { return crypto.subtle.sign('HMAC', k, new TextEncoder().encode(head + '.' + body)); })
       .then(function (sig) {
         $('tok').value = head + '.' + body + '.' + T.bytesToB64(new Uint8Array(sig)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-        $('secret').value = 'australian-jeevitham'; run();
+        $('secret').value = 'your-256-bit-secret'; run();
       });
   });
   $('clear').addEventListener('click', function () { $('tok').value = ''; $('secret').value = ''; run(); $('tok').focus(); });

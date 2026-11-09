@@ -13,20 +13,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Unix Timestamp Converter &amp; Time Zones | Australian Jeevitham Tech</title>
-  <meta name="description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC, Australia, India, the Gulf and other time zones. Runs in your browser.">
+  <meta name="description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC and time zones around the world. Runs in your browser.">
   <link rel="canonical" href="https://www.australianjeevitham.com/tech/timestamp-converter.html">
   <link rel="icon" type="image/png" href="../images/favicon.png">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Australian Jeevitham Tech">
   <meta property="og:title" content="Unix Timestamp Converter &amp; Time Zones | Australian Jeevitham Tech">
-  <meta property="og:description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC, Australia, India, the Gulf and other time zones. Runs in your browser.">
+  <meta property="og:description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC and time zones around the world. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/timestamp-converter.html">
   <meta property="og:locale" content="en_AU">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Unix Timestamp Converter &amp; Time Zones | Australian Jeevitham Tech">
-  <meta name="twitter:description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC, Australia, India, the Gulf and other time zones. Runs in your browser.">
+  <meta name="twitter:description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC and time zones around the world. Runs in your browser.">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -42,7 +42,7 @@
   "url": "https://www.australianjeevitham.com/tech/timestamp-converter.html",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Any (runs in the web browser)",
-  "description": "Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC, Australia, India, the Gulf and other time zones. Runs in your browser.",
+  "description": "Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC and time zones around the world. Runs in your browser.",
   "isAccessibleForFree": true,
   "offers": {
     "@type": "Offer",
@@ -78,7 +78,7 @@
   <div class="wrap">
     <p class="t-crumb"><a href="./">Tech</a> / Timestamp Converter</p>
     <h1>Timestamp <span class="hl">Converter</span></h1>
-    <p>Convert Unix time to readable dates and back, and see the same moment across time zones - including Australia, India and the Gulf.</p>
+    <p>Convert Unix time to readable dates and back, and see the same moment across time zones around the world.</p>
   </div>
 </section>
 
@@ -139,7 +139,7 @@
   'use strict';
   var T = AJT, $ = T.$, moment = new Date();
   var LOCAL = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-  var ZONES = ['UTC', 'Australia/Brisbane', 'Australia/Sydney', 'Australia/Perth', 'Asia/Kolkata', 'Asia/Dubai', 'Europe/London', 'America/New_York'];
+  var ZONES = ['UTC', 'America/Los_Angeles', 'America/New_York', 'Europe/London', 'Europe/Berlin', 'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo', 'Australia/Sydney'];
   if (ZONES.indexOf(LOCAL) < 0) ZONES.splice(1, 0, LOCAL);
   var ALL = (Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : []).slice();
   ZONES.forEach(function (z) { if (ALL.indexOf(z) < 0) ALL.push(z); }); // e.g. Asia/Kolkata is listed as Asia/Calcutta in some browsers

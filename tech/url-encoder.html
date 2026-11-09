@@ -100,15 +100,15 @@
         <button type="button" class="jp-btn" id="clear">Clear</button>
       </div>
       <div class="tl-row">
-        <label class="tl-field"><span>Plain text</span><textarea class="tl-text wrap short" id="plain" spellcheck="false" placeholder="e.g. jobs in Townsville & Cairns"></textarea></label>
-        <label class="tl-field"><span>Encoded</span><textarea class="tl-text wrap short" id="coded" spellcheck="false" placeholder="e.g. jobs%20in%20Townsville%20%26%20Cairns"></textarea></label>
+        <label class="tl-field"><span>Plain text</span><textarea class="tl-text wrap short" id="plain" spellcheck="false" placeholder="e.g. unit tests & filters=on"></textarea></label>
+        <label class="tl-field"><span>Encoded</span><textarea class="tl-text wrap short" id="coded" spellcheck="false" placeholder="e.g. unit%20tests%20%26%20filters%3Don"></textarea></label>
       </div>
       <div class="jp-status" id="status" role="status">Type in either box to encode or decode.</div>
     </div>
 
     <div class="tl-card tl-mt">
       <h2>URL parser</h2>
-      <label class="tl-field"><span>URL</span><input class="tl-input" id="url" spellcheck="false" placeholder="https://www.example.com:8080/path/page?city=Townsville&amp;tag=jobs&amp;tag=it#top"></label>
+      <label class="tl-field"><span>URL</span><input class="tl-input" id="url" spellcheck="false" placeholder="https://api.example.com:8080/v1/items?page=2&amp;sort=desc&amp;tag=json#results"></label>
       <div id="parts" class="tl-mt"></div>
       <div class="tl-mt" id="paramsWrap" hidden>
         <span class="tl-lbl">Query parameters</span>
@@ -176,7 +176,7 @@
   }
   T.onInput([$('url')], parse, 150);
   document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Copied'); });
-  $('url').value = 'https://www.australianjeevitham.com/tech/url-encoder.html?city=Townsville&tag=jobs&tag=it%20support&q=caf%C3%A9#top';
+  $('url').value = 'https://api.example.com/v1/search?q=unit%20tests&lang=en&tag=api&tag=rest&price=%E2%82%AC10#results';
   parse();
 })();
 </script>

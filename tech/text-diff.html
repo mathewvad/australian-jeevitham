@@ -222,8 +222,8 @@
   $('swap').addEventListener('click', function () { var t = $('a').value; $('a').value = $('b').value; $('b').value = t; run(); });
   $('clear').addEventListener('click', function () { $('a').value = ''; $('b').value = ''; run(); $('a').focus(); });
   $('sample').addEventListener('click', function () {
-    $('a').value = 'function greet(name) {\n  const message = "Hello, " + name;\n  console.log(message);\n  return message;\n}\n\ngreet("Binu");\n// Townsville, QLD';
-    $('b').value = 'function greet(name, city) {\n  const message = `Hello, ${name} from ${city}`;\n  console.log(message);\n  return message;\n}\n\ngreet("Binu", "Townsville");\n// Townsville, Queensland';
+    $('a').value = 'function calculateTotal(items) {\n  let total = 0;\n  for (let i = 0; i < items.length; i++) {\n    total += items[i].price;\n  }\n  return total;\n}\n\nconsole.log(calculateTotal(cart));';
+    $('b').value = 'function calculateTotal(items, taxRate = 0) {\n  let total = 0;\n  for (const item of items) {\n    total += item.price;\n  }\n  return total * (1 + taxRate);\n}\n\nconsole.log(calculateTotal(cart, 0.1));';
     run();
   });
 })();

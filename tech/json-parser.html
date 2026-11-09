@@ -106,7 +106,7 @@
     <div class="jp-grid">
       <div class="jp-panel">
         <div class="jp-head"><label for="input">Input</label><span id="inSize">0 B</span></div>
-        <textarea class="jp-area" id="input" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder='Paste JSON here, e.g. {"name": "Binu", "city": "Townsville"}'></textarea>
+        <textarea class="jp-area" id="input" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder='Paste JSON here, e.g. {"id": 42, "status": "active"}'></textarea>
       </div>
       <div class="jp-panel">
         <div class="jp-head">
@@ -147,16 +147,17 @@
   var lastText = '', lastValue, lastOk = false, view = 'code', timer;
 
   var SAMPLE = {
-    channel: 'Australian Jeevitham',
-    creator: { name: 'Binu Vadakkedath', city: 'Townsville', state: 'QLD' },
-    languages: ['Malayalam', 'English'],
-    followers: 547000,
-    verified: true,
-    guides: [
-      { title: 'Find Jobs in Australia', url: 'jobs-in-australia.html', year: 2026 },
-      { title: 'PR Points Guide', url: 'pr-points-calculator-australia.html', year: 2026 }
+    service: 'api-gateway',
+    version: '2.4.1',
+    environment: { name: 'staging', region: 'eu-west-1', debug: false },
+    features: ['auth', 'rate-limit', 'caching'],
+    maxConnections: 512,
+    healthy: true,
+    endpoints: [
+      { method: 'GET', path: '/v1/users', timeoutMs: 3000 },
+      { method: 'POST', path: '/v1/orders', timeoutMs: 5000 }
     ],
-    nextVideo: null
+    lastDeploy: null
   };
 
   function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }

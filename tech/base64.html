@@ -78,7 +78,7 @@
   <div class="wrap">
     <p class="t-crumb"><a href="./">Tech</a> / Base64 Encoder / Decoder</p>
     <h1>Base64 <span class="hl">Encode</span> &amp; Decode</h1>
-    <p>Encode and decode Base64 for text (full Unicode, including Malayalam) and files. Make image data URLs or turn Base64 back into a file - all in your browser.</p>
+    <p>Encode and decode Base64 for text (full Unicode - any language and emoji) and files. Make image data URLs or turn Base64 back into a file - all in your browser.</p>
   </div>
 </section>
 
@@ -95,12 +95,12 @@
         <button type="button" class="jp-btn" id="clear">Clear</button>
       </div>
       <div class="tl-row">
-        <label class="tl-field"><span>Plain text</span><textarea class="tl-text wrap" id="plain" spellcheck="false" placeholder="Type or paste text - any language works, e.g. ഓസ്‌ട്രേലിയൻ ജീവിതം"></textarea>
+        <label class="tl-field"><span>Plain text</span><textarea class="tl-text wrap" id="plain" spellcheck="false" placeholder="Type or paste text - any language works, e.g. Hello, 世界 👋"></textarea>
           <button type="button" class="tl-copy" data-copy="plain" style="align-self:flex-start;">Copy text</button></label>
         <label class="tl-field"><span>Base64</span><textarea class="tl-text wrap" id="b64" spellcheck="false" placeholder="Paste Base64 here to decode it"></textarea>
           <button type="button" class="tl-copy" data-copy="b64" style="align-self:flex-start;">Copy Base64</button></label>
       </div>
-      <div class="jp-status" id="status" role="status">Type in either box. Text is encoded as UTF-8, so Malayalam, Hindi, Tamil and emoji all work.</div>
+      <div class="jp-status" id="status" role="status">Type in either box. Text is encoded as UTF-8, so every language and emoji works.</div>
     </div>
 
     <div class="tl-row tl-mt">
