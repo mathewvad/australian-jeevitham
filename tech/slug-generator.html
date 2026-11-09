@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Slug Generator | Australian Jeevitham Tech</title>
+  <meta name="description" content="Turn titles into clean URL slugs. Removes accents and punctuation, with a choice of separator, length limit and bulk conversion. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/slug-generator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="URL Slug Generator | Australian Jeevitham Tech">
+  <meta property="og:description" content="Turn titles into clean URL slugs. Removes accents and punctuation, with a choice of separator, length limit and bulk conversion. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/slug-generator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="URL Slug Generator | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Turn titles into clean URL slugs. Removes accents and punctuation, with a choice of separator, length limit and bulk conversion. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "URL Slug Generator",
+  "url": "https://www.australianjeevitham.com/tech/slug-generator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Turn titles into clean URL slugs. Removes accents and punctuation, with a choice of separator, length limit and bulk conversion. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / URL Slug Generator</p>
+    <h1>URL <span class="hl">Slug</span> Generator</h1>
+    <p>Turn a title into a clean, readable URL slug. Paste several titles to convert them all at once.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Titles to slugs</h2>
+      <div class="jp-bar">
+        <label class="jp-check" for="sep">Separator
+          <select class="jp-select" id="sep">
+            <option value="-" selected>Hyphen ( - )</option>
+            <option value="_">Underscore ( _ )</option>
+            <option value=".">Dot ( . )</option>
+          </select>
+        </label>
+        <label class="jp-check"><input type="checkbox" id="lower" checked> Lower case</label>
+        <label class="jp-check"><input type="checkbox" id="stop"> Drop small words (a, the, of…)</label>
+        <label class="jp-check" for="max">Max length <input class="tl-input" type="number" id="max" min="0" max="500" value="0" style="width:90px;"></label>
+        <button type="button" class="jp-btn" id="clear">Clear</button>
+      </div>
+      <div class="tl-row">
+        <label class="tl-field"><span>Text (one title per line)</span><textarea class="tl-text wrap" id="in" spellcheck="false" placeholder="10 Tips for Faster API Responses" style="word-break:normal;"></textarea></label>
+        <label class="tl-field"><span>Slugs</span><textarea class="tl-text" id="out" spellcheck="false" readonly></textarea></label>
+      </div>
+      <div class="jp-status" id="status" role="status">Type a title to turn it into a URL slug.</div>
+      <div class="jp-bar tl-mt">
+        <button type="button" class="jp-btn primary" id="copy">Copy slugs</button>
+      </div>
+      <span class="tl-lbl">Looks like</span>
+      <div class="tl-out" id="url" style="margin-top:8px;"></div>
+      <p class="tl-note">Accents are removed (é becomes e), "&amp;" becomes "and", and punctuation is dropped. Letters from other scripts are kept. Max length 0 means no limit; longer slugs are cut at a whole word.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status');
+  var STOP = { a: 1, an: 1, the: 1, and: 1, or: 1, but: 1, of: 1, to: 1, 'in': 1, on: 1, 'for': 1, 'with': 1, at: 1, by: 1, is: 1, are: 1, as: 1, from: 1 };
+  var SPLIT;
+  try { SPLIT = new RegExp('[^\\p{L}\\p{N}]+', 'u'); } catch (e) { SPLIT = /[^A-Za-z0-9À-￿]+/; }
+
+  function slug(s) {
+    var sep = $('sep').value, max = parseInt($('max').value, 10) || 0;
+    s = s.normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/&/g, ' and ').replace(/['’‘]/g, '');
+    if ($('lower').checked) s = s.toLowerCase();
+    var parts = s.split(SPLIT).filter(Boolean);
+    if ($('stop').checked) { var kept = parts.filter(function (w) { return !STOP[w.toLowerCase()]; }); if (kept.length) parts = kept; }
+    var out = parts.join(sep);
+    if (max > 0 && out.length > max) {
+      var cut = out.slice(0, max), k = cut.lastIndexOf(sep);
+      out = out.charAt(max) === sep || k < 1 ? cut : cut.slice(0, k);
+      while (out.slice(-1) === sep) out = out.slice(0, -1);
+    }
+    return out;
+  }
+  function run() {
+    var lines = $('in').value.split('\n'), res = lines.map(function (l) { return l.trim() ? slug(l) : ''; });
+    $('out').value = res.join('\n');
+    var first = res.filter(Boolean)[0];
+    $('url').textContent = first ? 'https://example.com/blog/' + first : '';
+    var n = res.filter(Boolean).length;
+    T.status(st, n ? 'ok' : '', n ? '✓ ' + n + ' slug' + (n === 1 ? '' : 's') + (n === 1 ? ' (' + first.length + ' characters)' : '') : 'Type a title to turn it into a URL slug.');
+  }
+  T.onInput([$('in'), $('max')], run, 100);
+  ['sep', 'lower', 'stop'].forEach(function (id) { $(id).addEventListener('change', run); });
+  $('copy').addEventListener('click', function () { T.copy($('out').value, 'Copied'); });
+  $('clear').addEventListener('click', function () { $('in').value = ''; run(); $('in').focus(); });
+  $('in').value = '10 Tips for Faster API Responses (2026 Edition)\nWhat\'s New in HTTP/3 & QUIC?\nDéjà Vu: Caching Strategies, Explained';
+  run();
+})();
+</script>
+</body>
+</html>

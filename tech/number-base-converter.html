@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Number Base Converter - Binary, Hex, Decimal &amp; Octal | Australian Jeevitham Tech</title>
+  <meta name="description" content="Convert numbers between binary, octal, decimal, hexadecimal and any base from 2 to 36. Handles very large and negative numbers. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/number-base-converter.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Number Base Converter - Binary, Hex, Decimal &amp; Octal | Australian Jeevitham Tech">
+  <meta property="og:description" content="Convert numbers between binary, octal, decimal, hexadecimal and any base from 2 to 36. Handles very large and negative numbers. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/number-base-converter.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Number Base Converter - Binary, Hex, Decimal &amp; Octal | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Convert numbers between binary, octal, decimal, hexadecimal and any base from 2 to 36. Handles very large and negative numbers. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Number Base Converter - Binary, Hex, Decimal & Octal",
+  "url": "https://www.australianjeevitham.com/tech/number-base-converter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Convert numbers between binary, octal, decimal, hexadecimal and any base from 2 to 36. Handles very large and negative numbers. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Number Base Converter</p>
+    <h1>Number <span class="hl">Base</span> Converter</h1>
+    <p>Convert a number between binary, octal, decimal, hex and any base up to 36, with grouped bits and two&#x27;s complement for negative values.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Type in any box</h2>
+      <div class="tl-row">
+        <label class="tl-field"><span>Decimal (base 10)</span><input class="tl-input" id="b10" data-base="10" spellcheck="false" autocomplete="off" placeholder="255"></label>
+        <label class="tl-field"><span>Hexadecimal (base 16)</span><input class="tl-input" id="b16" data-base="16" spellcheck="false" autocomplete="off" placeholder="FF"></label>
+        <label class="tl-field"><span>Binary (base 2)</span><input class="tl-input" id="b2" data-base="2" spellcheck="false" autocomplete="off" placeholder="11111111"></label>
+        <label class="tl-field"><span>Octal (base 8)</span><input class="tl-input" id="b8" data-base="8" spellcheck="false" autocomplete="off" placeholder="377"></label>
+      </div>
+      <div class="tl-row tl-mt">
+        <label class="tl-field"><span>Any base</span>
+          <select class="jp-select" id="base"></select>
+        </label>
+        <label class="tl-field"><span>Value in that base</span><input class="tl-input" id="bx" spellcheck="false" autocomplete="off"></label>
+      </div>
+      <div class="jp-bar tl-mt">
+        <button type="button" class="jp-btn" id="clear">Clear</button>
+      </div>
+      <div class="jp-status" id="status" role="status">Type a number in any box. Prefixes 0x, 0b and 0o, spaces and underscores are accepted.</div>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Details</h2>
+      <div class="tl-table-wrap"><table class="tl-table"><tbody id="details"><tr><td>Nothing to show yet.</td></tr></tbody></table></div>
+      <p class="tl-note">Whole numbers of any size are supported, including negative numbers.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status');
+  var boxes = [$('b10'), $('b16'), $('b2'), $('b8')];
+  var HINT = 'Type a number in any box. Prefixes 0x, 0b and 0o, spaces and underscores are accepted.';
+  var sel = $('base');
+  for (var b = 2; b <= 36; b++) { var o = document.createElement('option'); o.value = b; o.textContent = 'Base ' + b; sel.appendChild(o); }
+  sel.value = '36';
+
+  function parse(str, base) {
+    var s = str.trim().replace(/[\s_,]/g, ''), neg = false;
+    if (!s) return null;
+    if (s.charAt(0) === '-') { neg = true; s = s.slice(1); } else if (s.charAt(0) === '+') s = s.slice(1);
+    if (base === 16) s = s.replace(/^0x/i, ''); else if (base === 2) s = s.replace(/^0b/i, ''); else if (base === 8) s = s.replace(/^0o/i, '');
+    if (!s) throw new Error('Type at least one digit');
+    var B = BigInt(base), v = BigInt(0);
+    for (var i = 0; i < s.length; i++) {
+      var d = parseInt(s.charAt(i), 36);
+      if (isNaN(d) || d >= base) throw new Error('"' + s.charAt(i) + '" is not a digit in base ' + base);
+      v = v * B + BigInt(d);
+    }
+    return neg ? -v : v;
+  }
+  function group(s, n) {
+    var out = [];
+    for (var i = s.length; i > 0; i -= n) out.unshift(s.slice(Math.max(0, i - n), i));
+    return out.join(' ');
+  }
+  function row(k, v, copy) {
+    return '<tr><th scope="row" style="width:210px;">' + k + '</th><td><code>' + T.esc(v) + '</code></td><td style="width:60px;">' + (copy ? '<button type="button" class="tl-copy" data-v="' + T.esc(copy) + '">Copy</button>' : '') + '</td></tr>';
+  }
+  function show(v, from) {
+    boxes.forEach(function (el) { if (el !== from) el.value = v.toString(+el.getAttribute('data-base')).toUpperCase(); });
+    if (from !== $('bx')) $('bx').value = v.toString(+sel.value).toUpperCase();
+    var zero = BigInt(0), abs = v < zero ? -v : v, bin = abs.toString(2), bits = abs === zero ? 1 : bin.length;
+    var html = row('Bits needed', bits + (v < zero ? ' (plus a sign bit)' : ''));
+    html += row('Bytes needed', String(Math.ceil((bits + (v < zero ? 1 : 0)) / 8)));
+    var padded = bin; while (padded.length % 8) padded = '0' + padded;
+    html += row('Binary, grouped', (v < zero ? '-' : '') + group(padded, 4), padded);
+    html += row('Hex, grouped', (v < zero ? '-' : '') + group(abs.toString(16).toUpperCase(), 4), '0x' + abs.toString(16).toUpperCase());
+    html += row('With digit separators', group(abs.toString(10), 3).replace(/ /g, ','));
+    if (v < zero) {
+      [8, 16, 32, 64].some(function (w) {
+        var lim = BigInt(1) << BigInt(w - 1);
+        if (abs > lim) return false;
+        var tc = ((BigInt(1) << BigInt(w)) + v).toString(2);
+        while (tc.length < w) tc = '0' + tc;
+        html += row("Two's complement (" + w + '-bit)', group(tc, 4), tc);
+        html += row("Two's complement, hex", '0x' + BigInt('0b' + tc).toString(16).toUpperCase(), '0x' + BigInt('0b' + tc).toString(16).toUpperCase());
+        return true;
+      });
+    } else if (v >= BigInt(32) && v <= BigInt(0x10FFFF) && !(v >= BigInt(0xD800) && v <= BigInt(0xDFFF)) && !(v >= BigInt(127) && v < BigInt(160))) {
+      var cp = Number(v), hex = cp.toString(16).toUpperCase();
+      while (hex.length < 4) hex = '0' + hex;
+      html += row('As a Unicode character', String.fromCodePoint(cp) + '  (U+' + hex + ')', String.fromCodePoint(cp));
+    }
+    $('details').innerHTML = html;
+    T.status(st, 'ok', '✓ ' + T.esc(v.toString(10).length > 40 ? v.toString(10).slice(0, 40) + '…' : v.toString(10)) + ' in decimal');
+  }
+  function run(el, base) {
+    try {
+      var v = parse(el.value, base);
+      if (v === null) { boxes.concat($('bx')).forEach(function (x) { if (x !== el) x.value = ''; }); $('details').innerHTML = '<tr><td>Nothing to show yet.</td></tr>'; T.status(st, '', HINT); return; }
+      show(v, el);
+    } catch (e) { T.status(st, 'err', '✗ ' + T.esc(e.message)); }
+  }
+  boxes.forEach(function (el) { el.addEventListener('input', function () { run(el, +el.getAttribute('data-base')); }); });
+  $('bx').addEventListener('input', function () { run($('bx'), +sel.value); });
+  sel.addEventListener('change', function () { if ($('b10').value) run($('b10'), 10); });
+  $('clear').addEventListener('click', function () { $('b10').value = ''; run($('b10'), 10); $('b10').focus(); });
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Copied'); });
+  $('b10').value = '255'; run($('b10'), 10);
+})();
+</script>
+</body>
+</html>

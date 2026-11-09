@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSONPath Tester - Query JSON Online | Australian Jeevitham Tech</title>
+  <meta name="description" content="Test JSONPath expressions against your JSON and see matching values and their paths. Supports filters, slices, wildcards and recursive search. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/jsonpath-tester.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="JSONPath Tester - Query JSON Online | Australian Jeevitham Tech">
+  <meta property="og:description" content="Test JSONPath expressions against your JSON and see matching values and their paths. Supports filters, slices, wildcards and recursive search. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/jsonpath-tester.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="JSONPath Tester - Query JSON Online | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Test JSONPath expressions against your JSON and see matching values and their paths. Supports filters, slices, wildcards and recursive search. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSONPath Tester - Query JSON Online",
+  "url": "https://www.australianjeevitham.com/tech/jsonpath-tester.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Test JSONPath expressions against your JSON and see matching values and their paths. Supports filters, slices, wildcards and recursive search. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / JSONPath Tester</p>
+    <h1>JSONPath <span class="hl">Tester</span></h1>
+    <p>Try a JSONPath expression against your JSON and see every matching value and where it sits in the document.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>JSONPath expression</h2>
+      <label class="tl-field"><span>Path</span><input class="tl-input" id="path" spellcheck="false" autocomplete="off" placeholder="$.services[*].name"></label>
+      <div class="tl-chips tl-mt" id="examples"></div>
+      <div class="jp-status" id="status" role="status">Type a path that starts with $.</div>
+    </div>
+    <div class="jp-grid tl-mt">
+      <div class="jp-panel">
+        <div class="jp-head"><span>JSON input</span></div>
+        <textarea class="jp-area" id="in" spellcheck="false" data-tabs aria-label="JSON input" placeholder="Paste JSON here"></textarea>
+      </div>
+      <div class="jp-panel">
+        <div class="jp-head"><span>Matches</span>
+          <div class="jp-tabs" role="tablist">
+            <button type="button" class="jp-tab" role="tab" id="tabV" aria-selected="true">Values</button>
+            <button type="button" class="jp-tab" role="tab" id="tabP" aria-selected="false">Paths</button>
+          </div>
+        </div>
+        <pre class="jp-out" id="out"></pre>
+      </div>
+    </div>
+    <div class="jp-bar tl-mt">
+      <button type="button" class="jp-btn primary" id="copy">Copy matches</button>
+      <button type="button" class="jp-btn" id="sample">Sample</button>
+    </div>
+    <div class="tl-card tl-mt">
+      <h2>Syntax</h2>
+      <div class="rx-cheat">
+        <div><code>$</code> the whole document</div>
+        <div><code>.name</code> a child by key</div>
+        <div><code>['a b']</code> a key with spaces</div>
+        <div><code>[0]</code> an array item</div>
+        <div><code>[-1]</code> the last item</div>
+        <div><code>[*]</code> every child</div>
+        <div><code>..name</code> search at any depth</div>
+        <div><code>[0:2]</code> a slice (start:end:step)</div>
+        <div><code>[0,2]</code> several items</div>
+        <div><code>[?(@.a &gt; 1)]</code> a filter</div>
+        <div><code>&amp;&amp; || !</code> combine filters</div>
+        <div><code>[?(@.a)]</code> key exists</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), tab = 'v', last = [];
+  var SAMPLE = JSON.stringify({
+    gateway: { name: 'api-gateway', port: 8080, timeout: 30 },
+    services: [
+      { name: 'auth', port: 8001, replicas: 3, tags: ['core', 'public'], healthy: true },
+      { name: 'billing', port: 8002, replicas: 2, tags: ['core'], healthy: true },
+      { name: 'search', port: 8003, replicas: 5, tags: ['public'], healthy: false },
+      { name: 'reports', port: 8004, replicas: 1, tags: [], healthy: true }
+    ]
+  }, null, 2);
+  var EX = ['$.services[*].name', '$..port', '$.services[?(@.replicas > 2)].name', '$.services[?(@.healthy == false)]', '$.services[0:2]', '$.services[-1].tags', "$..[?(@.name == 'auth' || @.port == 8080)]"];
+
+  function isObj(v) { return v !== null && typeof v === 'object'; }
+  function closeBracket(s, i) {
+    var depth = 0, q = null;
+    for (var j = i; j < s.length; j++) {
+      var c = s.charAt(j);
+      if (q) { if (c === '\\') j++; else if (c === q) q = null; continue; }
+      if (c === '"' || c === "'") q = c;
+      else if (c === '[' || c === '(') depth++;
+      else if (c === ']' || c === ')') { depth--; if (depth === 0 && c === ']') return j; }
+    }
+    throw new Error('A [ is never closed');
+  }
+  function splitTop(s) {
+    var out = [], cur = '', q = null;
+    for (var j = 0; j < s.length; j++) {
+      var c = s.charAt(j);
+      if (q) { cur += c; if (c === '\\') { cur += s.charAt(++j); } else if (c === q) q = null; continue; }
+      if (c === '"' || c === "'") { q = c; cur += c; }
+      else if (c === ',') { out.push(cur.trim()); cur = ''; }
+      else cur += c;
+    }
+    out.push(cur.trim());
+    return out;
+  }
+  function unquote(s) { return s.slice(1, -1).replace(/\\(.)/g, '$1'); }
+
+  // ----- filter expressions -----
+  function lex(s) {
+    var toks = [], m, rest = s;
+    var re = /^\s*(?:(&&|\|\||==|!=|<=|>=|<|>|!|\(|\))|('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*")|(-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?)|(true|false|null)\b|([@$](?:\.[A-Za-z_][\w-]*|\[(?:-?\d+|'[^']*'|"[^"]*")\])*))/;
+    while (rest.trim()) {
+      m = re.exec(rest);
+      if (!m) throw new Error('Cannot read the filter near "' + rest.trim().slice(0, 12) + '"');
+      if (m[1]) toks.push({ t: 'op', v: m[1] });
+      else if (m[2]) toks.push({ t: 'lit', v: unquote(m[2]) });
+      else if (m[3]) toks.push({ t: 'lit', v: parseFloat(m[3]) });
+      else if (m[4]) toks.push({ t: 'lit', v: m[4] === 'true' ? true : m[4] === 'false' ? false : null });
+      else {
+        var keys = [], kr = /\.([A-Za-z_][\w-]*)|\[(-?\d+)\]|\[('[^']*'|"[^"]*")\]/g, k;
+        while ((k = kr.exec(m[5]))) keys.push(k[1] !== undefined ? k[1] : k[2] !== undefined ? parseInt(k[2], 10) : unquote(k[3]));
+        toks.push({ t: 'path', root: m[5].charAt(0) === '$', keys: keys });
+      }
+      rest = rest.slice(m[0].length);
+    }
+    return toks;
+  }
+  function parseFilter(s) {
+    var toks = lex(s), i = 0;
+    function peek(v) { return toks[i] && toks[i].t === 'op' && toks[i].v === v; }
+    function or() { var l = and(); while (peek('||')) { i++; l = { t: 'or', l: l, r: and() }; } return l; }
+    function and() { var l = unary(); while (peek('&&')) { i++; l = { t: 'and', l: l, r: unary() }; } return l; }
+    function unary() {
+      if (peek('!')) { i++; return { t: 'not', e: unary() }; }
+      if (peek('(')) { i++; var e = or(); if (!peek(')')) throw new Error('A ( in the filter is never closed'); i++; return e; }
+      var a = toks[i++];
+      if (!a || a.t === 'op') throw new Error('The filter is missing a value');
+      if (toks[i] && toks[i].t === 'op' && /^(==|!=|<=|>=|<|>)$/.test(toks[i].v)) {
+        var op = toks[i++].v, b = toks[i++];
+        if (!b || b.t === 'op') throw new Error('The filter is missing a value after ' + op);
+        return { t: 'cmp', op: op, a: a, b: b };
+      }
+      return { t: 'exists', a: a };
+    }
+    var tree = or();
+    if (i < toks.length) throw new Error('Unexpected "' + toks[i].v + '" in the filter');
+    return tree;
+  }
+  function operand(o, cur, root) {
+    if (o.t === 'lit') return o.v;
+    var v = o.root ? root : cur;
+    for (var j = 0; j < o.keys.length; j++) {
+      var k = o.keys[j];
+      if (k === 'length' && (Array.isArray(v) || typeof v === 'string')) { v = v.length; continue; }
+      if (!isObj(v)) return undefined;
+      if (Array.isArray(v) && typeof k === 'number' && k < 0) k = v.length + k;
+      if (!Object.prototype.hasOwnProperty.call(v, k)) return undefined;
+      v = v[k];
+    }
+    return v;
+  }
+  function test(f, cur, root) {
+    switch (f.t) {
+      case 'or': return test(f.l, cur, root) || test(f.r, cur, root);
+      case 'and': return test(f.l, cur, root) && test(f.r, cur, root);
+      case 'not': return !test(f.e, cur, root);
+      case 'exists': var v = operand(f.a, cur, root); return f.a.t === 'lit' ? !!v : v !== undefined;
+      default:
+        var a = operand(f.a, cur, root), b = operand(f.b, cur, root);
+        if (f.op === '==' || f.op === '!=') {
+          var eq = a !== undefined && b !== undefined && (isObj(a) || isObj(b) ? JSON.stringify(a) === JSON.stringify(b) : a === b);
+          return f.op === '==' ? eq : !eq;
+        }
+        if (typeof a !== typeof b || (typeof a !== 'number' && typeof a !== 'string')) return false;
+        return f.op === '<' ? a < b : f.op === '<=' ? a <= b : f.op === '>' ? a > b : a >= b;
+    }
+  }
+
+  // ----- path -----
+  function parseSel(inner) {
+    if (!inner) throw new Error('Empty [ ]');
+    if (inner.charAt(0) === '?') return [{ t: 'filter', f: parseFilter(inner.slice(1)) }];
+    return splitTop(inner).map(function (p) {
+      var m;
+      if (p === '*') return { t: 'wild' };
+      if (/^'.*'$|^".*"$/.test(p)) return { t: 'name', v: unquote(p) };
+      if (/^-?\d+$/.test(p)) return { t: 'index', v: parseInt(p, 10) };
+      if ((m = /^(-?\d*)\s*:\s*(-?\d*)(?:\s*:\s*(-?\d*))?$/.exec(p))) {
+        var step = m[3] ? parseInt(m[3], 10) : 1;
+        if (step === 0) throw new Error('A slice step cannot be 0');
+        return { t: 'slice', a: m[1] === '' ? null : parseInt(m[1], 10), b: m[2] === '' ? null : parseInt(m[2], 10), s: step };
+      }
+      throw new Error('Cannot read "' + p + '" inside [ ]');
+    });
+  }
+  function compile(path) {
+    var s = path.trim(), i = 1, segs = [];
+    if (s.charAt(0) !== '$') throw new Error('A JSONPath starts with $');
+    while (i < s.length) {
+      var deep = false, c = s.charAt(i);
+      if (c === '.') {
+        if (s.charAt(i + 1) === '.') { deep = true; i += 2; } else i++;
+        c = s.charAt(i);
+        if (c === '*') { segs.push({ deep: deep, sel: [{ t: 'wild' }] }); i++; continue; }
+        if (c !== '[') {
+          var m = /^[^.\[\s]+/.exec(s.slice(i));
+          if (!m) throw new Error('Expected a name after "." at position ' + (i + 1));
+          segs.push({ deep: deep, sel: [{ t: 'name', v: m[0] }] }); i += m[0].length; continue;
+        }
+      }
+      if (c === '[') {
+        var end = closeBracket(s, i);
+        segs.push({ deep: deep, sel: parseSel(s.slice(i + 1, end).trim()) });
+        i = end + 1; continue;
+      }
+      throw new Error('Unexpected "' + c + '" at position ' + (i + 1));
+    }
+    return segs;
+  }
+  function childPath(p, k) { return typeof k === 'number' ? p + '[' + k + ']' : /^[A-Za-z_][\w]*$/.test(k) ? p + '.' + k : p + "['" + String(k).replace(/'/g, "\\'") + "']"; }
+  function children(n) {
+    if (Array.isArray(n.v)) return n.v.map(function (x, k) { return { v: x, p: childPath(n.p, k) }; });
+    if (isObj(n.v)) return Object.keys(n.v).map(function (k) { return { v: n.v[k], p: childPath(n.p, k) }; });
+    return [];
+  }
+  function descend(n, out) { out.push(n); children(n).forEach(function (c) { descend(c, out); }); return out; }
+  function apply(sel, n, root, out) {
+    var v = n.v, k;
+    if (sel.t === 'wild') { children(n).forEach(function (c) { out.push(c); }); return; }
+    if (sel.t === 'filter') { children(n).forEach(function (c) { if (test(sel.f, c.v, root)) out.push(c); }); return; }
+    if (sel.t === 'name') { if (isObj(v) && !Array.isArray(v) && Object.prototype.hasOwnProperty.call(v, sel.v)) out.push({ v: v[sel.v], p: childPath(n.p, sel.v) }); return; }
+    if (!Array.isArray(v)) return;
+    if (sel.t === 'index') { k = sel.v < 0 ? v.length + sel.v : sel.v; if (k >= 0 && k < v.length) out.push({ v: v[k], p: childPath(n.p, k) }); return; }
+    var len = v.length, s = sel.s, a, b;
+    function norm(x) { return x < 0 ? Math.max(len + x, s > 0 ? 0 : -1) : Math.min(x, s > 0 ? len : len - 1); }
+    if (s > 0) { a = sel.a === null ? 0 : norm(sel.a); b = sel.b === null ? len : norm(sel.b); for (k = a; k < b; k += s) out.push({ v: v[k], p: childPath(n.p, k) }); }
+    else { a = sel.a === null ? len - 1 : norm(sel.a); b = sel.b === null ? -1 : norm(sel.b); for (k = a; k > b; k += s) out.push({ v: v[k], p: childPath(n.p, k) }); }
+  }
+  function query(root, path) {
+    var nodes = [{ v: root, p: '$' }];
+    compile(path).forEach(function (seg) {
+      var src = nodes, out = [];
+      if (seg.deep) { src = []; nodes.forEach(function (n) { descend(n, src); }); }
+      src.forEach(function (n) { seg.sel.forEach(function (sel) { apply(sel, n, root, out); }); });
+      nodes = out;
+    });
+    return nodes;
+  }
+
+  function show() {
+    $('out').textContent = !last.length ? '' : tab === 'v' ? JSON.stringify(last.map(function (n) { return n.v; }), null, 2) : last.map(function (n) { return n.p; }).join('\n');
+    $('tabV').setAttribute('aria-selected', tab === 'v'); $('tabP').setAttribute('aria-selected', tab === 'p');
+  }
+  function run() {
+    var src = $('in').value, path = $('path').value;
+    last = [];
+    if (!src.trim() || !path.trim()) { show(); T.status(st, '', 'Type a path that starts with $.'); return; }
+    var data;
+    try { data = JSON.parse(src); } catch (e) { show(); T.status(st, 'err', '✗ The JSON is not valid: ' + T.esc(e.message)); return; }
+    try { last = query(data, path); } catch (e2) { last = []; show(); T.status(st, 'err', '✗ ' + T.esc(e2.message)); return; }
+    show();
+    T.status(st, last.length ? 'ok' : '', last.length ? '✓ ' + last.length + ' match' + (last.length === 1 ? '' : 'es') : 'No matches for this path.');
+  }
+  $('examples').innerHTML = EX.map(function (x) { return '<button type="button" class="tl-copy" data-ex="' + T.esc(x) + '"><code>' + T.esc(x) + '</code></button>'; }).join('');
+  $('examples').addEventListener('click', function (e) { var b = e.target.closest('[data-ex]'); if (b) { $('path').value = b.getAttribute('data-ex'); run(); } });
+  T.onInput([$('in'), $('path')], run, 200);
+  $('tabV').addEventListener('click', function () { tab = 'v'; show(); });
+  $('tabP').addEventListener('click', function () { tab = 'p'; show(); });
+  $('copy').addEventListener('click', function () { T.copy($('out').textContent, 'Copied'); });
+  $('sample').addEventListener('click', function () { $('in').value = SAMPLE; run(); });
+  $('in').value = SAMPLE; $('path').value = EX[0]; run();
+})();
+</script>
+</body>
+</html>

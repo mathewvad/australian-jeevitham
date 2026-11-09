@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IP Subnet &amp; CIDR Calculator (IPv4) | Australian Jeevitham Tech</title>
+  <meta name="description" content="Work out the network, broadcast address, usable host range and mask for any IPv4 CIDR block, and split it into smaller subnets. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/cidr-calculator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="IP Subnet &amp; CIDR Calculator (IPv4) | Australian Jeevitham Tech">
+  <meta property="og:description" content="Work out the network, broadcast address, usable host range and mask for any IPv4 CIDR block, and split it into smaller subnets. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/cidr-calculator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="IP Subnet &amp; CIDR Calculator (IPv4) | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Work out the network, broadcast address, usable host range and mask for any IPv4 CIDR block, and split it into smaller subnets. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "IP Subnet & CIDR Calculator (IPv4)",
+  "url": "https://www.australianjeevitham.com/tech/cidr-calculator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Work out the network, broadcast address, usable host range and mask for any IPv4 CIDR block, and split it into smaller subnets. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / IP Subnet Calculator</p>
+    <h1>IP <span class="hl">Subnet</span> Calculator</h1>
+    <p>Enter an IPv4 address with a prefix to see its network, broadcast address, mask and usable range, then split it into smaller subnets.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Network</h2>
+      <label class="tl-field"><span>IPv4 address with prefix or mask</span><input class="tl-input" id="cidr" spellcheck="false" autocomplete="off" placeholder="10.20.30.40/22 or 10.20.30.40 255.255.252.0"></label>
+      <div class="tl-chips tl-mt" id="presets"></div>
+      <div class="jp-status" id="status" role="status">Type an address such as 10.20.30.40/22.</div>
+    </div>
+
+    <div class="tl-row tl-mt">
+      <div class="tl-card">
+        <h2>Result</h2>
+        <div class="tl-table-wrap"><table class="tl-table"><tbody id="result"><tr><td>Nothing to show yet.</td></tr></tbody></table></div>
+      </div>
+      <div class="tl-card">
+        <h2>Binary</h2>
+        <div class="tl-table-wrap"><table class="tl-table"><tbody id="binary"><tr><td>Nothing to show yet.</td></tr></tbody></table></div>
+        <p class="tl-note">Bold bits are the network part; the rest identify the host.</p>
+        <h2 class="tl-mt">Is an address inside?</h2>
+        <label class="tl-field"><span>Address to check</span><input class="tl-input" id="probe" spellcheck="false" autocomplete="off" placeholder="10.20.31.200"></label>
+        <div class="jp-status" id="probeOut" role="status">Type an address to check it against the network.</div>
+      </div>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Split into smaller subnets</h2>
+      <div class="jp-bar">
+        <label class="jp-check" for="split">New prefix <select class="jp-select" id="split"></select></label>
+        <button type="button" class="jp-btn" id="copysub">Copy list</button>
+      </div>
+      <div class="tl-table-wrap"><table class="tl-table"><thead><tr><th>#</th><th>Subnet</th><th>Usable range</th><th>Broadcast</th><th>Hosts</th></tr></thead><tbody id="subs"></tbody></table></div>
+      <p class="tl-note" id="subnote"></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), cur = null, subText = '';
+  var PRE = ['10.20.30.40/22', '192.168.1.10/24', '172.16.5.4/20', '192.0.2.130/26', '10.0.0.1/30', '100.64.0.1/10'];
+
+  function toInt(s) {
+    var m = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(s.trim());
+    if (!m) throw new Error('"' + s + '" is not an IPv4 address (use four numbers such as 10.20.30.40)');
+    var v = 0;
+    for (var i = 1; i <= 4; i++) { var n = +m[i]; if (n > 255) throw new Error('Each part of the address must be 0 to 255'); v = v * 256 + n; }
+    return v;
+  }
+  function toIp(v) { return [v >>> 24, (v >>> 16) & 255, (v >>> 8) & 255, v & 255].join('.'); }
+  function maskOf(p) { return p === 0 ? 0 : (0xFFFFFFFF << (32 - p)) >>> 0; }
+  function parse(s) {
+    var m = /^\s*(\S+?)\s*(?:\/|\s)\s*(\S+)\s*$/.exec(s), ip, p;
+    if (!m) { toInt(s); throw new Error('Add a prefix such as /24, or a mask such as 255.255.255.0'); }
+    ip = toInt(m[1]);
+    if (/^\d{1,2}$/.test(m[2])) { p = +m[2]; if (p > 32) throw new Error('The prefix must be 0 to 32'); }
+    else {
+      var mk = toInt(m[2]), inv = (~mk) >>> 0;
+      if ((inv & (inv + 1)) !== 0) throw new Error(m[2] + ' is not a valid subnet mask');
+      p = 32; while (inv) { p--; inv = inv >>> 1; }
+    }
+    return net(ip, p);
+  }
+  function net(ip, p) {
+    var mask = maskOf(p), n = (ip & mask) >>> 0, b = (n | (~mask >>> 0)) >>> 0, size = Math.pow(2, 32 - p);
+    return { ip: ip, p: p, mask: mask, net: n, bc: b, size: size, hosts: p === 32 ? 1 : p === 31 ? 2 : size - 2, first: p >= 31 ? n : n + 1, last: p >= 31 ? b : b - 1 };
+  }
+  function inside(ip, base, p) { return ((ip & maskOf(p)) >>> 0) === toInt(base); }
+  function kind(ip) {
+    if (inside(ip, '10.0.0.0', 8) || inside(ip, '172.16.0.0', 12) || inside(ip, '192.168.0.0', 16)) return 'Private (RFC 1918)';
+    if (inside(ip, '127.0.0.0', 8)) return 'Loopback';
+    if (inside(ip, '169.254.0.0', 16)) return 'Link-local';
+    if (inside(ip, '100.64.0.0', 10)) return 'Shared address space (carrier-grade NAT)';
+    if (inside(ip, '192.0.2.0', 24) || inside(ip, '198.51.100.0', 24) || inside(ip, '203.0.113.0', 24)) return 'Documentation / examples';
+    if (inside(ip, '224.0.0.0', 4)) return 'Multicast';
+    if (inside(ip, '240.0.0.0', 4)) return 'Reserved';
+    if (inside(ip, '0.0.0.0', 8)) return 'This network';
+    return 'Public';
+  }
+  function bin(v, p) {
+    var s = ('00000000000000000000000000000000' + v.toString(2)).slice(-32), out = '';
+    for (var i = 0; i < 32; i++) { if (i && i % 8 === 0) out += '.'; out += i < p ? '<b>' + s.charAt(i) + '</b>' : '<span style="color:#9AA5B6">' + s.charAt(i) + '</span>'; }
+    return out;
+  }
+  function row(k, v) { return '<tr><th scope="row" style="width:170px;">' + k + '</th><td><code>' + T.esc(v) + '</code></td><td style="width:60px;"><button type="button" class="tl-copy" data-v="' + T.esc(v) + '">Copy</button></td></tr>'; }
+  function brow(k, v, p) { return '<tr><th scope="row" style="width:110px;">' + k + '</th><td><code>' + bin(v, p) + '</code></td></tr>'; }
+  function num(n) { return n.toLocaleString('en-AU'); }
+
+  function subnets() {
+    if (!cur) { $('subs').innerHTML = ''; $('subnote').textContent = ''; subText = ''; return; }
+    var np = +$('split').value;
+    if (!np || np <= cur.p) { $('subs').innerHTML = '<tr><td colspan="5">A /32 cannot be split any further.</td></tr>'; $('subnote').textContent = ''; subText = ''; return; }
+    var total = Math.pow(2, np - cur.p), step = Math.pow(2, 32 - np), show = Math.min(total, 256), html = '', lines = [];
+    for (var i = 0; i < show; i++) {
+      var s = net(cur.net + i * step, np);
+      html += '<tr><td>' + (i + 1) + '</td><td><code>' + toIp(s.net) + '/' + np + '</code></td><td><code>' + toIp(s.first) + ' - ' + toIp(s.last) + '</code></td><td><code>' + toIp(s.bc) + '</code></td><td>' + num(s.hosts) + '</td></tr>';
+      lines.push(toIp(s.net) + '/' + np);
+    }
+    $('subs').innerHTML = html; subText = lines.join('\n');
+    $('subnote').textContent = num(total) + ' subnet' + (total === 1 ? '' : 's') + ' of /' + np + (total > show ? ' - showing the first ' + show + '.' : '.');
+  }
+  function probe() {
+    var v = $('probe').value.trim(), el = $('probeOut');
+    if (!v || !cur) { T.status(el, '', 'Type an address to check it against the network.'); return; }
+    try {
+      var ip = toInt(v), ok = ip >= cur.net && ip <= cur.bc;
+      T.status(el, ok ? 'ok' : 'err', (ok ? '✓ ' : '✗ ') + T.esc(v) + (ok ? ' is inside ' : ' is outside ') + toIp(cur.net) + '/' + cur.p);
+    } catch (e) { T.status(el, 'err', '✗ ' + T.esc(e.message)); }
+  }
+  function run() {
+    var v = $('cidr').value;
+    cur = null;
+    if (!v.trim()) { $('result').innerHTML = $('binary').innerHTML = '<tr><td>Nothing to show yet.</td></tr>'; T.status(st, '', 'Type an address such as 10.20.30.40/22.'); subnets(); probe(); return; }
+    try { cur = parse(v); } catch (e) { $('result').innerHTML = $('binary').innerHTML = '<tr><td>Nothing to show yet.</td></tr>'; T.status(st, 'err', '✗ ' + T.esc(e.message)); subnets(); probe(); return; }
+    var c = cur;
+    $('result').innerHTML = row('Network', toIp(c.net) + '/' + c.p) + row('Subnet mask', toIp(c.mask)) + row('Wildcard mask', toIp((~c.mask) >>> 0)) +
+      row('Broadcast', toIp(c.bc)) + row('First usable', toIp(c.first)) + row('Last usable', toIp(c.last)) +
+      row('Usable hosts', num(c.hosts)) + row('Total addresses', num(c.size)) + row('Address type', kind(c.ip)) +
+      row('As a number', String(c.ip)) + row('As hex', '0x' + ('00000000' + c.ip.toString(16).toUpperCase()).slice(-8));
+    $('binary').innerHTML = brow('Address', c.ip, c.p) + brow('Mask', c.mask, c.p) + brow('Network', c.net, c.p) + brow('Broadcast', c.bc, c.p);
+    var sel = $('split'), keep = +sel.value, html = '';
+    for (var p = c.p + 1; p <= 32; p++) html += '<option value="' + p + '">/' + p + ' (' + num(Math.pow(2, p - c.p)) + ' subnets)</option>';
+    sel.innerHTML = html;
+    if (c.p < 32) sel.value = String(keep > c.p ? keep : Math.min(32, c.p + 2));
+    T.status(st, 'ok', '✓ ' + toIp(c.net) + '/' + c.p + ' - ' + num(c.hosts) + ' usable host' + (c.hosts === 1 ? '' : 's') + ', ' + toIp(c.first) + ' to ' + toIp(c.last));
+    subnets(); probe();
+  }
+  $('presets').innerHTML = PRE.map(function (x) { return '<button type="button" class="tl-copy" data-ex="' + x + '"><code>' + x + '</code></button>'; }).join('');
+  $('presets').addEventListener('click', function (e) { var b = e.target.closest('[data-ex]'); if (b) { $('cidr').value = b.getAttribute('data-ex'); run(); } });
+  T.onInput([$('cidr')], run, 150);
+  T.onInput([$('probe')], probe, 150);
+  $('split').addEventListener('change', subnets);
+  $('copysub').addEventListener('click', function () { T.copy(subText, 'Subnet list copied'); });
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Copied'); });
+  $('cidr').value = PRE[0]; $('probe').value = '10.20.31.200'; run();
+})();
+</script>
+</body>
+</html>

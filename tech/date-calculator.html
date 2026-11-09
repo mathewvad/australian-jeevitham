@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Date Difference &amp; Duration Calculator | Australian Jeevitham Tech</title>
+  <meta name="description" content="Find the time between two dates in years, months, days, working days, hours and seconds, or add and subtract time from a date. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/date-calculator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Date Difference &amp; Duration Calculator | Australian Jeevitham Tech">
+  <meta property="og:description" content="Find the time between two dates in years, months, days, working days, hours and seconds, or add and subtract time from a date. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/date-calculator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Date Difference &amp; Duration Calculator | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Find the time between two dates in years, months, days, working days, hours and seconds, or add and subtract time from a date. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Date Difference & Duration Calculator",
+  "url": "https://www.australianjeevitham.com/tech/date-calculator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Find the time between two dates in years, months, days, working days, hours and seconds, or add and subtract time from a date. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Date Difference Calculator</p>
+    <h1>Date <span class="hl">Difference</span> Calculator</h1>
+    <p>Work out the time between two dates, including working days, or add and subtract days, weeks and months from a date.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Time between two dates</h2>
+      <div class="tl-row">
+        <label class="tl-field"><span>From</span><input class="tl-input" type="datetime-local" id="from"></label>
+        <label class="tl-field"><span>To</span><input class="tl-input" type="datetime-local" id="to"></label>
+      </div>
+      <div class="jp-bar tl-mt">
+        <button type="button" class="jp-btn" id="fromNow">From = now</button>
+        <button type="button" class="jp-btn" id="toNow">To = now</button>
+        <button type="button" class="jp-btn" id="swap">Swap</button>
+      </div>
+      <div class="jp-status" id="status" role="status">Choose two dates.</div>
+      <div class="tl-table-wrap tl-mt"><table class="tl-table"><tbody id="diff"><tr><td>Nothing to show yet.</td></tr></tbody></table></div>
+      <p class="tl-note">Working days count Monday to Friday and do not allow for public holidays. Times use your device's time zone, including daylight saving changes.</p>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Add or subtract time</h2>
+      <div class="tl-row">
+        <label class="tl-field"><span>Start</span><input class="tl-input" type="datetime-local" id="start"></label>
+        <label class="tl-field"><span>Direction</span>
+          <select class="jp-select" id="dir"><option value="1" selected>Add (+)</option><option value="-1">Subtract (-)</option></select>
+        </label>
+      </div>
+      <div class="tl-row three tl-mt">
+        <label class="tl-field"><span>Years</span><input class="tl-input" type="number" id="ay" min="0" value="0"></label>
+        <label class="tl-field"><span>Months</span><input class="tl-input" type="number" id="amo" min="0" value="0"></label>
+        <label class="tl-field"><span>Weeks</span><input class="tl-input" type="number" id="aw" min="0" value="0"></label>
+        <label class="tl-field"><span>Days</span><input class="tl-input" type="number" id="ad" min="0" value="90"></label>
+        <label class="tl-field"><span>Hours</span><input class="tl-input" type="number" id="ah" min="0" value="0"></label>
+        <label class="tl-field"><span>Minutes</span><input class="tl-input" type="number" id="ami" min="0" value="0"></label>
+      </div>
+      <div class="tl-table-wrap tl-mt"><table class="tl-table"><tbody id="sum"></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status');
+  function two(n) { return ('0' + n).slice(-2); }
+  function toLocal(d) { return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()) + 'T' + two(d.getHours()) + ':' + two(d.getMinutes()); }
+  function read(id) { var v = $(id).value; if (!v) return null; var d = new Date(v); return isNaN(d) ? null : d; }
+  function num(n) { return n.toLocaleString('en-AU'); }
+  function pl(n, w) { return num(n) + ' ' + w + (n === 1 ? '' : 's'); }
+  // add whole months, keeping the day where possible (31 Jan + 1 month = 28/29 Feb)
+  function addMonths(d, n) {
+    var r = new Date(d.getTime()), day = r.getDate();
+    r.setDate(1); r.setMonth(r.getMonth() + n);
+    var last = new Date(r.getFullYear(), r.getMonth() + 1, 0).getDate();
+    r.setDate(Math.min(day, last));
+    return r;
+  }
+  function workdays(a, b) {
+    var s = new Date(a.getFullYear(), a.getMonth(), a.getDate()), e = new Date(b.getFullYear(), b.getMonth(), b.getDate());
+    var days = Math.round((e - s) / 86400000), weeks = Math.floor(days / 7), n = weeks * 5, d = s.getDay();
+    for (var i = 0; i < days % 7; i++) { var w = (d + i) % 7; if (w !== 0 && w !== 6) n++; }
+    return n;
+  }
+  function row(k, v) { return '<tr><th scope="row" style="width:190px;">' + k + '</th><td>' + v + '</td></tr>'; }
+  function crow(k, v) { return '<tr><th scope="row" style="width:190px;">' + k + '</th><td><code>' + T.esc(v) + '</code></td><td style="width:60px;"><button type="button" class="tl-copy" data-v="' + T.esc(v) + '">Copy</button></td></tr>'; }
+
+  function diff() {
+    var a = read('from'), b = read('to');
+    if (!a || !b) { $('diff').innerHTML = '<tr><td>Nothing to show yet.</td></tr>'; T.status(st, '', 'Choose two dates.'); return; }
+    var back = b < a, lo = back ? b : a, hi = back ? a : b;
+    var months = (hi.getFullYear() - lo.getFullYear()) * 12 + hi.getMonth() - lo.getMonth();
+    if (addMonths(lo, months) > hi) months--;
+    var rest = hi - addMonths(lo, months), y = Math.floor(months / 12), mo = months % 12;
+    var d = Math.floor(rest / 86400000), h = Math.floor(rest % 86400000 / 3600000), mi = Math.floor(rest % 3600000 / 60000);
+    var parts = [];
+    if (y) parts.push(pl(y, 'year')); if (mo) parts.push(pl(mo, 'month')); if (d) parts.push(pl(d, 'day')); if (h) parts.push(pl(h, 'hour')); if (mi) parts.push(pl(mi, 'minute'));
+    var ms = hi - lo, totalDays = Math.floor(ms / 86400000);
+    T.status(st, 'ok', '✓ <strong>' + (parts.length ? parts.join(', ') : 'No difference') + '</strong>' + (back ? ' (the "To" date is earlier)' : ''));
+    $('diff').innerHTML = row('Total days', num(totalDays) + (ms % 86400000 ? ' and ' + pl(Math.floor(ms % 86400000 / 3600000), 'hour') : '')) +
+      row('Weeks', pl(Math.floor(totalDays / 7), 'week') + ' and ' + pl(totalDays % 7, 'day')) +
+      row('Working days (Mon-Fri)', num(workdays(lo, hi))) +
+      row('Total hours', num(Math.floor(ms / 3600000))) + row('Total minutes', num(Math.floor(ms / 60000))) + row('Total seconds', num(Math.floor(ms / 1000))) +
+      row('From', lo.toLocaleString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })) +
+      row('To', hi.toLocaleString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }));
+  }
+  function n(id) { return Math.max(0, parseInt($(id).value, 10) || 0); }
+  function sum() {
+    var s = read('start');
+    if (!s) { $('sum').innerHTML = '<tr><td>Choose a start date.</td></tr>'; return; }
+    var k = +$('dir').value, r = addMonths(s, k * (n('ay') * 12 + n('amo')));
+    r.setDate(r.getDate() + k * (n('aw') * 7 + n('ad')));
+    r = new Date(r.getTime() + k * (n('ah') * 3600000 + n('ami') * 60000));
+    if (isNaN(r)) { $('sum').innerHTML = '<tr><td>That date is out of range.</td></tr>'; return; }
+    $('sum').innerHTML = crow('Result', r.toLocaleString('en-AU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })) +
+      crow('ISO 8601 (UTC)', r.toISOString()) + crow('Local date and time', toLocal(r).replace('T', ' ')) + crow('Unix timestamp', String(Math.floor(r.getTime() / 1000)));
+  }
+  ['from', 'to'].forEach(function (id) { $(id).addEventListener('input', diff); $(id).addEventListener('change', diff); });
+  ['start', 'ay', 'amo', 'aw', 'ad', 'ah', 'ami'].forEach(function (id) { $(id).addEventListener('input', sum); });
+  $('start').addEventListener('change', sum); $('dir').addEventListener('change', sum);
+  $('fromNow').addEventListener('click', function () { $('from').value = toLocal(new Date()); diff(); });
+  $('toNow').addEventListener('click', function () { $('to').value = toLocal(new Date()); diff(); });
+  $('swap').addEventListener('click', function () { var v = $('from').value; $('from').value = $('to').value; $('to').value = v; diff(); });
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Copied'); });
+  var now = new Date(); now.setSeconds(0, 0);
+  var jan = new Date(now.getFullYear(), 0, 1, 9, 0);
+  $('from').value = toLocal(jan); $('to').value = toLocal(now); $('start').value = toLocal(now);
+  diff(); sum();
+})();
+</script>
+</body>
+</html>

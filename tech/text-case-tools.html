@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Case Converter &amp; Line Tools | Australian Jeevitham Tech</title>
+  <meta name="description" content="Change text to upper, lower, title, camelCase, snake_case or kebab-case, and sort lines, remove duplicates and count words. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/text-case-tools.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Text Case Converter &amp; Line Tools | Australian Jeevitham Tech">
+  <meta property="og:description" content="Change text to upper, lower, title, camelCase, snake_case or kebab-case, and sort lines, remove duplicates and count words. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/text-case-tools.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Text Case Converter &amp; Line Tools | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Change text to upper, lower, title, camelCase, snake_case or kebab-case, and sort lines, remove duplicates and count words. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Text Case Converter & Line Tools",
+  "url": "https://www.australianjeevitham.com/tech/text-case-tools.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Change text to upper, lower, title, camelCase, snake_case or kebab-case, and sort lines, remove duplicates and count words. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Text Case &amp; Line Tools</p>
+    <h1>Text <span class="hl">Case</span> &amp; Line Tools</h1>
+    <p>Change the case of text, switch between camelCase, snake_case and kebab-case, tidy up lines and count words and characters.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Your text</h2>
+      <textarea class="tl-text wrap" id="txt" spellcheck="false" aria-label="Text to change" placeholder="Type or paste text here" style="min-height:240px; word-break:normal;"></textarea>
+      <div class="jp-status" id="status" role="status"></div>
+
+      <div class="tl-mt"><span class="tl-lbl">Change case</span>
+        <div class="jp-bar" style="margin-top:8px;">
+          <button type="button" class="jp-btn" data-op="upper">UPPER CASE</button>
+          <button type="button" class="jp-btn" data-op="lower">lower case</button>
+          <button type="button" class="jp-btn" data-op="title">Title Case</button>
+          <button type="button" class="jp-btn" data-op="sentence">Sentence case</button>
+        </div>
+      </div>
+      <div><span class="tl-lbl">Code style (each line)</span>
+        <div class="jp-bar" style="margin-top:8px;">
+          <button type="button" class="jp-btn" data-op="camel">camelCase</button>
+          <button type="button" class="jp-btn" data-op="pascal">PascalCase</button>
+          <button type="button" class="jp-btn" data-op="snake">snake_case</button>
+          <button type="button" class="jp-btn" data-op="kebab">kebab-case</button>
+          <button type="button" class="jp-btn" data-op="constant">CONSTANT_CASE</button>
+          <button type="button" class="jp-btn" data-op="dot">dot.case</button>
+        </div>
+      </div>
+      <div><span class="tl-lbl">Lines</span>
+        <div class="jp-bar" style="margin-top:8px;">
+          <button type="button" class="jp-btn" data-op="sort">Sort A-Z</button>
+          <button type="button" class="jp-btn" data-op="sortd">Sort Z-A</button>
+          <button type="button" class="jp-btn" data-op="dedupe">Remove duplicates</button>
+          <button type="button" class="jp-btn" data-op="empty">Remove empty lines</button>
+          <button type="button" class="jp-btn" data-op="trim">Trim spaces</button>
+          <button type="button" class="jp-btn" data-op="reverse">Reverse order</button>
+          <button type="button" class="jp-btn" data-op="number">Number lines</button>
+        </div>
+      </div>
+      <div class="jp-bar">
+        <button type="button" class="jp-btn primary" id="copy">Copy text</button>
+        <button type="button" class="jp-btn" id="undo">Undo</button>
+        <button type="button" class="jp-btn" id="sample">Sample</button>
+        <button type="button" class="jp-btn" id="clear">Clear</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, txt = $('txt'), st = $('status'), history = [];
+  var SAMPLE = 'user account created\nAPI gateway timeout\nuser account created\n  retry policy applied  \n\ncache warmed up\nDeploy pipeline finished\nmaxRetryCount\nHTTPRequestHandler';
+
+  function words(s) {
+    return s.replace(/([a-z0-9])([A-Z])/g, '$1 $2').replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2').split(/[^A-Za-z0-9À-￿]+/).filter(Boolean);
+  }
+  function cap(w) { return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase(); }
+  function eachLine(s, fn) { return s.split('\n').map(function (l) { return l.trim() ? fn(l) : l; }).join('\n'); }
+  var cmp = function (a, b) { return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }); };
+  var OPS = {
+    upper: function (s) { return s.toUpperCase(); },
+    lower: function (s) { return s.toLowerCase(); },
+    title: function (s) { return s.toLowerCase().replace(/(^|[\s\-(\["'\/])([^\s\-(\["'\/])/g, function (_, a, b) { return a + b.toUpperCase(); }); },
+    sentence: function (s) { return s.toLowerCase().replace(/(^\s*|[.!?]\s+|\n\s*)([^\s])/g, function (_, a, b) { return a + b.toUpperCase(); }); },
+    camel: function (s) { return eachLine(s, function (l) { return words(l).map(function (w, i) { return i ? cap(w) : w.toLowerCase(); }).join(''); }); },
+    pascal: function (s) { return eachLine(s, function (l) { return words(l).map(cap).join(''); }); },
+    snake: function (s) { return eachLine(s, function (l) { return words(l).join('_').toLowerCase(); }); },
+    kebab: function (s) { return eachLine(s, function (l) { return words(l).join('-').toLowerCase(); }); },
+    constant: function (s) { return eachLine(s, function (l) { return words(l).join('_').toUpperCase(); }); },
+    dot: function (s) { return eachLine(s, function (l) { return words(l).join('.').toLowerCase(); }); },
+    sort: function (s) { return s.split('\n').sort(cmp).join('\n'); },
+    sortd: function (s) { return s.split('\n').sort(cmp).reverse().join('\n'); },
+    dedupe: function (s) { var seen = {}; return s.split('\n').filter(function (l) { var k = '$' + l; if (seen[k]) return false; seen[k] = 1; return true; }).join('\n'); },
+    empty: function (s) { return s.split('\n').filter(function (l) { return l.trim(); }).join('\n'); },
+    trim: function (s) { return s.split('\n').map(function (l) { return l.trim().replace(/[ \t]{2,}/g, ' '); }).join('\n'); },
+    reverse: function (s) { return s.split('\n').reverse().join('\n'); },
+    number: function (s) { return s.split('\n').map(function (l, i) { return (i + 1) + '. ' + l; }).join('\n'); }
+  };
+  function stats() {
+    var v = txt.value, w = v.trim() ? v.trim().split(/\s+/).length : 0;
+    T.status(st, '', '<div class="jp-stats" style="margin-top:0;"><span>' + Array.from(v).length + ' characters</span><span>' + v.replace(/\s/g, '').length + ' without spaces</span><span>' + w + ' words</span><span>' + (v ? v.split('\n').length : 0) + ' lines</span><span>' + T.bytes(T.size(v)) + '</span></div>');
+  }
+  function set(v) { if (v === txt.value) return; history.push(txt.value); if (history.length > 50) history.shift(); txt.value = v; stats(); }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-op]');
+    if (!b) return;
+    if (!txt.value) { T.toast('Type some text first'); return; }
+    set(OPS[b.getAttribute('data-op')](txt.value.replace(/\r\n?/g, '\n')));
+  });
+  txt.addEventListener('input', stats);
+  $('copy').addEventListener('click', function () { T.copy(txt.value, 'Copied'); });
+  $('undo').addEventListener('click', function () { if (history.length) { txt.value = history.pop(); stats(); } else T.toast('Nothing to undo'); });
+  $('sample').addEventListener('click', function () { set(SAMPLE); });
+  $('clear').addEventListener('click', function () { set(''); txt.focus(); });
+  txt.value = SAMPLE; stats();
+})();
+</script>
+</body>
+</html>

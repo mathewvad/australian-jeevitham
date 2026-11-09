@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Resizer &amp; Compressor - JPEG, PNG, WebP | Australian Jeevitham Tech</title>
+  <meta name="description" content="Resize and compress images in your browser and convert between JPEG, PNG and WebP. Download the result or copy it as a data URL. Nothing is uploaded.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/image-resizer.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Image Resizer &amp; Compressor - JPEG, PNG, WebP | Australian Jeevitham Tech">
+  <meta property="og:description" content="Resize and compress images in your browser and convert between JPEG, PNG and WebP. Download the result or copy it as a data URL. Nothing is uploaded.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/image-resizer.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Image Resizer &amp; Compressor - JPEG, PNG, WebP | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Resize and compress images in your browser and convert between JPEG, PNG and WebP. Download the result or copy it as a data URL. Nothing is uploaded.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Image Resizer & Compressor - JPEG, PNG, WebP",
+  "url": "https://www.australianjeevitham.com/tech/image-resizer.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Resize and compress images in your browser and convert between JPEG, PNG and WebP. Download the result or copy it as a data URL. Nothing is uploaded.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Image Resizer &amp; Compressor</p>
+    <h1>Image <span class="hl">Resizer</span> &amp; Compressor</h1>
+    <p>Make an image smaller in size or in bytes, convert it to JPEG, PNG or WebP, and download it or copy it as a data URL.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-row">
+      <div class="tl-card">
+        <h2>Image</h2>
+        <label class="tl-drop" id="drop" for="file">
+          <strong>Choose an image or drop it here</strong>
+          <span>PNG, JPEG, WebP, GIF or SVG</span>
+          <input type="file" id="file" accept="image/*" style="position:absolute; width:1px; height:1px; opacity:0;">
+        </label>
+        <div class="jp-bar tl-mt"><button type="button" class="jp-btn" id="sample">Try a sample image</button></div>
+        <div class="tl-row">
+          <label class="tl-field"><span>Width (px)</span><input class="tl-input" type="number" id="w" min="1" max="12000"></label>
+          <label class="tl-field"><span>Height (px)</span><input class="tl-input" type="number" id="h" min="1" max="12000"></label>
+        </div>
+        <div class="jp-bar tl-mt">
+          <label class="jp-check"><input type="checkbox" id="lock" checked> Keep proportions</label>
+          <button type="button" class="jp-btn" data-scale="0.5">50%</button>
+          <button type="button" class="jp-btn" data-scale="0.25">25%</button>
+          <button type="button" class="jp-btn" data-scale="1">Original size</button>
+        </div>
+        <div class="tl-row">
+          <label class="tl-field"><span>Format</span>
+            <select class="jp-select" id="fmt">
+              <option value="image/jpeg">JPEG (photos)</option>
+              <option value="image/webp" selected>WebP (smallest)</option>
+              <option value="image/png">PNG (sharp edges, transparency)</option>
+            </select>
+          </label>
+          <label class="tl-field"><span>Quality: <b id="qv">80</b></span><input class="tl-range" type="range" id="q" min="10" max="100" value="80"></label>
+        </div>
+      </div>
+      <div class="tl-card">
+        <h2>Result</h2>
+        <div style="display:grid; place-items:center; min-height:200px; background:var(--sky-3); border:1px solid var(--line); border-radius:14px; padding:10px;">
+          <img id="preview" alt="Resized image preview" style="max-height:340px; display:none;">
+          <span id="ph" style="color:var(--muted); font-weight:600;">The result appears here.</span>
+        </div>
+        <div class="jp-status" id="status" role="status">Choose an image to begin.</div>
+        <div class="jp-bar tl-mt">
+          <button type="button" class="jp-btn primary" id="download">Download</button>
+          <button type="button" class="jp-btn" id="copyurl">Copy data URL</button>
+          <button type="button" class="jp-btn" id="copytag">Copy &lt;img&gt; tag</button>
+        </div>
+      </div>
+    </div>
+    <p class="jp-note">The image is resized inside your browser and never uploaded. Quality applies to JPEG and WebP; PNG is always lossless. JPEG has no transparency, so clear areas turn white.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), img = null, name = 'image', origSize = 0, blob = null, url = '', seq = 0;
+  var EXT = { 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/png': 'png' };
+
+  function setImage(el, fileName, size) {
+    img = el; name = (fileName || 'image').replace(/\.[^.]+$/, ''); origSize = size || 0;
+    $('w').value = img.naturalWidth || img.width; $('h').value = img.naturalHeight || img.height;
+    render();
+  }
+  function load(file) {
+    if (!file) return;
+    if (!/^image\//.test(file.type)) { T.status(st, 'err', '✗ That file is not an image.'); return; }
+    var u = URL.createObjectURL(file), el = new Image();
+    el.onload = function () { setImage(el, file.name, file.size); };
+    el.onerror = function () { URL.revokeObjectURL(u); T.status(st, 'err', '✗ This image could not be opened.'); };
+    el.src = u;
+  }
+  function natural() { return { w: img.naturalWidth || img.width, h: img.naturalHeight || img.height }; }
+  function render() {
+    if (!img) return;
+    var my = ++seq, w = Math.max(1, Math.min(12000, parseInt($('w').value, 10) || 1)), h = Math.max(1, Math.min(12000, parseInt($('h').value, 10) || 1));
+    var type = $('fmt').value, q = +$('q').value / 100, cv = document.createElement('canvas'), ctx = cv.getContext('2d');
+    $('qv').textContent = type === 'image/png' ? 'n/a' : $('q').value;
+    cv.width = w; cv.height = h;
+    if (type === 'image/jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); }
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, 0, 0, w, h);
+    cv.toBlob(function (b) {
+      if (my !== seq) return;
+      if (!b) { T.status(st, 'err', '✗ The image is too large for this browser to process. Try a smaller size.'); return; }
+      blob = b;
+      if (url) URL.revokeObjectURL(url);
+      url = URL.createObjectURL(b);
+      $('preview').src = url; $('preview').style.display = 'block'; $('ph').style.display = 'none';
+      var n = natural(), actual = EXT[b.type] ? b.type : 'image/png';
+      var change = origSize ? ' (' + (b.size <= origSize ? Math.round((1 - b.size / origSize) * 100) + '% smaller' : Math.round((b.size / origSize - 1) * 100) + '% larger') + ')' : '';
+      T.status(st, 'ok', '✓ ' + w + ' × ' + h + ' px ' + EXT[actual].toUpperCase() + ', ' + T.bytes(b.size) + change +
+        '<div class="jp-stats"><span>Original: ' + n.w + ' × ' + n.h + ' px' + (origSize ? ', ' + T.bytes(origSize) : '') + '</span>' + (actual !== type ? '<span>This browser cannot save that format, so PNG was used</span>' : '') + '</div>');
+    }, type, q);
+  }
+  var deb; function later() { clearTimeout(deb); deb = setTimeout(render, 150); }
+  $('w').addEventListener('input', function () { if (img && $('lock').checked) { var n = natural(); $('h').value = Math.max(1, Math.round((parseInt($('w').value, 10) || 1) * n.h / n.w)); } later(); });
+  $('h').addEventListener('input', function () { if (img && $('lock').checked) { var n = natural(); $('w').value = Math.max(1, Math.round((parseInt($('h').value, 10) || 1) * n.w / n.h)); } later(); });
+  $('q').addEventListener('input', later); $('fmt').addEventListener('change', render);
+  $('lock').addEventListener('change', function () { if (img && $('lock').checked) { var n = natural(); $('h').value = Math.max(1, Math.round((parseInt($('w').value, 10) || 1) * n.h / n.w)); render(); } });
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-scale]');
+    if (!b) return;
+    if (!img) { T.toast('Choose an image first'); return; }
+    var n = natural(), s = +b.getAttribute('data-scale');
+    $('w').value = Math.max(1, Math.round(n.w * s)); $('h').value = Math.max(1, Math.round(n.h * s)); render();
+  });
+  $('file').addEventListener('change', function () { load($('file').files[0]); });
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
+  drop.addEventListener('drop', function (e) { load(e.dataTransfer.files[0]); });
+  $('sample').addEventListener('click', function () {
+    var c = document.createElement('canvas'), x = c.getContext('2d');
+    c.width = 1600; c.height = 900;
+    var g = x.createLinearGradient(0, 0, 1600, 900); g.addColorStop(0, '#2563EB'); g.addColorStop(1, '#7C3AED');
+    x.fillStyle = g; x.fillRect(0, 0, 1600, 900);
+    x.fillStyle = 'rgba(255,255,255,.18)';
+    for (var i = 0; i < 12; i++) { x.beginPath(); x.arc(130 + i * 125, 450 + Math.sin(i) * 220, 60 + (i % 4) * 22, 0, Math.PI * 2); x.fill(); }
+    x.fillStyle = '#fff'; x.font = 'bold 96px sans-serif'; x.textAlign = 'center'; x.fillText('Sample 1600 × 900', 800, 480);
+    c.toBlob(function (b) { var el = new Image(); el.onload = function () { setImage(el, 'sample.png', b.size); }; el.src = URL.createObjectURL(b); }, 'image/png');
+  });
+  $('download').addEventListener('click', function () { if (blob) T.download(blob, name + '-' + $('w').value + 'x' + $('h').value + '.' + (EXT[blob.type] || 'png')); else T.toast('Choose an image first'); });
+  function dataUrl(fn) { if (!blob) { T.toast('Choose an image first'); return; } T.readFile(blob, 'dataurl').then(fn); }
+  $('copyurl').addEventListener('click', function () { dataUrl(function (d) { T.copy(d, 'Data URL copied (' + T.bytes(d.length) + ')'); }); });
+  $('copytag').addEventListener('click', function () { dataUrl(function (d) { T.copy('<img src="' + d + '" width="' + $('w').value + '" height="' + $('h').value + '" alt="">', 'Tag copied'); }); });
+})();
+</script>
+</body>
+</html>

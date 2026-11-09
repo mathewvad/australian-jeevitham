@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOTP Generator - Test 2FA Codes | Australian Jeevitham Tech</title>
+  <meta name="description" content="Generate time-based one-time passwords (TOTP, RFC 6238) from a Base32 secret to test two-factor sign-in. SHA-1, SHA-256 and SHA-512. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/totp-generator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="TOTP Generator - Test 2FA Codes | Australian Jeevitham Tech">
+  <meta property="og:description" content="Generate time-based one-time passwords (TOTP, RFC 6238) from a Base32 secret to test two-factor sign-in. SHA-1, SHA-256 and SHA-512. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/totp-generator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="TOTP Generator - Test 2FA Codes | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Generate time-based one-time passwords (TOTP, RFC 6238) from a Base32 secret to test two-factor sign-in. SHA-1, SHA-256 and SHA-512. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "TOTP Generator - Test 2FA Codes",
+  "url": "https://www.australianjeevitham.com/tech/totp-generator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Generate time-based one-time passwords (TOTP, RFC 6238) from a Base32 secret to test two-factor sign-in. SHA-1, SHA-256 and SHA-512. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / TOTP Code Generator</p>
+    <h1>TOTP <span class="hl">Code</span> Generator</h1>
+    <p>Generate the codes an authenticator app would show, from a Base32 secret, to test two-factor sign-in while you build it.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-row">
+      <div class="tl-card">
+        <h2>Settings</h2>
+        <label class="tl-field"><span>Secret key (Base32)</span><input class="tl-input" id="secret" spellcheck="false" autocomplete="off" placeholder="JBSWY3DPEHPK3PXP"></label>
+        <div class="jp-bar tl-mt">
+          <button type="button" class="jp-btn" id="random">New random secret</button>
+        </div>
+        <div class="tl-row three">
+          <label class="tl-field"><span>Digits</span>
+            <select class="jp-select" id="digits"><option value="6" selected>6</option><option value="7">7</option><option value="8">8</option></select>
+          </label>
+          <label class="tl-field"><span>Period (seconds)</span><input class="tl-input" type="number" id="period" min="5" max="300" value="30"></label>
+          <label class="tl-field"><span>Algorithm</span>
+            <select class="jp-select" id="algo"><option value="SHA-1" selected>SHA-1</option><option value="SHA-256">SHA-256</option><option value="SHA-512">SHA-512</option></select>
+          </label>
+        </div>
+        <label class="tl-field tl-mt"><span>Time to use (Unix seconds) - leave empty for now</span><input class="tl-input" id="at" inputmode="numeric" spellcheck="false" autocomplete="off" placeholder="now"></label>
+      </div>
+      <div class="tl-card">
+        <h2>Current code</h2>
+        <div class="tl-big"><span class="tl-code" id="code">------</span></div>
+        <div class="tl-meter tl-mt" aria-hidden="true"><i id="bar"></i></div>
+        <div class="jp-status" id="status" role="status">Enter a Base32 secret.</div>
+        <div class="jp-bar tl-mt">
+          <button type="button" class="jp-btn primary" id="copy">Copy code</button>
+        </div>
+        <div class="tl-table-wrap"><table class="tl-table"><tbody>
+          <tr><th scope="row">Previous</th><td><code id="prev">-</code></td></tr>
+          <tr><th scope="row">Next</th><td><code id="next">-</code></td></tr>
+          <tr><th scope="row">Counter</th><td><code id="counter">-</code></td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Authenticator link</h2>
+      <div class="tl-row">
+        <label class="tl-field"><span>Issuer</span><input class="tl-input" id="issuer" value="Example App" spellcheck="false" autocomplete="off"></label>
+        <label class="tl-field"><span>Account</span><input class="tl-input" id="account" value="alice_dev@example.com" spellcheck="false" autocomplete="off"></label>
+      </div>
+      <div class="tl-out tl-mt" id="uri"></div>
+      <div class="jp-bar tl-mt"><button type="button" class="jp-btn" id="copyuri">Copy link</button></div>
+    </div>
+    <p class="jp-note">Made for testing two-factor sign-in during development. Codes follow RFC 6238 and are worked out in your browser - the secret is never sent or stored. Do not paste the secret of a real account into any website.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), B32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567', seq = 0;
+
+  function b32decode(s) {
+    s = s.replace(/[\s-]/g, '').replace(/=+$/, '').toUpperCase();
+    if (!s) return null;
+    var bits = 0, val = 0, out = [];
+    for (var i = 0; i < s.length; i++) {
+      var k = B32.indexOf(s.charAt(i));
+      if (k < 0) throw new Error('"' + s.charAt(i) + '" is not a Base32 character (use A-Z and 2-7)');
+      val = (val << 5) | k; bits += 5;
+      if (bits >= 8) { bits -= 8; out.push((val >>> bits) & 255); val &= (1 << bits) - 1; }
+    }
+    if (!out.length) throw new Error('The secret is too short');
+    return new Uint8Array(out);
+  }
+  function hotp(key, counter, digits, algo) {
+    var msg = new Uint8Array(8), c = counter;
+    for (var i = 7; i >= 0; i--) { msg[i] = c % 256; c = Math.floor(c / 256); }
+    return crypto.subtle.importKey('raw', key, { name: 'HMAC', hash: algo }, false, ['sign']).then(function (k) {
+      return crypto.subtle.sign('HMAC', k, msg);
+    }).then(function (sig) {
+      var h = new Uint8Array(sig), o = h[h.length - 1] & 15;
+      var bin = ((h[o] & 127) * 16777216) + (h[o + 1] << 16) + (h[o + 2] << 8) + h[o + 3];
+      var code = String(bin % Math.pow(10, digits));
+      while (code.length < digits) code = '0' + code;
+      return code;
+    });
+  }
+  function blank(msg, kind) {
+    $('code').textContent = '------'; $('prev').textContent = $('next').textContent = $('counter').textContent = '-'; $('bar').style.width = '0';
+    T.status(st, kind || '', msg);
+  }
+  function uri() {
+    var s = $('secret').value.replace(/[\s-]/g, '').replace(/=+$/, '').toUpperCase(), iss = $('issuer').value.trim(), acc = $('account').value.trim();
+    if (!s) { $('uri').textContent = ''; return; }
+    var u = 'otpauth://totp/' + encodeURIComponent(iss ? iss + ':' + acc : acc) + '?secret=' + s + (iss ? '&issuer=' + encodeURIComponent(iss) : '');
+    if ($('algo').value !== 'SHA-1') u += '&algorithm=' + $('algo').value.replace('-', '');
+    if ($('digits').value !== '6') u += '&digits=' + $('digits').value;
+    if ($('period').value !== '30') u += '&period=' + $('period').value;
+    $('uri').textContent = u;
+  }
+  function tick() {
+    var my = ++seq, key;
+    uri();
+    try { key = b32decode($('secret').value); } catch (e) { blank('✗ ' + T.esc(e.message), 'err'); return; }
+    if (!key) { blank('Enter a Base32 secret.'); return; }
+    if (!window.crypto || !crypto.subtle) { blank('✗ This browser cannot run the calculation here (it needs a secure https page).', 'err'); return; }
+    var period = Math.max(5, Math.min(300, parseInt($('period').value, 10) || 30)), digits = +$('digits').value, algo = $('algo').value;
+    var fixed = $('at').value.trim(), now = fixed ? parseInt(fixed, 10) : Date.now() / 1000;
+    if (fixed && !/^\d+$/.test(fixed)) { blank('✗ The time must be a whole number of seconds', 'err'); return; }
+    var counter = Math.floor(now / period), left = period - Math.floor(now % period);
+    Promise.all([hotp(key, counter, digits, algo), hotp(key, Math.max(0, counter - 1), digits, algo), hotp(key, counter + 1, digits, algo)]).then(function (r) {
+      if (my !== seq) return;
+      $('code').textContent = r[0]; $('prev').textContent = r[1]; $('next').textContent = r[2]; $('counter').textContent = counter;
+      $('bar').style.width = (left / period * 100) + '%';
+      T.status(st, 'ok', fixed ? '✓ Code for the time you entered' : '✓ Changes in ' + left + ' second' + (left === 1 ? '' : 's'));
+    }, function () { if (my === seq) blank('✗ Could not work out the code for this secret', 'err'); });
+  }
+  $('random').addEventListener('click', function () {
+    var b = new Uint8Array(32), s = '';
+    crypto.getRandomValues(b);
+    for (var i = 0; i < 32; i++) s += B32.charAt(b[i] % 32);
+    $('secret').value = s; tick();
+  });
+  ['secret', 'period', 'at', 'issuer', 'account'].forEach(function (id) { $(id).addEventListener('input', tick); });
+  $('digits').addEventListener('change', tick); $('algo').addEventListener('change', tick);
+  $('copy').addEventListener('click', function () { var c = $('code').textContent; T.copy(/^\d+$/.test(c) ? c : '', 'Code copied'); });
+  $('copyuri').addEventListener('click', function () { T.copy($('uri').textContent, 'Link copied'); });
+  $('secret').value = 'JBSWY3DPEHPK3PXP';
+  tick(); setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>

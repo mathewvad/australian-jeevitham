@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cron Expression Explainer &amp; Next Run Times | Australian Jeevitham Tech</title>
+  <meta name="description" content="Paste a cron expression to read it in plain English and see when it will run next. Supports ranges, steps, lists and names. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/cron-explainer.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Cron Expression Explainer &amp; Next Run Times | Australian Jeevitham Tech">
+  <meta property="og:description" content="Paste a cron expression to read it in plain English and see when it will run next. Supports ranges, steps, lists and names. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/cron-explainer.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Cron Expression Explainer &amp; Next Run Times | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Paste a cron expression to read it in plain English and see when it will run next. Supports ranges, steps, lists and names. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Cron Expression Explainer & Next Run Times",
+  "url": "https://www.australianjeevitham.com/tech/cron-explainer.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Paste a cron expression to read it in plain English and see when it will run next. Supports ranges, steps, lists and names. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Cron Expression Explainer</p>
+    <h1>Cron Expression <span class="hl">Explainer</span></h1>
+    <p>Type a cron expression to read it in plain English, check each field and see the next times it will run.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Cron expression</h2>
+      <label class="tl-field"><span>Minute · Hour · Day of month · Month · Day of week</span><input class="tl-input" id="expr" spellcheck="false" autocomplete="off" placeholder="*/15 9-17 * * 1-5" style="font-size:1.1rem;"></label>
+      <div class="tl-chips tl-mt" id="presets"></div>
+      <div class="jp-status" id="status" role="status">Type a cron expression with 5 fields.</div>
+    </div>
+    <div class="tl-row tl-mt">
+      <div class="tl-card">
+        <h2>Field by field</h2>
+        <div class="tl-table-wrap"><table class="tl-table"><thead><tr><th>Field</th><th>Value</th><th>Meaning</th></tr></thead><tbody id="fields"><tr><td colspan="3">Nothing to show yet.</td></tr></tbody></table></div>
+      </div>
+      <div class="tl-card">
+        <h2>Next runs</h2>
+        <div class="jp-bar"><label class="jp-check"><input type="checkbox" id="utc"> Server runs on UTC</label></div>
+        <div class="tl-table-wrap"><table class="tl-table"><tbody id="next"><tr><td>Nothing to show yet.</td></tr></tbody></table></div>
+        <p class="tl-note" id="zone"></p>
+      </div>
+    </div>
+    <div class="tl-card tl-mt">
+      <h2>Syntax</h2>
+      <div class="rx-cheat">
+        <div><code>*</code> every value</div>
+        <div><code>5</code> one value</div>
+        <div><code>1,15</code> a list</div>
+        <div><code>9-17</code> a range</div>
+        <div><code>*/15</code> every 15th</div>
+        <div><code>0-30/5</code> every 5th in a range</div>
+        <div><code>MON-FRI</code> day names</div>
+        <div><code>JAN,JUL</code> month names</div>
+        <div><code>@daily</code> same as 0 0 * * *</div>
+        <div><code>@hourly</code> same as 0 * * * *</div>
+      </div>
+      <p class="tl-note">This reads the standard 5-field cron used by Linux crontab. Day of week runs 0 to 6 with Sunday as 0 (7 also means Sunday). When both day of month and day of week are set, the job runs when either one matches.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status');
+  var MON = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  var DOW = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  var MONL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var DOWL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var F = [
+    { n: 'Minute', min: 0, max: 59, u: 'minute' },
+    { n: 'Hour', min: 0, max: 23, u: 'hour' },
+    { n: 'Day of month', min: 1, max: 31, u: 'day' },
+    { n: 'Month', min: 1, max: 12, u: 'month', names: MON },
+    { n: 'Day of week', min: 0, max: 7, u: 'day of the week', names: DOW }
+  ];
+  var MACROS = { '@yearly': '0 0 1 1 *', '@annually': '0 0 1 1 *', '@monthly': '0 0 1 * *', '@weekly': '0 0 * * 0', '@daily': '0 0 * * *', '@midnight': '0 0 * * *', '@hourly': '0 * * * *' };
+  var PRE = [['*/15 9-17 * * 1-5', 'Every 15 min in work hours'], ['0 0 * * *', 'Daily at midnight'], ['30 2 * * 0', 'Sundays at 02:30'], ['0 9 1 * *', '1st of the month, 09:00'], ['0 */6 * * *', 'Every 6 hours'], ['0 8 * * MON-FRI', 'Weekdays at 08:00'], ['@hourly', 'Hourly']];
+
+  function val(s, f, i) {
+    if (/^\d+$/.test(s)) return parseInt(s, 10);
+    if (f.names) { var k = f.names.indexOf(s.toUpperCase()); if (k >= 0) return k + (i === 3 ? 1 : 0); }
+    throw new Error(f.n + ': "' + s + '" is not a valid value');
+  }
+  function parseField(str, i) {
+    var f = F[i], set = {}, parts = [], top = i === 4 ? 6 : f.max;
+    str.split(',').forEach(function (part) {
+      var m = /^(\*|[a-z0-9]+)(?:-([a-z0-9]+))?(?:\/(\d+))?$/i.exec(part);
+      if (!m || (m[1] === '*' && m[2] !== undefined)) throw new Error(f.n + ': cannot read "' + part + '"');
+      var star = m[1] === '*', hasStep = m[3] !== undefined, step = hasStep ? parseInt(m[3], 10) : 1, a, b;
+      if (step < 1) throw new Error(f.n + ': the step after / must be 1 or more');
+      if (star) { a = f.min; b = top; }
+      else { a = val(m[1], f, i); b = m[2] !== undefined ? val(m[2], f, i) : hasStep ? top : a; }
+      if (a < f.min || a > f.max || b < f.min || b > f.max) throw new Error(f.n + ': values must be between ' + f.min + ' and ' + f.max);
+      if (a > b) throw new Error(f.n + ': the range in "' + part + '" goes backwards');
+      for (var v = a; v <= b; v += step) set[i === 4 ? v % 7 : v] = true;
+      parts.push({ star: star, a: a, b: b, step: step, hasStep: hasStep && step > 1, range: m[2] !== undefined });
+    });
+    return { raw: str, all: str === '*', star: str.charAt(0) === '*', set: set, parts: parts, list: Object.keys(set).map(Number).sort(function (x, y) { return x - y; }) };
+  }
+  function parse(expr) {
+    var s = expr.trim(), mac = MACROS[s.toLowerCase()];
+    if (s.charAt(0) === '@' && !mac) throw new Error('"' + s + '" is not a known shortcut. Try @hourly, @daily, @weekly, @monthly or @yearly');
+    var f = (mac || s).split(/\s+/);
+    if (f.length === 6 || f.length === 7) throw new Error('This has ' + f.length + ' fields. Standard cron has 5 - remove the seconds (or year) field');
+    if (f.length !== 5) throw new Error('A cron expression needs 5 fields separated by spaces - this has ' + f.length);
+    return f.map(parseField);
+  }
+  function label(v, i) { return i === 3 ? MONL[v - 1] : i === 4 ? DOWL[v % 7] : String(v); }
+  function join(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1]; }
+  function describe(p, i) {
+    var u = F[i].u;
+    return join(p.parts.map(function (q) {
+      if (q.star) return q.hasStep ? 'every ' + q.step + ' ' + u + 's' : 'every ' + u;
+      if (q.range) return (q.hasStep ? 'every ' + q.step + ' ' + u + 's from ' : '') + label(q.a, i) + ' through ' + label(q.b, i);
+      if (q.hasStep) return 'every ' + q.step + ' ' + u + 's starting at ' + label(q.a, i);
+      return label(q.a, i);
+    }));
+  }
+  function plain(p) { return p.parts.every(function (q) { return !q.star && !q.range && !q.hasStep; }); }
+  function two(n) { return ('0' + n).slice(-2); }
+  function summary(p) {
+    var mi = p[0], h = p[1], s;
+    if (plain(mi) && plain(h) && mi.list.length === 1) s = 'At ' + join(h.list.map(function (x) { return two(x) + ':' + two(mi.list[0]); }));
+    else {
+      s = mi.all ? 'every minute' : plain(mi) ? 'at minute ' + join(mi.list.map(String)) : describe(mi, 0);
+      s = s.charAt(0).toUpperCase() + s.slice(1);
+      if (h.all) s += plain(mi) ? ' past every hour' : '';
+      else if (plain(h)) s += (plain(mi) ? ' past ' : ', during ') + 'hour' + (h.list.length > 1 ? 's ' : ' ') + join(h.list.map(String));
+      else if (h.parts.length === 1 && h.parts[0].range && !h.parts[0].hasStep) s += ', between ' + two(h.parts[0].a) + ':00 and ' + two(h.parts[0].b) + ':59';
+      else if (h.parts.length === 1 && h.parts[0].star) s += (plain(mi) ? ' past ' : ', ') + describe(h, 1);
+      else s += ', in hours ' + describe(h, 1);
+    }
+    var dom = !p[2].all, dw = !p[4].all;
+    var domText = dom ? (p[2].parts.every(function (q) { return !q.star && !q.hasStep; }) ? 'on day ' + describe(p[2], 2) + ' of the month' : describe(p[2], 2) + ' of the month') : '';
+    if (dom && dw && !p[2].star && !p[4].star) s += ', ' + domText + ' or on ' + describe(p[4], 4);
+    else if (dom && dw) s += ', ' + domText + ', and only on ' + describe(p[4], 4);
+    else if (dom) s += ', ' + domText;
+    else if (dw) s += ', on ' + describe(p[4], 4);
+    if (!p[3].all) s += ', in ' + describe(p[3], 3);
+    return s + '.';
+  }
+  function nextRuns(p, from, n, utc) {
+    var out = [], g = utc ? 'getUTC' : 'get';
+    var y = from[g + 'FullYear'](), mo = from[g + 'Month'](), day = from[g + 'Date']();
+    for (var k = 0; k < 366 * 12 && out.length < n; k++) {
+      var c = utc ? new Date(Date.UTC(y, mo, day + k)) : new Date(y, mo, day + k, 12);
+      var cy = c[g + 'FullYear'](), cm = c[g + 'Month'](), cd = c[g + 'Date'](), cw = c[g + 'Day']();
+      if (!p[3].set[cm + 1]) continue;
+      var okDom = !!p[2].set[cd], okDow = !!p[4].set[cw];
+      if (!((p[2].star || p[4].star) ? (okDom && okDow) : (okDom || okDow))) continue;
+      for (var a = 0; a < p[1].list.length && out.length < n; a++) for (var b = 0; b < p[0].list.length && out.length < n; b++) {
+        var hh = p[1].list[a], mm = p[0].list[b];
+        var t = utc ? new Date(Date.UTC(cy, cm, cd, hh, mm)) : new Date(cy, cm, cd, hh, mm);
+        if (!utc && (t.getHours() !== hh || t.getMinutes() !== mm)) continue;
+        if (t > from) out.push(t);
+      }
+    }
+    return out;
+  }
+  function rel(ms) {
+    var m = Math.round(ms / 60000);
+    if (m < 1) return 'in under a minute';
+    if (m < 60) return 'in ' + m + ' min';
+    if (m < 2880) return 'in ' + Math.floor(m / 60) + ' h ' + (m % 60) + ' min';
+    return 'in ' + Math.round(m / 1440) + ' days';
+  }
+  function empty(msg, kind) {
+    $('fields').innerHTML = '<tr><td colspan="3">Nothing to show yet.</td></tr>'; $('next').innerHTML = '<tr><td>Nothing to show yet.</td></tr>';
+    T.status(st, kind || '', msg);
+  }
+  function run() {
+    var v = $('expr').value, p, utc = $('utc').checked;
+    $('zone').textContent = utc ? 'Times are shown in UTC.' : 'Times are shown in your local time zone (' + (Intl.DateTimeFormat().resolvedOptions().timeZone || 'local') + ').';
+    if (!v.trim()) { empty('Type a cron expression with 5 fields.'); return; }
+    try { p = parse(v); } catch (e) { empty('✗ ' + T.esc(e.message), 'err'); return; }
+    $('fields').innerHTML = p.map(function (x, i) { return '<tr><th scope="row">' + F[i].n + '</th><td><code>' + T.esc(x.raw) + '</code></td><td>' + T.esc(describe(x, i)) + '</td></tr>'; }).join('');
+    var now = new Date(), runs = nextRuns(p, now, 7, utc);
+    var fmt = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false };
+    if (utc) fmt.timeZone = 'UTC';
+    $('next').innerHTML = runs.length ? runs.map(function (t, i) { return '<tr><td style="width:36px;">' + (i + 1) + '</td><td><code>' + T.esc(t.toLocaleString('en-AU', fmt)) + '</code></td><td>' + rel(t - now) + '</td></tr>'; }).join('')
+      : '<tr><td>This expression never runs - no date matches it.</td></tr>';
+    T.status(st, 'ok', '✓ <strong>' + T.esc(summary(p)) + '</strong>');
+  }
+  $('presets').innerHTML = PRE.map(function (x) { return '<button type="button" class="tl-copy" data-ex="' + T.esc(x[0]) + '"><code>' + T.esc(x[0]) + '</code> ' + x[1] + '</button>'; }).join('');
+  $('presets').addEventListener('click', function (e) { var b = e.target.closest('[data-ex]'); if (b) { $('expr').value = b.getAttribute('data-ex'); run(); } });
+  T.onInput([$('expr')], run, 150);
+  $('utc').addEventListener('change', run);
+  $('expr').value = PRE[0][0]; run();
+  setInterval(function () { if (document.visibilityState !== 'hidden') run(); }, 30000);
+})();
+</script>
+</body>
+</html>

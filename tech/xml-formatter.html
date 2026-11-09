@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XML Formatter, Validator &amp; Minifier | Australian Jeevitham Tech</title>
+  <meta name="description" content="Format, validate and minify XML in your browser. Shows where a parsing error is, and counts elements and attributes. Nothing is uploaded.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/xml-formatter.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="XML Formatter, Validator &amp; Minifier | Australian Jeevitham Tech">
+  <meta property="og:description" content="Format, validate and minify XML in your browser. Shows where a parsing error is, and counts elements and attributes. Nothing is uploaded.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/xml-formatter.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="XML Formatter, Validator &amp; Minifier | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Format, validate and minify XML in your browser. Shows where a parsing error is, and counts elements and attributes. Nothing is uploaded.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "XML Formatter, Validator & Minifier",
+  "url": "https://www.australianjeevitham.com/tech/xml-formatter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Format, validate and minify XML in your browser. Shows where a parsing error is, and counts elements and attributes. Nothing is uploaded.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / XML Formatter &amp; Validator</p>
+    <h1>XML <span class="hl">Formatter</span> &amp; Validator</h1>
+    <p>Paste XML to check that it is well formed, then indent it neatly or minify it. Errors show the line and column.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="jp-bar">
+      <button type="button" class="jp-btn primary" id="format">Format</button>
+      <button type="button" class="jp-btn" id="minify">Minify</button>
+      <label class="jp-check" for="indent">Indent
+        <select class="jp-select" id="indent">
+          <option value="2">2 spaces</option>
+          <option value="4">4 spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+      </label>
+      <button type="button" class="jp-btn" id="copy">Copy result</button>
+      <button type="button" class="jp-btn" id="download">Download</button>
+      <button type="button" class="jp-btn" id="sample">Sample</button>
+      <button type="button" class="jp-btn" id="clear">Clear</button>
+    </div>
+    <div class="jp-grid">
+      <div class="jp-panel">
+        <div class="jp-head"><span>XML input</span></div>
+        <textarea class="jp-area" id="in" spellcheck="false" data-tabs aria-label="XML input" placeholder="Paste XML here"></textarea>
+      </div>
+      <div class="jp-panel">
+        <div class="jp-head"><span>Result</span></div>
+        <textarea class="jp-area" id="out" spellcheck="false" readonly aria-label="Formatted XML"></textarea>
+      </div>
+    </div>
+    <div class="jp-status" id="status" role="status">Paste XML to check and format it.</div>
+    <p class="jp-note">Formatting removes whitespace between tags and trims text inside elements. Comments, CDATA sections and processing instructions are kept.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), mode = 'format';
+  var SAMPLE = '<?xml version="1.0" encoding="UTF-8"?><service name="api-gateway" version="2.4.1"><listen port="8080" tls="true"/><routes><route path="/v1/users" upstream="users-svc" timeout="30"/><route path="/v1/orders" upstream="orders-svc" timeout="45"/></routes><!-- retry policy --><retry attempts="3"><backoff>exponential</backoff></retry><notes><![CDATA[Use <strict> mode in production]]></notes></service>';
+
+  function escT(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  function escA(s) { return escT(s).replace(/"/g, '&quot;'); }
+  var stats;
+  function ser(node, depth, ind, out) {
+    var pad = ind === null ? '' : new Array(depth + 1).join(ind);
+    switch (node.nodeType) {
+      case 1:
+        stats.el++; stats.attr += node.attributes.length; if (depth + 1 > stats.depth) stats.depth = depth + 1;
+        var open = '<' + node.nodeName;
+        for (var i = 0; i < node.attributes.length; i++) open += ' ' + node.attributes[i].name + '="' + escA(node.attributes[i].value) + '"';
+        var kids = Array.prototype.filter.call(node.childNodes, function (c) { return !(c.nodeType === 3 && !c.nodeValue.trim()); });
+        if (!kids.length) { out.push(pad + open + '/>'); return; }
+        if (kids.every(function (c) { return c.nodeType === 3; })) {
+          out.push(pad + open + '>' + escT(kids.map(function (c) { return c.nodeValue; }).join('').trim()) + '</' + node.nodeName + '>'); return;
+        }
+        out.push(pad + open + '>');
+        kids.forEach(function (c) { ser(c, depth + 1, ind, out); });
+        out.push(pad + '</' + node.nodeName + '>'); return;
+      case 3: out.push(pad + escT(node.nodeValue.trim())); return;
+      case 4: out.push(pad + '<![CDATA[' + node.nodeValue + ']]>'); return;
+      case 7: out.push(pad + '<?' + node.target + (node.data ? ' ' + node.data : '') + '?>'); return;
+      case 8: out.push(pad + '<!--' + node.nodeValue + '-->'); return;
+      case 10: out.push(pad + new XMLSerializer().serializeToString(node)); return;
+    }
+  }
+  function run() {
+    var src = $('in').value;
+    if (!src.trim()) { $('out').value = ''; T.status(st, '', 'Paste XML to check and format it.'); return; }
+    var doc = new DOMParser().parseFromString(src, 'application/xml');
+    var err = doc.getElementsByTagName('parsererror')[0];
+    if (err) {
+      var d = err.querySelector('div'), msg = (d ? d.textContent : err.textContent).trim().split('\n').slice(0, 3).join(' ');
+      $('out').value = '';
+      T.status(st, 'err', '✗ Not valid XML: ' + T.esc(msg)); return;
+    }
+    var v = $('indent').value, ind = mode === 'minify' ? null : v === 'tab' ? '\t' : v === '4' ? '    ' : '  ';
+    var out = [], decl = /^\s*<\?xml[^?]*\?>/.exec(src);
+    stats = { el: 0, attr: 0, depth: 0 };
+    if (decl) out.push(decl[0].trim());
+    Array.prototype.forEach.call(doc.childNodes, function (n) { ser(n, 0, ind, out); });
+    var res = out.join(ind === null ? '' : '\n');
+    $('out').value = res;
+    T.status(st, 'ok', '✓ Valid XML<div class="jp-stats"><span>' + stats.el + ' elements</span><span>' + stats.attr + ' attributes</span><span>depth ' + stats.depth + '</span><span>' + T.bytes(T.size(src)) + ' → ' + T.bytes(T.size(res)) + '</span></div>');
+  }
+  $('format').addEventListener('click', function () { mode = 'format'; run(); });
+  $('minify').addEventListener('click', function () { mode = 'minify'; run(); });
+  $('indent').addEventListener('change', run);
+  T.onInput([$('in')], run, 300);
+  $('copy').addEventListener('click', function () { T.copy($('out').value, 'Copied'); });
+  $('download').addEventListener('click', function () { if ($('out').value) T.download($('out').value, 'formatted.xml', 'application/xml'); else T.toast('Nothing to download yet'); });
+  $('sample').addEventListener('click', function () { $('in').value = SAMPLE; mode = 'format'; run(); });
+  $('clear').addEventListener('click', function () { $('in').value = ''; run(); $('in').focus(); });
+  $('in').value = SAMPLE; run();
+})();
+</script>
+</body>
+</html>

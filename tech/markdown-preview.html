@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Previewer &amp; Markdown to HTML Converter | Australian Jeevitham Tech</title>
+  <meta name="description" content="Write Markdown and see the formatted result as you type, then copy or download the HTML. Supports tables, code blocks and task lists. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/markdown-preview.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Markdown Previewer &amp; Markdown to HTML Converter | Australian Jeevitham Tech">
+  <meta property="og:description" content="Write Markdown and see the formatted result as you type, then copy or download the HTML. Supports tables, code blocks and task lists. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/markdown-preview.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Markdown Previewer &amp; Markdown to HTML Converter | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Write Markdown and see the formatted result as you type, then copy or download the HTML. Supports tables, code blocks and task lists. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Markdown Previewer & Markdown to HTML Converter",
+  "url": "https://www.australianjeevitham.com/tech/markdown-preview.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Write Markdown and see the formatted result as you type, then copy or download the HTML. Supports tables, code blocks and task lists. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Markdown Previewer</p>
+    <h1>Markdown <span class="hl">Previewer</span></h1>
+    <p>Type Markdown on the left and see it formatted on the right. Copy the HTML or download it when you are done.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="jp-bar">
+      <button type="button" class="jp-btn primary" id="copy">Copy HTML</button>
+      <button type="button" class="jp-btn" id="dlh">Download .html</button>
+      <button type="button" class="jp-btn" id="dlm">Download .md</button>
+      <button type="button" class="jp-btn" id="sample">Sample</button>
+      <button type="button" class="jp-btn" id="clear">Clear</button>
+    </div>
+    <div class="jp-grid">
+      <div class="jp-panel">
+        <div class="jp-head"><span>Markdown</span><span id="count"></span></div>
+        <textarea class="jp-area" id="in" spellcheck="false" data-tabs aria-label="Markdown input" placeholder="Type or paste Markdown here" style="white-space:pre-wrap;"></textarea>
+      </div>
+      <div class="jp-panel">
+        <div class="jp-head"><span>Result</span>
+          <div class="jp-tabs" role="tablist">
+            <button type="button" class="jp-tab" role="tab" id="tabP" aria-selected="true">Preview</button>
+            <button type="button" class="jp-tab" role="tab" id="tabH" aria-selected="false">HTML</button>
+          </div>
+        </div>
+        <div class="md-out" id="preview"></div>
+        <pre class="jp-out" id="html" hidden style="white-space:pre-wrap;"></pre>
+      </div>
+    </div>
+    <p class="jp-note">Supports headings, bold, italic, strikethrough, links, images, lists, task lists, quotes, code blocks, tables and horizontal rules. Raw HTML in the Markdown is shown as text, not run.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, out = '';
+  var SAMPLE = [
+    '# api-gateway 2.4.1', '',
+    'Release notes for the **March** update. See the [changelog](https://api.example.com/changelog) for every commit.', '',
+    '## What changed', '',
+    '- Faster routing: *p95 latency* down from 48 ms to 31 ms',
+    '- New `retry.backoff` setting',
+    '  - `fixed`',
+    '  - `exponential` (default)',
+    '- ~~Legacy XML config~~ removed', '',
+    '## Upgrade steps', '',
+    '1. Back up `gateway.yaml`',
+    '2. Run the migration',
+    '3. Restart the service', '',
+    '```bash', 'gatewayctl migrate --from 2.3 --to 2.4', 'gatewayctl restart', '```', '',
+    '| Setting | Old default | New default |',
+    '|:--------|:-----------:|------------:|',
+    '| timeout | 60 | 30 |',
+    '| retries | 0 | 3 |', '',
+    '> **Note:** tokens issued before the upgrade stay valid.', '',
+    '- [x] Tests pass',
+    '- [ ] Docs updated', '',
+    '---', '',
+    'Questions? Open an issue.'
+  ].join('\n');
+
+  function safe(u) { return !/^[a-z][a-z0-9+.-]*:/i.test(u) || /^(https?|mailto):/i.test(u); }
+  function inline(s) {
+    var codes = [];
+    s = s.replace(/`([^`]+)`/g, function (_, c) { codes.push('<code>' + T.esc(c) + '</code>'); return '\u0000' + (codes.length - 1) + '\u0000'; });
+    s = T.esc(s);
+    s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function (all, a, u) { return safe(u) ? '<img alt="' + a + '" src="' + u + '">' : all; });
+    s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (all, t, u) { return safe(u) ? '<a href="' + u + '">' + t + '</a>' : all; });
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>').replace(/__([^_]+)__/g, '<strong>$1</strong>');
+    s = s.replace(/(^|[^*\w])\*([^*\s](?:[^*]*[^*\s])?)\*(?!\*)/g, '$1<em>$2</em>').replace(/(^|[^\w])_([^_\s](?:[^_]*[^_\s])?)_(?!\w)/g, '$1<em>$2</em>');
+    s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+    s = s.replace(/(^|[\s(])(https?:\/\/[^\s<)]+[^\s<).,;:!?])/g, '$1<a href="$2">$2</a>');
+    s = s.replace(/ {2,}\n/g, '<br>\n');
+    return s.replace(/\u0000(\d+)\u0000/g, function (_, n) { return codes[+n]; });
+  }
+  var ITEM = /^\s*(?:[-*+]|\d+[.)])\s+(.*)$/;
+  var HR = /^\s*([-*_])(?:\s*\1){2,}\s*$/;
+  function isItem(l) { return ITEM.test(l) && !HR.test(l); }
+  function list(block) {
+    var base = /^(\s*)/.exec(block[0])[1].length, tag = /^\s*\d+[.)]\s/.test(block[0]) ? 'ol' : 'ul', items = [], cur = null;
+    block.forEach(function (ln) {
+      var ind = /^(\s*)/.exec(ln)[1].length, m = ITEM.exec(ln);
+      if (m && ind <= base) { cur = { text: m[1], sub: [] }; items.push(cur); }
+      else if (cur) cur.sub.push(ln);
+    });
+    return '<' + tag + '>\n' + items.map(function (it) {
+      var t = it.text, m = /^\[([ xX])\]\s+(.*)$/.exec(t), pre = '', sub = '';
+      if (m) { pre = '<input type="checkbox" disabled' + (m[1] !== ' ' ? ' checked' : '') + '> '; t = m[2]; }
+      var first = -1;
+      it.sub.some(function (l, k) { if (isItem(l)) { first = k; return true; } return false; });
+      var more = (first < 0 ? it.sub : it.sub.slice(0, first)).map(function (l) { return l.trim(); }).filter(Boolean);
+      if (more.length) t += ' ' + more.join(' ');
+      if (first >= 0) sub = '\n' + list(it.sub.slice(first));
+      return '<li>' + pre + inline(t) + sub + '</li>';
+    }).join('\n') + '\n</' + tag + '>';
+  }
+  function cells(l) { return l.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map(function (c) { return c.trim(); }); }
+  function render(src) {
+    var lines = src.replace(/\r\n?/g, '\n').split('\n'), o = [], i = 0, m, buf;
+    while (i < lines.length) {
+      var l = lines[i];
+      if (!l.trim()) { i++; continue; }
+      if ((m = /^\s*(```|~~~)\s*([\w+-]*)/.exec(l))) {
+        buf = []; i++;
+        while (i < lines.length && lines[i].trim().indexOf(m[1]) !== 0) buf.push(lines[i++]);
+        i++;
+        o.push('<pre><code' + (m[2] ? ' class="language-' + m[2] + '"' : '') + '>' + T.esc(buf.join('\n')) + '</code></pre>'); continue;
+      }
+      if ((m = /^(#{1,6})\s+(.*?)\s*#*\s*$/.exec(l))) { o.push('<h' + m[1].length + '>' + inline(m[2]) + '</h' + m[1].length + '>'); i++; continue; }
+      if (HR.test(l)) { o.push('<hr>'); i++; continue; }
+      if (/^\s*>/.test(l)) {
+        buf = [];
+        while (i < lines.length && /^\s*>/.test(lines[i])) buf.push(lines[i++].replace(/^\s*>\s?/, ''));
+        o.push('<blockquote>\n' + render(buf.join('\n')) + '\n</blockquote>'); continue;
+      }
+      if (l.indexOf('|') >= 0 && i + 1 < lines.length && /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/.test(lines[i + 1]) && lines[i + 1].indexOf('|') >= 0) {
+        var head = cells(l), al = cells(lines[i + 1]).map(function (c) { return /^:-+:$/.test(c) ? 'center' : /-:$/.test(c) ? 'right' : /^:/.test(c) ? 'left' : ''; });
+        var cell = function (tag, c, k) { return '<' + tag + (al[k] ? ' style="text-align:' + al[k] + '"' : '') + '>' + inline(c) + '</' + tag + '>'; };
+        var t = '<table>\n<thead><tr>' + head.map(function (c, k) { return cell('th', c, k); }).join('') + '</tr></thead>\n<tbody>\n';
+        i += 2;
+        while (i < lines.length && lines[i].trim() && lines[i].indexOf('|') >= 0) { t += '<tr>' + cells(lines[i]).map(function (c, k) { return cell('td', c, k); }).join('') + '</tr>\n'; i++; }
+        o.push(t + '</tbody>\n</table>'); continue;
+      }
+      if (isItem(l)) {
+        buf = [];
+        while (i < lines.length && lines[i].trim() && (isItem(lines[i]) || /^\s{2,}\S/.test(lines[i]))) buf.push(lines[i++]);
+        o.push(list(buf)); continue;
+      }
+      buf = [];
+      while (i < lines.length && lines[i].trim() && !/^(#{1,6})\s/.test(lines[i]) && !/^\s*(```|~~~)/.test(lines[i]) && !/^\s*>/.test(lines[i]) && !isItem(lines[i]) && !HR.test(lines[i])) buf.push(lines[i++]);
+      if (!buf.length) { buf.push(lines[i++]); }
+      o.push('<p>' + inline(buf.join('\n')) + '</p>');
+    }
+    return o.join('\n');
+  }
+  function run() {
+    var src = $('in').value;
+    out = render(src);
+    $('preview').innerHTML = out;
+    $('html').textContent = out;
+    var words = src.trim() ? src.trim().split(/\s+/).length : 0;
+    $('count').textContent = words + ' word' + (words === 1 ? '' : 's');
+  }
+  function tab(p) {
+    $('preview').hidden = !p; $('html').hidden = p;
+    $('tabP').setAttribute('aria-selected', p); $('tabH').setAttribute('aria-selected', !p);
+  }
+  T.onInput([$('in')], run, 150);
+  $('tabP').addEventListener('click', function () { tab(true); });
+  $('tabH').addEventListener('click', function () { tab(false); });
+  $('copy').addEventListener('click', function () { T.copy(out, 'HTML copied'); });
+  $('dlh').addEventListener('click', function () { if (out) T.download('<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="UTF-8">\n<title>Document</title>\n</head>\n<body>\n' + out + '\n</body>\n</html>\n', 'document.html', 'text/html'); else T.toast('Nothing to download yet'); });
+  $('dlm').addEventListener('click', function () { if ($('in').value) T.download($('in').value, 'document.md', 'text/markdown'); else T.toast('Nothing to download yet'); });
+  $('sample').addEventListener('click', function () { $('in').value = SAMPLE; run(); });
+  $('clear').addEventListener('click', function () { $('in').value = ''; run(); $('in').focus(); });
+  $('in').value = SAMPLE; run();
+})();
+</script>
+</body>
+</html>

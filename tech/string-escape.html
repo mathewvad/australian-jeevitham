@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String Escape &amp; Unescape - JSON, SQL, Shell, Regex | Australian Jeevitham Tech</title>
+  <meta name="description" content="Escape or unescape text for JSON and JavaScript strings, SQL, shell arguments, regular expressions and CSV fields. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/string-escape.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="String Escape &amp; Unescape - JSON, SQL, Shell, Regex | Australian Jeevitham Tech">
+  <meta property="og:description" content="Escape or unescape text for JSON and JavaScript strings, SQL, shell arguments, regular expressions and CSV fields. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/string-escape.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="String Escape &amp; Unescape - JSON, SQL, Shell, Regex | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Escape or unescape text for JSON and JavaScript strings, SQL, shell arguments, regular expressions and CSV fields. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "String Escape & Unescape - JSON, SQL, Shell, Regex",
+  "url": "https://www.australianjeevitham.com/tech/string-escape.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Escape or unescape text for JSON and JavaScript strings, SQL, shell arguments, regular expressions and CSV fields. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / String Escape &amp; Unescape</p>
+    <h1>String <span class="hl">Escape</span> &amp; Unescape</h1>
+    <p>Make text safe to paste into JSON, JavaScript, SQL, a shell command, a regular expression or a CSV file - or turn escaped text back.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Escape / unescape</h2>
+      <div class="jp-bar">
+        <button type="button" class="jp-btn primary" id="esc">Escape →</button>
+        <button type="button" class="jp-btn" id="unesc">← Unescape</button>
+        <label class="jp-check" for="mode">For
+          <select class="jp-select" id="mode">
+            <option value="json">JSON / JavaScript string</option>
+            <option value="unicode">Unicode escapes (\u for non-English letters)</option>
+            <option value="sql">SQL string (single quotes)</option>
+            <option value="shell">Shell (bash) argument</option>
+            <option value="regex">Regular expression</option>
+            <option value="csv">CSV field</option>
+          </select>
+        </label>
+        <label class="jp-check"><input type="checkbox" id="live" checked> Live</label>
+        <button type="button" class="jp-btn" id="clear">Clear</button>
+      </div>
+      <div class="tl-row">
+        <label class="tl-field"><span>Plain text</span><textarea class="tl-text" id="plain" spellcheck="false" placeholder="Text as you would read it"></textarea></label>
+        <label class="tl-field"><span>Escaped</span><textarea class="tl-text wrap" id="coded" spellcheck="false" placeholder="Text ready to paste into code"></textarea></label>
+      </div>
+      <div class="jp-status" id="status" role="status">Type in either box.</div>
+      <div class="jp-bar tl-mt">
+        <button type="button" class="jp-btn" id="copy">Copy escaped</button>
+      </div>
+      <p class="tl-note" id="hint"></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, plain = $('plain'), coded = $('coded'), st = $('status');
+  var HINT = 'Type in either box.';
+  var NOTES = {
+    json: 'Escapes quotes, backslashes, new lines and tabs. Paste the result between double quotes.',
+    unicode: 'Turns every non-ASCII character into a \\uXXXX code and leaves the rest as it is.',
+    sql: 'Doubles single quotes for use inside a quoted SQL string. Prefer query parameters in real code - escaping alone does not make a query safe.',
+    shell: 'Wraps the text in single quotes so bash treats it as one argument with no special characters.',
+    regex: 'Puts a backslash before characters that have a special meaning in a regular expression.',
+    csv: 'Adds double quotes when a value contains a comma, quote or new line, and doubles the quotes inside.'
+  };
+  var MAP = { n: '\n', t: '\t', r: '\r', b: '\b', f: '\f', v: '\v', '0': '\0' };
+
+  function cUnescape(s) {
+    return s.replace(/\\(?:u\{([0-9a-fA-F]{1,6})\}|u([0-9a-fA-F]{4})|x([0-9a-fA-F]{2})|([\s\S]))/g, function (all, a, b, c, d) {
+      if (a || b || c) return String.fromCodePoint(parseInt(a || b || c, 16));
+      if (d === 'u' || d === 'x') throw new Error('A \\' + d + ' code is incomplete');
+      return Object.prototype.hasOwnProperty.call(MAP, d) ? MAP[d] : d;
+    });
+  }
+  var ESC = {
+    json: function (s) { return JSON.stringify(s).slice(1, -1); },
+    unicode: function (s) { return s.replace(/[^\x00-\x7F]/g, function (c) { return '\\u' + ('0000' + c.charCodeAt(0).toString(16).toUpperCase()).slice(-4); }); },
+    sql: function (s) { return s.replace(/'/g, "''"); },
+    shell: function (s) { return "'" + s.replace(/'/g, "'\\''") + "'"; },
+    regex: function (s) { return s.replace(/[.*+?^${}()|[\]\\\/-]/g, '\\$&'); },
+    csv: function (s) { return /[",\r\n]|^\s|\s$/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
+  };
+  var UN = {
+    json: function (s) { s = s.trim(); if (s.length > 1 && s.charAt(0) === '"' && s.charAt(s.length - 1) === '"' && s.charAt(s.length - 2) !== '\\') s = s.slice(1, -1); return cUnescape(s); },
+    unicode: cUnescape,
+    sql: function (s) { s = s.trim(); if (s.length > 1 && s.charAt(0) === "'" && s.charAt(s.length - 1) === "'") s = s.slice(1, -1); return s.replace(/''/g, "'"); },
+    shell: function (s) {
+      s = s.trim();
+      var out = '', i = 0;
+      while (i < s.length) {
+        var c = s.charAt(i);
+        if (c === "'") { var j = s.indexOf("'", i + 1); if (j < 0) throw new Error('A single quote is never closed'); out += s.slice(i + 1, j); i = j + 1; }
+        else if (c === '\\') { out += s.charAt(i + 1); i += 2; }
+        else { out += c; i++; }
+      }
+      return out;
+    },
+    regex: function (s) { return s.replace(/\\([.*+?^${}()|[\]\\\/-])/g, '$1'); },
+    csv: function (s) { var t = s.trim(); return t.length > 1 && t.charAt(0) === '"' && t.charAt(t.length - 1) === '"' ? t.slice(1, -1).replace(/""/g, '"') : s; }
+  };
+  function escape() {
+    var v = plain.value;
+    coded.value = v ? ESC[$('mode').value](v) : '';
+    T.status(st, v ? 'ok' : '', v ? '✓ Escaped (' + coded.value.length + ' characters)' : HINT);
+  }
+  function unescape() {
+    var v = coded.value;
+    try { plain.value = v ? UN[$('mode').value](v) : ''; T.status(st, v ? 'ok' : '', v ? '✓ Unescaped' : HINT); }
+    catch (e) { T.status(st, 'err', '✗ ' + T.esc(e.message)); }
+  }
+  plain.addEventListener('input', function () { if ($('live').checked) escape(); });
+  coded.addEventListener('input', function () { if ($('live').checked) unescape(); });
+  $('esc').addEventListener('click', escape);
+  $('unesc').addEventListener('click', unescape);
+  $('mode').addEventListener('change', function () { $('hint').textContent = NOTES[$('mode').value]; if (plain.value) escape(); });
+  $('copy').addEventListener('click', function () { T.copy(coded.value, 'Copied'); });
+  $('clear').addEventListener('click', function () { plain.value = coded.value = ''; T.status(st, '', HINT); plain.focus(); });
+  plain.value = 'Line one\nHe said "retry", then it\'s done\nPath: C:\\temp\\logs\tStatus: 100% (ok)';
+  $('hint').textContent = NOTES.json;
+  escape();
+})();
+</script>
+</body>
+</html>

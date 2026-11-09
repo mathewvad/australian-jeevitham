@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PX to REM Converter (and REM to PX) | Australian Jeevitham Tech</title>
+  <meta name="description" content="Convert px to rem, em, pt and percent with any root font size, and convert every px value in a stylesheet at once. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/px-rem-converter.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="PX to REM Converter (and REM to PX) | Australian Jeevitham Tech">
+  <meta property="og:description" content="Convert px to rem, em, pt and percent with any root font size, and convert every px value in a stylesheet at once. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/px-rem-converter.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="PX to REM Converter (and REM to PX) | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Convert px to rem, em, pt and percent with any root font size, and convert every px value in a stylesheet at once. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "PX to REM Converter (and REM to PX)",
+  "url": "https://www.australianjeevitham.com/tech/px-rem-converter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Convert px to rem, em, pt and percent with any root font size, and convert every px value in a stylesheet at once. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / PX to REM Converter</p>
+    <h1>PX to <span class="hl">REM</span> Converter</h1>
+    <p>Convert between px, rem, pt and percent for any root font size, or convert every value in a block of CSS in one go.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-card">
+      <h2>Convert one value</h2>
+      <div class="tl-row three">
+        <label class="tl-field"><span>Root font size (px)</span><input class="tl-input" type="number" id="base" min="1" max="100" step="any" value="16"></label>
+        <label class="tl-field"><span>Pixels (px)</span><input class="tl-input" type="number" id="px" step="any" data-u="px"></label>
+        <label class="tl-field"><span>rem / em</span><input class="tl-input" type="number" id="rem" step="any" data-u="rem"></label>
+        <label class="tl-field"><span>Points (pt)</span><input class="tl-input" type="number" id="pt" step="any" data-u="pt"></label>
+        <label class="tl-field"><span>Percent (%)</span><input class="tl-input" type="number" id="pc" step="any" data-u="pc"></label>
+      </div>
+      <div class="jp-status" id="status" role="status"></div>
+      <p class="tl-note">1rem equals the root font size, which is 16px in browsers unless a site changes it. em works the same way but is measured against the parent element's font size.</p>
+    </div>
+
+    <div class="tl-row tl-mt">
+      <div class="tl-card">
+        <h2>Common sizes</h2>
+        <div class="tl-table-wrap"><table class="tl-table"><thead><tr><th>px</th><th>rem</th><th>pt</th><th></th></tr></thead><tbody id="table"></tbody></table></div>
+      </div>
+      <div class="tl-card">
+        <h2>Convert a whole stylesheet</h2>
+        <div class="jp-bar">
+          <label class="jp-check" for="dir">Change
+            <select class="jp-select" id="dir"><option value="px2rem" selected>px → rem</option><option value="rem2px">rem → px</option></select>
+          </label>
+          <label class="jp-check"><input type="checkbox" id="keep1" checked> Leave 1px alone (borders)</label>
+          <button type="button" class="jp-btn primary" id="copy">Copy result</button>
+        </div>
+        <label class="tl-field"><span>CSS in</span><textarea class="tl-text short" id="cssin" spellcheck="false" data-tabs></textarea></label>
+        <label class="tl-field tl-mt"><span>CSS out</span><textarea class="tl-text short" id="cssout" spellcheck="false" readonly></textarea></label>
+        <div class="jp-status" id="cssst" role="status"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$;
+  var SIZES = [8, 10, 12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64, 72, 80, 96];
+  function base() { var b = parseFloat($('base').value); return b > 0 ? b : 16; }
+  function fmt(n) { return String(parseFloat(n.toFixed(4))); }
+  var ids = ['px', 'rem', 'pt', 'pc'];
+  function fromPx(px, skip) {
+    var b = base(), v = { px: px, rem: px / b, pt: px * 0.75, pc: px / b * 100 };
+    ids.forEach(function (id) { if (id !== skip) $(id).value = fmt(v[id]); });
+    T.status($('status'), 'ok', '✓ ' + fmt(px) + 'px = ' + fmt(v.rem) + 'rem = ' + fmt(v.pt) + 'pt = ' + fmt(v.pc) + '% (root ' + fmt(b) + 'px)');
+  }
+  function toPx(id, val) { var b = base(); return id === 'px' ? val : id === 'rem' ? val * b : id === 'pt' ? val / 0.75 : val / 100 * b; }
+  ids.forEach(function (id) {
+    $(id).addEventListener('input', function () {
+      var val = parseFloat($(id).value);
+      if (isNaN(val)) { ids.forEach(function (o) { if (o !== id) $(o).value = ''; }); T.status($('status'), '', 'Type a number in any box.'); return; }
+      fromPx(toPx(id, val), id);
+    });
+  });
+  function table() {
+    var b = base();
+    $('table').innerHTML = SIZES.map(function (p) {
+      var r = fmt(p / b) + 'rem';
+      return '<tr><td><code>' + p + 'px</code></td><td><code>' + r + '</code></td><td><code>' + fmt(p * 0.75) + 'pt</code></td><td style="width:60px;"><button type="button" class="tl-copy" data-v="' + r + '">Copy</button></td></tr>';
+    }).join('');
+  }
+  function css() {
+    var b = base(), src = $('cssin').value, n = 0, keep = $('keep1').checked, out;
+    if ($('dir').value === 'px2rem') {
+      out = src.replace(/(-?\d*\.?\d+)px\b/g, function (all, num) {
+        var v = parseFloat(num);
+        if (keep && Math.abs(v) === 1) return all;
+        n++; return v === 0 ? '0' : fmt(v / b) + 'rem';
+      });
+    } else {
+      out = src.replace(/(-?\d*\.?\d+)rem\b/g, function (all, num) { var v = parseFloat(num); n++; return v === 0 ? '0' : fmt(v * b) + 'px'; });
+    }
+    $('cssout').value = out;
+    T.status($('cssst'), n ? 'ok' : '', n ? '✓ Changed ' + n + ' value' + (n === 1 ? '' : 's') : 'No values to change.');
+  }
+  $('base').addEventListener('input', function () { var p = parseFloat($('px').value); if (!isNaN(p)) fromPx(p, 'px'); table(); css(); });
+  T.onInput([$('cssin')], css, 150);
+  $('dir').addEventListener('change', css); $('keep1').addEventListener('change', css);
+  $('copy').addEventListener('click', function () { T.copy($('cssout').value, 'Copied'); });
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Copied ' + b.getAttribute('data-v')); });
+  $('px').value = '24'; fromPx(24, 'px'); table();
+  $('cssin').value = '.card {\n  padding: 24px 32px;\n  margin-bottom: 12px;\n  font-size: 18px;\n  border: 1px solid #ccc;\n  border-radius: 8px;\n  max-width: 640px;\n}';
+  css();
+})();
+</script>
+</body>
+</html>

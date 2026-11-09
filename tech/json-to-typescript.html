@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON to TypeScript Types Generator | Australian Jeevitham Tech</title>
+  <meta name="description" content="Turn a JSON sample into TypeScript interfaces or types. Handles nested objects, arrays, optional keys and unions. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/json-to-typescript.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="JSON to TypeScript Types Generator | Australian Jeevitham Tech">
+  <meta property="og:description" content="Turn a JSON sample into TypeScript interfaces or types. Handles nested objects, arrays, optional keys and unions. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/json-to-typescript.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="JSON to TypeScript Types Generator | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Turn a JSON sample into TypeScript interfaces or types. Handles nested objects, arrays, optional keys and unions. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "JSON to TypeScript Types Generator",
+  "url": "https://www.australianjeevitham.com/tech/json-to-typescript.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Turn a JSON sample into TypeScript interfaces or types. Handles nested objects, arrays, optional keys and unions. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / JSON to TypeScript</p>
+    <h1>JSON to <span class="hl">TypeScript</span></h1>
+    <p>Paste a JSON sample and get TypeScript interfaces for it, with nested objects, optional keys and union types worked out for you.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="jp-bar">
+      <label class="jp-check" for="root">Root name <input class="tl-input" id="root" value="Root" spellcheck="false" autocomplete="off" style="width:150px;"></label>
+      <label class="jp-check" for="style">Output
+        <select class="jp-select" id="style">
+          <option value="interface">interface</option>
+          <option value="type">type</option>
+        </select>
+      </label>
+      <label class="jp-check"><input type="checkbox" id="exp" checked> export</label>
+      <button type="button" class="jp-btn primary" id="copy">Copy types</button>
+      <button type="button" class="jp-btn" id="download">Download .ts</button>
+      <button type="button" class="jp-btn" id="sample">Sample</button>
+      <button type="button" class="jp-btn" id="clear">Clear</button>
+    </div>
+    <div class="jp-grid">
+      <div class="jp-panel">
+        <div class="jp-head"><span>JSON input</span></div>
+        <textarea class="jp-area" id="in" spellcheck="false" data-tabs aria-label="JSON input" placeholder="Paste JSON here"></textarea>
+      </div>
+      <div class="jp-panel">
+        <div class="jp-head"><span>TypeScript</span></div>
+        <textarea class="jp-area" id="out" spellcheck="false" readonly aria-label="TypeScript types"></textarea>
+      </div>
+    </div>
+    <div class="jp-status" id="status" role="status">Paste JSON to generate TypeScript types.</div>
+    <p class="jp-note">Objects inside an array are merged into one type. A key missing from some of them becomes optional (<code>?</code>), and mixed values become a union such as <code>string | null</code>.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status');
+  var SAMPLE = JSON.stringify({
+    service: 'api-gateway', version: '2.4.1', enabled: true, port: 8080,
+    limits: { requestsPerMinute: 600, burst: 50 },
+    routes: [
+      { path: '/v1/users', upstream: 'users-svc', timeoutSeconds: 30, methods: ['GET', 'POST'] },
+      { path: '/v1/orders', upstream: 'orders-svc', timeoutSeconds: 45, methods: ['GET'], cache: { ttl: 120 } }
+    ],
+    owner: null, 'x-trace-id': 'a1b2c3'
+  }, null, 2);
+
+  var names, order;
+  function isObj(v) { return v !== null && typeof v === 'object' && !Array.isArray(v); }
+  function pascal(s) {
+    var w = String(s).replace(/([a-z0-9])([A-Z])/g, '$1 $2').split(/[^A-Za-z0-9]+/).filter(Boolean)
+      .map(function (x) { return x.charAt(0).toUpperCase() + x.slice(1); }).join('');
+    if (!w || /^\d/.test(w)) w = 'T' + w;
+    return w;
+  }
+  function singular(s) {
+    s = String(s);
+    return /ies$/i.test(s) ? s.slice(0, -3) + 'y' : /(ss|us|is)$/i.test(s) ? s : /ses$/i.test(s) ? s.slice(0, -2) : /s$/i.test(s) ? s.slice(0, -1) : s + 'Item';
+  }
+  function add(ts, t) { if (ts.indexOf(t) < 0) ts.push(t); }
+  function arrType(items, hint) {
+    if (!items.length) return 'unknown[]';
+    var ts = [], objs = items.filter(isObj), arrs = items.filter(Array.isArray);
+    if (objs.length) add(ts, objType(objs, hint));
+    if (arrs.length) add(ts, arrType([].concat.apply([], arrs), hint));
+    items.forEach(function (x) { if (!isObj(x) && !Array.isArray(x)) add(ts, x === null ? 'null' : typeof x); });
+    return ts.length === 1 && !/\[\]$/.test(ts[0]) ? ts[0] + '[]' : ts.length === 1 ? ts[0] + '[]' : '(' + ts.join(' | ') + ')[]';
+  }
+  function objType(objs, hint) {
+    var keys = [], seen = {};
+    objs.forEach(function (o) { Object.keys(o).forEach(function (k) { if (!seen['$' + k]) { seen['$' + k] = 1; keys.push(k); } }); });
+    var body = keys.map(function (k) {
+      var present = objs.filter(function (o) { return Object.prototype.hasOwnProperty.call(o, k); });
+      var vals = present.map(function (o) { return o[k]; }), ts = [];
+      var sub = vals.filter(isObj), arrs = vals.filter(Array.isArray);
+      if (sub.length) add(ts, objType(sub, k));
+      if (arrs.length) add(ts, arrType([].concat.apply([], arrs), singular(k)));
+      vals.forEach(function (x) { if (!isObj(x) && !Array.isArray(x)) add(ts, x === null ? 'null' : typeof x); });
+      return '  ' + (/^[A-Za-z_$][\w$]*$/.test(k) ? k : JSON.stringify(k)) + (present.length < objs.length ? '?' : '') + ': ' + ts.join(' | ') + ';';
+    }).join('\n');
+    var base = pascal(hint), name = base, n = 2;
+    while (Object.prototype.hasOwnProperty.call(names, name)) { if (names[name] === body) return name; name = base + n++; }
+    names[name] = body; order.push(name);
+    return name;
+  }
+  function run() {
+    var src = $('in').value;
+    if (!src.trim()) { $('out').value = ''; T.status(st, '', 'Paste JSON to generate TypeScript types.'); return; }
+    var data;
+    try { data = JSON.parse(src); } catch (e) { $('out').value = ''; T.status(st, 'err', '✗ Not valid JSON: ' + T.esc(e.message)); return; }
+    names = {}; order = [];
+    var root = pascal($('root').value || 'Root'), ex = $('exp').checked ? 'export ' : '', asType = $('style').value === 'type', head = '';
+    if (isObj(data)) objType([data], root);
+    else {
+      names[root] = null;
+      var t = Array.isArray(data) ? arrType(data, singular(root)) : data === null ? 'null' : typeof data;
+      delete names[root];
+      head = ex + 'type ' + root + ' = ' + t + ';\n\n';
+    }
+    var out = head + order.slice().reverse().map(function (nm) {
+      return asType ? ex + 'type ' + nm + ' = {\n' + names[nm] + '\n};' : ex + 'interface ' + nm + ' {\n' + names[nm] + '\n}';
+    }).join('\n\n');
+    $('out').value = out.trim() + '\n';
+    T.status(st, 'ok', '✓ Generated ' + (order.length + (head ? 1 : 0)) + ' type' + (order.length + (head ? 1 : 0) === 1 ? '' : 's'));
+  }
+  T.onInput([$('in'), $('root')], run, 250);
+  $('style').addEventListener('change', run); $('exp').addEventListener('change', run);
+  $('copy').addEventListener('click', function () { T.copy($('out').value, 'Copied'); });
+  $('download').addEventListener('click', function () { if ($('out').value) T.download($('out').value, 'types.ts', 'text/plain'); else T.toast('Nothing to download yet'); });
+  $('sample').addEventListener('click', function () { $('in').value = SAMPLE; run(); });
+  $('clear').addEventListener('click', function () { $('in').value = ''; run(); $('in').focus(); });
+  $('in').value = SAMPLE; run();
+})();
+</script>
+</body>
+</html>

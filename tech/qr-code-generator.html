@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator - PNG &amp; SVG | Australian Jeevitham Tech</title>
+  <meta name="description" content="Make a QR code from any text or link and download it as PNG or SVG. Choose size, colours and error correction. Made in your browser - nothing is uploaded.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/qr-code-generator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="QR Code Generator - PNG &amp; SVG | Australian Jeevitham Tech">
+  <meta property="og:description" content="Make a QR code from any text or link and download it as PNG or SVG. Choose size, colours and error correction. Made in your browser - nothing is uploaded.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/qr-code-generator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="QR Code Generator - PNG &amp; SVG | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Make a QR code from any text or link and download it as PNG or SVG. Choose size, colours and error correction. Made in your browser - nothing is uploaded.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js" integrity="sha384-mZT2gIty7ZDdOGkxfP6joZcYdMW1Jvj9dRlfpTmaJAKKXTqzygtB22k7FLe+KZC1" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "QR Code Generator - PNG & SVG",
+  "url": "https://www.australianjeevitham.com/tech/qr-code-generator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Make a QR code from any text or link and download it as PNG or SVG. Choose size, colours and error correction. Made in your browser - nothing is uploaded.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / QR Code Generator</p>
+    <h1>QR Code <span class="hl">Generator</span></h1>
+    <p>Turn a link or any text into a QR code, then download it as a PNG or SVG. The code is made in your browser.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-row">
+      <div class="tl-card">
+        <h2>Content</h2>
+        <label class="tl-field"><span>Text or URL</span><textarea class="tl-text wrap short" id="text" spellcheck="false" placeholder="https://api.example.com/v1/status"></textarea></label>
+        <div class="tl-row tl-mt">
+          <label class="tl-field"><span>Error correction</span>
+            <select class="jp-select" id="ec">
+              <option value="L">Low (7%) - smallest code</option>
+              <option value="M" selected>Medium (15%)</option>
+              <option value="Q">Quartile (25%)</option>
+              <option value="H">High (30%) - most robust</option>
+            </select>
+          </label>
+          <label class="tl-field"><span>Image size</span>
+            <select class="jp-select" id="size">
+              <option value="256">256 px</option>
+              <option value="512" selected>512 px</option>
+              <option value="1024">1024 px</option>
+              <option value="2048">2048 px</option>
+            </select>
+          </label>
+          <label class="tl-field"><span>Quiet zone (modules)</span><input class="tl-input" type="number" id="margin" min="0" max="10" value="4"></label>
+          <label class="tl-field"><span>Colours (dark / light)</span>
+            <span style="display:flex; gap:8px;"><input type="color" id="fg" value="#000000" aria-label="Dark colour"><input type="color" id="bg" value="#ffffff" aria-label="Light colour"></span>
+          </label>
+        </div>
+        <div class="jp-status" id="status" role="status">Type some text to make a QR code.</div>
+      </div>
+      <div class="tl-card">
+        <h2>QR code</h2>
+        <div style="display:grid; place-items:center; padding:8px;"><canvas id="cv" width="300" height="300" style="width:100%; max-width:300px; height:auto; image-rendering:pixelated; border:1px solid var(--line); border-radius:12px;" role="img" aria-label="QR code preview"></canvas></div>
+        <div class="jp-bar tl-mt" style="justify-content:center;">
+          <button type="button" class="jp-btn primary" id="png">Download PNG</button>
+          <button type="button" class="jp-btn" id="svg">Download SVG</button>
+          <button type="button" class="jp-btn" id="copysvg">Copy SVG</button>
+        </div>
+      </div>
+    </div>
+    <p class="jp-note">The code is drawn in your browser - the text is not sent anywhere. Keep strong contrast between the two colours, with the darker one for the squares, or some scanners will not read it.</p>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), cv = $('cv'), svgText = '', count = 0;
+  if (typeof qrcode === 'undefined') { T.status(st, 'err', '✗ The QR code library did not load. Check your connection and reload the page.'); return; }
+  qrcode.stringToBytes = function (s) { return Array.prototype.slice.call(new TextEncoder().encode(s)); };
+
+  function draw() {
+    var text = $('text').value, ctx = cv.getContext('2d');
+    svgText = ''; count = 0;
+    if (!text) { cv.width = cv.height = 300; ctx.clearRect(0, 0, 300, 300); T.status(st, '', 'Type some text to make a QR code.'); return; }
+    var q;
+    try { q = qrcode(0, $('ec').value); q.addData(text, 'Byte'); q.make(); }
+    catch (e) { cv.width = cv.height = 300; T.status(st, 'err', '✗ That is too much text for one QR code. Shorten it or lower the error correction.'); return; }
+    var n = q.getModuleCount(), margin = Math.max(0, Math.min(10, parseInt($('margin').value, 10) || 0));
+    var total = n + margin * 2, scale = Math.max(1, Math.floor(+$('size').value / total)), px = total * scale;
+    var fg = $('fg').value, bg = $('bg').value, path = '';
+    count = n;
+    cv.width = cv.height = px;
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, px, px);
+    ctx.fillStyle = fg;
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) {
+      ctx.fillRect((c + margin) * scale, (r + margin) * scale, scale, scale);
+      path += 'M' + (c + margin) + ' ' + (r + margin) + 'h1v1h-1z';
+    }
+    svgText = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + total + ' ' + total + '" width="' + px + '" height="' + px + '" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="' + bg + '"/><path fill="' + fg + '" d="' + path + '"/></svg>';
+    T.status(st, 'ok', '✓ ' + n + ' × ' + n + ' modules, ' + new TextEncoder().encode(text).length + ' bytes of data, image ' + px + ' × ' + px + ' px');
+  }
+  T.onInput([$('text'), $('margin'), $('fg'), $('bg')], draw, 120);
+  $('ec').addEventListener('change', draw); $('size').addEventListener('change', draw);
+  $('png').addEventListener('click', function () {
+    if (!count) { T.toast('Nothing to download yet'); return; }
+    cv.toBlob(function (b) { T.download(b, 'qr-code.png'); }, 'image/png');
+  });
+  $('svg').addEventListener('click', function () { if (svgText) T.download(svgText, 'qr-code.svg', 'image/svg+xml'); else T.toast('Nothing to download yet'); });
+  $('copysvg').addEventListener('click', function () { T.copy(svgText, 'SVG copied'); });
+  $('text').value = 'https://api.example.com/v1/status';
+  draw();
+})();
+</script>
+</body>
+</html>

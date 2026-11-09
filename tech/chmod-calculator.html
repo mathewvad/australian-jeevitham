@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chmod Calculator - Linux File Permissions | Australian Jeevitham Tech</title>
+  <meta name="description" content="Work out Linux file permissions: tick read, write and execute to get the octal and symbolic values and the chmod command. Runs in your browser.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/tech/chmod-calculator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Tech">
+  <meta property="og:title" content="Chmod Calculator - Linux File Permissions | Australian Jeevitham Tech">
+  <meta property="og:description" content="Work out Linux file permissions: tick read, write and execute to get the octal and symbolic values and the chmod command. Runs in your browser.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/tech/chmod-calculator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Chmod Calculator - Linux File Permissions | Australian Jeevitham Tech">
+  <meta name="twitter:description" content="Work out Linux file permissions: tick read, write and execute to get the octal and symbolic values and the chmod command. Runs in your browser.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="tech.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Chmod Calculator - Linux File Permissions",
+  "url": "https://www.australianjeevitham.com/tech/chmod-calculator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Work out Linux file permissions: tick read, write and execute to get the octal and symbolic values and the chmod command. Runs in your browser.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">TECH</span></b><small>Developer tools</small></span>
+    </a>
+    <nav aria-label="Tech">
+      <ul class="t-nav">
+        <li><a href="./">All tools</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Tech</a> / Chmod Calculator</p>
+    <h1>Chmod <span class="hl">Calculator</span></h1>
+    <p>Tick who can read, write and run a file to get the octal number, the symbolic form and a chmod command ready to copy.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap">
+    <div class="tl-row">
+      <div class="tl-card">
+        <h2>Permissions</h2>
+        <div class="tl-table-wrap"><table class="tl-table tl-perm">
+          <thead><tr><th>Who</th><th>Read (4)</th><th>Write (2)</th><th>Execute (1)</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Owner</th><td><input type="checkbox" data-bit="256" aria-label="Owner read"></td><td><input type="checkbox" data-bit="128" aria-label="Owner write"></td><td><input type="checkbox" data-bit="64" aria-label="Owner execute"></td></tr>
+            <tr><th scope="row">Group</th><td><input type="checkbox" data-bit="32" aria-label="Group read"></td><td><input type="checkbox" data-bit="16" aria-label="Group write"></td><td><input type="checkbox" data-bit="8" aria-label="Group execute"></td></tr>
+            <tr><th scope="row">Others</th><td><input type="checkbox" data-bit="4" aria-label="Others read"></td><td><input type="checkbox" data-bit="2" aria-label="Others write"></td><td><input type="checkbox" data-bit="1" aria-label="Others execute"></td></tr>
+          </tbody>
+        </table></div>
+        <div class="jp-bar tl-mt">
+          <label class="jp-check"><input type="checkbox" data-bit="2048"> setuid</label>
+          <label class="jp-check"><input type="checkbox" data-bit="1024"> setgid</label>
+          <label class="jp-check"><input type="checkbox" data-bit="512"> sticky bit</label>
+        </div>
+        <span class="tl-lbl">Common settings</span>
+        <div class="tl-chips" id="presets" style="margin-top:8px;"></div>
+      </div>
+      <div class="tl-card">
+        <h2>Value</h2>
+        <div class="tl-row">
+          <label class="tl-field"><span>Octal</span><input class="tl-input" id="oct" spellcheck="false" autocomplete="off" inputmode="numeric" maxlength="4" placeholder="755"></label>
+          <label class="tl-field"><span>Symbolic</span><input class="tl-input" id="sym" spellcheck="false" autocomplete="off" maxlength="10" placeholder="rwxr-xr-x"></label>
+        </div>
+        <div class="jp-status" id="status" role="status"></div>
+        <label class="tl-field tl-mt"><span>File or folder name</span><input class="tl-input" id="file" value="deploy.sh" spellcheck="false" autocomplete="off"></label>
+        <label class="jp-check tl-mt"><input type="checkbox" id="rec"> Apply to everything inside a folder (-R)</label>
+        <div class="tl-table-wrap tl-mt"><table class="tl-table"><tbody id="cmds"></tbody></table></div>
+      </div>
+    </div>
+    <div class="tl-card tl-mt">
+      <h2>What it means</h2>
+      <div class="tl-table-wrap"><table class="tl-table"><tbody id="explain"></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Tech - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All tools</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="tech.js"></script>
+<script>
+(function () {
+  'use strict';
+  var T = AJT, $ = T.$, st = $('status'), mode = 493;
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('[data-bit]'));
+  var PRE = [['644', 'files: owner edits, everyone reads'], ['755', 'programs and folders'], ['600', 'private file'], ['700', 'private folder or script'], ['664', 'group can edit'], ['775', 'shared folder'], ['400', 'read-only key file'], ['777', 'anyone can do anything']];
+
+  function octal(m) { var s = (m & 511).toString(8); while (s.length < 3) s = '0' + s; return (m >> 9 ? String(m >> 9) : '') + s; }
+  function symbolic(m) {
+    var s = '';
+    for (var i = 8; i >= 0; i--) s += (m >> i) & 1 ? 'rwx'.charAt((8 - i) % 3) : '-';
+    var a = s.split('');
+    if (m & 2048) a[2] = a[2] === 'x' ? 's' : 'S';
+    if (m & 1024) a[5] = a[5] === 'x' ? 's' : 'S';
+    if (m & 512) a[8] = a[8] === 'x' ? 't' : 'T';
+    return a.join('');
+  }
+  function parseSym(v) {
+    v = v.trim();
+    if (v.length === 10) v = v.slice(1);
+    if (!/^[r-][w-][xsS-][r-][w-][xsS-][r-][w-][xtT-]$/.test(v)) return null;
+    var m = 0;
+    for (var i = 0; i < 9; i++) { var c = v.charAt(i); if (c !== '-' && c !== 'S' && c !== 'T') m |= 1 << (8 - i); }
+    if (/[sS]/.test(v.charAt(2))) m |= 2048;
+    if (/[sS]/.test(v.charAt(5))) m |= 1024;
+    if (/[tT]/.test(v.charAt(8))) m |= 512;
+    return m;
+  }
+  function words(n) { var a = []; if (n & 4) a.push('read'); if (n & 2) a.push('write'); if (n & 1) a.push('execute'); return a.length ? a.join(', ') : 'no access'; }
+  function clause(letter, n) { return letter + '=' + (n & 4 ? 'r' : '') + (n & 2 ? 'w' : '') + (n & 1 ? 'x' : ''); }
+  function row(k, v) { return '<tr><th scope="row" style="width:130px;">' + k + '</th><td><code>' + T.esc(v) + '</code></td><td style="width:60px;"><button type="button" class="tl-copy" data-v="' + T.esc(v) + '">Copy</button></td></tr>'; }
+
+  function show(from) {
+    boxes.forEach(function (b) { b.checked = !!(mode & +b.getAttribute('data-bit')); });
+    if (from !== 'oct') $('oct').value = octal(mode);
+    if (from !== 'sym') $('sym').value = symbolic(mode);
+    var o = (mode >> 6) & 7, g = (mode >> 3) & 7, w = mode & 7, f = $('file').value.trim() || 'file', r = $('rec').checked ? '-R ' : '';
+    if (/[^\w.\/-]/.test(f)) f = "'" + f.replace(/'/g, "'\\''") + "'";
+    var sp = (mode & 2048 ? ',u+s' : '') + (mode & 1024 ? ',g+s' : '') + (mode & 512 ? ',+t' : '');
+    $('cmds').innerHTML = row('Octal', 'chmod ' + r + octal(mode) + ' ' + f) + row('Symbolic', 'chmod ' + r + clause('u', o) + ',' + clause('g', g) + ',' + clause('o', w) + sp + ' ' + f);
+    $('explain').innerHTML = '<tr><th scope="row" style="width:130px;">Owner</th><td>' + words(o) + '</td></tr><tr><th scope="row">Group</th><td>' + words(g) + '</td></tr><tr><th scope="row">Others</th><td>' + words(w) + '</td></tr>' +
+      (mode & 2048 ? '<tr><th scope="row">setuid</th><td>A program runs with the rights of the file owner.</td></tr>' : '') +
+      (mode & 1024 ? '<tr><th scope="row">setgid</th><td>A program runs with the rights of the group; new files in a folder inherit its group.</td></tr>' : '') +
+      (mode & 512 ? '<tr><th scope="row">sticky bit</th><td>In a shared folder, only the owner of a file can delete or rename it.</td></tr>' : '');
+    var warn = (mode & 2) ? ' - anyone on the system can change this file' : '';
+    T.status(st, warn ? 'err' : 'ok', (warn ? '⚠ ' : '✓ ') + octal(mode) + ' = ' + symbolic(mode) + warn);
+  }
+  boxes.forEach(function (b) { b.addEventListener('change', function () { var bit = +b.getAttribute('data-bit'); mode = b.checked ? mode | bit : mode & ~bit; show(); }); });
+  $('oct').addEventListener('input', function () {
+    var v = $('oct').value.trim();
+    if (/^[0-7]{3,4}$/.test(v)) { mode = parseInt(v, 8); show('oct'); }
+    else T.status(st, v ? 'err' : '', v ? '✗ Use 3 or 4 digits from 0 to 7, such as 755' : 'Type an octal value such as 755.');
+  });
+  $('sym').addEventListener('input', function () {
+    var m = parseSym($('sym').value);
+    if (m !== null) { mode = m; show('sym'); }
+    else T.status(st, 'err', '✗ Use 9 characters such as rwxr-xr-x');
+  });
+  $('file').addEventListener('input', function () { show(); });
+  $('rec').addEventListener('change', function () { show(); });
+  $('presets').innerHTML = PRE.map(function (p) { return '<button type="button" class="tl-copy" data-pre="' + p[0] + '" title="' + p[1] + '"><code>' + p[0] + '</code> ' + p[1] + '</button>'; }).join('');
+  $('presets').addEventListener('click', function (e) { var b = e.target.closest('[data-pre]'); if (b) { mode = parseInt(b.getAttribute('data-pre'), 8); show(); } });
+  document.addEventListener('click', function (e) { var b = e.target.closest('[data-v]'); if (b) T.copy(b.getAttribute('data-v'), 'Copied'); });
+  show();
+})();
+</script>
+</body>
+</html>
