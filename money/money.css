@@ -306,3 +306,10 @@ a.m-tile:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); }
   .m-table td .tl-input{ width:74px; }
 }
 .tl-note a{ color:var(--orange-2); }
+/* Feedback box (added 10 Nov 2026) */
+.m-fb{ margin-top:26px; position:relative; }
+.m-fb .jp-btn{ min-width:72px; }
+.m-fb .jp-btn.on{ background:var(--navy); border-color:var(--navy); color:#fff; }
+.m-fb textarea{ resize:vertical; min-height:84px; }
+.m-fb .jp-btn:disabled{ opacity:.6; cursor:default; }
+.m-trap{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
