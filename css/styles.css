@@ -1194,7 +1194,7 @@ footer#connect .wrap{ max-width:1180px; padding:0 clamp(16px,4vw,32px); }
 footer#connect .section-head{ position:relative; max-width:780px; margin-bottom:42px; }
 footer#connect .stamp{ display:inline-flex; gap:8px; padding:0; border-radius:0; background:none; font-family:"Dancing Script", cursive; font-size:1.5rem; font-weight:700; letter-spacing:0; color:#8FC3E6; }
 footer#connect .stamp::before{ content:none; }
-footer#connect .section-head h2{ margin:10px 0 0; font-family:"Josefin Sans", system-ui, sans-serif; font-weight:700; font-size:clamp(1.8rem,3.4vw,2.6rem); line-height:1.15; letter-spacing:.05em; text-transform:uppercase; color:#fff; }
+footer#connect .section-head h2{ margin:10px 0 0 !important; font-family:"Josefin Sans", system-ui, sans-serif; font-weight:700; font-size:clamp(1.8rem,3.4vw,2.6rem); line-height:1.15; letter-spacing:.05em; text-transform:uppercase; color:#fff; }
 footer#connect .section-head h2::after{ content:""; display:block; width:110px; height:8px; margin-top:14px; border-radius:50%; background:#8FC3E6; opacity:.8; }
 footer#connect .connect-grid{ grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; margin-top:0; }
 footer#connect .connect-link{ min-width:0; padding:14px 16px; border-radius:20px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); color:inherit; box-shadow:none; transition:all .25s; }
