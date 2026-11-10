@@ -13,20 +13,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Australian PR Points Calculator (189, 190, 491) | Australian Jeevitham Money</title>
-  <meta name="description" content="Tick your age, English, work experience, qualifications and partner details to see your Australian skilled visa points for subclass 189, 190 and 491.">
+  <meta name="description" content="Tick your age, English, work experience, qualifications and partner details to see your Australian skilled visa points for subclass 189, 190 and 491, and the day your age points change.">
   <link rel="canonical" href="https://www.australianjeevitham.com/money/pr-points-calculator.html">
   <link rel="icon" type="image/png" href="../images/favicon.png">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Australian Jeevitham Money">
   <meta property="og:title" content="Australian PR Points Calculator (189, 190, 491) | Australian Jeevitham Money">
-  <meta property="og:description" content="Tick your age, English, work experience, qualifications and partner details to see your Australian skilled visa points for subclass 189, 190 and 491.">
+  <meta property="og:description" content="Tick your age, English, work experience, qualifications and partner details to see your Australian skilled visa points for subclass 189, 190 and 491, and the day your age points change.">
   <meta property="og:url" content="https://www.australianjeevitham.com/money/pr-points-calculator.html">
   <meta property="og:locale" content="en_AU">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Australian PR Points Calculator (189, 190, 491) | Australian Jeevitham Money">
-  <meta name="twitter:description" content="Tick your age, English, work experience, qualifications and partner details to see your Australian skilled visa points for subclass 189, 190 and 491.">
+  <meta name="twitter:description" content="Tick your age, English, work experience, qualifications and partner details to see your Australian skilled visa points for subclass 189, 190 and 491, and the day your age points change.">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -42,7 +42,7 @@
   "url": "https://www.australianjeevitham.com/money/pr-points-calculator.html",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any (runs in the web browser)",
-  "description": "Tick your age, English, work experience, qualifications and partner details to see your Australian skilled visa points for subclass 189, 190 and 491.",
+  "description": "Tick your age, English, work experience, qualifications and partner details to see your Australian skilled visa points for subclass 189, 190 and 491, and the day your age points change.",
   "isAccessibleForFree": true,
   "offers": {
     "@type": "Offer",
@@ -83,77 +83,83 @@
 </section>
 
 <section class="jp-tool">
-  <div class="wrap">
-    <div class="m-two" id="calc">
+  <div class="wrap" id="calc">
+    <div class="m-two">
       <div class="m-pts">
+      <div class="tl-card">
+        <h2>Your date of birth</h2>
+        <label class="tl-field"><span>Date of birth (optional)</span><input class="tl-input" type="date" id="dob" data-private></label>
+        <div class="jp-status" id="dobMsg" role="status">Type your date of birth to see the day your age points change.</div>
+        <p class="tl-note">Your date of birth stays on this device. It is not put in the link you share. Clear the date to pick your age by hand.</p>
+      </div>
       <div class="tl-card">
         <h2>Your age</h2>
         <div class="m-opts">
-          <label><input type="radio" name="age" value="25" checked> <span>18 to 24</span><em>25 points</em></label>
-          <label><input type="radio" name="age" value="30"> <span>25 to 32</span><em>30 points</em></label>
-          <label><input type="radio" name="age" value="25"> <span>33 to 39</span><em>25 points</em></label>
-          <label><input type="radio" name="age" value="15"> <span>40 to 44</span><em>15 points</em></label>
-          <label><input type="radio" name="age" value="0"> <span>45 or over (cannot be invited)</span><em>0 points</em></label>
+          <label><input type="radio" id="age0" name="age" value="25" checked> <span>18 to 24</span><em>25 points</em></label>
+          <label><input type="radio" id="age1" name="age" value="30"> <span>25 to 32</span><em>30 points</em></label>
+          <label><input type="radio" id="age2" name="age" value="25"> <span>33 to 39</span><em>25 points</em></label>
+          <label><input type="radio" id="age3" name="age" value="15"> <span>40 to 44</span><em>15 points</em></label>
+          <label><input type="radio" id="age4" name="age" value="0"> <span>45 or over (cannot be invited)</span><em>0 points</em></label>
         </div>
       </div>
       <div class="tl-card">
         <h2>English</h2>
         <div class="m-opts">
-          <label><input type="radio" name="eng" value="0" checked> <span>Competent - IELTS 6 in each part</span><em>0 points</em></label>
-          <label><input type="radio" name="eng" value="10"> <span>Proficient - IELTS 7 in each part</span><em>10 points</em></label>
-          <label><input type="radio" name="eng" value="20"> <span>Superior - IELTS 8 in each part</span><em>20 points</em></label>
+          <label><input type="radio" id="eng0" name="eng" value="0" checked> <span>Competent - IELTS 6 in each part</span><em>0 points</em></label>
+          <label><input type="radio" id="eng1" name="eng" value="10"> <span>Proficient - IELTS 7 in each part</span><em>10 points</em></label>
+          <label><input type="radio" id="eng2" name="eng" value="20"> <span>Superior - IELTS 8 in each part</span><em>20 points</em></label>
         </div>
       </div>
       <div class="tl-card">
         <h2>Skilled work outside Australia (last 10 years)</h2>
         <div class="m-opts">
-          <label><input type="radio" name="os" value="0" checked> <span>Less than 3 years</span><em>0 points</em></label>
-          <label><input type="radio" name="os" value="5"> <span>3 to 4 years</span><em>5 points</em></label>
-          <label><input type="radio" name="os" value="10"> <span>5 to 7 years</span><em>10 points</em></label>
-          <label><input type="radio" name="os" value="15"> <span>8 years or more</span><em>15 points</em></label>
+          <label><input type="radio" id="os0" name="os" value="0" checked> <span>Less than 3 years</span><em>0 points</em></label>
+          <label><input type="radio" id="os1" name="os" value="5"> <span>3 to 4 years</span><em>5 points</em></label>
+          <label><input type="radio" id="os2" name="os" value="10"> <span>5 to 7 years</span><em>10 points</em></label>
+          <label><input type="radio" id="os3" name="os" value="15"> <span>8 years or more</span><em>15 points</em></label>
         </div>
       </div>
       <div class="tl-card">
         <h2>Skilled work in Australia (last 10 years)</h2>
         <div class="m-opts">
-          <label><input type="radio" name="au" value="0" checked> <span>Less than 1 year</span><em>0 points</em></label>
-          <label><input type="radio" name="au" value="5"> <span>1 to 2 years</span><em>5 points</em></label>
-          <label><input type="radio" name="au" value="10"> <span>3 to 4 years</span><em>10 points</em></label>
-          <label><input type="radio" name="au" value="15"> <span>5 to 7 years</span><em>15 points</em></label>
-          <label><input type="radio" name="au" value="20"> <span>8 years or more</span><em>20 points</em></label>
+          <label><input type="radio" id="au0" name="au" value="0" checked> <span>Less than 1 year</span><em>0 points</em></label>
+          <label><input type="radio" id="au1" name="au" value="5"> <span>1 to 2 years</span><em>5 points</em></label>
+          <label><input type="radio" id="au2" name="au" value="10"> <span>3 to 4 years</span><em>10 points</em></label>
+          <label><input type="radio" id="au3" name="au" value="15"> <span>5 to 7 years</span><em>15 points</em></label>
+          <label><input type="radio" id="au4" name="au" value="20"> <span>8 years or more</span><em>20 points</em></label>
         </div>
       </div>
       <div class="tl-card">
         <h2>Highest qualification</h2>
         <div class="m-opts">
-          <label><input type="radio" name="edu" value="0" checked> <span>None of these</span><em>0 points</em></label>
-          <label><input type="radio" name="edu" value="10"> <span>Diploma or trade qualification</span><em>10 points</em></label>
-          <label><input type="radio" name="edu" value="10"> <span>Other qualification recognised for your job</span><em>10 points</em></label>
-          <label><input type="radio" name="edu" value="15"> <span>Bachelor or Master degree</span><em>15 points</em></label>
-          <label><input type="radio" name="edu" value="20"> <span>Doctorate (PhD)</span><em>20 points</em></label>
+          <label><input type="radio" id="edu0" name="edu" value="0" checked> <span>None of these</span><em>0 points</em></label>
+          <label><input type="radio" id="edu1" name="edu" value="10"> <span>Diploma or trade qualification</span><em>10 points</em></label>
+          <label><input type="radio" id="edu2" name="edu" value="10"> <span>Other qualification recognised for your job</span><em>10 points</em></label>
+          <label><input type="radio" id="edu3" name="edu" value="15"> <span>Bachelor or Master degree</span><em>15 points</em></label>
+          <label><input type="radio" id="edu4" name="edu" value="20"> <span>Doctorate (PhD)</span><em>20 points</em></label>
         </div>
       </div>
       <div class="tl-card">
         <h2>Partner</h2>
         <div class="m-opts">
-          <label><input type="radio" name="partner" value="0" checked> <span>Partner with no points</span><em>0 points</em></label>
-          <label><input type="radio" name="partner" value="10"> <span>Single, or partner is an Australian citizen or permanent resident</span><em>10 points</em></label>
-          <label><input type="radio" name="partner" value="10"> <span>Partner with a skills assessment and competent English</span><em>10 points</em></label>
-          <label><input type="radio" name="partner" value="5"> <span>Partner with competent English only</span><em>5 points</em></label>
+          <label><input type="radio" id="partner0" name="partner" value="0" checked> <span>Partner with no points</span><em>0 points</em></label>
+          <label><input type="radio" id="partner1" name="partner" value="10"> <span>Single, or partner is an Australian citizen or permanent resident</span><em>10 points</em></label>
+          <label><input type="radio" id="partner2" name="partner" value="10"> <span>Partner with a skills assessment and competent English</span><em>10 points</em></label>
+          <label><input type="radio" id="partner3" name="partner" value="5"> <span>Partner with competent English only</span><em>5 points</em></label>
         </div>
       </div>
       <div class="tl-card">
         <h2>Extra points - tick all that fit</h2>
         <div class="m-opts">
-          <label><input type="checkbox" value="5"> <span>Australian study - 2 years of study in Australia</span><em>5 points</em></label>
-          <label><input type="checkbox" value="5"> <span>Study in regional Australia</span><em>5 points</em></label>
-          <label><input type="checkbox" value="10"> <span>Specialist education - Australian research Master or PhD in science, technology, engineering or maths</span><em>10 points</em></label>
-          <label><input type="checkbox" value="5"> <span>Professional Year in Australia</span><em>5 points</em></label>
-          <label><input type="checkbox" value="5"> <span>Community language test (NAATI CCL)</span><em>5 points</em></label>
+          <label><input type="checkbox" id="extra0" value="5"> <span>Australian study - 2 years of study in Australia</span><em>5 points</em></label>
+          <label><input type="checkbox" id="extra1" value="5"> <span>Study in regional Australia</span><em>5 points</em></label>
+          <label><input type="checkbox" id="extra2" value="10"> <span>Specialist education - Australian research Master or PhD in science, technology, engineering or maths</span><em>10 points</em></label>
+          <label><input type="checkbox" id="extra3" value="5"> <span>Professional Year in Australia</span><em>5 points</em></label>
+          <label><input type="checkbox" id="extra4" value="5"> <span>Community language test (NAATI CCL)</span><em>5 points</em></label>
         </div>
       </div>
       </div>
-      <div class="tl-card m-sticky">
+      <div class="tl-card m-sticky" id="result">
         <h2>Your points</h2>
         <div class="m-score" id="score" aria-live="polite">0</div>
         <p class="tl-note" style="margin-top:4px;">for subclass 189</p>
@@ -164,6 +170,15 @@
         <p class="tl-note"><a href="../pr-points-calculator-australia.html">Read the PR points guide</a></p>
       </div>
     </div>
+
+    <a class="m-float" href="#result">Your points: <b id="score2">0</b></a>
+
+    <div class="tl-card tl-mt">
+      <h2>What if? Ways to add points</h2>
+      <ul class="m-gain" id="gain"></ul>
+      <p class="tl-note">Each line shows one change and the score it would give you for subclass 189. Tick it above to try it.</p>
+    </div>
+    <div class="m-share"><div class="jp-bar" id="shareBar"></div><p class="tl-note">The link opens this page with the same choices and numbers you see now.</p></div>
     <p class="m-disclaimer"><strong>Estimate only - not financial or migration advice.</strong> Last updated: 10 November 2026.</p>
     <p class="m-sources">Source: <a href="https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-independent-189/points-table" target="_blank" rel="noopener noreferrer">Home Affairs points table for skilled visas</a>. Other English tests such as PTE are accepted too - check the matching scores with Home Affairs.</p>
   </div>
@@ -182,14 +197,45 @@
   'use strict';
   var M = window.AJM, $ = M.$, root = $('calc');
   var PASS = 65, WORK_CAP = 20;
+  var AGE_PTS = [25, 30, 25, 15, 0], AGE_FROM = [18, 25, 33, 40, 45]; // points and first age of each age group
+  var GROUPS = [['eng', 'English'], ['os', 'Work outside Australia'], ['au', 'Work in Australia'], ['edu', 'Qualification'], ['partner', 'Partner']];
+  M.init(root, 'pr');
+
+  function radios(name) { return [].slice.call(root.querySelectorAll('input[name="' + name + '"]')); }
   function pick(name) { var el = root.querySelector('input[name="' + name + '"]:checked'); return el ? +el.value : 0; }
+  function boxes() { return [].slice.call(root.querySelectorAll('input[type="checkbox"]')); }
+  function label(el) { return el.parentNode.querySelector('span').textContent; }
+  // Total for subclass 189; "swap" tries one answer without ticking it: { name: points }
+  function total(swap) {
+    swap = swap || {};
+    function v(n) { return swap[n] != null ? swap[n] : pick(n); }
+    var extra = 0; boxes().forEach(function (c) { if (c.checked) extra += +c.value; });
+    return v('age') + v('eng') + Math.min(WORK_CAP, v('os') + v('au')) + v('edu') + v('partner') + extra + (swap.extra || 0);
+  }
+  function longDate(d) { return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }); }
+
+  // Date of birth: ticks the age group and shows the day the age points change
+  function age() {
+    var box = $('dobMsg'), p = $('dob').value.split('-');
+    if (p.length !== 3 || !+p[0]) { box.className = 'jp-status'; box.textContent = 'Type your date of birth to see the day your age points change.'; return; }
+    var y = +p[0], m = +p[1] - 1, d = +p[2], now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var years = today.getFullYear() - y - (today < new Date(today.getFullYear(), m, d) ? 1 : 0);
+    if (years < 18) { box.className = 'jp-status err'; box.textContent = 'You are ' + years + '. You must be 18 or over to be invited.'; return; }
+    var g = 0; AGE_FROM.forEach(function (from, i) { if (years >= from) g = i; });
+    radios('age').forEach(function (r, i) { r.checked = i === g; });
+    if (g === 4) { box.className = 'jp-status err'; box.textContent = 'You are ' + years + '. You must be under 45 to be invited for these visas.'; return; }
+    var when = new Date(y + AGE_FROM[g + 1], m, d), days = Math.round((when - today) / 86400000);
+    var up = AGE_PTS[g + 1] > AGE_PTS[g];
+    box.className = 'jp-status ' + (up ? 'ok' : 'err');
+    box.textContent = 'You are ' + years + '. Your age points ' + (up ? 'rise' : 'drop') + ' from ' + AGE_PTS[g] + ' to ' + AGE_PTS[g + 1] + ' on ' + longDate(when) + ' - ' + days + ' day' + (days === 1 ? '' : 's') + ' from today.';
+  }
+
+  var text = '';
   function run() {
-    var work = pick('os') + pick('au'), capped = Math.min(WORK_CAP, work), extra = 0;
-    [].forEach.call(root.querySelectorAll('input[type="checkbox"]:checked'), function (c) { extra += +c.value; });
-    var base = pick('age') + pick('eng') + capped + pick('edu') + pick('partner') + extra;
-    var tooOld = pick('age') === 0;
+    age();
+    var work = pick('os') + pick('au'), base = total(), tooOld = pick('age') === 0;
     var rows = [['Subclass 189 - Skilled Independent', base], ['Subclass 190 - state nomination adds 5', base + 5], ['Subclass 491 - regional nomination adds 15', base + 15]];
-    $('score').textContent = base;
+    $('score').textContent = base; $('score2').textContent = base;
     $('rows').innerHTML = rows.map(function (r) { return '<tr' + (r[1] >= PASS ? ' class="mine"' : '') + '><td>' + r[0] + '</td><td class="num">' + r[1] + '</td></tr>'; }).join('');
     $('cap').textContent = work > WORK_CAP ? 'Work points are capped at 20 in total, so ' + work + ' became 20.' : '';
     var box = $('check');
@@ -197,8 +243,28 @@
     else if (base >= PASS) { box.className = 'jp-status ok'; box.textContent = '✓ You reach the 65 point pass mark for all three visas.'; }
     else if (base + 15 >= PASS) { box.className = 'jp-status ok'; box.textContent = '✓ You reach 65 points with ' + (base + 5 >= PASS ? 'a state (190) or regional (491) nomination.' : 'a regional (491) nomination.'); }
     else { box.className = 'jp-status err'; box.textContent = 'You need ' + (PASS - base - 15) + ' more points to reach 65, even with a 491 nomination.'; }
+
+    // What if: every single change that would add points
+    var gains = [];
+    GROUPS.forEach(function (g) {
+      radios(g[0]).forEach(function (r) {
+        var s = {}; s[g[0]] = +r.value;
+        var add = total(s) - base;
+        if (!r.checked && add > 0 && r.id !== 'partner1') gains.push([add, g[1] + ': ' + label(r)]);
+      });
+    });
+    boxes().forEach(function (c) { if (!c.checked) gains.push([+c.value, label(c)]); });
+    gains.sort(function (a, b) { return b[0] - a[0]; });
+    $('gain').innerHTML = gains.length ? gains.slice(0, 8).map(function (g) {
+      return '<li><b>+' + g[0] + '</b><span>' + M.esc(g[1]) + '</span><em>' + (base + g[0]) + ' points</em></li>';
+    }).join('') : '<li><span>You already have every answer that adds points.</span></li>';
+
+    text = 'My Australian PR points: ' + base + ' for subclass 189, ' + (base + 5) + ' for 190 and ' + (base + 15) + ' for 491.';
+    M.remember();
+    M.setPlan({ points: base });
   }
   M.watch(root, run);
+  M.shareBar(function () { return text; });
   run();
 })();
 </script>

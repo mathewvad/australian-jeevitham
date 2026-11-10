@@ -115,6 +115,7 @@
       <div class="m-tiles" id="tiles"></div>
       <div class="jp-status" id="check" role="status"></div>
       <p class="tl-note">The rent check uses a common guide: rent above 30% of your pay before tax is called rent stress.</p>
+      <p class="tl-note">Want to know your pay after tax? <a href="take-home-pay-calculator.html">Open the take-home pay calculator</a>.</p>
     </div>
 
     <div class="tl-card tl-mt">
@@ -122,6 +123,7 @@
       <div class="tl-table-wrap m-full"><table class="tl-table m-table"><thead><tr><th>City</th><th class="num">House</th><th class="num">Unit</th><th class="num">Pay needed for a unit</th></tr></thead><tbody id="rows"></tbody></table></div>
       <p class="tl-note">"Pay needed" is the yearly household pay before tax that keeps the unit rent at 30% of pay. Median means the middle rent: half of homes cost more and half cost less. Townsville and Cairns show the rent for a 3-bedroom house and a 2-bedroom unit, from new leases signed in July to September 2026.</p>
     </div>
+    <div class="m-share"><div class="jp-bar" id="shareBar"></div><p class="tl-note">The link opens this page with the same choices and numbers you see now.</p></div>
     <p class="m-disclaimer"><strong>Estimate only - not financial or migration advice.</strong> Last updated: 10 November 2026.</p>
     <p class="m-sources">Source for rents: <a href="https://www.domain.com.au/research/rental-report/september-2026/" target="_blank" rel="noopener noreferrer">Domain Rental Report, September 2026</a> (median asking rents for capital cities) and <a href="https://www.rta.qld.gov.au/forms-resources/rta-data-releases/median-rents-quarterly-data" target="_blank" rel="noopener noreferrer">Queensland RTA median rents data</a> (Townsville and Cairns council areas). The rupee amount uses the rate you type in.</p>
   </div>
@@ -139,16 +141,9 @@
 (function () {
   'use strict';
   var M = window.AJM, $ = M.$;
-  // Median weekly rent [house, unit] in AUD. Capital cities: Domain Rental Report, September 2026 (asking rents)
-  var CITIES = [
-    ['Sydney', 835, 780], ['Melbourne', 600, 600], ['Brisbane', 700, 660], ['Adelaide', 650, 550],
-    ['Perth', 750, 700], ['Hobart', 625, 525], ['Canberra', 700, 580], ['Darwin', 800, 650],
-    // Queensland RTA bond data, July to September 2026: 3-bedroom house, 2-bedroom unit
-    ['Townsville', 580, 470], ['Cairns', 670, 530]
-  ];
+  var CITIES = M.CITIES; // median weekly rent [name, house, unit]
   var GUIDE = 0.30;
   $('city').innerHTML = CITIES.map(function (c, i) { return '<option value="' + i + '">' + c[0] + '</option>'; }).join('');
-  var saved = M.load('city'); if (saved && CITIES[saved]) $('city').value = saved;
 
   function fillRent() { $('rent').value = CITIES[+$('city').value][$('type').value === '0' ? 1 : 2]; }
   function run() {
@@ -173,11 +168,24 @@
     $('rows').innerHTML = CITIES.map(function (c, i) {
       return '<tr' + (i === ci ? ' class="mine"' : '') + '><td>' + c[0] + '</td><td class="num">' + M.aud(c[1]) + '</td><td class="num">' + M.aud(c[2]) + '</td><td class="num">' + M.aud(c[2] * 52 / GUIDE) + '</td></tr>';
     }).join('');
+
+    text = 'Living in ' + city + ': about ' + M.aud(total) + ' a week (' + M.aud(total * 52 / 12) + ' a month), with rent of ' + M.aud(rent) + ' a week.';
+    M.remember();
+    M.setPlan({ city: ci, cityName: city, weekCost: Math.round(total), weekOther: Math.round(other) });
   }
-  $('city').addEventListener('change', function () { M.save('city', $('city').value); fillRent(); });
+  var text = '';
+  $('city').addEventListener('change', fillRent);
   $('type').addEventListener('change', fillRent);
+  fillRent();
+  var st = M.init($('calc'), 'living');
+  if (!st.shared) { // numbers already typed in the other calculators
+    var p = M.plan;
+    if (p.city != null && CITIES[p.city] && String(p.city) !== $('city').value) { $('city').value = p.city; fillRent(); }
+    if (p.pay > 0 && !st.own.pay) $('pay').value = p.pay;
+  }
   M.watch($('calc'), run);
-  fillRent(); run();
+  M.shareBar(function () { return text; });
+  run();
 })();
 </script>
 </body>

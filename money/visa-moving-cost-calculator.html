@@ -107,6 +107,7 @@
       <h2>Your total</h2>
       <div class="m-tiles" id="tiles"></div>
     </div>
+    <div class="m-share"><div class="jp-bar" id="shareBar"></div><p class="tl-note">The link opens this page with the same choices and numbers you see now.</p></div>
     <p class="m-disclaimer"><strong>Estimate only - not financial or migration advice.</strong> Last updated: 10 November 2026.</p>
     <p class="m-sources">Sources for visa fees: <a href="https://immi.homeaffairs.gov.au/visas/getting-a-visa/fees-and-charges/current-visa-pricing" target="_blank" rel="noopener noreferrer">Home Affairs current visa pricing</a> (the official list - check it before you pay) and the <a href="https://www.australian.com/visas/fees" target="_blank" rel="noopener noreferrer">australian.com fee summary</a>. The rupee amount uses the rate you type in.</p>
   </div>
@@ -175,10 +176,22 @@
       [M.aud(sum - visa), 'Everything else', false]
     ];
     $('tiles').innerHTML = tiles.map(function (t) { return '<div class="m-tile' + (t[2] ? ' hot' : '') + '"><b>' + M.esc(t[0]) + '</b><span>' + t[1] + '</span></div>'; }).join('');
+
+    text = 'Moving to Australia with ' + adults + ' adult' + (adults === 1 ? '' : 's') + ' and ' + kids + ' child' + (kids === 1 ? '' : 'ren') + ': about ' + M.aud(sum) + ' in total (' + M.aud(visa) + ' of it visa fees).';
+    M.remember();
+    M.setPlan({ adults: adults, kids: kids, moveTotal: Math.round(sum) });
   }
+  var text = '';
   $('visa').addEventListener('change', fillVisa);
+  fillVisa();
+  var st = M.init($('calc'), 'moving');
+  if (!st.shared) { // family size typed on an earlier visit
+    if (M.plan.adults >= 1) $('adults').value = M.plan.adults;
+    if (M.plan.kids >= 0) $('kids').value = M.plan.kids;
+  }
   M.watch($('calc'), run);
-  fillVisa(); run();
+  M.shareBar(function () { return text; });
+  run();
 })();
 </script>
 </body>

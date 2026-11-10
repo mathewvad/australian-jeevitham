@@ -99,6 +99,7 @@
       <div class="tl-table-wrap m-full tl-mt"><table class="tl-table m-table m-plan"><thead><tr><th id="thc">Australia</th><th>Kerala, India</th><th>Good time to call?</th></tr></thead><tbody id="rows"></tbody></table></div>
       <p class="tl-note">A good time means it is between 7 am and 10 pm in both places. The row for the current hour is highlighted.</p>
     </div>
+    <div class="m-share"><div class="jp-bar" id="shareBar"></div><p class="tl-note">The link opens this page with the same choices and numbers you see now.</p></div>
     <p class="m-disclaimer"><strong>Estimate only - not financial or migration advice.</strong> Last updated: 10 November 2026.</p>
     <p class="m-sources">Times come from your device's clock and its time zone data.</p>
   </div>
@@ -147,7 +148,7 @@
     return (h ? h + ' h ' : '') + (m ? m + ' min ' : '') + (mins > 0 ? 'ahead of India' : 'behind India');
   }
   $('city').innerHTML = CITIES.map(function (c, i) { return '<option value="' + i + '">' + c[0] + ' (' + c[2] + ')</option>'; }).join('');
-  var saved = M.load('tcity'); if (saved && CITIES[saved]) $('city').value = saved;
+  M.init($('calc'), 'time');
 
   function clocks(now) {
     var india = offset(HOME[1], now);
@@ -181,7 +182,8 @@
     if (minute === lastMinute) return;
     lastMinute = minute; clocks(now); plan(now);
   }
-  $('city').addEventListener('change', function () { M.save('tcity', $('city').value); plan(new Date()); });
+  $('city').addEventListener('change', function () { plan(new Date()); M.remember(); });
+  M.shareBar(function () { return $('best').textContent.replace('✓ ', ''); });
   tick(); setInterval(tick, 1000);
 })();
 </script>

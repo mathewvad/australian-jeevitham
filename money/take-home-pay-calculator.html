@@ -119,6 +119,7 @@
       <div class="m-legend"><span class="c-net">Take-home pay</span><span class="c-tax">Income tax</span><span class="c-med">Medicare levy</span></div>
       <p class="tl-note">Each bar is one yearly pay before tax, using the tax year and residency you picked above. The bar marked "Your pay" moves as you type or slide.</p>
     </div>
+    <div class="m-share"><div class="jp-bar" id="shareBar"></div><p class="tl-note">The link opens this page with the same choices and numbers you see now.</p></div>
     <p class="m-disclaimer"><strong>Estimate only - not financial or migration advice.</strong> Last updated: 10 November 2026.</p>
     <p class="m-sources">Sources: <a href="https://www.ato.gov.au/tax-rates-and-codes/tax-rates-australian-residents" target="_blank" rel="noopener noreferrer">ATO tax rates for Australian residents</a>, <a href="https://www.ato.gov.au/tax-rates-and-codes/tax-rates-foreign-residents" target="_blank" rel="noopener noreferrer">ATO tax rates for foreign residents</a> and <a href="https://www.ato.gov.au/individuals-and-families/medicare-and-private-health-insurance/medicare-levy" target="_blank" rel="noopener noreferrer">ATO Medicare levy</a>. The rupee amount uses the rate you type in.</p>
   </div>
@@ -136,44 +137,12 @@
 (function () {
   'use strict';
   var M = window.AJM, $ = M.$;
-  // [upper limit of band, rate] - each rate applies to income above the previous limit
-  var RATES = {
-    res2026: [[18200, 0], [45000, 0.15], [135000, 0.30], [190000, 0.37], [Infinity, 0.45]],
-    res2025: [[18200, 0], [45000, 0.16], [135000, 0.30], [190000, 0.37], [Infinity, 0.45]],
-    foreign: [[135000, 0.30], [190000, 0.37], [Infinity, 0.45]]
-  };
-  var MEDICARE_LOW = 27222; // single low-income threshold (latest figure confirmed by the ATO)
-
-  function bandTax(income, bands) {
-    var tax = 0, prev = 0;
-    for (var i = 0; i < bands.length; i++) {
-      var top = bands[i][0], rate = bands[i][1];
-      if (income > prev) tax += (Math.min(income, top) - prev) * rate;
-      prev = top;
-    }
-    return tax;
-  }
-  function lito(income) {
-    if (income <= 37500) return 700;
-    if (income <= 45000) return 700 - 0.05 * (income - 37500);
-    if (income <= 66667) return Math.max(0, 325 - 0.015 * (income - 45000));
-    return 0;
-  }
-  function medicare(income) {
-    if (income <= MEDICARE_LOW) return 0;
-    return Math.min(0.02 * income, 0.10 * (income - MEDICARE_LOW));
-  }
   function annual() {
     var pay = M.num('pay'), per = $('per').value;
     var mult = { hour: M.num('hours') * 52, week: 52, fortnight: 26, month: 12, year: 1 }[per];
     return pay * mult;
   }
-  function split(gross, bands, resident) {
-    var tax = bandTax(gross, bands);
-    if (resident) tax = Math.max(0, tax - lito(gross));
-    var med = resident ? medicare(gross) : 0;
-    return { tax: tax, med: med, net: gross - tax - med };
-  }
+  function split(gross) { return M.tax(gross, $('year1').value, $('res').value === 'res'); }
   function parts(s) { return [['c-net', 'Take-home pay', s.net], ['c-tax', 'Income tax', s.tax], ['c-med', 'Medicare levy', s.med]]; }
   function segs(s, gross) {
     return parts(s).map(function (p) {
@@ -187,9 +156,7 @@
     var sup = M.num('super') / 100, gross = annual(), employerSuper;
     if ($('incl').checked) { gross = gross / (1 + sup); }
     employerSuper = gross * sup;
-    var resident = $('res').value === 'res';
-    var bands = resident ? RATES[$('year1').value === '2025' ? 'res2025' : 'res2026'] : RATES.foreign;
-    var s = split(gross, bands, resident), tax = s.tax, med = s.med, net = s.net;
+    var s = split(gross), tax = s.tax, med = s.med, net = s.net;
     var typed = annual();
     if (document.activeElement !== $('slide')) $('slide').value = Math.min(250000, typed);
     $('slideOut').textContent = M.aud(typed) + ' a year';
@@ -220,12 +187,17 @@
     levels.sort(function (a, b) { return a - b; });
     var max = levels[levels.length - 1];
     $('levels').innerHTML = levels.map(function (v) {
-      var x = split(v, bands, resident), mine = v === gross && gross > 0;
+      var x = split(v), mine = v === gross && gross > 0;
       return '<div class="m-level' + (mine ? ' mine' : '') + '"><span class="l">' + M.aud(v) + (mine ? '<small>Your pay</small>' : '') + '</span>' +
         '<span class="b"><span class="m-bar" style="width:' + (v / max * 100).toFixed(2) + '%">' + segs(x, v) + '</span></span>' +
         '<span class="v">' + M.aud(x.net) + '<small>take-home</small></span></div>';
     }).join('');
+
+    text = 'My take-home pay in Australia on ' + M.aud(typed) + ' a year: ' + M.aud2(net / 12) + ' a month (' + M.aud2(net / 52) + ' a week).';
+    M.remember();
+    M.setPlan({ pay: typed, netMonth: Math.round(net / 12) });
   }
+  var text = '';
   // The slider sets the pay box, in whatever "paid per" unit is picked, and redraws at once
   $('slide').addEventListener('input', function (e) {
     e.stopPropagation();
@@ -233,7 +205,11 @@
     $('pay').value = Math.round(+$('slide').value / m * 100) / 100;
     run();
   });
+  var st = M.init($('calc'), 'pay');
+  // Pay typed in another calculator on this device
+  if (!st.shared && M.plan.pay > 0 && Math.abs(annual() - M.plan.pay) > 0.5) { $('pay').value = M.plan.pay; $('per').value = 'year'; }
   M.watch($('calc'), run);
+  M.shareBar(function () { return text; });
   run();
 })();
 </script>

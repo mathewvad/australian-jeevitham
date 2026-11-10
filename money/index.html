@@ -13,20 +13,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Australian Jeevitham Money: Calculators for Migrants</title>
-  <meta name="description" content="Calculators for Malayalis living in or moving to Australia: take-home pay in AUD and INR, cost of living and rent by city, visa and moving costs, PR points and India-Australia time.">
+  <meta name="description" content="Calculators for Malayalis living in or moving to Australia: take-home pay in AUD and INR, cost of living and rent by city, a pay comparison with India and the Gulf, visa and moving costs, PR points and India-Australia time.">
   <link rel="canonical" href="https://www.australianjeevitham.com/money/">
   <link rel="icon" type="image/png" href="../images/favicon.png">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Australian Jeevitham Money">
   <meta property="og:title" content="Australian Jeevitham Money: Calculators for Migrants">
-  <meta property="og:description" content="Calculators for Malayalis living in or moving to Australia: take-home pay in AUD and INR, cost of living and rent by city, visa and moving costs, PR points and India-Australia time.">
+  <meta property="og:description" content="Calculators for Malayalis living in or moving to Australia: take-home pay in AUD and INR, cost of living and rent by city, a pay comparison with India and the Gulf, visa and moving costs, PR points and India-Australia time.">
   <meta property="og:url" content="https://www.australianjeevitham.com/money/">
   <meta property="og:locale" content="en_AU">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Australian Jeevitham Money: Calculators for Migrants">
-  <meta name="twitter:description" content="Calculators for Malayalis living in or moving to Australia: take-home pay in AUD and INR, cost of living and rent by city, visa and moving costs, PR points and India-Australia time.">
+  <meta name="twitter:description" content="Calculators for Malayalis living in or moving to Australia: take-home pay in AUD and INR, cost of living and rent by city, a pay comparison with India and the Gulf, visa and moving costs, PR points and India-Australia time.">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -40,7 +40,7 @@
   "@type": "CollectionPage",
   "name": "Australian Jeevitham Money",
   "url": "https://www.australianjeevitham.com/money/",
-  "description": "Calculators for Malayalis living in or moving to Australia: take-home pay in AUD and INR, cost of living and rent by city, visa and moving costs, PR points and India-Australia time.",
+  "description": "Calculators for Malayalis living in or moving to Australia: take-home pay in AUD and INR, cost of living and rent by city, a pay comparison with India and the Gulf, visa and moving costs, PR points and India-Australia time.",
   "publisher": {
     "@type": "Organization",
     "name": "Australian Jeevitham",
@@ -56,6 +56,11 @@
       "@type": "WebApplication",
       "name": "Cost of Living and Rent Calculator by Australian City",
       "url": "https://www.australianjeevitham.com/money/cost-of-living-calculator.html"
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Is the Move Worth It? India and Gulf to Australia Pay Comparison",
+      "url": "https://www.australianjeevitham.com/money/move-worth-it-calculator.html"
     },
     {
       "@type": "WebApplication",
@@ -98,7 +103,15 @@
     <span class="t-kicker">Australian Jeevitham Money</span>
     <h1>Money and planning <span class="hl">calculators</span> for moving to Australia.</h1>
     <p>Simple calculators from Binu Vadakkedath for Malayalis living in, or moving to, Australia. Every calculator runs in your web browser - nothing to install, and your numbers stay on your own device. Results are estimates only, not financial or migration advice.</p>
-    <div class="t-search"><input type="search" id="q" placeholder="Search 5 calculators - try tax, rent or visa" aria-label="Search the calculators" autocomplete="off"></div>
+    <div class="t-search"><input type="search" id="q" placeholder="Search 6 calculators - try tax, rent or visa" aria-label="Search the calculators" autocomplete="off"></div>
+  </div>
+</section>
+
+<section class="t-section m-mine" id="mine" hidden>
+  <div class="wrap">
+    <h2>Your numbers</h2>
+    <div class="m-tiles" id="mineTiles"></div>
+    <p class="tl-note">From your last visit. Saved on this device only. <button type="button" class="m-linkbtn" id="clear">Clear my numbers</button></p>
   </div>
 </section>
 
@@ -136,6 +149,13 @@
   <div class="wrap">
     <h2>Moving</h2>
     <div class="t-grid">
+      <a class="t-card" href="move-worth-it-calculator.html">
+        <div class="t-icon" aria-hidden="true">VS</div>
+        <h3>Is the move worth it?</h3>
+        <p>Compare what you have left each month now, in India or the Gulf, with an Australian job after tax, rent and living costs - in rupees.</p>
+        <ul class="t-chips"><li>India or Gulf</li><li>After tax and rent</li><li>In rupees</li></ul>
+        <span class="t-go">Open calculator →</span>
+      </a>
       <a class="t-card" href="visa-moving-cost-calculator.html">
         <div class="t-icon" aria-hidden="true">VISA</div>
         <h3>Visa and moving cost estimator</h3>
@@ -190,13 +210,32 @@
       var ok = terms.every(function (t) { return text[i].indexOf(t) >= 0; });
       c.hidden = !ok; if (ok) shown++;
     });
-    sections.forEach(function (s) { s.hidden = !s.querySelector('.t-card:not([hidden])'); });
+    sections.forEach(function (s) { if (s.id !== 'mine') s.hidden = !s.querySelector('.t-card:not([hidden])'); });
     none.hidden = shown > 0;
   }
   q.addEventListener('input', run);
   q.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { q.value = ''; run(); }
     if (e.key === 'Enter') { var first = document.querySelector('.t-card:not([hidden])'); if (first && q.value.trim()) location.href = first.getAttribute('href'); }
+  });
+})();
+// "Your numbers": results saved on this device by the calculators
+(function () {
+  'use strict';
+  var M = window.AJM, $ = M.$, p = M.plan, items = [];
+  if (p.netMonth > 0) items.push([M.aud(p.netMonth), 'Take-home pay per month', 'take-home-pay-calculator.html']);
+  if (p.weekCost > 0) items.push([M.aud(p.weekCost), 'Weekly costs in ' + (p.cityName || 'your city'), 'cost-of-living-calculator.html']);
+  if (typeof p.moreMonth === 'number') items.push([(p.moreMonth >= 0 ? '+' : '-') + M.inr(Math.abs(p.moreMonth)), 'Left over per month after the move', 'move-worth-it-calculator.html']);
+  if (p.moveTotal > 0) items.push([M.aud(p.moveTotal), 'Cost to move', 'visa-moving-cost-calculator.html']);
+  if (p.points > 0) items.push([String(p.points), 'PR points for subclass 189', 'pr-points-calculator.html']);
+  if (!items.length) return;
+  $('mineTiles').innerHTML = items.map(function (t, i) {
+    return '<a class="m-tile' + (i ? '' : ' hot') + '" href="' + t[2] + '"><b>' + M.esc(t[0]) + '</b><span>' + M.esc(t[1]) + '</span></a>';
+  }).join('');
+  $('mine').hidden = false;
+  $('clear').addEventListener('click', function () {
+    try { Object.keys(localStorage).forEach(function (k) { if (k.indexOf('ajm-') === 0) localStorage.removeItem(k); }); } catch (e) {}
+    $('mine').hidden = true;
   });
 })();
 </script>
