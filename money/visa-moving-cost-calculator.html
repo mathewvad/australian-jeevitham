@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visa and Moving Cost Estimator for Australia | Australian Jeevitham Money</title>
+  <meta name="description" content="Add up Australian visa fees, skills assessment, English test, medicals, flights, rental bond and first-month costs for your family, in AUD and Indian rupees.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/money/visa-moving-cost-calculator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Money">
+  <meta property="og:title" content="Visa and Moving Cost Estimator for Australia | Australian Jeevitham Money">
+  <meta property="og:description" content="Add up Australian visa fees, skills assessment, English test, medicals, flights, rental bond and first-month costs for your family, in AUD and Indian rupees.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/money/visa-moving-cost-calculator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Visa and Moving Cost Estimator for Australia | Australian Jeevitham Money">
+  <meta name="twitter:description" content="Add up Australian visa fees, skills assessment, English test, medicals, flights, rental bond and first-month costs for your family, in AUD and Indian rupees.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="money.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Visa and Moving Cost Estimator for Australia",
+  "url": "https://www.australianjeevitham.com/money/visa-moving-cost-calculator.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Add up Australian visa fees, skills assessment, English test, medicals, flights, rental bond and first-month costs for your family, in AUD and Indian rupees.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">MONEY</span></b><small>Calculators for migrants</small></span>
+    </a>
+    <nav aria-label="Money">
+      <ul class="t-nav">
+        <li><a href="./">All calculators</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Money</a> / Visa and Moving Cost Estimator</p>
+    <h1>Visa and <span class="hl">moving cost</span> estimator</h1>
+    <p>Pick your visa and family size to add up visa fees, tests, flights, rental bond and first-month costs - in Australian dollars and Indian rupees.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap" id="calc">
+    <div class="tl-card">
+      <h2>Your visa and family</h2>
+      <div class="tl-row three">
+        <label class="tl-field"><span>Visa</span><select class="tl-input" id="visa"></select></label>
+        <label class="tl-field"><span>Adults (18 or over), with you</span><input class="tl-input" type="number" id="adults" min="1" max="10" step="1" value="2"></label>
+        <label class="tl-field"><span>Children under 18</span><input class="tl-input" type="number" id="kids" min="0" max="10" step="1" value="0"></label>
+      </div>
+      <div class="tl-row tl-mt">
+        <label class="tl-field"><span>1 AUD = ? Indian rupees</span><input class="tl-input" type="number" id="inr" min="0" step="any" inputmode="decimal" placeholder="Type today's rate"></label>
+      </div>
+      <p class="tl-note">Visa fees change every year, usually on 1 July. The fees here are a guide - confirm with Home Affairs before you pay. You can type over any fee.</p>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Your costs</h2>
+      <div class="tl-table-wrap m-full"><table class="tl-table m-table"><thead><tr><th>Cost</th><th class="num">Price each (AUD)</th><th class="num">How many</th><th class="num">Total</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <p class="tl-note">Every price except the visa fees is a rough guess. Change them to your own quotes, and type 0 on any line you do not need.</p>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Your total</h2>
+      <div class="m-tiles" id="tiles"></div>
+    </div>
+    <p class="m-disclaimer"><strong>Estimate only - not financial or migration advice.</strong> Last updated: 10 November 2026.</p>
+    <p class="m-sources">Sources for visa fees: <a href="https://immi.homeaffairs.gov.au/visas/getting-a-visa/fees-and-charges/current-visa-pricing" target="_blank" rel="noopener noreferrer">Home Affairs current visa pricing</a> (the official list - check it before you pay) and the <a href="https://www.australian.com/visas/fees" target="_blank" rel="noopener noreferrer">australian.com fee summary</a>. The rupee amount uses the rate you type in.</p>
+  </div>
+</section>
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Money - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All calculators</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="money.js"></script>
+<script>
+(function () {
+  'use strict';
+  var M = window.AJM, $ = M.$;
+  // Visa fee in AUD: [name, main applicant, each other adult, each child under 18] - confirm with Home Affairs
+  var VISAS = [
+    ['Skilled Independent (subclass 189)', 6135, 3070, 1540],
+    ['Skilled Nominated (subclass 190)', 6140, 3070, 1535],
+    ['Skilled Work Regional (subclass 491)', 6140, 3070, 1535],
+    ['Skills in Demand - employer sponsored (subclass 482)', 4015, 4015, 1005],
+    ['Student (subclass 500)', 2500, 1530, 500],
+    ['Temporary Graduate (subclass 485)', 5750, 2875, 1450],
+    ['Partner (subclass 820 or 309)', 11710, 5860, 2935],
+    ['Other visa - I will type the fee', 0, 0, 0]
+  ];
+  // [label, starting price, who it is counted for]
+  var LINES = [
+    ['Visa fee - main applicant', 0, 'one'],
+    ['Visa fee - each other adult', 0, 'others'],
+    ['Visa fee - each child under 18', 0, 'kids'],
+    ['Skills assessment', 1100, 'one'],
+    ['English test (IELTS or PTE)', 475, 'one'],
+    ['Medical checks - each person', 400, 'people'],
+    ['Police certificates - each adult', 60, 'adults'],
+    ['Flights to Australia - each person', 1100, 'people'],
+    ['Rental bond (4 weeks of rent)', 2600, 'one'],
+    ['Rent in advance (2 weeks)', 1300, 'one'],
+    ['Furniture and home setup', 3000, 'one'],
+    ['First-month living costs', 2500, 'one'],
+    ['Other costs', 0, 'one']
+  ];
+  $('visa').innerHTML = VISAS.map(function (v, i) { return '<option value="' + i + '">' + M.esc(v[0]) + '</option>'; }).join('');
+  $('rows').innerHTML = LINES.map(function (l, i) {
+    return '<tr><td><label for="p' + i + '">' + l[0] + '</label></td><td class="num"><input class="tl-input" type="number" id="p' + i + '" min="0" step="any" inputmode="decimal" value="' + l[1] + '"></td><td class="num" id="q' + i + '"></td><td class="num" id="t' + i + '"></td></tr>';
+  }).join('') + '<tr class="total"><td>Total</td><td></td><td></td><td class="num" id="sum"></td></tr>';
+
+  function whole(id, min) { return Math.max(min, Math.floor(M.num(id))); }
+  function fillVisa() { var v = VISAS[+$('visa').value]; for (var i = 0; i < 3; i++) $('p' + i).value = v[i + 1]; }
+  function run() {
+    var adults = whole('adults', 1), kids = whole('kids', 0);
+    var count = { one: 1, others: adults - 1, kids: kids, adults: adults, people: adults + kids };
+    var sum = 0, visa = 0;
+    LINES.forEach(function (l, i) {
+      var q = count[l[2]], t = M.num('p' + i) * q;
+      $('q' + i).textContent = '× ' + q; $('t' + i).textContent = M.aud(t);
+      sum += t; if (i < 3) visa += t;
+    });
+    $('sum').textContent = M.aud(sum);
+    var tiles = [
+      [M.aud(sum), 'Total to move', true],
+      [M.inrText(sum), 'Total in rupees', false],
+      [M.aud(visa), 'Visa fees only', false],
+      [M.aud(sum - visa), 'Everything else', false]
+    ];
+    $('tiles').innerHTML = tiles.map(function (t) { return '<div class="m-tile' + (t[2] ? ' hot' : '') + '"><b>' + M.esc(t[0]) + '</b><span>' + t[1] + '</span></div>'; }).join('');
+  }
+  $('visa').addEventListener('change', fillVisa);
+  M.watch($('calc'), run);
+  fillVisa(); run();
+})();
+</script>
+</body>
+</html>

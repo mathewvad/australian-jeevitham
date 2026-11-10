@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HE4E37HMXF');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cost of Living and Rent Calculator by Australian City | Australian Jeevitham Money</title>
+  <meta name="description" content="Typical weekly rent in Sydney, Melbourne, Brisbane, Perth, Adelaide, Hobart, Canberra, Darwin, Townsville and Cairns, your weekly budget in AUD and rupees, and how much rent your pay can afford.">
+  <link rel="canonical" href="https://www.australianjeevitham.com/money/cost-of-living-calculator.html">
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Australian Jeevitham Money">
+  <meta property="og:title" content="Cost of Living and Rent Calculator by Australian City | Australian Jeevitham Money">
+  <meta property="og:description" content="Typical weekly rent in Sydney, Melbourne, Brisbane, Perth, Adelaide, Hobart, Canberra, Darwin, Townsville and Cairns, your weekly budget in AUD and rupees, and how much rent your pay can afford.">
+  <meta property="og:url" content="https://www.australianjeevitham.com/money/cost-of-living-calculator.html">
+  <meta property="og:locale" content="en_AU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@AusJeevitham">
+  <meta name="twitter:title" content="Cost of Living and Rent Calculator by Australian City | Australian Jeevitham Money">
+  <meta name="twitter:description" content="Typical weekly rent in Sydney, Melbourne, Brisbane, Perth, Adelaide, Hobart, Canberra, Darwin, Townsville and Cairns, your weekly budget in AUD and rupees, and how much rent your pay can afford.">
+
+  <meta name="theme-color" content="#1B2A4A">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+  <link rel="stylesheet" href="money.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Cost of Living and Rent Calculator by Australian City",
+  "url": "https://www.australianjeevitham.com/money/cost-of-living-calculator.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any (runs in the web browser)",
+  "description": "Typical weekly rent in Sydney, Melbourne, Brisbane, Perth, Adelaide, Hobart, Canberra, Darwin, Townsville and Cairns, your weekly budget in AUD and rupees, and how much rent your pay can afford.",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "AUD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Australian Jeevitham",
+    "url": "https://www.australianjeevitham.com/"
+  }
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+<header class="t-header">
+  <div class="wrap">
+    <a class="t-brand" href="./">
+      <img src="../images/logo.webp" alt="" width="38" height="38" decoding="async">
+      <span><b>Australian Jeevitham <span class="t-tag">MONEY</span></b><small>Calculators for migrants</small></span>
+    </a>
+    <nav aria-label="Money">
+      <ul class="t-nav">
+        <li><a href="./">All calculators</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main-content">
+<section class="t-hero small">
+  <div class="wrap">
+    <p class="t-crumb"><a href="./">Money</a> / Cost of Living by City</p>
+    <h1>Cost of living <span class="hl">by city</span></h1>
+    <p>Pick a city to see the typical weekly rent, add your other weekly costs, and check how much rent your pay can afford.</p>
+  </div>
+</section>
+
+<section class="jp-tool">
+  <div class="wrap" id="calc">
+    <div class="tl-card">
+      <h2>Your city and rent</h2>
+      <div class="tl-row three">
+        <label class="tl-field"><span>City</span><select class="tl-input" id="city"></select></label>
+        <label class="tl-field"><span>Home type</span><select class="tl-input" id="type"><option value="1" selected>Unit (apartment)</option><option value="0">House</option></select></label>
+        <label class="tl-field"><span>Weekly rent (AUD)</span><input class="tl-input" type="number" id="rent" min="0" step="any" inputmode="decimal"></label>
+        <label class="tl-field"><span>Your share of the rent (%)</span><input class="tl-input" type="number" id="share" min="0" max="100" step="any" value="100"></label>
+        <label class="tl-field"><span>Household pay before tax, per year (AUD)</span><input class="tl-input" type="number" id="pay" min="0" step="any" inputmode="decimal" value="90000"></label>
+        <label class="tl-field"><span>1 AUD = ? Indian rupees</span><input class="tl-input" type="number" id="inr" min="0" step="any" inputmode="decimal" placeholder="Type today's rate"></label>
+      </div>
+      <p class="tl-note">The rent box fills with the city's median rent. Type over it if you already know your rent. If you share a home, put your share - for example 50 if two people split the rent.</p>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Other weekly costs (AUD)</h2>
+      <div class="tl-row three">
+        <label class="tl-field"><span>Groceries</span><input class="tl-input" type="number" id="c1" min="0" step="any" value="180"></label>
+        <label class="tl-field"><span>Power, gas and water</span><input class="tl-input" type="number" id="c2" min="0" step="any" value="50"></label>
+        <label class="tl-field"><span>Internet and phone</span><input class="tl-input" type="number" id="c3" min="0" step="any" value="35"></label>
+        <label class="tl-field"><span>Transport or fuel</span><input class="tl-input" type="number" id="c4" min="0" step="any" value="60"></label>
+        <label class="tl-field"><span>Insurance and health</span><input class="tl-input" type="number" id="c5" min="0" step="any" value="40"></label>
+        <label class="tl-field"><span>Everything else</span><input class="tl-input" type="number" id="c6" min="0" step="any" value="80"></label>
+      </div>
+      <p class="tl-note">These starting numbers are rough guesses for one or two adults. Change them to your own costs.</p>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Your weekly budget</h2>
+      <div class="m-tiles" id="tiles"></div>
+      <div class="jp-status" id="check" role="status"></div>
+      <p class="tl-note">The rent check uses a common guide: rent above 30% of your pay before tax is called rent stress.</p>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Median weekly rent by city</h2>
+      <div class="tl-table-wrap m-full"><table class="tl-table m-table"><thead><tr><th>City</th><th class="num">House</th><th class="num">Unit</th><th class="num">Pay needed for a unit</th></tr></thead><tbody id="rows"></tbody></table></div>
+      <p class="tl-note">"Pay needed" is the yearly household pay before tax that keeps the unit rent at 30% of pay. Median means the middle rent: half of homes cost more and half cost less. Townsville and Cairns show the rent for a 3-bedroom house and a 2-bedroom unit, from new leases signed in July to September 2026.</p>
+    </div>
+    <p class="m-disclaimer"><strong>Estimate only - not financial or migration advice.</strong> Last updated: 10 November 2026.</p>
+    <p class="m-sources">Source for rents: <a href="https://www.domain.com.au/research/rental-report/september-2026/" target="_blank" rel="noopener noreferrer">Domain Rental Report, September 2026</a> (median asking rents for capital cities) and <a href="https://www.rta.qld.gov.au/forms-resources/rta-data-releases/median-rents-quarterly-data" target="_blank" rel="noopener noreferrer">Queensland RTA median rents data</a> (Townsville and Cairns council areas). The rupee amount uses the rate you type in.</p>
+  </div>
+</section>
+</main>
+
+<footer class="t-footer">
+  <div class="wrap">
+    <p>Australian Jeevitham Money - a division of <a href="../">Australian Jeevitham</a>.</p>
+    <p class="links"><a href="./">All calculators</a><a href="../contact-australian-jeevitham.html">Contact</a><span>© <span id="year">2026</span> Australian Jeevitham</span></p>
+  </div>
+</footer>
+<script src="money.js"></script>
+<script>
+(function () {
+  'use strict';
+  var M = window.AJM, $ = M.$;
+  // Median weekly rent [house, unit] in AUD. Capital cities: Domain Rental Report, September 2026 (asking rents)
+  var CITIES = [
+    ['Sydney', 835, 780], ['Melbourne', 600, 600], ['Brisbane', 700, 660], ['Adelaide', 650, 550],
+    ['Perth', 750, 700], ['Hobart', 625, 525], ['Canberra', 700, 580], ['Darwin', 800, 650],
+    // Queensland RTA bond data, July to September 2026: 3-bedroom house, 2-bedroom unit
+    ['Townsville', 580, 470], ['Cairns', 670, 530]
+  ];
+  var GUIDE = 0.30;
+  $('city').innerHTML = CITIES.map(function (c, i) { return '<option value="' + i + '">' + c[0] + '</option>'; }).join('');
+  var saved = M.load('city'); if (saved && CITIES[saved]) $('city').value = saved;
+
+  function fillRent() { $('rent').value = CITIES[+$('city').value][$('type').value === '0' ? 1 : 2]; }
+  function run() {
+    var ci = +$('city').value, city = CITIES[ci][0];
+    var rent = M.num('rent') * Math.min(100, Math.max(0, M.num('share'))) / 100;
+    var other = 0; for (var i = 1; i <= 6; i++) other += M.num('c' + i);
+    var total = rent + other, pay = M.num('pay'), weekPay = pay / 52;
+    var pct = weekPay > 0 ? rent / weekPay * 100 : 0, afford = weekPay * GUIDE;
+    var tiles = [
+      [M.aud(total), 'Total cost per week', true],
+      [M.aud(total * 52 / 12), 'Total cost per month', false],
+      [M.inrText(total * 52 / 12), 'Per month in rupees', false],
+      [M.aud(rent), 'Your rent per week', false],
+      [pay > 0 ? pct.toFixed(0) + '%' : '-', 'Rent share of your pay', false],
+      [M.aud(afford), 'Most rent at 30% of pay', false]
+    ];
+    $('tiles').innerHTML = tiles.map(function (t) { return '<div class="m-tile' + (t[2] ? ' hot' : '') + '"><b>' + M.esc(t[0]) + '</b><span>' + t[1] + '</span></div>'; }).join('');
+    var box = $('check');
+    if (pay <= 0) { box.className = 'jp-status'; box.textContent = 'Type your pay to check the rent.'; }
+    else if (pct <= 30) { box.className = 'jp-status ok'; box.textContent = '✓ Your rent in ' + city + ' is ' + pct.toFixed(0) + '% of your pay before tax - inside the 30% guide.'; }
+    else { box.className = 'jp-status err'; box.textContent = 'Your rent in ' + city + ' is ' + pct.toFixed(0) + '% of your pay before tax - above the 30% guide. A rent of ' + M.aud(afford) + ' a week or less would fit your pay.'; }
+    $('rows').innerHTML = CITIES.map(function (c, i) {
+      return '<tr' + (i === ci ? ' class="mine"' : '') + '><td>' + c[0] + '</td><td class="num">' + M.aud(c[1]) + '</td><td class="num">' + M.aud(c[2]) + '</td><td class="num">' + M.aud(c[2] * 52 / GUIDE) + '</td></tr>';
+    }).join('');
+  }
+  $('city').addEventListener('change', function () { M.save('city', $('city').value); fillRent(); });
+  $('type').addEventListener('change', fillRent);
+  M.watch($('calc'), run);
+  fillRent(); run();
+})();
+</script>
+</body>
+</html>
