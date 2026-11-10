@@ -1,3 +1,6 @@
+/* Josefin Sans for the brand name only (same font as the home page header) */
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&display=swap&text=AUSTRALIANJEVTHM%20");
+
 :root{
   /* ---- Brand palette (warm, personal-creator-brand) ---- */
   --coral:   #FF5B3D;
@@ -164,17 +167,22 @@ nav{
   backdrop-filter:blur(8px);
 }
 nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:76px; gap:16px; }
+/* Brand block matches the home page (home.css .d7 .brand) - changed 10 Nov 2026 */
 .brand{
-  font-family:var(--display); font-size:1rem;
-  color:var(--fg); text-decoration:none; letter-spacing:-0.01em;
-  display:flex; align-items:center; gap:10px;
+  font-family:"Josefin Sans", system-ui, sans-serif;
+  font-weight:700; font-size:.92rem; line-height:1.15;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:#1B2A4A; text-decoration:none;
+  display:flex; align-items:center; gap:12px;
   flex-shrink:0;
 }
+.brand > span{ white-space:nowrap; }
 .brand img{
-  height:36px; width:36px; object-fit:contain;
-  border-radius:8px; flex-shrink:0;
+  height:46px; width:46px; object-fit:contain;
+  border-radius:50%; flex:none;
 }
-.brand .mal{ font-size:0.85rem; color:var(--fg-muted); }
+.brand .mal{ font-size:.8rem; letter-spacing:0; text-transform:none; color:#EE4A23; line-height:1.5 !important; }
+@media (min-width:1141px) and (max-width:1320px){ .brand{ letter-spacing:.1em; } }
 .nav-links{ display:flex; align-items:center; gap:28px; }
 .nav-links a{
   color:var(--fg); text-decoration:none; font-size:0.9rem;
