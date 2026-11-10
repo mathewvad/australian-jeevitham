@@ -94,6 +94,7 @@
         <label class="tl-field"><span>Tax residency</span><select class="tl-input" id="res"><option value="res" selected>Australian resident for tax</option><option value="foreign">Foreign resident for tax</option></select></label>
         <label class="tl-field"><span>Employer super (%)</span><input class="tl-input" type="number" id="super" min="0" max="30" step="any" value="12"></label>
       </div>
+      <label class="tl-field tl-mt m-slide"><span>Slide to change your yearly pay: <b id="slideOut"></b></span><input type="range" id="slide" min="0" max="250000" step="1000" value="75000"></label>
       <div class="jp-bar tl-mt">
         <label class="jp-check"><input type="checkbox" id="incl"> My pay amount already includes super (a "package")</label>
       </div>
@@ -105,8 +106,18 @@
     <div class="tl-card tl-mt">
       <h2>What you take home</h2>
       <div class="m-tiles" id="tiles"></div>
+      <h3 class="m-h3">Where each dollar of your pay goes</h3>
+      <div class="m-bar" id="bar" role="img"></div>
+      <div class="m-legend" id="legend"></div>
       <div class="tl-table-wrap tl-mt"><table class="tl-table m-table"><thead><tr><th></th><th class="num">Week</th><th class="num">Fortnight</th><th class="num">Month</th><th class="num">Year</th></tr></thead><tbody id="rows"></tbody></table></div>
       <p class="tl-note">Worked out on 52 weeks, 26 fortnights and 12 months a year. Tax uses the ATO rates for the year you pick, the low income tax offset (residents only) and the Medicare levy. It leaves out study loan (HELP) repayments, deductions and other offsets, so your payslip can differ a little.</p>
+    </div>
+
+    <div class="tl-card tl-mt">
+      <h2>Take-home pay at different pay levels</h2>
+      <div class="m-levels" id="levels"></div>
+      <div class="m-legend"><span class="c-net">Take-home pay</span><span class="c-tax">Income tax</span><span class="c-med">Medicare levy</span></div>
+      <p class="tl-note">Each bar is one yearly pay before tax, using the tax year and residency you picked above. The bar marked "Your pay" moves as you type or slide.</p>
     </div>
     <p class="m-disclaimer"><strong>Estimate only - not financial or migration advice.</strong> Last updated: 10 November 2026.</p>
     <p class="m-sources">Sources: <a href="https://www.ato.gov.au/tax-rates-and-codes/tax-rates-australian-residents" target="_blank" rel="noopener noreferrer">ATO tax rates for Australian residents</a>, <a href="https://www.ato.gov.au/tax-rates-and-codes/tax-rates-foreign-residents" target="_blank" rel="noopener noreferrer">ATO tax rates for foreign residents</a> and <a href="https://www.ato.gov.au/individuals-and-families/medicare-and-private-health-insurance/medicare-levy" target="_blank" rel="noopener noreferrer">ATO Medicare levy</a>. The rupee amount uses the rate you type in.</p>
@@ -157,6 +168,20 @@
     var mult = { hour: M.num('hours') * 52, week: 52, fortnight: 26, month: 12, year: 1 }[per];
     return pay * mult;
   }
+  function split(gross, bands, resident) {
+    var tax = bandTax(gross, bands);
+    if (resident) tax = Math.max(0, tax - lito(gross));
+    var med = resident ? medicare(gross) : 0;
+    return { tax: tax, med: med, net: gross - tax - med };
+  }
+  function parts(s) { return [['c-net', 'Take-home pay', s.net], ['c-tax', 'Income tax', s.tax], ['c-med', 'Medicare levy', s.med]]; }
+  function segs(s, gross) {
+    return parts(s).map(function (p) {
+      var pc = gross > 0 ? p[2] / gross * 100 : 0;
+      return pc > 0 ? '<i class="' + p[0] + '" style="flex:' + pc.toFixed(3) + ' 1 0" title="' + p[1] + ': ' + M.aud(p[2]) + ' a year (' + pc.toFixed(1) + '%)"></i>' : '';
+    }).join('');
+  }
+  function perYear() { return { hour: M.num('hours') * 52, week: 52, fortnight: 26, month: 12, year: 1 }[$('per').value]; }
   function run() {
     $('hoursBox').classList.toggle('m-hide', $('per').value !== 'hour');
     var sup = M.num('super') / 100, gross = annual(), employerSuper;
@@ -164,24 +189,50 @@
     employerSuper = gross * sup;
     var resident = $('res').value === 'res';
     var bands = resident ? RATES[$('year1').value === '2025' ? 'res2025' : 'res2026'] : RATES.foreign;
-    var tax = bandTax(gross, bands);
-    if (resident) tax = Math.max(0, tax - lito(gross));
-    var med = resident ? medicare(gross) : 0;
-    var net = gross - tax - med;
-    var rows = [['Pay before tax', gross], ['Income tax', -tax || 0], ['Medicare levy', -med || 0], ['Take-home pay', net]];
+    var s = split(gross, bands, resident), tax = s.tax, med = s.med, net = s.net;
+    var typed = annual();
+    if (document.activeElement !== $('slide')) $('slide').value = Math.min(250000, typed);
+    $('slideOut').textContent = M.aud(typed) + ' a year';
+    var rows = [['Pay before tax', gross, ''], ['Income tax', -tax || 0, 'c-tax'], ['Medicare levy', -med || 0, 'c-med'], ['Take-home pay', net, 'c-net']];
     $('rows').innerHTML = rows.map(function (r, i) {
-      var cells = [52, 26, 12, 1].map(function (d) { return '<td class="num">' + M.aud(r[1] / d) + '</td>'; }).join('');
-      return '<tr' + (i === 3 ? ' class="total"' : '') + '><td>' + r[0] + '</td>' + cells + '</tr>';
-    }).join('') + '<tr><td>Employer super, paid on top into your super fund</td>' + [52, 26, 12, 1].map(function (d) { return '<td class="num">' + M.aud(employerSuper / d) + '</td>'; }).join('') + '</tr>';
+      var cells = [52, 26, 12, 1].map(function (d) { return '<td class="num">' + M.aud2(r[1] / d) + '</td>'; }).join('');
+      return '<tr' + (i === 3 ? ' class="total"' : '') + '><td>' + (r[2] ? '<span class="m-dot ' + r[2] + '"></span>' : '') + r[0] + '</td>' + cells + '</tr>';
+    }).join('') + '<tr><td><span class="m-dot c-sup"></span>Employer super, paid on top into your super fund</td>' + [52, 26, 12, 1].map(function (d) { return '<td class="num">' + M.aud2(employerSuper / d) + '</td>'; }).join('') + '</tr>';
     var avg = gross > 0 ? (tax + med) / gross * 100 : 0;
     var tiles = [
-      [M.aud(net / 12), 'Take-home per month', true],
+      [M.aud2(net / 12), 'Take-home per month', true],
       [M.inrText(net / 12), 'Per month in rupees', false],
-      [M.aud(net / 52), 'Take-home per week', false],
+      [M.aud2(net / 52), 'Take-home per week', false],
       [avg.toFixed(1) + '%', 'Tax + Medicare share', false]
     ];
     $('tiles').innerHTML = tiles.map(function (t) { return '<div class="m-tile' + (t[2] ? ' hot' : '') + '"><b>' + M.esc(t[0]) + '</b><span>' + t[1] + '</span></div>'; }).join('');
+
+    // Graph 1: one bar split into take-home, income tax and Medicare
+    $('bar').innerHTML = segs(s, gross);
+    $('bar').setAttribute('aria-label', 'Take-home pay ' + M.aud(net) + ', income tax ' + M.aud(tax) + ', Medicare levy ' + M.aud(med) + ' a year');
+    $('legend').innerHTML = parts(s).map(function (p) {
+      return '<span class="' + p[0] + '">' + p[1] + ' <b>' + M.aud(p[2]) + ' · ' + (gross > 0 ? (p[2] / gross * 100).toFixed(1) : '0.0') + '%</b></span>';
+    }).join('');
+
+    // Graph 2: the same split at other yearly pay levels, with your own pay slotted in
+    var levels = [40000, 60000, 80000, 100000, 120000, 150000, 200000].filter(function (v) { return Math.abs(v - gross) > 2500; });
+    if (gross > 0) levels.push(gross);
+    levels.sort(function (a, b) { return a - b; });
+    var max = levels[levels.length - 1];
+    $('levels').innerHTML = levels.map(function (v) {
+      var x = split(v, bands, resident), mine = v === gross && gross > 0;
+      return '<div class="m-level' + (mine ? ' mine' : '') + '"><span class="l">' + M.aud(v) + (mine ? '<small>Your pay</small>' : '') + '</span>' +
+        '<span class="b"><span class="m-bar" style="width:' + (v / max * 100).toFixed(2) + '%">' + segs(x, v) + '</span></span>' +
+        '<span class="v">' + M.aud(x.net) + '<small>take-home</small></span></div>';
+    }).join('');
   }
+  // The slider sets the pay box, in whatever "paid per" unit is picked, and redraws at once
+  $('slide').addEventListener('input', function (e) {
+    e.stopPropagation();
+    var m = perYear() || 1;
+    $('pay').value = Math.round(+$('slide').value / m * 100) / 100;
+    run();
+  });
   M.watch($('calc'), run);
   run();
 })();

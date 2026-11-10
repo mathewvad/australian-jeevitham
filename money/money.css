@@ -249,3 +249,25 @@ a.t-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-hover); }
 .m-table td .tl-input{ width:130px; max-width:100%; text-align:right; padding:7px 10px; }
 .m-table td label{ cursor:pointer; }
 @media (max-width:900px){ .m-two{ grid-template-columns:1fr; } }
+/* Graphs and slider (take-home pay page). Colours checked for colour-blind safety: take-home, income tax, Medicare; super is navy */
+:root{ --c-net:#0B9A8D; --c-tax:#EE4A23; --c-med:#3A7FC2; --c-sup:#1B2A4A; }
+.c-net{ --c:var(--c-net); } .c-tax{ --c:var(--c-tax); } .c-med{ --c:var(--c-med); } .c-sup{ --c:var(--c-sup); }
+.m-h3{ font:700 .95rem var(--display); margin:22px 0 10px; }
+.m-bar{ display:flex; gap:2px; height:34px; border-radius:6px; overflow:hidden; min-width:0; }
+.m-bar i{ display:block; min-width:2px; background:var(--c); transition:flex-grow .25s; }
+.m-bar i:hover{ filter:brightness(1.12); }
+.m-legend{ display:flex; flex-wrap:wrap; gap:8px 24px; margin-top:12px; font-size:.9rem; color:var(--muted); }
+.m-legend span::before, .m-dot{ content:""; display:inline-block; width:11px; height:11px; border-radius:3px; background:var(--c); margin-right:8px; vertical-align:-1px; }
+.m-legend b{ color:var(--ink); font-variant-numeric:tabular-nums; }
+.m-levels{ display:grid; gap:8px; }
+.m-level{ display:grid; grid-template-columns:96px minmax(0,1fr) 104px; gap:12px; align-items:center; padding:5px 8px; border-radius:10px; }
+.m-level .m-bar{ height:22px; border-radius:4px; }
+.m-level .l, .m-level .v{ font:700 .88rem var(--mono); font-variant-numeric:tabular-nums; }
+.m-level .v{ text-align:right; }
+.m-level small{ display:block; font:600 .68rem var(--body); color:var(--muted); letter-spacing:.02em; }
+.m-level.mine{ background:#FFF6F2; outline:1px solid rgba(238,74,35,.35); }
+.m-level.mine small{ color:var(--orange-2); }
+.m-table tr.total td{ border-top:2px solid var(--c-net); }
+.m-slide b{ color:var(--navy); font-size:.9rem; letter-spacing:0; }
+.m-slide input[type=range]{ width:100%; height:32px; accent-color:var(--orange); cursor:pointer; }
+@media (max-width:560px){ .m-level{ grid-template-columns:78px minmax(0,1fr) 84px; gap:8px; } .m-level .l, .m-level .v{ font-size:.78rem; } }
