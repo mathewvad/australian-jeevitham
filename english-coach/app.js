@@ -862,7 +862,7 @@
     return {
       installed: isInstalled(),
       code: hasAccess(),
-      test: !!myLevelInfo(),
+      test: !!myLevelInfo() && !isGuest(),
       drill: Object.keys(state.sounds || {}).length > 0,
       talk: turns >= 5,
       plan: currentStreak() >= 3
@@ -959,7 +959,8 @@
       '<div class="ml-top"><span class="eyebrow">' + esc(ENGLISHES[myEnglish()].name) + '</span><span class="pill">' + esc(cur.cefr) + '</span></div>' +
       '<div class="ml-name">' + esc(cur.name) + '</div>' +
       '<div class="ladder">' + LEVELS.map(function(l, i){ return '<span class="' + (i < idx ? 'past' : i === idx ? 'now' : '') + '"><i></i>' + esc(l.name) + '</span>'; }).join('') + '</div>' +
-      '<div class="ml-next">' + (!nx ? 'You have reached the top level - well done!'
+      '<div class="ml-next">' + (isGuest() ? 'You chose this level. Create an account to take the placement test.'
+        : !nx ? 'You have reached the top level - well done!'
         : wait ? 'Next level exam (' + esc(nx.name) + ') from <b>' + esc(niceDate(wait)) + '</b>'
         : '<b>Your ' + esc(nx.name) + ' exam is ready</b> - pass with 80% to move up') + I.chev + '</div></a>';
   }
@@ -1012,6 +1013,7 @@
       '<a class="acct-link" href="#/account"><span class="avatar sm">' + esc(((profile && profile.name) || '?').charAt(0).toUpperCase()) + '</span>My account</a>' +
       '<p class="lede">Speak confident ' + eng().name + ' for life and work in ' + eng().country + ', with a coach that listens and gives you feedback.</p>' +
       (!me && getCode() ? '<a class="card cta signin-cta" href="#/signin"><span class="ic">' + I.check + '</span><span><b>Create your account</b><span>Sign in with Google or email to get your level, the placement test and weekly exams. Access codes will stop working soon.</span></span><span class="chev">' + I.chev + '</span></a>' : '') +
+      guestCta('Create your account', 'Unlock conversations with the AI coach, pronunciation scores, natural voices and level exams.') +
       levelCard() + installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
       planCard() + skillsCard() + fixCard() +
       '<div class="stats">' +
@@ -1047,13 +1049,13 @@
       '<div class="list two">' +
         '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
         '<a class="card item" href="#/listen"><span class="num">' + I.speaker + '</span><span class="t"><h2>Listening: older patients</h2><span class="sub">' + eng().listenSub + (state.listenBest != null ? ' · best ' + state.listenBest + '%' : '') + '</span></span></a>' +
-        '<a class="card item" href="#/fluency"><span class="num">' + I.mic + '</span><span class="t"><h2>1-minute speaking check</h2><span class="sub">Pronunciation, grammar, vocabulary, pace, pauses and fillers in one report</span></span></a>' +
+        '<a class="card item" href="#/fluency"><span class="num">' + I.mic + '</span><span class="t"><h2>1-minute speaking check' + lockPill() + '</h2><span class="sub">Pronunciation, grammar, vocabulary, pace, pauses and fillers in one report</span></span></a>' +
         (myEnglish() === 'in' ? '' : '<a class="card item" href="#/oet"><span class="num">' + I.check + '</span><span class="t"><h2>OET Speaking (Nursing)</h2><span class="sub">10 role-plays with a 3-minute prep and 5-minute talk, marked on all 9 criteria</span></span></a>') +
         '<a class="card item" href="#/ielts"><span class="num">' + I.check + '</span><span class="t"><h2>IELTS Speaking</h2><span class="sub">Parts 1-3, cue cards with timers, full mock test, band scores on the 4 criteria</span></span></a>' +
         '<a class="card item" href="#/interview"><span class="num">' + I.chat + '</span><span class="t"><h2>Interview preparation</h2><span class="sub">20 healthcare interview questions, model answers and AI feedback</span></span></a>' +
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">' + curVocab().reduce(function(a, t){ return a + t.words.length; }, 0) + ' words from Beginner to Leadership: everyday life, work and healthcare</span></span></a>' +
         '<a class="card item" href="#/practise"><span class="num">' + I.pencil + '</span><span class="t"><h2>Practise any sentence</h2><span class="sub">Type your own words and get scored saying them</span></span></a>' +
-        '<a class="card item" href="#/exam"><span class="num">' + I.check + '</span><span class="t"><h2>Your level and exams</h2><span class="sub">' + (myLevelInfo() ? 'You are ' + esc(levelById(userLevel()).name) + (nextLevel() ? ' · ' + (nextExamDate() ? 'next exam ' + esc(niceDate(nextExamDate())) : 'exam ready now') : '') : 'Take the placement test') + '</span></span></a>' +
+        '<a class="card item" href="#/exam"><span class="num">' + I.check + '</span><span class="t"><h2>Your level and exams' + lockPill() + '</h2><span class="sub">' + (myLevelInfo() ? 'You are ' + esc(levelById(userLevel()).name) + (nextLevel() ? ' · ' + (nextExamDate() ? 'next exam ' + esc(niceDate(nextExamDate())) : 'exam ready now') : '') : 'Take the placement test') + '</span></span></a>' +
         '<a class="card item" href="#/everyday"><span class="num">' + I.chat + '</span><span class="t"><h2>' + eng().everyday + '</h2><span class="sub">' + curLessons().length + ' lessons of everyday phrases' + (nativeLang() !== 'en' ? ' with ' + NATIVES[nativeLang()] + ' meanings' : '') + (quizzesDone() ? ' · ' + quizzesDone() + '/' + curLessons().length + ' quizzes done' : '') + '</span></span></a>' +
         '<a class="card item" href="#/slang"><span class="num">' + I.cards + '</span><span class="t"><h2>' + eng().slang + '</h2><span class="sub">' + curSlang().length + ' ' + eng().slangSub + '</span></span></a>' +
       '</div>'
@@ -2183,7 +2185,7 @@
       '<p class="lede">' + (first ? 'Your lessons, voices and conversations will match it. You can change it later in My account.' : 'Each English keeps its own level. A new one starts with a placement test.') + '</p>' +
       '<div class="list eng-list">' + Object.keys(ENGLISHES).map(function(k){
         var e = ENGLISHES[k], lv = profile && profile.levels && profile.levels[k];
-        return '<button type="button" class="card item eng-opt' + (myEnglish() === k ? ' on' : '') + '" data-e="' + k + '"><span class="num">' + e.tag + '</span><span class="t"><h2>' + esc(e.name) + '</h2><span class="sub">' + esc(e.desc) + (lv ? ' · your level: ' + esc(levelById(lv.level).name) : '') + '</span></span><span class="chev">' + I.chev + '</span></button>';
+        return '<button type="button" class="card item eng-opt' + (myEnglish() === k || (first && guest && guest.english === k) ? ' on' : '') + '" data-e="' + k + '"><span class="num">' + e.tag + '</span><span class="t"><h2>' + esc(e.name) + '</h2><span class="sub">' + esc(e.desc) + (lv ? ' · your level: ' + esc(levelById(lv.level).name) : '') + '</span></span><span class="chev">' + I.chev + '</span></button>';
       }).join('') + '</div><p class="auth-msg" id="msg" role="status"></p>'
     );
     var msg = document.getElementById('msg');
@@ -2199,6 +2201,76 @@
         })
         .catch(function(){ app.querySelectorAll('.eng-opt').forEach(function(x){ x.disabled = false; }); msg.textContent = 'Couldn\'t save - please check your internet and try again.'; });
     }; });
+  }
+
+  /* ---------- Guests (no account) ---------- */
+  // First visit without an account: which English, mother tongue and level. Saved on this phone only.
+  function guestPage(){
+    var g = guest || {}, edit = guestReady(), pick = ENGLISHES[g.english] ? g.english : '';
+    (edit ? function(h){ setTab(''); render('<a class="back" href="#/account">' + I.back + 'My account</a>' + h); } : authShell)(
+      '<h1 class="title">' + (edit ? 'Change your choices' : 'Welcome to English Coach') + '</h1>' +
+      '<p class="lede">' + (edit ? 'These are saved on this phone only.' : 'Start practising straight away - no account needed. First, three quick questions.') + '</p>' +
+      '<form id="gf" class="auth-form" novalidate>' +
+        '<label>Which English do you want to learn?</label>' +
+        '<div class="list eng-list">' + Object.keys(ENGLISHES).map(function(k){
+          var e = ENGLISHES[k];
+          return '<button type="button" class="card item eng-opt' + (pick === k ? ' on' : '') + '" data-e="' + k + '" aria-pressed="' + (pick === k) + '"><span class="num">' + e.tag + '</span><span class="t"><h2>' + esc(e.name) + '</h2><span class="sub">' + esc(e.desc) + '</span></span></button>';
+        }).join('') + '</div>' +
+        '<label>Your mother tongue<select id="nt" required><option value="">Choose…</option>' + Object.keys(NATIVES).map(function(k){ return '<option value="' + k + '"' + (g.native === k ? ' selected' : '') + '>' + esc(NATIVES[k]) + '</option>'; }).join('') + '</select>' +
+          '<span class="hint">Explanations and help in the app will be in this language.</span></label>' +
+        '<label>Your level<select id="lv" required><option value="">Choose…</option>' + LEVELS.map(function(l){ return '<option value="' + l.id + '"' + (edit && g.level === l.id ? ' selected' : '') + '>' + esc(l.name) + ' (' + esc(l.cefr) + ') - ' + esc(l.about) + '</option>'; }).join('') +
+          '<option value="unsure">Not sure - start at Beginner</option></select>' +
+          '<span class="hint">With an account you can take the placement test to find your exact level.</span></label>' +
+        '<button class="btn primary" id="sv" type="submit">' + (edit ? 'Save' : 'Start practising') + '</button>' +
+      '</form>' +
+      '<p class="auth-msg" id="msg" role="status"></p>' +
+      (edit ? '' : '<p class="switch">Already have an account? <a class="link" href="#/signin">Sign in</a></p>')
+    );
+    var msg = app.querySelector('#msg');
+    app.querySelectorAll('.eng-opt').forEach(function(b){ b.onclick = function(){
+      pick = b.dataset.e;
+      app.querySelectorAll('.eng-opt').forEach(function(x){ x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', x === b); });
+    }; });
+    app.querySelector('#gf').onsubmit = function(e){
+      e.preventDefault();
+      var nt = app.querySelector('#nt').value, lv = app.querySelector('#lv').value;
+      if (!pick || !nt || !lv) { msg.textContent = 'Please answer all three questions.'; return; }
+      guest = { english: pick, native: nt, level: lv === 'unsure' ? 'beginner' : lv };
+      try { localStorage.setItem(GUEST_KEY, JSON.stringify(guest)); } catch(err) {}
+      profile = guestProfile();
+      pickVoice();
+      if (location.hash === '#/' || location.hash === '') route(); else location.hash = '#/';
+    };
+  }
+  // A guest opened a part that uses the AI coach: explain why it needs an account.
+  var LOCK_WHY = {
+    talk: 'Conversations use the AI coach.',
+    exam: 'The placement test and level exams are marked by the AI coach.',
+    fluency: 'The 1-minute speaking check is marked by the AI coach.',
+    oet: 'OET role-plays use the AI coach as the patient and the examiner.',
+    ielts: 'IELTS practice is marked by the AI coach.'
+  };
+  var LOCK_BACK = { talk: '#/talk', oet: '#/oet', ielts: '#/ielts' };
+  function lockedPage(page){
+    if (page === 'test') page = 'exam';
+    setTab(page === 'talk' ? 'talk' : 'learn');
+    render(
+      '<a class="back" href="' + (LOCK_BACK[page] || '#/learn') + '">' + I.back + 'Back</a>' +
+      '<article class="card pad lock-card"><span class="big-ic lock-ic" aria-hidden="true">🔒</span>' +
+        '<h1 class="title">Create an account to use the AI coach</h1>' +
+        '<p class="lede">' + LOCK_WHY[page] + ' Every AI reply costs Australian Jeevitham money to run, so this part needs an account. It takes about a minute.</p>' +
+        '<p><b>With an account you also get:</b></p>' +
+        '<ul class="tiplist"><li>Conversations with the AI coach about daily life and work</li><li>Detailed pronunciation scores for every sound</li><li>Natural voices</li>' +
+          '<li>The placement test and weekly level exams</li><li>IELTS and OET speaking marked on the official criteria</li><li>Feedback on your job interview answers</li></ul>' +
+        '<a class="btn primary" href="#/signin">Sign in or create an account' + I.chev + '</a>' +
+        '<p class="heard" style="text-align:left">Your practice so far stays on this phone.</p>' +
+      '</article>'
+    );
+  }
+  // A small lock on cards that need an account (guests only).
+  function lockPill(){ return isGuest() ? ' <span class="pill">🔒 Account</span>' : ''; }
+  function guestCta(title, text){
+    return isGuest() ? '<a class="card cta signin-cta" href="#/signin"><span class="ic">' + I.check + '</span><span><b>' + title + '</b><span>' + text + '</span></span><span class="chev">' + I.chev + '</span></a>' : '';
   }
 
   /* ---------- Quiz ---------- */
@@ -2296,6 +2368,23 @@
     profile = pr;
     try { if (pr) localStorage.setItem(PROFILE_KEY, JSON.stringify(pr)); else localStorage.removeItem(PROFILE_KEY); } catch(e) {}
   }
+  // Guests (no account): their English, mother tongue and chosen level, saved on this phone only.
+  // Everything that costs nothing to run works for them; the AI coach needs an account.
+  var GUEST_KEY = 'aj-english-guest', guest = null;
+  try { guest = JSON.parse(localStorage.getItem(GUEST_KEY)); } catch(e) {}
+  function guestReady(){ return !!(guest && ENGLISHES[guest.english] && NATIVES[guest.native] && levelById(guest.level)); }
+  function guestProfile(){
+    var g = guest || {}, lv = {};
+    if (guestReady()) lv[g.english] = { level: g.level, history: [] };
+    return { guest: true, english: g.english, native: g.native, levels: lv };
+  }
+  function isGuest(){ return !me && !!profile && !!profile.guest; }
+  // Pages that use the AI coach (every reply costs money), so guests are asked to sign in.
+  function needsAccount(parts){
+    var p = parts[0], s = parts[1] || '';
+    return (p === 'talk' && !!s) || p === 'exam' || p === 'test' || p === 'fluency' ||
+      (p === 'oet' && s !== '' && !isNaN(+s)) || (p === 'ielts' && (s === 'mock' || (/^p[123]$/.test(s) && (parts[2] || '') !== '')));
+  }
   // Signed in with a confirmed email and a profile - or holding an old access code.
   function hasAccess(){ return !!(me && me.emailVerified && profile && profile.uid === me.uid) || (!me && !!getCode()); }
   // Calls to the AI server, with the signed-in user's token.
@@ -2387,9 +2476,13 @@
   var OPEN_PAGES = { signin: 1, privacy: 1, terms: 1, help: 1 };
   function gate(page){
     if (OPEN_PAGES[page]) return null;
-    if (!fbAuth) return profile || getCode() ? null : 'signin';
-    if (!authReady || profileLoading) return 'wait';
-    if (!me) return getCode() ? null : 'signin';
+    if (!fbAuth && profile && !profile.guest) return null;   // offline: returning users can still practise
+    if (fbAuth && (!authReady || profileLoading)) return 'wait';
+    if (!me) {
+      // No account: practise as a guest after three quick questions.
+      if (!profile || !profile.guest) profile = guestProfile();
+      return guestReady() ? null : 'guest';
+    }
     if (!me.emailVerified) return 'verify';
     if (!profile || profile.uid !== me.uid || !profile.native) return 'profile';
     if (page === 'privacy' || page === 'terms' || page === 'account' || page === 'profile') return null;
@@ -2441,6 +2534,7 @@
       '<p class="auth-msg" id="msg" role="status"></p>' +
       '<p class="switch"><span id="swTxt">New here?</span> <button type="button" class="link" id="sw">Create an account</button></p>' +
       '<button type="button" class="link" id="forgot">Forgot password?</button>' +
+      (me ? '' : '<a class="link" href="#/" style="margin-top:14px">Not now - keep practising without an account</a>') +
       (getCode() ? '<p class="notice">You are using an access code. Please create your account - access codes will stop working soon.</p>' : '')
     );
     var msg = app.querySelector('#msg'), em = app.querySelector('#em'), pw = app.querySelector('#pw'), go = app.querySelector('#go');
@@ -2524,7 +2618,7 @@
         '<label>Your field<select id="fd" required>' + options(FIELDS, pr.field) + '</select></label>' +
         '<label id="rlWrap"' + (pr.field === 'Healthcare & Medical' ? '' : ' hidden') + '>Your role<select id="rl">' + options(HEALTH_ROLES, pr.role) + '</select></label>' +
         '<label>Your main goal<select id="gl" required>' + options(GOALS, pr.goal) + '</select></label>' +
-        '<label>Your mother tongue<select id="nt" required><option value="">Choose…</option>' + Object.keys(NATIVES).map(function(k){ return '<option value="' + k + '"' + (pr.native === k ? ' selected' : '') + '>' + esc(NATIVES[k]) + '</option>'; }).join('') + '</select>' +
+        '<label>Your mother tongue<select id="nt" required><option value="">Choose…</option>' + Object.keys(NATIVES).map(function(k){ return '<option value="' + k + '"' + ((pr.native || (first && guest && guest.native)) === k ? ' selected' : '') + '>' + esc(NATIVES[k]) + '</option>'; }).join('') + '</select>' +
           '<span class="hint">Explanations and help in the app will be in this language.</span></label>' +
         (first ? '<label class="check"><input id="ok" type="checkbox" required> I am 18 or older and agree to the <a href="#/terms">Terms</a> and <a href="#/privacy">Privacy policy</a>.</label>' : '') +
         '<button class="btn primary" id="sv" type="submit">' + (first ? 'Start practising' : 'Save') + '</button>' +
@@ -2574,8 +2668,12 @@
     function row(k, v){ return '<div class="acct-row"><span>' + k + '</span><b>' + esc(v || '-') + '</b></div>'; }
     render(
       '<span class="eyebrow">My account</span>' +
-      '<h1 class="title">' + esc(pr.name || 'Your account') + '</h1>' +
-      (me ? '' : '<div class="notice">You are using an access code, which will stop working soon.</div><a class="btn primary" href="#/signin" style="margin-top:12px">Sign in or create your account' + I.chev + '</a>') +
+      '<h1 class="title">' + esc(isGuest() ? 'Practising without an account' : pr.name || 'Your account') + '</h1>' +
+      (isGuest() ? '<div class="card pad" style="margin-top:16px">' + row('Learning', myEnglish() ? ENGLISHES[myEnglish()].name : '') + row('Level', myLevelInfo() ? levelById(userLevel()).name + ' (your choice)' : '') + row('Mother tongue', NATIVES[pr.native] || '') +
+          '<div class="row" style="margin-top:12px;gap:8px"><a class="btn ghost sm" href="#/start">' + I.pencil + 'Change</a></div></div>' +
+          '<p class="heard" style="text-align:left">Your choices and progress are saved on this phone only.</p>' +
+          '<a class="btn primary" href="#/signin" style="margin-top:12px">Sign in or create an account' + I.chev + '</a>'
+        : me ? '' : '<div class="notice">You are using an access code, which will stop working soon.</div><a class="btn primary" href="#/signin" style="margin-top:12px">Sign in or create your account' + I.chev + '</a>') +
       (me ? '<div class="card pad" style="margin-top:16px">' + row('Email', me.email) + row('Learning', myEnglish() ? ENGLISHES[myEnglish()].name : '') + row('Level', myLevelInfo() ? levelById(userLevel()).name : '') +
         row('Lives in', pr.country) + row('Field', pr.role ? pr.field + ' · ' + pr.role : pr.field || pr.job) + row('Main goal', pr.goal) + row('Mother tongue', NATIVES[pr.native] || '') + row('Member since', pr.created) +
         '<div class="row" style="margin-top:12px;gap:8px"><a class="btn ghost sm" href="#/profile">' + I.pencil + 'Edit profile</a><a class="btn ghost sm" href="#/english">Change English</a></div></div>' : '') +
@@ -2621,6 +2719,7 @@
         '<label class="fb-q" for="fbm">Your message</label>' +
         '<textarea id="fbm" rows="6" maxlength="2000" placeholder="What happened, what you expected, or your idea…"></textarea>' +
         (me && me.email ? '<label class="check"><input id="fbr" type="checkbox" checked> You can email me back at ' + esc(me.email) + '</label>' : '') +
+        (me ? '' : '<label class="fb-q" for="fbc">Your email, if you would like a reply (optional)</label><input id="fbc" type="email" maxlength="120" autocomplete="email" inputmode="email">') +
         '<button class="btn primary" id="fbs" type="submit">' + I.send + 'Send feedback</button>' +
         '<p class="auth-msg" id="msg" role="status"></p>' +
       '</form>'
@@ -2639,12 +2738,19 @@
       var text = app.querySelector('#fbm').value.trim();
       if (!text && !rating) { msg.textContent = 'Please choose a rating or write a message.'; return; }
       btn.disabled = true; msg.textContent = '';
-      var reply = app.querySelector('#fbr');
-      apiFetch(TALK_API + '/feedback', {
+      var reply = app.querySelector('#fbr'), contact = app.querySelector('#fbc');
+      var ver = APP_VERSION ? 'v0.' + APP_VERSION : '';
+      // Guests have no account, so their feedback goes through the website's feedback route.
+      (me ? apiFetch(TALK_API + '/feedback', {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
         body: JSON.stringify({ rating: rating, type: type, message: text, reply: reply ? reply.checked : false,
-          page: lastPage, version: APP_VERSION ? 'v0.' + APP_VERSION : '', device: navigator.userAgent.slice(0, 200), installed: isInstalled() })
-      }).then(function(r){ return r.json(); }).then(function(d){
+          page: lastPage, version: ver, device: navigator.userAgent.slice(0, 200), installed: isInstalled() })
+      }) : apiFetch(TALK_API + '/site-feedback', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ page: 'English Coach app (guest)', contact: contact ? contact.value.trim() : '',
+          message: ('Rating: ' + (rating ? rating + '/5' : 'none') + ' | Type: ' + (type || 'none') + ' | Screen: ' + lastPage + ' | ' + ver + ' | ' + (isInstalled() ? 'installed' : 'browser') +
+            '\n\n' + (text || '(no message)')).slice(0, 1500) })
+      })).then(function(r){ return r.json(); }).then(function(d){
         if (!d.ok) throw new Error(d.error || 'feedback');
         render('<article class="card pad done"><span class="ic big-ic">' + I.check + '</span><h1 class="title">Thank you!</h1>' +
           '<p class="lede">Your feedback has been sent to Australian Jeevitham.' + (reply && reply.checked ? ' We may email you back.' : '') + '</p>' +
@@ -2736,6 +2842,7 @@
       '<h1 class="title" style="margin-top:10px">Conversations</h1>' +
       '<p class="lede">Practise real situations from daily life and work. Speak as you would - your coach marks anything to improve and shows a better way to say it.</p>' +
       (TALK_API ? '' : '<div class="notice">The AI coach is being set up. Coming soon!</div>') +
+      guestCta('Sign in to start a conversation', 'Conversations use the AI coach, so they need an account. Have a look at the topics below first.') +
       '<h2 class="section-title">For you · ' + esc(talkPick().title) + '</h2>' +
       '<div class="list">' + forYou.map(sceneRow).join('') + '</div>' +
       '<h2 class="section-title">All topics</h2>' +
@@ -3122,6 +3229,9 @@
     var g = gate(parts[0]);
     showLevelBadge();
     if (g === 'wait') return waitPage();
+    if (g === 'guest') return guestPage();
+    if (isGuest() && needsAccount(parts)) return lockedPage(parts[0]);
+    if (parts[0] === 'start' && isGuest()) return guestPage();
     if (g === 'signin') return signinPage();
     if (g === 'verify') return verifyPage();
     if (g === 'profile' || (parts[0] === 'profile' && me)) return profilePage();
