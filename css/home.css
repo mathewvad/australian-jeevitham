@@ -268,3 +268,16 @@ body.d7{ background:var(--paper) var(--paper-tex); color:var(--ink); font-family
 .d7 footer .disclaimer strong{ color:#fff; }
 .d7 footer .disclaimer a{ color:var(--sky); font-weight:700; }
 .d7 footer .disclaimer .mal{ font-size:.88rem; }
+
+/* Section badges above the footer links (11 Nov 2026) */
+.d7 .section-badges{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin-top:24px; }
+.d7 .section-badges .label{ font-size:.92rem; color:#C9D3E6; margin-right:4px; }
+.d7 .section-badges + .records{ margin-top:18px; padding-top:16px; }
+.d7 .section-badges a{ font:700 .78rem "Space Mono", ui-monospace, Consolas, monospace; letter-spacing:.14em; padding:6px 14px; border-radius:999px; background:#EE4A23; color:#fff; text-decoration:none; transition:transform .15s, filter .15s; }
+.d7 .section-badges a:hover, .d7 .section-badges a:focus-visible{ filter:brightness(.88); transform:translateY(-2px); }
+/* One colour per section (white text contrast 5.0 to 5.7) */
+.d7 .section-badges .b-tech{ background:#B91C1C; }
+.d7 .section-badges .b-money{ background:#15803D; }
+.d7 .section-badges .b-learn{ background:#7C3AED; }
+.d7 .section-badges .b-lingo{ background:#2563EB; }
+.d7 .section-badges .b-wild{ background:#B45309; }

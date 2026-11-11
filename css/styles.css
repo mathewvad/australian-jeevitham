@@ -1216,3 +1216,15 @@ footer#connect .records{ margin-top:44px; padding-top:22px; border-top:1px solid
 footer#connect .records a{ color:#fff; text-decoration:none; font-weight:700; }
 footer#connect .records a:hover{ color:#8FC3E6; }
 footer#connect .copyright{ margin-top:8px; font-size:.84rem; color:#7D8BA8; }
+
+/* Section badges above the footer links (11 Nov 2026): one colour per section */
+footer#connect .section-badges{ display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; margin-top:24px; position:static; z-index:auto; background:none; border-bottom:0; backdrop-filter:none; }
+footer#connect .section-badges .label{ font-size:.92rem; color:#C9D3E6; margin-right:4px; }
+footer#connect .section-badges + .records{ margin-top:18px; padding-top:16px; }
+footer#connect .section-badges a{ font:700 .78rem "Space Mono", ui-monospace, Consolas, monospace; letter-spacing:.14em; padding:6px 14px; border-radius:999px; color:#fff; text-decoration:none; transition:transform .15s, filter .15s; }
+footer#connect .section-badges a:hover, footer#connect .section-badges a:focus-visible{ filter:brightness(.88); transform:translateY(-2px); }
+footer#connect .section-badges .b-tech{ background:#B91C1C; }
+footer#connect .section-badges .b-money{ background:#15803D; }
+footer#connect .section-badges .b-learn{ background:#7C3AED; }
+footer#connect .section-badges .b-lingo{ background:#2563EB; }
+footer#connect .section-badges .b-wild{ background:#B45309; }
