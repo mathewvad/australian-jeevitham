@@ -402,6 +402,11 @@
     @media (prefers-reduced-motion: reduce){
       .gp-btn, .gp-toast{ transition:none; }
     }
+    /* Section badges (11 Nov 2026): same colours as the site footers */
+    .gp-badges{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; position:static; z-index:auto; background:none; border:0; backdrop-filter:none; }
+    .gp-badges a{ font:700 .78rem "Space Mono", ui-monospace, Consolas, monospace; letter-spacing:.14em; padding:7px 14px; border-radius:999px; color:#fff; text-decoration:none; transition:transform .15s, filter .15s; }
+    .gp-badges a:hover, .gp-badges a:focus-visible{ filter:brightness(.88); transform:translateY(-2px); }
+    .gp-badges .b-tech{ background:#B91C1C; } .gp-badges .b-money{ background:#15803D; } .gp-badges .b-learn{ background:#7C3AED; } .gp-badges .b-lingo{ background:#2563EB; } .gp-badges .b-wild{ background:#B45309; }
   </style>
 </head>
 <body>
@@ -672,6 +677,17 @@
             </a>
 
           </div>
+        </section>
+        <!-- ============ SECTIONS ============ -->
+        <section class="gp-card gp-section" id="sections">
+          <h2>Explore our sections</h2>
+          <nav class="section-badges gp-badges" aria-label="Website sections">
+            <a class="b-tech" href="tech/" title="Tech tools">TECH</a>
+            <a class="b-money" href="money/" title="Money calculators">MONEY</a>
+            <a class="b-learn" href="learn/" title="Tests and quizzes">LEARN</a>
+            <a class="b-lingo" href="lingo/" title="English for work">LINGO</a>
+            <a class="b-wild" href="wild/" title="Wildlife and farm">WILD</a>
+          </nav>
         </section>
       </div>
 
