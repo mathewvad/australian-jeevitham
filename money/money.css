@@ -32,7 +32,7 @@ code{ font-family:var(--mono); font-size:.92em; }
 .t-brand img{ width:38px; height:38px; border-radius:50%; box-shadow:0 0 0 3px rgba(255,255,255,.9); }
 .t-brand b{ display:block; font:700 .95rem var(--display); letter-spacing:.01em; line-height:1.2; }
 .t-brand small{ display:block; font:400 .72rem var(--mono); color:var(--sky-2); letter-spacing:.12em; text-transform:uppercase; }
-.t-tag{ font:700 .72rem var(--mono); letter-spacing:.14em; padding:3px 9px; border-radius:999px; background:var(--orange); color:#fff; margin-left:4px; }
+.t-tag{ font:700 .72rem var(--mono); letter-spacing:.14em; padding:3px 9px; border-radius:999px; background:#15803D; color:#fff; margin-left:4px; } /* section colour (11 Nov 2026) */
 .t-nav{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; list-style:none; }
 .t-nav a{ display:inline-block; padding:8px 14px; border-radius:999px; font:600 .9rem var(--body); text-decoration:none; color:#DCE6F3; transition:background .2s, color .2s; }
 .t-nav a:hover, .t-nav a[aria-current="page"]{ background:rgba(143,195,230,.18); color:#fff; }
@@ -313,3 +313,15 @@ a.m-tile:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); }
 .m-fb textarea{ resize:vertical; min-height:84px; }
 .m-fb .jp-btn:disabled{ opacity:.6; cursor:default; }
 .m-trap{ position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
+
+/* Section badges in the footer (11 Nov 2026): one colour per section, same as the home page */
+.t-footer .section-badges{ flex-basis:100%; display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,.1); }
+.t-footer .section-badges .label{ color:#B9C6D9; margin-right:4px; }
+.t-footer .section-badges a{ font:700 .72rem var(--mono); letter-spacing:.14em; padding:5px 12px; border-radius:999px; color:#fff; text-decoration:none; transition:transform .15s, filter .15s; }
+.t-footer .section-badges a:hover, .t-footer .section-badges a:focus-visible{ filter:brightness(.88); transform:translateY(-2px); }
+.t-footer .section-badges .b-home{ background:#8FC3E6; color:#1B2A4A; }
+.t-footer .section-badges .b-tech{ background:#B91C1C; }
+.t-footer .section-badges .b-money{ background:#15803D; }
+.t-footer .section-badges .b-learn{ background:#7C3AED; }
+.t-footer .section-badges .b-lingo{ background:#2563EB; }
+.t-footer .section-badges .b-wild{ background:#B45309; }
