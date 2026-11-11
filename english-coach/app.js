@@ -928,7 +928,8 @@
           return '<details class="card"><summary>' + esc(it.q) + '</summary><div class="a">' + it.a + '</div></details>';
         }).join('') + '</div>';
       }).join('') +
-      '<p class="heard" style="margin-top:24px">Still stuck? Message Australian Jeevitham on Facebook or YouTube.</p>'
+      '<p class="heard" style="margin-top:24px">Still stuck? Message Australian Jeevitham on Facebook or YouTube.</p>' +
+      '<p class="heard" style="margin-top:8px"><a href="#/privacy">Privacy policy</a> · <a href="#/terms">Terms of use</a></p>'
     );
   }
 
@@ -2769,7 +2770,13 @@
     render('<span class="eyebrow">' + esc(d.eyebrow) + '</span><h1 class="title">' + esc(d.title) + '</h1>' +
       '<p class="heard" style="text-align:left">Last updated ' + esc(d.updated) + '</p>' +
       '<article class="card pad legal">' + d.html + '</article>' +
-      '<p style="margin-top:16px"><a class="btn ghost" href="' + (me || getCode() ? '#/account' : '#/signin') + '">' + I.back + 'Back</a></p>');
+      '<p style="margin-top:16px"><a class="btn ghost" href="' + legalBack() + '">' + I.back + 'Back</a></p>');
+  }
+  // Back from Privacy or Terms: signed-in people go to My account; guests and visitors go back
+  // to the screen they came from (the welcome screen, sign-in, Help or My account).
+  function legalBack(){
+    if (me || getCode()) return '#/account';
+    return lastPage && !/^#\/(privacy|terms)\b/.test(lastPage) ? lastPage : '#/';
   }
 
   /* ---------- Talk menu: sections by field (Healthcare has a sub-menu per role) ---------- */

@@ -78,15 +78,18 @@ const HELP = [
 /* Privacy policy and Terms of use, shown at #/privacy and #/terms. */
 const LEGAL = {
   privacy: {
-    eyebrow: 'Privacy', title: 'Privacy policy', updated: '3 November 2026',
+    eyebrow: 'Privacy', title: 'Privacy policy', updated: '11 November 2026',
     html:
       '<p>English Coach is made by Australian Jeevitham (australianjeevitham.com), based in Queensland, Australia. This page explains what we collect when you use the app, why, and your choices.</p>' +
+      '<h2>Using the app without an account</h2><p>You can use the lessons, drills, listening, vocabulary, slang and tips without an account. Your choices (which English, your mother tongue and your level) and your progress are saved only on your own phone. We receive nothing from you unless you send feedback.</p>' +
       '<h2>What we collect</h2><ul>' +
         '<li><b>Your account:</b> your name, email address and how you sign in (Google or email and password). Passwords are handled by Google Firebase - we never see them.</li>' +
         '<li><b>Your profile:</b> where you live, your work and your main goal.</li>' +
         '<li><b>Usage counts:</b> how many AI coach messages you send each day, kept for 90 days to apply daily limits and plan the app.</li>' +
         '<li><b>What you say or type to the AI features:</b> sent to the AI coach to reply and give feedback. We do not keep your conversations.</li>' +
         '<li><b>Your voice recordings</b> in drills and speaking tests: sent for pronunciation scoring and not kept by us.</li>' +
+        '<li><b>Feedback you send:</b> your rating and message, the screen you were on, the app version and your type of phone and browser. With an account, it also includes your name and email address. Without an account, any contact details you choose to give are included, and our server counts messages from each internet (IP) address to stop spam - these counts are deleted after 90 days. Feedback is saved on our server and emailed to us.</li>' +
+        '<li><b>When you create an account:</b> we receive an email with your name, email address and profile answers, so we know who has joined.</li>' +
         '<li><b>Website statistics:</b> our website uses Google Analytics to count visits.</li>' +
       '</ul>' +
       '<p>Your practice progress (streak, scores, saved phrases) stays on your own phone.</p>' +
@@ -96,12 +99,13 @@ const LEGAL = {
         '<li>Cloudflare - our server and account storage</li>' +
         '<li>Anthropic (Claude) - the AI coach replies and feedback</li>' +
         '<li>Microsoft Azure - pronunciation scoring and the natural voices</li>' +
+        '<li>Resend - sends us the emails about feedback and new accounts</li>' +
         '<li>GitHub - hosts the app files; Google Analytics - website statistics</li>' +
       '</ul>' +
       '<h2>Please don\'t share private details</h2><p>Never type or say real patient information, passwords, bank details or ID numbers in the app. Use made-up names and details when you practise.</p>' +
       '<h2>Your choices</h2><ul>' +
         '<li>Edit your profile or <b>delete your account</b> at any time in My account. Deleting removes your account and profile; usage counts expire within 90 days.</li>' +
-        '<li>Ask us what we hold about you, or to correct it, by emailing <a href="mailto:australianjeevitham@gmail.com">australianjeevitham@gmail.com</a>.</li>' +
+        '<li>Ask us what we hold about you, or to correct or delete it (including feedback you sent), by emailing <a href="mailto:australianjeevitham@gmail.com">australianjeevitham@gmail.com</a>.</li>' +
       '</ul>' +
       '<h2>Who the app is for</h2><p>The app is for adults aged 18 and over.</p>' +
       '<h2>Changes</h2><p>We may update this policy as the app grows. The date at the top shows the latest version.</p>'
