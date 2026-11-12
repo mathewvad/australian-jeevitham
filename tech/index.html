@@ -238,6 +238,23 @@
     <div class="t-search"><input type="search" id="q" placeholder="Search 31 tools - try json, hash or cron" aria-label="Search the tools" autocomplete="off"></div>
   </div>
 </section>
+<section class="m-hubguide" id="guide">
+  <div class="wrap">
+    <div class="m-guide">
+      <h2>About these tools</h2>
+      <p>Each tool does one everyday job for developers, testers and anyone who works with data. They all run in your web browser: the JSON, tokens, passwords and documents you paste are processed on your own device and are not uploaded. That matters at work, because many employers do not allow customer data or secret keys to be pasted into online tools that send them to a server.</p>
+      <h3>Which tool for which job?</h3>
+      <ul>
+        <li><strong>Checking API data</strong> - <a href="json-parser.html">JSON parser</a>, <a href="jsonpath-tester.html">JSONPath tester</a> and <a href="json-to-typescript.html">JSON to TypeScript</a>.</li>
+        <li><strong>Sign-in and security</strong> - <a href="jwt-decoder.html">JWT decoder</a>, <a href="totp-generator.html">TOTP generator</a>, <a href="hash-generator.html">hash generator</a> and <a href="password-strength.html">password strength checker</a>.</li>
+        <li><strong>Fixing text</strong> - <a href="string-escape.html">string escape</a>, <a href="url-encoder.html">URL encoder</a>, <a href="text-diff.html">text diff</a> and <a href="text-case-tools.html">text case tools</a>.</li>
+        <li><strong>Web design</strong> - <a href="colour-converter.html">colour converter</a>, <a href="px-rem-converter.html">px to rem</a>, <a href="css-gradient-shadow.html">gradient and shadow</a> and <a href="image-resizer.html">image resizer</a>.</li>
+        <li><strong>Servers and networks</strong> - <a href="cron-explainer.html">cron explainer</a>, <a href="chmod-calculator.html">chmod calculator</a>, <a href="cidr-calculator.html">IP subnet calculator</a> and <a href="timestamp-converter.html">timestamp converter</a>.</li>
+      </ul>
+      <p>Every tool page also has a short guide below the tool, with examples, common mistakes and tips.</p>
+    </div>
+  </div>
+</section>
 
 <section class="t-section" id="data">
   <div class="wrap">
@@ -492,20 +509,9 @@
   </div>
 </section>
 <p class="t-empty" id="none" hidden>No tools match that search.</p>
-<section class="m-hubguide" id="guide">
+<section class="m-hubguide" id="about">
   <div class="wrap">
     <div class="m-guide">
-      <h2>About these tools</h2>
-      <p>Each tool does one everyday job for developers, testers and anyone who works with data. They all run in your web browser: the JSON, tokens, passwords and documents you paste are processed on your own device and are not uploaded. That matters at work, because many employers do not allow customer data or secret keys to be pasted into online tools that send them to a server.</p>
-      <h3>Which tool for which job?</h3>
-      <ul>
-        <li><strong>Checking API data</strong> - <a href="json-parser.html">JSON parser</a>, <a href="jsonpath-tester.html">JSONPath tester</a> and <a href="json-to-typescript.html">JSON to TypeScript</a>.</li>
-        <li><strong>Sign-in and security</strong> - <a href="jwt-decoder.html">JWT decoder</a>, <a href="totp-generator.html">TOTP generator</a>, <a href="hash-generator.html">hash generator</a> and <a href="password-strength.html">password strength checker</a>.</li>
-        <li><strong>Fixing text</strong> - <a href="string-escape.html">string escape</a>, <a href="url-encoder.html">URL encoder</a>, <a href="text-diff.html">text diff</a> and <a href="text-case-tools.html">text case tools</a>.</li>
-        <li><strong>Web design</strong> - <a href="colour-converter.html">colour converter</a>, <a href="px-rem-converter.html">px to rem</a>, <a href="css-gradient-shadow.html">gradient and shadow</a> and <a href="image-resizer.html">image resizer</a>.</li>
-        <li><strong>Servers and networks</strong> - <a href="cron-explainer.html">cron explainer</a>, <a href="chmod-calculator.html">chmod calculator</a>, <a href="cidr-calculator.html">IP subnet calculator</a> and <a href="timestamp-converter.html">timestamp converter</a>.</li>
-      </ul>
-      <p>Every tool page also has a short guide below the tool, with examples, common mistakes and tips.</p>
       <h3>Who made these tools?</h3>
       <p><a href="../creator-australian-jeevitham.html">Binu Vadakkedath</a>, a Malayali software engineer from Kozhikode, Kerala, who has lived in Australia since 2012 and is based in Townsville, Queensland.</p>
     </div>
@@ -531,7 +537,7 @@
 <script>
 (function () {
   'use strict';
-  var q = document.getElementById('q'), none = document.getElementById('none');
+  var q = document.getElementById('q'), none = document.getElementById('none'), guide = document.getElementById('guide');
   var cards = [].slice.call(document.querySelectorAll('.t-card')), sections = [].slice.call(document.querySelectorAll('.t-section'));
   var text = cards.map(function (c) { return c.textContent.toLowerCase() + ' ' + c.getAttribute('href'); });
   function run() {
@@ -542,6 +548,7 @@
     });
     sections.forEach(function (s) { s.hidden = !s.querySelector('.t-card:not([hidden])'); });
     none.hidden = shown > 0;
+    if (guide) guide.hidden = terms.length > 0;
   }
   q.addEventListener('input', run);
   q.addEventListener('keydown', function (e) {
