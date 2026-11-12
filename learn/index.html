@@ -122,6 +122,25 @@
   </div>
 </section>
 
+<section class="m-hubguide" id="guide">
+  <div class="wrap">
+    <div class="m-guide">
+      <h2>Which test should I try?</h2>
+      <ul>
+        <li><strong>Looking for work?</strong> Try the <a href="aptitude-test-practice.html">aptitude test practice</a> and the <a href="workplace-english-quiz.html">workplace English quiz</a>.</li>
+        <li><strong>Applying for citizenship?</strong> Use the <a href="citizenship-test-practice.html">citizenship test practice</a> while you study the official booklet.</li>
+        <li><strong>Learning to drive, or changing over an Indian licence?</strong> Try the <a href="driver-knowledge-test-practice.html">driver knowledge test practice</a>.</li>
+        <li><strong>New to Aussie English?</strong> Start with the <a href="aussie-slang-quiz.html">Aussie slang quiz</a>.</li>
+        <li><strong>Just for fun?</strong> Take the <a href="iq-test.html">IQ test</a>.</li>
+      </ul>
+      <h3>Are these the real tests?</h3>
+      <p>No. Every test here is a practice test written by Australian Jeevitham, and the real questions will be different. For the citizenship test and the driver knowledge test, the official booklet or your state's road rules handbook is always the final word.</p>
+      <h3>Do you keep my answers?</h3>
+      <p>No. Your answers are marked in your own web browser. Some tests remember your best score on this device only, and you can clear those scores at any time. Nothing is sent to us unless you use a feedback box.</p>
+    </div>
+  </div>
+</section>
+
 <section class="t-section" id="brain">
   <div class="wrap">
     <h2>Brain</h2>
@@ -189,21 +208,9 @@
 </section>
 <p class="t-empty" id="none" hidden>No tests match that search.</p>
 
-<section class="m-hubguide" id="guide">
+<section class="m-hubguide" id="about">
   <div class="wrap">
     <div class="m-guide">
-      <h2>Which test should I try?</h2>
-      <ul>
-        <li><strong>Looking for work?</strong> Try the <a href="aptitude-test-practice.html">aptitude test practice</a> and the <a href="workplace-english-quiz.html">workplace English quiz</a>.</li>
-        <li><strong>Applying for citizenship?</strong> Use the <a href="citizenship-test-practice.html">citizenship test practice</a> while you study the official booklet.</li>
-        <li><strong>Learning to drive, or changing over an Indian licence?</strong> Try the <a href="driver-knowledge-test-practice.html">driver knowledge test practice</a>.</li>
-        <li><strong>New to Aussie English?</strong> Start with the <a href="aussie-slang-quiz.html">Aussie slang quiz</a>.</li>
-        <li><strong>Just for fun?</strong> Take the <a href="iq-test.html">IQ test</a>.</li>
-      </ul>
-      <h3>Are these the real tests?</h3>
-      <p>No. Every test here is a practice test written by Australian Jeevitham, and the real questions will be different. For the citizenship test and the driver knowledge test, the official booklet or your state's road rules handbook is always the final word.</p>
-      <h3>Do you keep my answers?</h3>
-      <p>No. Your answers are marked in your own web browser. Some tests remember your best score on this device only, and you can clear those scores at any time. Nothing is sent to us unless you use a feedback box.</p>
       <h3>Who made these tests?</h3>
       <p><a href="../creator-australian-jeevitham.html">Binu Vadakkedath</a>, a Malayali software engineer from Kozhikode, Kerala, who has lived in Australia since 2012 and is based in Townsville, Queensland.</p>
     </div>
@@ -229,7 +236,7 @@
 <script>
 (function () {
   'use strict';
-  var q = document.getElementById('q'), none = document.getElementById('none');
+  var q = document.getElementById('q'), none = document.getElementById('none'), guide = document.getElementById('guide');
   var cards = [].slice.call(document.querySelectorAll('.t-card')), sections = [].slice.call(document.querySelectorAll('.t-section'));
   var text = cards.map(function (c) { return c.textContent.toLowerCase() + ' ' + c.getAttribute('href'); });
   function run() {
@@ -240,6 +247,7 @@
     });
     sections.forEach(function (s) { if (s.id !== 'mine') s.hidden = !s.querySelector('.t-card:not([hidden])'); });
     none.hidden = shown > 0;
+    if (guide) guide.hidden = terms.length > 0;
   }
   q.addEventListener('input', run);
   q.addEventListener('keydown', function (e) {
