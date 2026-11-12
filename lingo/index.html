@@ -124,6 +124,29 @@
   </div>
 </section>
 
+<section class="m-hubguide" id="guide">
+  <div class="wrap">
+    <div class="m-guide">
+      <h2>How to use these pages</h2>
+      <p>Good English at work in Australia comes from three things: knowing the words, understanding how people use them, and speaking often. These pages help with each step:</p>
+      <ul>
+        <li><strong>Learn the words</strong> - the <a href="aussie-slang-words.html">Aussie slang list</a> has 62 everyday words and the <a href="workplace-english-words.html">workplace English list</a> has 42 work words, each with a meaning and an example sentence.</li>
+        <li><strong>Check yourself</strong> - try the <a href="../learn/aussie-slang-quiz.html">Aussie slang quiz</a> and the <a href="../learn/workplace-english-quiz.html">workplace English quiz</a>, with every answer explained.</li>
+        <li><strong>Speak</strong> - practise real work conversations with the <a href="english-coach.html">English Coach app</a>, which listens and gives you feedback.</li>
+        <li><strong>Read</strong> - see <a href="../english-for-working-in-australia.html">why good English matters at work</a>, and get your <a href="../australian-resume-cover-letter-guide.html">resume and cover letter</a> right.</li>
+      </ul>
+      <h3>Will these pages get me ready for IELTS, PTE or OET?</h3>
+      <p>They help with the everyday and workplace English that every test and job needs. For a visa or registration test, also practise with the official materials for your test, and check the score you need with <a href="https://immi.homeaffairs.gov.au/help-support/meeting-our-requirements/english-language" target="_blank" rel="noopener noreferrer">Home Affairs</a> or your registration board.</p>
+      <h3>Tips that really help</h3>
+      <ul>
+        <li>Speak a little every day - even ten minutes of talking helps more than an hour of only reading.</li>
+        <li>Learn words inside whole sentences, so you know how to use them.</li>
+        <li>When you do not understand something at work, ask: "Sorry, could you say that again?" Australians are happy to repeat.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <section class="t-section" id="speak">
   <div class="wrap">
     <h2>Speak</h2>
@@ -206,25 +229,9 @@
 </section>
 <p class="t-empty" id="none" hidden>No pages match that search.</p>
 
-<section class="m-hubguide" id="guide">
+<section class="m-hubguide" id="about">
   <div class="wrap">
     <div class="m-guide">
-      <h2>How to use these pages</h2>
-      <p>Good English at work in Australia comes from three things: knowing the words, understanding how people use them, and speaking often. These pages help with each step:</p>
-      <ul>
-        <li><strong>Learn the words</strong> - the <a href="aussie-slang-words.html">Aussie slang list</a> has 62 everyday words and the <a href="workplace-english-words.html">workplace English list</a> has 42 work words, each with a meaning and an example sentence.</li>
-        <li><strong>Check yourself</strong> - try the <a href="../learn/aussie-slang-quiz.html">Aussie slang quiz</a> and the <a href="../learn/workplace-english-quiz.html">workplace English quiz</a>, with every answer explained.</li>
-        <li><strong>Speak</strong> - practise real work conversations with the <a href="english-coach.html">English Coach app</a>, which listens and gives you feedback.</li>
-        <li><strong>Read</strong> - see <a href="../english-for-working-in-australia.html">why good English matters at work</a>, and get your <a href="../australian-resume-cover-letter-guide.html">resume and cover letter</a> right.</li>
-      </ul>
-      <h3>Will these pages get me ready for IELTS, PTE or OET?</h3>
-      <p>They help with the everyday and workplace English that every test and job needs. For a visa or registration test, also practise with the official materials for your test, and check the score you need with <a href="https://immi.homeaffairs.gov.au/help-support/meeting-our-requirements/english-language" target="_blank" rel="noopener noreferrer">Home Affairs</a> or your registration board.</p>
-      <h3>Tips that really help</h3>
-      <ul>
-        <li>Speak a little every day - even ten minutes of talking helps more than an hour of only reading.</li>
-        <li>Learn words inside whole sentences, so you know how to use them.</li>
-        <li>When you do not understand something at work, ask: "Sorry, could you say that again?" Australians are happy to repeat.</li>
-      </ul>
       <h3>Who made these pages?</h3>
       <p><a href="../creator-australian-jeevitham.html">Binu Vadakkedath</a>, a Malayali software engineer from Kozhikode, Kerala, who has lived in Australia since 2012 and is based in Townsville, Queensland.</p>
     </div>
@@ -250,7 +257,7 @@
 <script>
 (function () {
   'use strict';
-  var q = document.getElementById('q'), none = document.getElementById('none');
+  var q = document.getElementById('q'), none = document.getElementById('none'), guide = document.getElementById('guide');
   var cards = [].slice.call(document.querySelectorAll('.t-card')), sections = [].slice.call(document.querySelectorAll('.t-section'));
   var text = cards.map(function (c) { return c.textContent.toLowerCase() + ' ' + (c.getAttribute('href') || ''); });
   function run() {
@@ -261,6 +268,7 @@
     });
     sections.forEach(function (s) { s.hidden = !s.querySelector('.t-card:not([hidden])'); });
     none.hidden = shown > 0;
+    if (guide) guide.hidden = terms.length > 0;
     var n = document.getElementById('count'); if (n) n.textContent = terms.length ? shown + ' of ' + cards.length + ' shown' : '';
   }
   q.addEventListener('input', run);
