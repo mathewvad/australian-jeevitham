@@ -395,3 +395,13 @@ a.m-tile:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); }
 .t-footer .section-badges .b-learn{ background:#7C3AED; }
 .t-footer .section-badges .b-lingo{ background:#2563EB; }
 .t-footer .section-badges .b-wild{ background:#B45309; }
+
+/* Guide text below the tests (AdSense-ready round, 2026-11-12) */
+.m-guide p{ margin:0 0 12px; line-height:1.6; }
+.m-guide h3{ font:700 .98rem var(--display); margin:20px 0 6px; }
+.m-guide ol, .m-guide ul{ margin:0 0 14px; padding-left:22px; }
+.m-guide li{ margin-bottom:6px; line-height:1.6; }
+.m-guide .tl-table-wrap{ margin:4px 0 14px; }
+.m-hubguide{ padding:64px 0; }
+.m-hubguide h2{ font:800 clamp(1.5rem,3vw,2.1rem)/1.2 var(--display); margin-bottom:20px; }
+.m-hubguide .m-guide{ max-width:780px; }
