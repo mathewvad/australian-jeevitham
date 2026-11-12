@@ -23,10 +23,17 @@
   <meta property="og:description" content="Test JSONPath expressions against your JSON and see matching values and their paths. Supports filters, slices, wildcards and recursive search. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/jsonpath-tester.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="JSONPath Tester - Query JSON Online | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Test JSONPath expressions against your JSON and see matching values and their paths. Supports filters, slices, wildcards and recursive search. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -125,6 +132,29 @@
         <div><code>&amp;&amp; || !</code> combine filters</div>
         <div><code>[?(@.a)]</code> key exists</div>
       </div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>About JSONPath</h2>
+      <p>JSONPath picks values out of a JSON document, the way a file path picks a file out of folders. It was standardised in 2024 as <a href="https://www.rfc-editor.org/rfc/rfc9535" target="_blank" rel="noopener noreferrer">RFC 9535</a>, and it is used by tools such as <code>kubectl</code> and many testing and automation tools.</p>
+      <p>With this JSON - <code>{"store":{"book":[{"title":"A","price":8},{"title":"B","price":12},{"title":"C","price":9.5}],"bicycle":{"price":200}}}</code> - these paths give:</p>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Path</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>$.store.book[*].title</code></td><td>"A", "B", "C" - every book title</td></tr>
+          <tr><td><code>$.store.book[0].title</code></td><td>"A" - the first book</td></tr>
+          <tr><td><code>$.store.book[-1].title</code></td><td>"C" - the last book</td></tr>
+          <tr><td><code>$..price</code></td><td>8, 12, 9.5, 200 - every price at any depth</td></tr>
+          <tr><td><code>$.store.book[?(@.price &lt; 10)].title</code></td><td>"A", "C" - books under 10</td></tr>
+        </tbody>
+      </table></div>
+      <h3>JSONPath or jq?</h3>
+      <p>jq is a command-line program with its own, more powerful language for changing JSON. JSONPath only selects values, but it is simpler and built into many libraries and tools, so it is often the quicker choice for finding data.</p>
+      <h3>Tips</h3>
+      <ul>
+        <li>Use <code>['key name']</code> for keys with spaces or dashes.</li>
+        <li><code>..</code> searches the whole document, so it can match more than you expect - check the Paths list to see where each match came from.</li>
+      </ul>
+      <p>Everything runs in your browser, and your JSON is not uploaded.</p>
     </div>
   </div>
 </section>

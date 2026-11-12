@@ -23,10 +23,17 @@
   <meta property="og:description" content="Work out Linux file permissions: tick read, write and execute to get the octal and symbolic values and the chmod command. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/chmod-calculator.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Chmod Calculator - Linux File Permissions | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Work out Linux file permissions: tick read, write and execute to get the octal and symbolic values and the chmod command. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -118,6 +125,28 @@
     <div class="tl-card tl-mt">
       <h2>What it means</h2>
       <div class="tl-table-wrap"><table class="tl-table"><tbody id="explain"></tbody></table></div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>How Linux file permissions work</h2>
+      <p>Every file and folder on Linux and macOS has three sets of permissions: for the <strong>owner</strong>, the <strong>group</strong> and <strong>others</strong>. Each set adds up read (4), write (2) and execute (1), giving one digit from 0 to 7. So <code>755</code> means the owner can read, write and run (7), and everyone else can read and run (5) - written <code>rwxr-xr-x</code>.</p>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Mode</th><th>Usually used for</th></tr></thead>
+        <tbody>
+          <tr><td><code>644</code></td><td>Normal files, such as web pages and images</td></tr>
+          <tr><td><code>755</code></td><td>Folders, and scripts or programs that need to run</td></tr>
+          <tr><td><code>600</code></td><td>Private files, such as an SSH private key</td></tr>
+          <tr><td><code>700</code></td><td>Private folders, such as <code>~/.ssh</code></td></tr>
+          <tr><td><code>777</code></td><td>Almost never - see below</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Why is 777 dangerous?</h3>
+      <p>It lets every user on the system change or replace the file. On a web server, anyone who gets even a small foothold could then change your site's files. If something only works with 777, the owner or group is usually wrong - fix those with <code>chown</code> instead.</p>
+      <h3>What do permissions mean for folders?</h3>
+      <p>Read lets you list the files in a folder, write lets you add or delete files in it, and execute lets you open the folder and reach the files inside.</p>
+      <h3>Careful with -R</h3>
+      <p><code>chmod -R 755</code> also makes every file executable. To give folders 755 and files 644 instead, run <code>find mydir -type d -exec chmod 755 {} +</code> and then <code>find mydir -type f -exec chmod 644 {} +</code>.</p>
+      <h3>The special bits</h3>
+      <p><strong>setuid</strong> runs a program as its owner, <strong>setgid</strong> runs it as its group (or, on a folder, gives new files the folder's group), and the <strong>sticky bit</strong> on a shared folder such as <code>/tmp</code> lets people delete only their own files.</p>
     </div>
   </div>
 </section>

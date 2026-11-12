@@ -23,10 +23,17 @@
   <meta property="og:description" content="Make SHA-256, SHA-384, SHA-512, SHA-1 and MD5 hashes of text or files, in hex or Base64, plus HMAC-SHA256. Uses your browser&#x27;s built-in crypto - nothing is uploaded.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/hash-generator.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Hash Generator - SHA-256, SHA-512, SHA-1 &amp; MD5 | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Make SHA-256, SHA-384, SHA-512, SHA-1 and MD5 hashes of text or files, in hex or Base64, plus HMAC-SHA256. Uses your browser&#x27;s built-in crypto - nothing is uploaded.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -122,6 +129,25 @@
       </div>
     </div>
     <p class="jp-note">MD5 and SHA-1 are fine for checksums but are no longer safe for passwords or signatures. Use SHA-256 or stronger for anything security related.</p>
+    <div class="tl-card tl-mt m-guide">
+      <h2>About hash functions</h2>
+      <p>A hash function turns any text or file into a short, fixed-length "fingerprint". The same input always gives the same hash, and even a one-letter change gives a completely different one. You cannot turn a hash back into the original data. A SHA-256 hash, for example, is always 64 hex characters long, whatever the size of the file.</p>
+      <h3>Which hash should I use?</h3>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Hash</th><th>Use it for</th></tr></thead>
+        <tbody>
+          <tr><td>SHA-256, SHA-384, SHA-512</td><td>Checking downloads, signatures and anything security-related</td></tr>
+          <tr><td>SHA-1, MD5</td><td>Only for matching old checksums - researchers have made different files with the same hash, so they are not safe for security</td></tr>
+        </tbody>
+      </table></div>
+      <h3>How do I check a download?</h3>
+      <p>Many software sites publish a SHA-256 checksum next to the download. Open the downloaded file here, and paste the published checksum into the "Compare with a checksum" box. If they match, the file has not been changed or damaged.</p>
+      <h3>What is HMAC?</h3>
+      <p>HMAC mixes a secret key into the hash. Only someone with the same key can make the same HMAC, so it is used to prove that a message - such as a webhook from an online service - really came from the right sender and was not changed.</p>
+      <h3>Can I store passwords as SHA-256 hashes?</h3>
+      <p>No. Fast hashes like SHA-256 and MD5 can be guessed billions of times a second. Passwords need a slow password-hashing method such as Argon2, scrypt or bcrypt - see the <a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP password storage guide</a>.</p>
+      <p>Your text and files are hashed in your browser and are not uploaded.</p>
+    </div>
   </div>
 </section>
 

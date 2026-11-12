@@ -23,10 +23,17 @@
   <meta property="og:description" content="Write Markdown and see the formatted result as you type, then copy or download the HTML. Supports tables, code blocks and task lists. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/markdown-preview.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Markdown Previewer &amp; Markdown to HTML Converter | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Write Markdown and see the formatted result as you type, then copy or download the HTML. Supports tables, code blocks and task lists. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -108,6 +115,34 @@
       </div>
     </div>
     <p class="jp-note">Supports headings, bold, italic, strikethrough, links, images, lists, task lists, quotes, code blocks, tables and horizontal rules. Raw HTML in the Markdown is shown as text, not run.</p>
+    <div class="tl-card tl-mt m-guide">
+      <h2>Markdown quick guide</h2>
+      <p>Markdown is a simple way to format text with ordinary characters. It is used in README files on GitHub, in notes apps, chat apps and many website editors. This page follows the common GitHub style, including tables and task lists.</p>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Type this</th><th>To get</th></tr></thead>
+        <tbody>
+          <tr><td><code># Title</code>, <code>## Section</code></td><td>Headings (level 1, level 2)</td></tr>
+          <tr><td><code>**bold**</code>, <code>*italic*</code>, <code>~~struck~~</code></td><td>Bold, italic, strikethrough</td></tr>
+          <tr><td><code>[text](https://example.com)</code></td><td>A link</td></tr>
+          <tr><td><code>![alt text](photo.jpg)</code></td><td>An image</td></tr>
+          <tr><td><code>- item</code> or <code>1. item</code></td><td>Bulleted or numbered list</td></tr>
+          <tr><td><code>- [ ] task</code>, <code>- [x] done</code></td><td>Task list</td></tr>
+          <tr><td><code>&gt; quote</code></td><td>A quote</td></tr>
+          <tr><td><code>`code`</code></td><td>Code in a sentence</td></tr>
+          <tr><td>Three backticks on lines before and after</td><td>A code block</td></tr>
+          <tr><td><code>| a | b |</code> rows, with <code>|---|---|</code> under the header</td><td>A table</td></tr>
+          <tr><td><code>---</code></td><td>A horizontal line</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Tips</h3>
+      <ul>
+        <li>Leave a blank line between paragraphs, and before and after lists and tables.</li>
+        <li>For a line break without a new paragraph, end the line with two spaces.</li>
+        <li>Always write alt text for images - it is read aloud to people using screen readers.</li>
+      </ul>
+      <h3>Is the HTML safe to use?</h3>
+      <p>Raw HTML typed into the Markdown is shown as text, not run, so a pasted <code>&lt;script&gt;</code> cannot do anything here. If you build a site that shows Markdown written by other people, use a Markdown library that sanitises the HTML it produces. Everything on this page runs in your browser, and nothing is uploaded.</p>
+    </div>
   </div>
 </section>
 

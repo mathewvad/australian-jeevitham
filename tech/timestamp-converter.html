@@ -23,10 +23,17 @@
   <meta property="og:description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC and time zones around the world. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/timestamp-converter.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Unix Timestamp Converter &amp; Time Zones | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Convert Unix timestamps (seconds or milliseconds) to dates and back, and see any moment in UTC and time zones around the world. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -121,6 +128,18 @@
         <label class="jp-check" for="addZone">Add a time zone <select class="jp-select" id="addZone"></select></label>
       </div>
       <div class="tl-table-wrap tl-mt"><table class="tl-table"><tbody id="formats"></tbody></table></div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>About Unix timestamps</h2>
+      <p>A Unix timestamp counts the seconds since midnight UTC on 1 January 1970, a moment called the Unix epoch. Computers store time this way because it is one plain number that means the same moment everywhere in the world. For example, <code>1767225600</code> is midnight UTC on 1 January 2026.</p>
+      <h3>Seconds or milliseconds?</h3>
+      <p>A 10-digit timestamp is usually in seconds. A 13-digit one is in milliseconds, which JavaScript and many web APIs use. If you leave the unit on "Detect automatically", this page works out which one you have.</p>
+      <h3>What is ISO 8601?</h3>
+      <p>A standard way to write a date and time as text, such as <code>2026-12-25T09:00:00+10:00</code>: the date, a <code>T</code>, the time, then the offset from UTC. A <code>Z</code> at the end means UTC. Dates written this way also sort correctly as plain text.</p>
+      <h3>Time zones in Australia</h3>
+      <p>Queensland, New South Wales, Victoria, Tasmania and the ACT use UTC+10. South Australia and the Northern Territory use UTC+9:30, and Western Australia uses UTC+8. During daylight saving, New South Wales, Victoria, Tasmania and the ACT move to UTC+11 and South Australia to UTC+10:30. To avoid daylight saving bugs, store times in UTC and convert them only when you show them. To compare Australian and Indian time, try our <a href="../money/india-australia-time.html">India ⇄ Australia time checker</a>.</p>
+      <h3>What is the year 2038 problem?</h3>
+      <p>Older systems that store Unix time as a signed 32-bit number run out of room at 03:14:07 UTC on 19 January 2038. Modern systems use 64-bit numbers, which last far longer.</p>
     </div>
   </div>
 </section>

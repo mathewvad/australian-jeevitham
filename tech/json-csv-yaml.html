@@ -23,10 +23,17 @@
   <meta property="og:description" content="Convert JSON to CSV or YAML and back again. Flattens nested objects into columns, handles quotes and commas, and downloads the result. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/json-csv-yaml.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="JSON to CSV &amp; YAML Converter (and back) | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Convert JSON to CSV or YAML and back again. Flattens nested objects into columns, handles quotes and commas, and downloads the result. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -133,6 +140,29 @@
     </div>
     <div class="jp-status" id="status" role="status">Paste some data, then press Convert (or just start typing).</div>
     <p class="jp-note">JSON to CSV works best with a list of objects, like <code>[{"name":"A","age":30}, ...]</code>. Each object becomes a row; nested objects become columns such as <code>address.city</code>, and lists are kept as JSON text in one cell.</p>
+    <div class="tl-card tl-mt m-guide">
+      <h2>JSON, CSV and YAML compared</h2>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Format</th><th>Used for</th><th>Good to know</th></tr></thead>
+        <tbody>
+          <tr><td>JSON</td><td>Web APIs and apps</td><td>Handles nested data and lists</td></tr>
+          <tr><td>CSV</td><td>Spreadsheets such as Excel and Google Sheets</td><td>Flat rows and columns only</td></tr>
+          <tr><td>YAML</td><td>Configuration files, such as Docker Compose, Kubernetes and GitHub Actions</td><td>Easy to read, but the indentation matters</td></tr>
+        </tbody>
+      </table></div>
+      <h3>How nested data becomes CSV</h3>
+      <p>CSV has no nesting, so this page flattens nested objects into dotted column names. This JSON:</p>
+      <p><code>[{"name":"Anu","address":{"city":"Brisbane","postcode":"4000"},"skills":["nursing","IELTS"]}]</code></p>
+      <p>becomes the columns <code>name</code>, <code>address.city</code>, <code>address.postcode</code> and <code>skills</code>. The list of skills is kept as JSON text in one cell, so no data is lost.</p>
+      <h3>Opening a CSV in Excel</h3>
+      <p>Excel can change some values when it opens a CSV: it drops the leading zero from phone numbers such as 0412 345 678, and shows long ID numbers in scientific notation. To keep them exactly, import the file with Excel's data import and set those columns to Text. If your Excel expects semicolons, choose the semicolon separator above.</p>
+      <h3>Common YAML mistakes</h3>
+      <ul>
+        <li>Indent with spaces, never tabs.</li>
+        <li>Put quotes around values that could be misread, such as <code>"yes"</code>, <code>"no"</code>, <code>"08"</code> or a postcode with a leading zero.</li>
+      </ul>
+      <p>Your data is converted in your browser and is not uploaded.</p>
+    </div>
   </div>
 </section>
 

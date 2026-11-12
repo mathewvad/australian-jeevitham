@@ -23,10 +23,17 @@
   <meta property="og:description" content="Compare two pieces of text or code and see added, removed and changed lines, with the exact changed words highlighted. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/text-diff.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Text Diff Checker - Compare Two Texts | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Compare two pieces of text or code and see added, removed and changed lines, with the exact changed words highlighted. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -105,6 +112,24 @@
     </div>
     <div class="jp-status" id="status" role="status">Paste two versions to see the differences.</div>
     <div class="df tl-mt" id="out" hidden></div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>How the text diff works</h2>
+      <p>A diff shows the smallest set of changes that turns the original text into the changed text. This page first compares the two versions line by line, using the Myers diff method - the same idea behind <code>git diff</code>. Lines that were removed are marked in one colour and added lines in another, and inside each changed line the words that changed are highlighted.</p>
+      <h3>When the options help</h3>
+      <ul>
+        <li><strong>Ignore spaces</strong> - when one version has different indentation or extra spaces at the ends of lines, for example after copying from an email.</li>
+        <li><strong>Ignore upper/lower case</strong> - when only capital letters changed, such as in a list of names or SQL keywords.</li>
+        <li><strong>Hide unchanged lines</strong> - for long documents, to show only the parts that differ.</li>
+      </ul>
+      <h3>Everyday uses</h3>
+      <ul>
+        <li>Check what changed between two versions of a resume, cover letter or contract before you send it.</li>
+        <li>Compare two configuration files, or two versions of a block of code.</li>
+        <li>Spot the one word your employer or agent changed in a document they sent back.</li>
+      </ul>
+      <h3>Is it private?</h3>
+      <p>Yes. Both texts are compared in your browser and are never uploaded, so it is safe for contracts, payslips and other personal documents.</p>
+    </div>
   </div>
 </section>
 

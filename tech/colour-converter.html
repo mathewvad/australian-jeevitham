@@ -23,10 +23,17 @@
   <meta property="og:description" content="Convert colours between HEX, RGB and HSL, make tints and shades, and check text contrast against WCAG AA and AAA. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/colour-converter.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Colour Converter (HEX, RGB, HSL) &amp; Contrast Checker | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Convert colours between HEX, RGB and HSL, make tints and shades, and check text contrast against WCAG AA and AAA. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -113,6 +120,22 @@
     <div class="tl-card tl-mt">
       <h2>Tints &amp; shades <span class="tl-note" style="font:400 .85rem var(--body); margin:0;">(click one to use it)</span></h2>
       <div class="tl-shades" id="shades"></div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>HEX, RGB and HSL</h2>
+      <p>These are three ways of writing the same colour in CSS. <strong>HEX</strong> such as <code>#EE4A23</code> is short and common in design files. <strong>RGB</strong> such as <code>rgb(238, 74, 35)</code> gives the amounts of red, green and blue from 0 to 255. <strong>HSL</strong> such as <code>hsl(12, 86%, 54%)</code> gives the hue, saturation and lightness, which makes it easy to build lighter or darker versions of a colour - the tints and shades above.</p>
+      <h3>What do AA and AAA mean?</h3>
+      <p>They are levels in the Web Content Accessibility Guidelines (<a href="https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html" target="_blank" rel="noopener noreferrer">WCAG</a>). Contrast is the difference in brightness between text and its background, written as a ratio from 1:1 to 21:1.</p>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Level</th><th>Normal text</th><th>Large text</th></tr></thead>
+        <tbody>
+          <tr><td>AA</td><td>At least 4.5:1</td><td>At least 3:1</td></tr>
+          <tr><td>AAA</td><td>At least 7:1</td><td>At least 4.5:1</td></tr>
+        </tbody>
+      </table></div>
+      <p>Large text means about 24 px, or about 18.5 px in bold. AA is the level most websites aim for, and Australian government websites are expected to meet it.</p>
+      <h3>Why does contrast matter?</h3>
+      <p>Good contrast helps people with low vision, older readers, and anyone reading a phone outside in bright sun. Light grey text on white is the most common mistake - check it here before you use it.</p>
     </div>
   </div>
 </section>

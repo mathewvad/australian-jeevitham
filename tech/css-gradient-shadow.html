@@ -23,10 +23,17 @@
   <meta property="og:description" content="Build CSS gradients and box shadows with live preview, then copy the CSS. Linear, radial and conic gradients with several colour stops. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/css-gradient-shadow.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="CSS Gradient &amp; Box Shadow Generator | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Build CSS gradients and box shadows with live preview, then copy the CSS. Linear, radial and conic gradients with several colour stops. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -121,6 +128,23 @@
         <div class="tl-out" id="scss"></div>
         <div class="jp-bar tl-mt"><button type="button" class="jp-btn primary" id="scopy">Copy CSS</button></div>
       </div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>CSS gradients and shadows</h2>
+      <p>CSS has three kinds of gradient. A <strong>linear</strong> gradient changes colour along a straight line - <code>90deg</code> runs left to right and <code>180deg</code> top to bottom. A <strong>radial</strong> gradient spreads out from a centre point, and a <strong>conic</strong> gradient sweeps around a centre, like a colour wheel or pie chart.</p>
+      <h3>How to make a shadow look real</h3>
+      <ul>
+        <li>Move it down a little, not sideways - light usually comes from above.</li>
+        <li>Use a large blur with a small negative spread, so the shadow is soft and tucked under the box.</li>
+        <li>Keep the opacity low, about 15-30%. Strong black shadows look heavy.</li>
+        <li>For extra depth, combine two shadows separated by a comma: a small, sharp one close to the box and a large, soft one further away.</li>
+      </ul>
+      <h3>What is an inset shadow?</h3>
+      <p>Ticking "Inset" draws the shadow inside the box instead of outside it. It is useful for pressed buttons, input fields and panels that should look sunk into the page.</p>
+      <h3>Tips for smooth gradients</h3>
+      <p>A gradient between two very similar colours over a large area can show visible stripes, called banding. Adding a middle colour stop, or slightly more difference between the colours, usually fixes it. Also check that any text on a gradient has enough contrast at both ends - try the <a href="colour-converter.html">colour converter and contrast checker</a>.</p>
+      <h3>A note on performance</h3>
+      <p>Gradients and shadows are cheap for browsers to draw once, but animating <code>box-shadow</code> redraws it on every frame. For hover effects, animate <code>transform</code> or <code>opacity</code> instead, for example by fading in a shadow on a pseudo-element.</p>
     </div>
   </div>
 </section>

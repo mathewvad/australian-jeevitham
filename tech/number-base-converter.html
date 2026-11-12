@@ -23,10 +23,17 @@
   <meta property="og:description" content="Convert numbers between binary, octal, decimal, hexadecimal and any base from 2 to 36. Handles very large and negative numbers. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/number-base-converter.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Number Base Converter - Binary, Hex, Decimal &amp; Octal | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Convert numbers between binary, octal, decimal, hexadecimal and any base from 2 to 36. Handles very large and negative numbers. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -108,6 +115,23 @@
       <h2>Details</h2>
       <div class="tl-table-wrap"><table class="tl-table"><tbody id="details"><tr><td>Nothing to show yet.</td></tr></tbody></table></div>
       <p class="tl-note">Whole numbers of any size are supported, including negative numbers.</p>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>Binary, octal, decimal and hex</h2>
+      <p>These are four ways of writing the same number. Decimal 255 is <code>FF</code> in hex, <code>1111 1111</code> in binary and <code>377</code> in octal. Computers work in binary, and hex is the handy short form: each hex digit stands for exactly 4 bits, so one byte is always two hex digits.</p>
+      <h3>Where you will see each base</h3>
+      <ul>
+        <li><strong>Hex</strong> - colours such as <code>#EE4A23</code>, memory addresses, network MAC addresses and Unicode codes (the Malayalam letter അ is U+0D05).</li>
+        <li><strong>Binary</strong> - flags and bit masks, and subnet masks in networking.</li>
+        <li><strong>Octal</strong> - Linux file permissions such as <code>755</code>.</li>
+        <li><strong>Base 36</strong> - uses 0-9 and a-z, so it makes short IDs, such as in link shorteners.</li>
+      </ul>
+      <h3>What do 0x, 0b and 0o mean?</h3>
+      <p>They are prefixes that show the base in code: <code>0xFF</code> is hex, <code>0b1010</code> is binary and <code>0o755</code> is octal, in languages such as JavaScript and Python. You can paste numbers with these prefixes into the boxes above.</p>
+      <h3>How are negative numbers stored?</h3>
+      <p>Most computers use two's complement. In 8 bits, -1 is stored as <code>1111 1111</code> (<code>0xFF</code>), which is why the same bits can mean -1 or 255 depending on the type. Type a negative number to see its two's complement form in the details.</p>
+      <h3>Very large numbers</h3>
+      <p>Normal JavaScript numbers lose accuracy above 9,007,199,254,740,991 (2<sup>53</sup> - 1). This page uses JavaScript's BigInt for whole numbers, so even very long IDs and 64-bit values convert exactly.</p>
     </div>
   </div>
 </section>

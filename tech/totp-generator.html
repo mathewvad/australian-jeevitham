@@ -23,10 +23,17 @@
   <meta property="og:description" content="Generate time-based one-time passwords (TOTP, RFC 6238) from a Base32 secret to test two-factor sign-in. SHA-1, SHA-256 and SHA-512. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/totp-generator.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="TOTP Generator - Test 2FA Codes | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Generate time-based one-time passwords (TOTP, RFC 6238) from a Base32 secret to test two-factor sign-in. SHA-1, SHA-256 and SHA-512. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -128,6 +135,19 @@
       <div class="jp-bar tl-mt"><button type="button" class="jp-btn" id="copyuri">Copy link</button></div>
     </div>
     <p class="jp-note">Made for testing two-factor sign-in during development. Codes follow RFC 6238 and are worked out in your browser - the secret is never sent or stored. Do not paste the secret of a real account into any website.</p>
+    <div class="tl-card tl-mt m-guide">
+      <h2>How authenticator codes work</h2>
+      <p>The 6-digit codes in apps such as Google Authenticator and Microsoft Authenticator are TOTP codes - time-based one-time passwords, defined in <a href="https://www.rfc-editor.org/rfc/rfc6238" target="_blank" rel="noopener noreferrer">RFC 6238</a>. When you set up two-factor sign-in, the website and your app share a secret key, usually by scanning a QR code. From then on, both sides combine that secret with the current time, in 30-second steps, using HMAC. They get the same code without talking to each other.</p>
+      <h3>Why do codes sometimes fail?</h3>
+      <ul>
+        <li><strong>Clock difference</strong> - if the phone's or server's clock is off by more than about 30 seconds, the codes do not match. Turn on automatic time on the phone and keep the server's time in sync.</li>
+        <li><strong>Settings that do not match</strong> - the number of digits, the period and the algorithm must be the same on both sides. Most apps use 6 digits, 30 seconds and SHA-1.</li>
+        <li><strong>A mistyped secret</strong> - Base32 secrets use only the letters A-Z and the numbers 2-7.</li>
+      </ul>
+      <p>Many servers also accept the code just before and just after the current one, to allow for small clock differences - which is why this page shows the previous and next codes.</p>
+      <h3>Testing two-factor sign-in safely</h3>
+      <p>Use "New random secret" to make a test secret, then copy the authenticator link or turn it into a QR code with the <a href="qr-code-generator.html">QR code generator</a> to add it to your phone. Never paste the secret of a real account into any website, including this one. The codes are worked out in your browser, and the secret is never sent or stored.</p>
+    </div>
   </div>
 </section>
 

@@ -23,10 +23,17 @@
   <meta property="og:description" content="Work out the network, broadcast address, usable host range and mask for any IPv4 CIDR block, and split it into smaller subnets. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/cidr-calculator.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="IP Subnet &amp; CIDR Calculator (IPv4) | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Work out the network, broadcast address, usable host range and mask for any IPv4 CIDR block, and split it into smaller subnets. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -114,6 +121,27 @@
       </div>
       <div class="tl-table-wrap"><table class="tl-table"><thead><tr><th>#</th><th>Subnet</th><th>Usable range</th><th>Broadcast</th><th>Hosts</th></tr></thead><tbody id="subs"></tbody></table></div>
       <p class="tl-note" id="subnote"></p>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>Understanding CIDR and subnets</h2>
+      <p>An IPv4 address has 32 bits. In <code>192.168.1.0/24</code>, the <code>/24</code> means the first 24 bits name the network and the last 8 bits number the devices on it. That gives 256 addresses, of which 254 can be used, because the first is the network address and the last is the broadcast address.</p>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Prefix</th><th>Subnet mask</th><th>Addresses</th><th>Usable</th></tr></thead>
+        <tbody>
+          <tr><td>/16</td><td>255.255.0.0</td><td>65,536</td><td>65,534</td></tr>
+          <tr><td>/24</td><td>255.255.255.0</td><td>256</td><td>254</td></tr>
+          <tr><td>/25</td><td>255.255.255.128</td><td>128</td><td>126</td></tr>
+          <tr><td>/26</td><td>255.255.255.192</td><td>64</td><td>62</td></tr>
+          <tr><td>/27</td><td>255.255.255.224</td><td>32</td><td>30</td></tr>
+          <tr><td>/28</td><td>255.255.255.240</td><td>16</td><td>14</td></tr>
+          <tr><td>/30</td><td>255.255.255.252</td><td>4</td><td>2</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Private address ranges</h3>
+      <p>Home routers, office networks and cloud networks use the private ranges from <a href="https://www.rfc-editor.org/rfc/rfc1918" target="_blank" rel="noopener noreferrer">RFC 1918</a>: <code>10.0.0.0/8</code>, <code>172.16.0.0/12</code> and <code>192.168.0.0/16</code>. These addresses are not reachable from the internet directly, so the same ranges are used in millions of networks.</p>
+      <h3>Planning cloud subnets</h3>
+      <p>A common plan is one <code>10.0.0.0/16</code> network split into <code>/24</code> subnets - one public and one private subnet in each zone. Enter the /16 above, then use "Split into smaller subnets" with a new prefix of 24 to list them. Remember that AWS and Azure keep 5 addresses in every subnet for their own use, so a cloud /24 gives 251 usable addresses, not 254.</p>
+      <p>Everything is worked out in your browser, and nothing is sent anywhere.</p>
     </div>
   </div>
 </section>

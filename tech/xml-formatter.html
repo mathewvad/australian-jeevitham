@@ -23,10 +23,17 @@
   <meta property="og:description" content="Format, validate and minify XML in your browser. Shows where a parsing error is, and counts elements and attributes. Nothing is uploaded.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/xml-formatter.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="XML Formatter, Validator &amp; Minifier | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Format, validate and minify XML in your browser. Shows where a parsing error is, and counts elements and attributes. Nothing is uploaded.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -111,6 +118,23 @@
     </div>
     <div class="jp-status" id="status" role="status">Paste XML to check and format it.</div>
     <p class="jp-note">Formatting removes whitespace between tags and trims text inside elements. Comments, CDATA sections and processing instructions are kept.</p>
+    <div class="tl-card tl-mt m-guide">
+      <h2>About XML</h2>
+      <p>XML is a text format that stores data inside tags, such as <code>&lt;name&gt;Anu&lt;/name&gt;</code>. It is still widely used for website sitemaps, RSS news feeds, office documents, bank and government data exchange, and older SOAP web services.</p>
+      <h3>Well-formed or valid?</h3>
+      <p><strong>Well-formed</strong> means the XML follows the basic rules, so any program can read it. <strong>Valid</strong> means it also matches a schema (a DTD or XSD file) that says which tags are allowed and in what order. This page checks that your XML is well-formed. To check it against a schema, use a validator that has the schema file.</p>
+      <h3>The most common XML errors</h3>
+      <ul>
+        <li>A tag that is not closed - every <code>&lt;tag&gt;</code> needs <code>&lt;/tag&gt;</code>, or must close itself like <code>&lt;br/&gt;</code>.</li>
+        <li>Tags closed in the wrong order - <code>&lt;a&gt;&lt;b&gt;&lt;/a&gt;&lt;/b&gt;</code> is not allowed.</li>
+        <li>More than one top-level element - the whole document must sit inside one root tag.</li>
+        <li>A bare <code>&amp;</code> or <code>&lt;</code> in text - write <code>&amp;amp;</code> and <code>&amp;lt;</code> instead.</li>
+        <li>Attribute values without quotes - <code>id=5</code> must be <code>id="5"</code>.</li>
+        <li>Upper and lower case that do not match - <code>&lt;Name&gt;</code> and <code>&lt;/name&gt;</code> are different tags.</li>
+      </ul>
+      <h3>A security note for developers</h3>
+      <p>When your own server reads XML from other people, turn off external entities and DTD processing in your XML parser. Otherwise a crafted file can make the server read local files - an attack called XXE. See the <a href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP XXE prevention guide</a>. This page checks your XML in your browser, and nothing is uploaded.</p>
+    </div>
   </div>
 </section>
 

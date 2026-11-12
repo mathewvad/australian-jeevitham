@@ -23,10 +23,17 @@
   <meta property="og:description" content="Encode or decode URL text, and split any URL into protocol, host, path, query parameters and hash. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/url-encoder.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="URL Encoder, Decoder &amp; Query String Parser | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Encode or decode URL text, and split any URL into protocol, host, path, query parameters and hash. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -114,6 +121,21 @@
         <span class="tl-lbl">Query parameters</span>
         <div class="tl-table-wrap tl-mt" style="margin-top:8px;"><table class="tl-table"><thead><tr><th>#</th><th>Name</th><th>Value (decoded)</th><th></th></tr></thead><tbody id="params"></tbody></table></div>
       </div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>About URL encoding</h2>
+      <p>A web address can only contain a limited set of characters. Others - spaces, <code>&amp;</code>, <code>?</code>, <code>#</code> and non-English letters such as Malayalam - must be "percent-encoded": each byte becomes <code>%</code> followed by two hex digits. A space becomes <code>%20</code>, <code>&amp;</code> becomes <code>%26</code>, and the Malayalam letter അ becomes <code>%E0%B4%85</code>. The rules are in <a href="https://www.rfc-editor.org/rfc/rfc3986" target="_blank" rel="noopener noreferrer">RFC 3986</a>.</p>
+      <h3>Which mode should I use?</h3>
+      <ul>
+        <li><strong>Component</strong> - for one value inside a URL, such as a search word. It also encodes <code>&amp;</code>, <code>/</code> and <code>?</code>.</li>
+        <li><strong>Full URL</strong> - for a whole address. It keeps <code>:</code> <code>/</code> <code>?</code> <code>&amp;</code> so the link still works.</li>
+        <li><strong>Form</strong> - like Component, but spaces become <code>+</code>, the way web forms send data.</li>
+      </ul>
+      <h3>Why does my link break?</h3>
+      <p>Usually a value contains <code>&amp;</code> or <code>#</code> that was not encoded, so the browser reads the rest as a new parameter or as a page section. Encode each value in Component mode before you join them into the address.</p>
+      <h3>What is the URL parser for?</h3>
+      <p>Paste any long link - for example one with tracking codes - to see its parts and every query parameter in a table, already decoded. It is a quick way to check what a link really contains before you click or share it.</p>
+      <p>Encoding, decoding and parsing all happen in your browser, and nothing is uploaded.</p>
     </div>
   </div>
 </section>

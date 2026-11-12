@@ -23,10 +23,17 @@
   <meta property="og:description" content="Encode text into HTML entities or decode entities back into characters, with a reference table of common entities. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/html-entities.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="HTML Entity Encoder &amp; Decoder | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Encode text into HTML entities or decode entities back into characters, with a reference table of common entities. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -111,6 +118,16 @@
       <h2>Common entities</h2>
       <div class="tl-table-wrap"><table class="tl-table"><thead><tr><th>Character</th><th>Name</th><th>Number</th><th>Meaning</th></tr></thead><tbody id="ref"></tbody></table></div>
       <p class="tl-note">Select a name or number to copy it.</p>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>About HTML entities</h2>
+      <p>In HTML, <code>&lt;</code> starts a tag and <code>&amp;</code> starts an entity. To show these characters as text, you write them as entities: <code>&amp;lt;</code> for <code>&lt;</code>, <code>&amp;gt;</code> for <code>&gt;</code>, <code>&amp;amp;</code> for <code>&amp;</code>, <code>&amp;quot;</code> for <code>"</code> and <code>&amp;#39;</code> for <code>'</code>.</p>
+      <p>An entity can be a name, a decimal number or a hex number. <code>&amp;mdash;</code>, <code>&amp;#8212;</code> and <code>&amp;#x2014;</code> all show the same long dash: —.</p>
+      <h3>Why does escaping matter for security?</h3>
+      <p>If a website shows text that people type without escaping it, someone can slip in a <code>&lt;script&gt;</code> and run their own code on your page. This is called cross-site scripting (XSS). Escaping <code>&amp; &lt; &gt; " '</code> before putting text into HTML stops it. See the <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP guide to preventing XSS</a>.</p>
+      <h3>Do I need entities for Malayalam text?</h3>
+      <p>No. If your page is saved as UTF-8 and has <code>&lt;meta charset="UTF-8"&gt;</code>, you can type Malayalam, Hindi or Tamil letters straight into the HTML. Entities are only needed for the special characters above.</p>
+      <p>Your text is encoded in your browser and is not uploaded.</p>
     </div>
   </div>
 </section>

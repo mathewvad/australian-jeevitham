@@ -23,10 +23,17 @@
   <meta property="og:description" content="Escape or unescape text for JSON and JavaScript strings, SQL, shell arguments, regular expressions and CSV fields. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/string-escape.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="String Escape &amp; Unescape - JSON, SQL, Shell, Regex | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Escape or unescape text for JSON and JavaScript strings, SQL, shell arguments, regular expressions and CSV fields. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -111,6 +118,25 @@
         <button type="button" class="jp-btn" id="copy">Copy escaped</button>
       </div>
       <p class="tl-note" id="hint"></p>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>Why escaping matters</h2>
+      <p>Every language has characters with a special meaning. A double quote ends a JSON string, a single quote ends an SQL string, and <code>$</code> or a space changes a shell command. Escaping marks those characters so they are read as plain text.</p>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>For</th><th>What this page does</th></tr></thead>
+        <tbody>
+          <tr><td>JSON / JavaScript</td><td>Adds a backslash: <code>"</code> becomes <code>\"</code>, a new line becomes <code>\n</code></td></tr>
+          <tr><td>SQL</td><td>Doubles single quotes: <code>O'Brien</code> becomes <code>O''Brien</code></td></tr>
+          <tr><td>Shell (bash)</td><td>Wraps the text in single quotes, so it is one argument with no special characters</td></tr>
+          <tr><td>Regular expression</td><td>Adds a backslash before characters such as <code>. * + ? ( ) [ ]</code></td></tr>
+          <tr><td>CSV</td><td>Puts a value with a comma, quote or new line in double quotes, and doubles the quotes inside</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Should I escape SQL by hand in my code?</h3>
+      <p>No. In real code, use query parameters (prepared statements), which keep data and commands apart and stop SQL injection. Hand escaping is only for one-off queries you type yourself. See the <a href="https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">OWASP guide to preventing SQL injection</a>.</p>
+      <h3>What are Unicode escapes?</h3>
+      <p>Some systems only accept plain English characters. With the Unicode option, other letters are written as codes - the Malayalam letter അ becomes <code>അ</code> - and turn back into the same letter when read.</p>
+      <p>Your text is escaped in your browser and is not uploaded.</p>
     </div>
   </div>
 </section>

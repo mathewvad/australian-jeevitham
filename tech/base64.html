@@ -23,10 +23,17 @@
   <meta property="og:description" content="Encode text or files to Base64, decode Base64 back to text or a downloadable file, make image data URLs, and use URL-safe Base64. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/base64.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Base64 Encode &amp; Decode (Text, Files &amp; Images) | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Encode text or files to Base64, decode Base64 back to text or a downloadable file, make image data URLs, and use URL-safe Base64. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -126,6 +133,21 @@
         <div id="preview2" hidden></div>
         <p class="tl-note" id="info2"></p>
       </div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>About Base64</h2>
+      <p>Base64 turns any data - text, images or files - into plain letters, numbers and the symbols <code>+</code> and <code>/</code>, so it can travel safely inside email, JSON or a web page. It is defined in <a href="https://www.rfc-editor.org/rfc/rfc4648" target="_blank" rel="noopener noreferrer">RFC 4648</a>. Every 3 bytes become 4 characters, so Base64 is about a third larger than the original. The <code>=</code> signs at the end are padding.</p>
+      <h3>Is Base64 encryption?</h3>
+      <p>No. Anyone can decode Base64 in seconds, so never use it to hide passwords or personal details. To keep data secret you need real encryption.</p>
+      <h3>What is URL-safe Base64?</h3>
+      <p>A version that uses <code>-</code> and <code>_</code> instead of <code>+</code> and <code>/</code>, and often drops the padding, so the result can go in web addresses and file names. JSON Web Tokens use it. Tick "URL-safe" above to use it.</p>
+      <h3>When is Base64 useful?</h3>
+      <ul>
+        <li>Putting a small icon or image straight into HTML or CSS as a <code>data:</code> address.</li>
+        <li>Sending a file through an API that only accepts JSON text.</li>
+        <li>Email attachments, which are sent as Base64 behind the scenes.</li>
+      </ul>
+      <p>For larger images, a normal image file is better, because Base64 makes the data about 33% bigger. Your text and files are encoded in your browser and are not uploaded.</p>
     </div>
   </div>
 </section>

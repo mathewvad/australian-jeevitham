@@ -23,10 +23,17 @@
   <meta property="og:description" content="Convert px to rem, em, pt and percent with any root font size, and convert every px value in a stylesheet at once. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/px-rem-converter.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="PX to REM Converter (and REM to PX) | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Convert px to rem, em, pt and percent with any root font size, and convert every px value in a stylesheet at once. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -115,6 +122,23 @@
         <label class="tl-field tl-mt"><span>CSS out</span><textarea class="tl-text short" id="cssout" spellcheck="false" readonly></textarea></label>
         <div class="jp-status" id="cssst" role="status"></div>
       </div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>px, rem, em and pt explained</h2>
+      <ul>
+        <li><strong>px</strong> - a fixed CSS pixel.</li>
+        <li><strong>rem</strong> - relative to the root (<code>html</code>) font size. With the usual 16px, <code>1rem</code> is 16px and <code>1.5rem</code> is 24px.</li>
+        <li><strong>em</strong> - relative to the font size of the parent element, so it grows or shrinks with its surroundings.</li>
+        <li><strong>pt</strong> - a print unit: 1pt is 1/72 of an inch and 1px is 1/96 of an inch, so 12pt equals 16px.</li>
+      </ul>
+      <h3>Why use rem for text?</h3>
+      <p>Many people make text bigger in their browser settings because it is easier to read. Sizes in rem grow with that setting, while sizes in px stay fixed. Using rem helps meet the accessibility rule that text can be enlarged to 200% without losing content - see <a href="https://www.w3.org/WAI/WCAG21/Understanding/resize-text.html" target="_blank" rel="noopener noreferrer">WCAG resize text</a>.</p>
+      <h3>When is px still fine?</h3>
+      <p>For thin borders, outlines and shadow offsets, px is fine, because a 1px line should stay 1px thin. That is why the stylesheet converter has an option to leave 1px values alone.</p>
+      <h3>rem or em for spacing?</h3>
+      <p>Use rem for most spacing and layout, so everything follows the root size. Use em for things that should grow with their own text, such as the padding inside a button.</p>
+      <h3>What if my site changes the root size?</h3>
+      <p>Some sites set <code>html { font-size: 62.5%; }</code> so that 1rem equals 10px. If yours does, type 10 as the root font size above, and every conversion will match your site.</p>
     </div>
   </div>
 </section>

@@ -23,10 +23,17 @@
   <meta property="og:description" content="Decode a JSON Web Token to read its header and payload, see when it was issued and when it expires. Optional HS256 signature check. Runs in your browser - tokens are never sent anywhere.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/jwt-decoder.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="JWT Decoder - Read Token Header, Payload &amp; Expiry | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Decode a JSON Web Token to read its header and payload, see when it was issued and when it expires. Optional HS256 signature check. Runs in your browser - tokens are never sent anywhere.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -120,6 +127,27 @@
         <span id="verifyOut"></span>
       </div>
       <p class="tl-note" style="margin-top:0;">Only HMAC tokens (HS256, HS384, HS512) can be checked here. Tokens signed with RS/ES keys need the issuer's public key. Never paste a production secret into any website you do not trust.</p>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>About JSON Web Tokens</h2>
+      <p>A JSON Web Token (JWT), defined in <a href="https://www.rfc-editor.org/rfc/rfc7519" target="_blank" rel="noopener noreferrer">RFC 7519</a>, is a compact way to pass facts - such as who a user is and when their login ends - between systems. It has three parts separated by dots: the header, the payload and the signature. The header and payload are just URL-safe Base64 JSON, so anyone can read them. The signature proves they have not been changed.</p>
+      <h3>Common claims in the payload</h3>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Claim</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>iss</code></td><td>Issuer - who created the token</td></tr>
+          <tr><td><code>sub</code></td><td>Subject - usually the user's ID</td></tr>
+          <tr><td><code>aud</code></td><td>Audience - who the token is for</td></tr>
+          <tr><td><code>exp</code></td><td>Expiry time</td></tr>
+          <tr><td><code>nbf</code></td><td>Not valid before this time</td></tr>
+          <tr><td><code>iat</code></td><td>Issued at</td></tr>
+        </tbody>
+      </table></div>
+      <p>The times are Unix timestamps in seconds. You can check one with the <a href="timestamp-converter.html">timestamp converter</a>.</p>
+      <h3>HS256 or RS256?</h3>
+      <p>HS256 signs and checks the token with one shared secret. RS256 signs with a private key and checks with a public key, so other services can verify tokens without being able to create them. This page can check HS256 signatures.</p>
+      <h3>Is it safe to decode a token here?</h3>
+      <p>Decoding happens in your browser and the token is not sent anywhere. But while a token is valid it works like a password, so avoid pasting live production tokens into any website, and never put secrets in a JWT payload - it is not encrypted.</p>
     </div>
   </div>
 </section>

@@ -23,10 +23,17 @@
   <meta property="og:description" content="Turn titles into clean URL slugs. Removes accents and punctuation, with a choice of separator, length limit and bulk conversion. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/slug-generator.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="URL Slug Generator | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Turn titles into clean URL slugs. Removes accents and punctuation, with a choice of separator, length limit and bulk conversion. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -110,6 +117,21 @@
       <span class="tl-lbl">Looks like</span>
       <div class="tl-out" id="url" style="margin-top:8px;"></div>
       <p class="tl-note">Accents are removed (é becomes e), "&amp;" becomes "and", and punctuation is dropped. Letters from other scripts are kept. Max length 0 means no limit; longer slugs are cut at a whole word.</p>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>What makes a good URL slug?</h2>
+      <p>A slug is the readable part of a web address that names a page, such as <code>australian-resume-cover-letter-guide</code>. Google's <a href="https://developers.google.com/search/docs/crawling-indexing/url-structure" target="_blank" rel="noopener noreferrer">URL structure guidelines</a> recommend simple, descriptive words in addresses, with hyphens between them, because people (and search engines) can tell what the page is about before they open it.</p>
+      <p>For example, the title "How to Get AHPRA Registration as a Nurse &amp; Pass the OSCE!" becomes <code>how-to-get-ahpra-registration-as-a-nurse-and-pass-the-osce</code>. With "Drop small words" ticked, it becomes the shorter <code>how-get-ahpra-registration-nurse-pass-osce</code>.</p>
+      <h3>Tips for slugs</h3>
+      <ul>
+        <li>Use hyphens, not underscores - search engines read a hyphen as a space between words.</li>
+        <li>Keep slugs short and lower case, and include the main words people search for.</li>
+        <li>Leave out dates and numbers that will go out of date, unless the page is about that year.</li>
+        <li>Once a page is published, avoid changing its slug. If you must, set up a redirect from the old address so links and search rankings are not lost.</li>
+      </ul>
+      <h3>What about Malayalam and other scripts?</h3>
+      <p>This tool keeps letters from other scripts, and modern browsers show them correctly. But when the link is copied or shared, each letter is turned into long percent codes (see the <a href="url-encoder.html">URL encoder</a>), so many bilingual sites use English words in the slug and keep Malayalam in the page title and text.</p>
+      <p>Your titles are converted in your browser and are not uploaded.</p>
     </div>
   </div>
 </section>

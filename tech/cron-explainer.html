@@ -23,10 +23,17 @@
   <meta property="og:description" content="Paste a cron expression to read it in plain English and see when it will run next. Supports ranges, steps, lists and names. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/cron-explainer.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Cron Expression Explainer &amp; Next Run Times | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Paste a cron expression to read it in plain English and see when it will run next. Supports ranges, steps, lists and names. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -117,6 +124,28 @@
         <div><code>@hourly</code> same as 0 * * * *</div>
       </div>
       <p class="tl-note">This reads the standard 5-field cron used by Linux crontab. Day of week runs 0 to 6 with Sunday as 0 (7 also means Sunday). When both day of month and day of week are set, the job runs when either one matches.</p>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>How cron schedules work</h2>
+      <p>Cron runs commands on a schedule on Linux servers and in many cloud services. A cron expression has five fields, separated by spaces: minute (0-59), hour (0-23), day of month (1-31), month (1-12) and day of week (0-6, where 0 is Sunday).</p>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Expression</th><th>Runs</th></tr></thead>
+        <tbody>
+          <tr><td><code>0 2 * * *</code></td><td>Every day at 2:00 am</td></tr>
+          <tr><td><code>*/15 * * * *</code></td><td>Every 15 minutes</td></tr>
+          <tr><td><code>0 9 * * MON-FRI</code></td><td>At 9:00 am on weekdays</td></tr>
+          <tr><td><code>30 17 1 * *</code></td><td>At 5:30 pm on the 1st of every month</td></tr>
+          <tr><td><code>0 0 * * 0</code></td><td>At midnight every Sunday</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Which time zone does cron use?</h3>
+      <p>The server's own time zone - and cloud servers are often set to UTC. Brisbane is UTC+10 all year, so a job for 2:00 am Brisbane time is <code>0 16 * * *</code> in UTC, at 4:00 pm the day before. In Sydney or Melbourne, daylight saving moves the UTC time by an hour twice a year, so check your jobs when the clocks change. Tick "Server runs on UTC" above to see the next runs in UTC.</p>
+      <h3>Common mistakes</h3>
+      <ul>
+        <li><code>* * * * *</code> runs every minute, not once.</li>
+        <li>When both day of month and day of week are set, the job runs when either one matches - <code>0 9 1 * MON</code> runs on the 1st and on every Monday.</li>
+        <li>Cron jobs run with very few settings, so use full paths to programs and files in your commands.</li>
+      </ul>
     </div>
   </div>
 </section>

@@ -23,10 +23,17 @@
   <meta property="og:description" content="Test JavaScript regular expressions with live match highlighting, capture groups, named groups and replace preview, plus a quick cheat sheet. Runs in your browser.">
   <meta property="og:url" content="https://www.australianjeevitham.com/tech/regex-tester.html">
   <meta property="og:locale" content="en_AU">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta property="og:image:type" content="image/webp">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@AusJeevitham">
   <meta name="twitter:title" content="Regex Tester - Test JavaScript Regular Expressions | Australian Jeevitham Tech">
   <meta name="twitter:description" content="Test JavaScript regular expressions with live match highlighting, capture groups, named groups and replace preview, plus a quick cheat sheet. Runs in your browser.">
+  <meta name="twitter:image" content="https://www.australianjeevitham.com/images/og/tech-developer-tools.webp">
+  <meta name="twitter:image:alt" content="Australian Jeevitham Tech: developer tools that run in your browser">
 
   <meta name="theme-color" content="#1B2A4A">
 
@@ -136,6 +143,31 @@
         <div><code>( )</code> capture group</div><div><code>(?:)</code> group, no capture</div><div><code>(?&lt;n&gt;)</code> named group</div><div><code>\1</code> repeat group 1</div>
         <div><code>(?=)</code> followed by</div><div><code>(?!)</code> not followed by</div><div><code>(?&lt;=)</code> preceded by</div><div><code>\p{L}</code> any letter (u flag)</div>
       </div>
+    </div>
+    <div class="tl-card tl-mt m-guide">
+      <h2>Useful patterns for Australian data</h2>
+      <p>These patterns check the format only - they cannot tell whether a phone number or ABN really exists. Remove spaces before testing phone numbers, and use the <code>m</code> flag when you test one value per line.</p>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>Checks</th><th>Pattern</th></tr></thead>
+        <tbody>
+          <tr><td>Mobile number, such as 0412345678 or +61412345678</td><td><code>^(?:\+61|0)4\d{8}$</code></td></tr>
+          <tr><td>Postcode (4 digits)</td><td><code>^\d{4}$</code></td></tr>
+          <tr><td>ABN, such as 51 824 753 556, with or without spaces</td><td><code>^\d{2} ?\d{3} ?\d{3} ?\d{3}$</code></td></tr>
+          <tr><td>Email address (a rough check)</td><td><code>^[^\s@]+@[^\s@]+\.[^\s@]+$</code></td></tr>
+        </tbody>
+      </table></div>
+      <p>An ABN also has a check digit, which a pattern cannot test - look it up on the <a href="https://abr.business.gov.au/" target="_blank" rel="noopener noreferrer">ABN Lookup</a> website to be sure.</p>
+      <h3>What is catastrophic backtracking?</h3>
+      <p>Some patterns, such as <code>^(a+)+$</code>, can take an enormous time on text that almost matches, because the regex engine tries every possible way to split the text. On a server this can be used to slow a website down - an attack called ReDoS. This page runs patterns in the background and stops after 1.5 seconds, so try <code>^(a+)+$</code> on a long row of a's ending in "b" to see the warning. In your own code, avoid repeated groups inside repeated groups, and limit the length of input before you test it.</p>
+      <h3>The flags</h3>
+      <ul>
+        <li><code>g</code> - find every match, not just the first.</li>
+        <li><code>i</code> - ignore upper and lower case.</li>
+        <li><code>m</code> - make <code>^</code> and <code>$</code> work on each line.</li>
+        <li><code>s</code> - let <code>.</code> match new lines too.</li>
+        <li><code>u</code> - full Unicode support, needed for <code>\p{L}</code> to match letters in Malayalam and other scripts.</li>
+      </ul>
+      <p>Your patterns and text are tested in your browser and are not uploaded.</p>
     </div>
   </div>
 </section>
