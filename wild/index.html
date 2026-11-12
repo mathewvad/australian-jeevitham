@@ -96,6 +96,31 @@
   </div>
 </section>
 
+<section class="m-hubguide" id="guide">
+  <div class="wrap">
+    <div class="m-guide">
+      <h2>Living with Queensland wildlife</h2>
+      <p>In Queensland we share backyards, parks, roads and farms with native animals. Kangaroos, wallabies and magpies are protected under Queensland's Nature Conservation Act 1992, so never harm them, feed them or disturb their nests. Most of the time they are easy neighbours - it helps to know when they are most active.</p>
+      <h3>Times of year to know</h3>
+      <div class="tl-table-wrap"><table class="tl-table">
+        <thead><tr><th>What</th><th>When</th></tr></thead>
+        <tbody>
+          <tr><td><a href="australian-magpie.html">Magpie swooping</a></td><td>Mostly August to November, when there are chicks in the nest</td></tr>
+          <tr><td><a href="kangaroos-and-wallabies.html">Kangaroos and wallabies on the road</a></td><td>All year, most of all at dawn, at dusk and at night</td></tr>
+          <tr><td><a href="passion-fruit-flower-pollination.html">Hand-pollinating passion fruit</a></td><td>In the morning, when the flowers are fully open</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Who to call</h3>
+      <ul>
+        <li><strong>A magpie swooping in a park, street or school</strong> - tell your local council, so they can put up warning signs. For advice, call the Queensland Government on 13 QGOV (13 74 68).</li>
+        <li><strong>An injured, sick or orphaned kangaroo or wallaby</strong> - contact RSPCA Queensland.</li>
+        <li><strong>Someone harming or illegally feeding kangaroos</strong> - call 1300 130 372.</li>
+      </ul>
+      <p>The Queensland Government has more advice on <a href="https://www.qld.gov.au/environment/plants-animals/animals/living-with/magpies" target="_blank" rel="noopener noreferrer">living with magpies</a> and <a href="https://www.qld.gov.au/environment/plants-animals/animals/living-with/kangaroos" target="_blank" rel="noopener noreferrer">living with kangaroos</a>.</p>
+    </div>
+  </div>
+</section>
+
 <section class="t-section" id="animals">
   <div class="wrap">
     <h2>Animals</h2>
@@ -164,27 +189,9 @@
 </section>
 
 <p class="t-empty" id="none" hidden>No pages match that search.</p>
-<section class="m-hubguide" id="guide">
+<section class="m-hubguide" id="about">
   <div class="wrap">
     <div class="m-guide">
-      <h2>Living with Queensland wildlife</h2>
-      <p>In Queensland we share backyards, parks, roads and farms with native animals. Kangaroos, wallabies and magpies are protected under Queensland's Nature Conservation Act 1992, so never harm them, feed them or disturb their nests. Most of the time they are easy neighbours - it helps to know when they are most active.</p>
-      <h3>Times of year to know</h3>
-      <div class="tl-table-wrap"><table class="tl-table">
-        <thead><tr><th>What</th><th>When</th></tr></thead>
-        <tbody>
-          <tr><td><a href="australian-magpie.html">Magpie swooping</a></td><td>Mostly August to November, when there are chicks in the nest</td></tr>
-          <tr><td><a href="kangaroos-and-wallabies.html">Kangaroos and wallabies on the road</a></td><td>All year, most of all at dawn, at dusk and at night</td></tr>
-          <tr><td><a href="passion-fruit-flower-pollination.html">Hand-pollinating passion fruit</a></td><td>In the morning, when the flowers are fully open</td></tr>
-        </tbody>
-      </table></div>
-      <h3>Who to call</h3>
-      <ul>
-        <li><strong>A magpie swooping in a park, street or school</strong> - tell your local council, so they can put up warning signs. For advice, call the Queensland Government on 13 QGOV (13 74 68).</li>
-        <li><strong>An injured, sick or orphaned kangaroo or wallaby</strong> - contact RSPCA Queensland.</li>
-        <li><strong>Someone harming or illegally feeding kangaroos</strong> - call 1300 130 372.</li>
-      </ul>
-      <p>The Queensland Government has more advice on <a href="https://www.qld.gov.au/environment/plants-animals/animals/living-with/magpies" target="_blank" rel="noopener noreferrer">living with magpies</a> and <a href="https://www.qld.gov.au/environment/plants-animals/animals/living-with/kangaroos" target="_blank" rel="noopener noreferrer">living with kangaroos</a>.</p>
       <h3>About these pages</h3>
       <p>Every photo here was filmed by Australian Jeevitham in Queensland, and each page comes with one of our Malayalam videos on YouTube. The facts are checked against government and expert sources, which are listed at the bottom of each page.</p>
     </div>
@@ -216,7 +223,7 @@
 <script>
 (function () {
   'use strict';
-  var q = document.getElementById('q'), none = document.getElementById('none');
+  var q = document.getElementById('q'), none = document.getElementById('none'), guide = document.getElementById('guide');
   var cards = [].slice.call(document.querySelectorAll('.t-card')), sections = [].slice.call(document.querySelectorAll('.t-section[id]'));
   var text = cards.map(function (c) { return c.textContent.toLowerCase() + ' ' + (c.getAttribute('href') || ''); });
   function run() {
@@ -227,6 +234,7 @@
     });
     sections.forEach(function (s) { s.hidden = !s.querySelector('.t-card:not([hidden])'); });
     none.hidden = shown > 0;
+    guide.hidden = terms.length > 0;
   }
   q.addEventListener('input', run);
   q.addEventListener('keydown', function (e) {
