@@ -43,13 +43,22 @@
   <!-- Lean Font Loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&family=Josefin+Sans:wght@400;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
   <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Poppins:wght@700;800&family=Space+Mono:wght@400;700&family=Josefin+Sans:wght@400;700&display=swap">
   </noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&text=Connect%20With%20Us&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&text=Connect%20With%20Us&display=swap"></noscript>
 
   <link rel="stylesheet" href="css/styles.css">
   <style>
+    .subhero-note{ margin-top:4px; }
+    .subhero-note p{ margin:0; }
+    .subhero-note .note-en{ margin-top:12px; font-size:0.95rem; }
+    .subhero-note .note-en.first{ margin-top:6px; }
+    .note-en-box{ margin-top:14px; }
+    .note-en-box summary{ cursor:pointer; padding:10px 0; font-family:var(--body); font-weight:700; font-size:0.92rem; color:var(--ocean-dim); }
+    .note-en-box summary:hover{ text-decoration:underline; }
     nav.topic-jump{ position:static; background:none; border:0; z-index:auto; padding:0; backdrop-filter:none; }
     .topic-jump ul{ display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:20px 0 8px; padding:0; }
     .topic-jump a{
@@ -839,15 +848,26 @@
       <p class="subhero-tag">
         Malayalam videos on everyday life, culture and adventures in Australia
  - from Kerala-style gardening to information on jobs and migration.
-        <span class="mal" lang="ml">
-          ഓസ്‌ട്രേലിയൻ ജീവിതത്തിൻ്റെ വീഡിയോകൾ ഇവിടെ കാണാം.
-        </span>
       </p>
+
+      <div class="subhero-tag subhero-note">
+        <p><span class="mal" lang="ml">ഓസ്ട്രേലിയ ഒരിക്കലും കാണാൻ പറ്റാത്തവർക്കും, ഓസ്‌ട്രേലിയയിലേക്ക് വരാൻ വേണ്ടി നോക്കി നിൽക്കുന്നവർക്കും വേണ്ടി ആയിരുന്നു ഞാൻ ഓസ്‌ട്രേലിയൻ ജീവിതം എന്ന ഈ ചാനൽ തുടങ്ങിയത്.  പക്ഷെ ഇപ്പോൾ ഓസ്‌ട്രേലിയയിൽ ഉള്ളവരും, വേറെ രാജ്യങ്ങളിൽ താമസിക്കുന്നവരും ഒക്കെ എൻ്റെ ഈ ചാനൽ കാണാനും സപ്പോർട്ട് ചെയ്യാനും തുടങ്ങി.</span></p>
+        <p><span class="mal" lang="ml">ഓസ്‌ട്രേലിയൻ ജീവിതം വീഡിയോ പേജിലൂടെ എൻ്റെ വീഡിയോ പല കാറ്റഗറി ആക്കി വെക്കാം എന്ന് കരുതി. അതുകൊണ്ടാണ് ഈ പേജ് ഉണ്ടാക്കിയത്. പുതിയ വിഡിയോകൾ വരുമ്പോൾ ഇവിടെ തീർച്ചയായും ഇടാൻ നോക്കാം.</span></p>
+        <p><span class="mal" lang="ml">എന്നെ സപ്പോർട്ട് ചെയ്യുന്ന എല്ലാവർക്കും നന്ദി.</span></p>
+        <details class="note-en-box">
+          <summary>Read in English</summary>
+          <p class="note-en first">I started this channel, Australian Jeevitham, for people who may never get to see Australia, and for those hoping to come to Australia. But now people living in Australia and in other countries have also started watching and supporting my channel.</p>
+          <p class="note-en">I wanted this Australian Jeevitham videos page to arrange my videos into different categories. That is why I made this page. When new videos come out, I will make sure to add them here.</p>
+          <p class="note-en">Thank you to everyone who supports me.</p>
+        </details>
+      </div>
     </div>
 
     <div class="info-card reveal">
       <div class="info-card-image-wrap">
-  <img src="images/og/australian-malayalam-videos.webp"
+  <img src="images/og/australian-malayalam-videos-800.webp"
+       srcset="images/og/australian-malayalam-videos-480.webp 480w, images/og/australian-malayalam-videos-640.webp 640w, images/og/australian-malayalam-videos-800.webp 800w, images/og/australian-malayalam-videos.webp 1200w"
+       sizes="(max-width: 900px) calc(100vw - 110px), 380px"
        alt="Australian Jeevitham Malayalam Videos and Vlogs Hub"
        width="1200" height="630"
        loading="eager" decoding="async" fetchpriority="high">
