@@ -1,7 +1,5 @@
-/* Home-page fonts for the header brand and the footer (same as index.html) */
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap&text=Connect%20With%20Us");
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@700&display=swap");
+/* Header brand + footer fonts (Josefin Sans, Dancing Script, Noto Sans Malayalam 700)
+   are loaded non-blocking from each page's <head> for a faster first paint. */
 
 :root{
   /* ---- Brand palette (warm, personal-creator-brand) ---- */
