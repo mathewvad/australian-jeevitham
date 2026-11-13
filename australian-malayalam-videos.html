@@ -49,6 +49,21 @@
   </noscript>
 
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    nav.topic-jump{ position:static; background:none; border:0; z-index:auto; padding:0; backdrop-filter:none; }
+    .topic-jump ul{ display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:20px 0 8px; padding:0; }
+    .topic-jump a{
+      display:inline-block; font-family:var(--body); font-weight:600; font-size:0.84rem;
+      background:var(--bg-alt); color:var(--fg); text-decoration:none;
+      border:1px solid var(--border); border-radius:999px; padding:8px 14px;
+    }
+    .topic-jump a:hover{ border-color:var(--fg); }
+    .video-topic{ margin-top:44px; scroll-margin-top:90px; }
+    .topic-title{ font-family:var(--display); font-size:1.35rem; line-height:1.3; margin:0 0 18px; }
+    .vcard h3:last-child{ padding-bottom:16px; }
+    .topic-guides{ margin-top:22px; }
+    .topic-guides .hero-cta{ padding:12px 20px; font-size:0.92rem; }
+  </style>
 
 
   <!-- Structured Data -->
@@ -449,7 +464,7 @@
           data-video-id="2mGlBoGaKss"
           role="button"
           tabindex="0"
-          aria-label="Play Australian Jeevitham YouTube Short: Gardening in Australia"
+          aria-label="Play Australian Jeevitham YouTube Short: ഇവിടെ പേടിക്കാതെ നടക്കാം, കാരണം ഇതാണ്!"
         >
           <img
             src="https://i.ytimg.com/vi/2mGlBoGaKss/hqdefault.jpg"
@@ -484,7 +499,7 @@
           data-video-id="eJQX8GbthDc"
           role="button"
           tabindex="0"
-          aria-label="Play Australian Jeevitham YouTube Short: Australian Supermarkets and Food"
+          aria-label="Play Australian Jeevitham YouTube Short: കങ്കാരുവിൻ്റെ കണ്ണിൽ നോക്കരുത്"
         >
           <img
             src="https://i.ytimg.com/vi/eJQX8GbthDc/hqdefault.jpg"
@@ -557,6 +572,19 @@
       Fresh uploads and selected favourites, ready to watch right here.
     </p>
 
+    <nav class="topic-jump" aria-label="Video topics">
+      <ul>
+        <li><a href="#farming">Kerala-style farming in Queensland, Australia</a></li>
+        <li><a href="#kangaroos-wildlife">Kangaroos &amp; wildlife</a></li>
+        <li><a href="#jobs-migration">Jobs, resumes and migration</a></li>
+        <li><a href="#living-cost">Living cost in Australia</a></li>
+        <li><a href="#regional-queensland">Regional Queensland life and trips</a></li>
+      </ul>
+    </nav>
+
+    <div class="video-topic" id="farming">
+      <h3 class="topic-title">Kerala-style farming in Queensland, Australia</h3>
+
     <div class="video-grid">
 
       <article class="vcard">
@@ -619,6 +647,18 @@
         </p>
       </article>
 
+    </div>
+
+      <div class="hero-ctas topic-guides">
+        <a class="hero-cta" href="wild/passion-fruit-flower-pollination.html">Read the full guide: Passion fruit flower pollination <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+
+    <div class="video-topic" id="kangaroos-wildlife">
+      <h3 class="topic-title">Kangaroos &amp; wildlife</h3>
+
+    <div class="video-grid">
+
       <article class="vcard">
         <div
           class="video-frame youtube-facade"
@@ -650,6 +690,255 @@
         </p>
       </article>
 
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="7GlQjjVhtKQ"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: തെങ്ങിൻ തോപ്പും കങ്കാരുക്കളും | Coconut garden and Kangaroos"
+        >
+          <img
+            src="https://i.ytimg.com/vi/7GlQjjVhtKQ/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for തെങ്ങിൻ തോപ്പും കങ്കാരുക്കളും | Coconut garden and Kangaroos"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">തെങ്ങിൻ തോപ്പും കങ്കാരുക്കളും | Coconut garden and Kangaroos</span>
+        </h3>
+      </article>
+
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="fotxl3CQ6ms"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: കൃഷിത്തോട്ടത്തിലെ കങ്കാരുക്കൾ"
+        >
+          <img
+            src="https://i.ytimg.com/vi/fotxl3CQ6ms/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for കൃഷിത്തോട്ടത്തിലെ കങ്കാരുക്കൾ"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">കൃഷിത്തോട്ടത്തിലെ കങ്കാരുക്കൾ</span>
+        </h3>
+      </article>
+
+    </div>
+
+      <div class="hero-ctas topic-guides">
+        <a class="hero-cta" href="wild/kangaroos-and-wallabies.html">Read the full guide: Kangaroos and wallabies <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+
+    <div class="video-topic" id="jobs-migration">
+      <h3 class="topic-title">Jobs, resumes and migration</h3>
+
+    <div class="video-grid">
+
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="dGInE5JrVWA"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: എങ്ങനെയൊക്കെ ഓസ്‌ട്രേലിയയയിലേക്ക് വരാം"
+        >
+          <img
+            src="https://i.ytimg.com/vi/dGInE5JrVWA/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for എങ്ങനെയൊക്കെ ഓസ്‌ട്രേലിയയയിലേക്ക് വരാം"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">എങ്ങനെയൊക്കെ ഓസ്‌ട്രേലിയയയിലേക്ക് വരാം</span>
+        </h3>
+      </article>
+
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="7RviDmkTec0"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: NCLEX-RN / OSCE ഇല്ലാതെ ഓസ്‌ട്രേലിയൻ നഴ്സിംഗ് രെജിസ്‌ട്രേഷൻ നടത്താം"
+        >
+          <img
+            src="https://i.ytimg.com/vi/7RviDmkTec0/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for NCLEX-RN / OSCE ഇല്ലാതെ ഓസ്‌ട്രേലിയൻ നഴ്സിംഗ് രെജിസ്‌ട്രേഷൻ നടത്താം"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">NCLEX-RN / OSCE ഇല്ലാതെ ഓസ്‌ട്രേലിയൻ നഴ്സിംഗ് രെജിസ്‌ട്രേഷൻ നടത്താം</span>
+        </h3>
+      </article>
+
+    </div>
+
+      <div class="hero-ctas topic-guides">
+        <a class="hero-cta" href="how-to-migrate.html">Read the full guide: How to migrate to Australia <span aria-hidden="true">&rarr;</span></a>
+        <a class="hero-cta" href="ahpra-nursing-registration-guide-kerala.html">Read the full guide: AHPRA nursing registration <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+
+    <div class="video-topic" id="living-cost">
+      <h3 class="topic-title">Living cost in Australia</h3>
+
+    <div class="video-grid">
+
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="31tJpPIq_J0"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: ഓസ്‌ട്രേലിയയിൽ ഒരു ഫാമിലിക്ക് ഒരു മാസം കഴിയാൻ 2024"
+        >
+          <img
+            src="https://i.ytimg.com/vi/31tJpPIq_J0/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for ഓസ്‌ട്രേലിയയിൽ ഒരു ഫാമിലിക്ക് ഒരു മാസം കഴിയാൻ 2024"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിൽ ഒരു ഫാമിലിക്ക് ഒരു മാസം കഴിയാൻ 2024</span>
+        </h3>
+      </article>
+
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="i7HhEmswv8g"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: ഓസ്‌ട്രേലിയയിൽ ജീവിച്ചുപോകണമെങ്കിൽ minimum ഇത്രയാകും"
+        >
+          <img
+            src="https://i.ytimg.com/vi/i7HhEmswv8g/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for ഓസ്‌ട്രേലിയയിൽ ജീവിച്ചുപോകണമെങ്കിൽ minimum ഇത്രയാകും"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിൽ ജീവിച്ചുപോകണമെങ്കിൽ minimum ഇത്രയാകും</span>
+        </h3>
+      </article>
+
+    </div>
+
+      <div class="hero-ctas topic-guides">
+        <a class="hero-cta" href="money/cost-of-living-calculator.html">Try the cost of living calculator <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+
+    <div class="video-topic" id="regional-queensland">
+      <h3 class="topic-title">Regional Queensland life and trips</h3>
+
+    <div class="video-grid">
+
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="FkhAHexnGYE"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: ഓസ്‌ട്രേലിയയിലെ ജീവിതകാഴ്ചകൾ Ep. 1 | Kuranda, Cairns Australia"
+        >
+          <img
+            src="https://i.ytimg.com/vi/FkhAHexnGYE/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for ഓസ്‌ട്രേലിയയിലെ ജീവിതകാഴ്ചകൾ Ep. 1 | Kuranda, Cairns Australia"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിലെ ജീവിതകാഴ്ചകൾ Ep. 1 | Kuranda, Cairns Australia</span>
+        </h3>
+      </article>
+
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="hCrN5PmRQ7w"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: കെയിൻസ് ഓസ്ട്രേലിയ | Cairns Australia"
+        >
+          <img
+            src="https://i.ytimg.com/vi/hCrN5PmRQ7w/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for കെയിൻസ് ഓസ്ട്രേലിയ | Cairns Australia"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">കെയിൻസ് ഓസ്ട്രേലിയ | Cairns Australia</span>
+        </h3>
+      </article>
+
+      <article class="vcard">
+        <div
+          class="video-frame youtube-facade"
+          data-video-id="m4YjqdFbkd0"
+          role="button"
+          tabindex="0"
+          aria-label="Play video: ഓസ്‌ട്രേലിയയിലെ ജീവിതകാഴ്ചകൾ Ep. 2 - Atherton, Queensland"
+        >
+          <img
+            src="https://i.ytimg.com/vi/m4YjqdFbkd0/hqdefault.jpg"
+            width="480"
+            height="360"
+            alt="Video thumbnail for ഓസ്‌ട്രേലിയയിലെ ജീവിതകാഴ്ചകൾ Ep. 2 - Atherton, Queensland"
+            loading="lazy"
+            decoding="async"
+          >
+          <span class="play-btn" aria-hidden="true">▶</span>
+        </div>
+        <h3>
+          <span class="mal" lang="ml">ഓസ്‌ട്രേലിയയിലെ ജീവിതകാഴ്ചകൾ Ep. 2 - Atherton, Queensland</span>
+        </h3>
+      </article>
+
+    </div>
+
+      <div class="hero-ctas topic-guides">
+        <a class="hero-cta" href="explore-australia.html">Read the full guide: Explore Australia <span aria-hidden="true">&rarr;</span></a>
+      </div>
     </div>
 
     <p class="video-note">
