@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html lang="en"><head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-HE4E37HMXF');</script>
+  <script>
+    // Google Analytics: loads on first scroll/touch/mouse/key, or after 4 s (faster first paint)
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-HE4E37HMXF');
+
+    var gtagLoaded = false;
+    function loadGtag() {
+      if (gtagLoaded) return;
+      gtagLoaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF';
+      document.head.appendChild(s);
+    }
+    function loadGtagSoon() {
+      if ('requestIdleCallback' in window) { requestIdleCallback(loadGtag, { timeout: 1000 }); }
+      else { setTimeout(loadGtag, 200); }
+    }
+    ['scroll', 'mousemove', 'touchstart', 'keydown'].forEach(function (evt) {
+      window.addEventListener(evt, loadGtagSoon, { once: true, passive: true });
+    });
+    setTimeout(loadGtag, 4000);
+  </script>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>School Admissions &amp; Dependent Fees | Australian Jeevitham</title><meta name="description" content="A state-by-state planning guide for school enrolment and public-school fees for children on temporary and dependent visas in Australia."><link rel="canonical" href="https://www.australianjeevitham.com/school-admissions-dependent-visa-fees.html"><link rel="icon" type="image/png" href="images/favicon.png">
   <meta property="og:type" content="article"><meta property="og:site_name" content="Australian Jeevitham"><meta property="og:title" content="School Admissions &amp; Dependent Visa Fees 2026 | Australian Jeevitham"><meta property="og:description" content="A state-by-state planning guide for school enrolment and public-school fees for children on temporary and dependent visas in Australia."><meta property="og:url" content="https://www.australianjeevitham.com/school-admissions-dependent-visa-fees.html"><meta property="og:image" content="https://www.australianjeevitham.com/images/og/school-admissions-dependent-visa-fees.webp"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="School Admissions &amp; Dependent Visa Fees illustrated guide"><meta property="og:locale" content="ml_IN"><meta property="og:locale:alternate" content="en_AU">
