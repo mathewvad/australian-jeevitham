@@ -79,8 +79,8 @@ a.t-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-hover); }
 .jp-bar{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:14px; }
 .jp-btn{ font:600 .92rem var(--body); padding:10px 18px; border-radius:999px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer; transition:transform .15s, box-shadow .15s; }
 .jp-btn:hover{ transform:translateY(-1px); box-shadow:var(--shadow); }
-.jp-btn.primary{ background:var(--orange); border-color:var(--orange); color:#fff; }
-.jp-btn.primary:hover{ background:var(--orange-2); }
+.jp-btn.primary{ background:var(--orange-2); border-color:var(--orange-2); color:#fff; }
+.jp-btn.primary:hover{ background:#B8330F; border-color:#B8330F; }
 .jp-select{ font:600 .9rem var(--body); padding:9px 12px; border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--ink); }
 .jp-check{ display:inline-flex; align-items:center; gap:6px; font:600 .9rem var(--body); color:var(--muted); }
 .jp-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
