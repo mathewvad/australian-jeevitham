@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF"></script>
+  <!-- Google tag (gtag.js) - loaded after the page has finished loading (speed test 2026-11-13) -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
     gtag('config', 'G-HE4E37HMXF');
+
+    (function(){
+      function loadGtag(){
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-HE4E37HMXF';
+        document.head.appendChild(s);
+      }
+      if (document.readyState === 'complete') { loadGtag(); }
+      else { window.addEventListener('load', function(){ setTimeout(loadGtag, 0); }); }
+    })();
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
