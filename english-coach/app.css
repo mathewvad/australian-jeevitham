@@ -607,3 +607,12 @@ ul.tiplist.card{ margin-left:0; padding-left:34px; }
 .top-row .brand-text small{ overflow:hidden; text-overflow:ellipsis; }
 .top-actions{ flex:none; }
 @media (max-width:380px){ .brand-text .ver{ display:none; } }
+button.card.item{ width:100%; text-align:left; font:inherit; color:inherit; cursor:pointer; }
+
+/* Settings in My account (v0.45): text size and light/dark moved out of the header */
+.set-title{ font-size:1.05rem; margin:24px 0 8px; }
+.set-card .set-h{ font-size:.9rem; font-weight:600; color:var(--muted); margin:0 0 8px; }
+.set-card .set-h + .set-chips{ margin-bottom:14px; }
+.set-card .set-chips:last-child{ margin-bottom:0; }
+.set-chips .chip{ font-size:.92rem; padding:8px 14px; }
+.set-chips .chip.on{ background:var(--accent); color:var(--on-accent); border-color:var(--accent); }

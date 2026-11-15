@@ -115,24 +115,34 @@
   var prefs = {};
   try { prefs = JSON.parse(localStorage.getItem(PREF_KEY)) || {}; } catch(e) {}
   function savePrefs(){ try { localStorage.setItem(PREF_KEY, JSON.stringify(prefs)); } catch(e) {} }
-  var themeBtn = document.getElementById('themeBtn'), sizeBtn = document.getElementById('sizeBtn');
+  // Theme and text size are set in My account (they used to be header buttons).
   function showTheme(){
     if (prefs.theme) document.documentElement.setAttribute('data-theme', prefs.theme);
     else document.documentElement.removeAttribute('data-theme');
-    themeBtn.innerHTML = prefs.theme === 'dark' ? I.moon : prefs.theme === 'light' ? I.sun : I.auto;
-    themeBtn.title = prefs.theme === 'dark' ? 'Dark mode' : prefs.theme === 'light' ? 'Light mode' : 'Match my device';
   }
-  themeBtn.onclick = function(){
-    prefs.theme = !prefs.theme ? 'light' : prefs.theme === 'light' ? 'dark' : undefined;
-    savePrefs(); showTheme();
-  };
-  sizeBtn.onclick = function(){
-    var sizes = [100, 112, 125];
-    prefs.size = sizes[(sizes.indexOf(prefs.size || 100) + 1) % sizes.length];
-    document.documentElement.style.fontSize = prefs.size + '%';
-    savePrefs();
-  };
   showTheme();
+  var THEMES = [['', 'Match my phone'], ['light', 'Light'], ['dark', 'Dark']];
+  var SIZES = [[100, 'Normal'], [112, 'Large'], [125, 'Extra large']];
+  function displayCard(){
+    function chips(list, cur, attr){
+      return '<div class="chips wrap set-chips">' + list.map(function(o){
+        return '<button type="button" class="chip' + (o[0] === cur ? ' on' : '') + '" ' + attr + '="' + o[0] + '" aria-pressed="' + (o[0] === cur) + '">' + o[1] + '</button>';
+      }).join('') + '</div>';
+    }
+    return '<div class="card pad set-card"><h2 class="set-h">Text size</h2>' + chips(SIZES, prefs.size || 100, 'data-size') +
+      '<h2 class="set-h">Light or dark</h2>' + chips(THEMES, prefs.theme || '', 'data-theme-pick') + '</div>';
+  }
+  function bindDisplay(){
+    app.querySelectorAll('[data-size]').forEach(function(b){ b.onclick = function(){
+      prefs.size = +b.dataset.size;
+      document.documentElement.style.fontSize = prefs.size + '%';
+      savePrefs(); route();
+    }; });
+    app.querySelectorAll('[data-theme-pick]').forEach(function(b){ b.onclick = function(){
+      prefs.theme = b.dataset.themePick || undefined;
+      savePrefs(); showTheme(); route();
+    }; });
+  }
 
   /* ---------- Installable app ---------- */
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
@@ -144,34 +154,43 @@
   window.addEventListener('appinstalled', function(){ installPrompt = null; });
   function isInstalled(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; }
   function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+  function installSnoozed(){ var t = prefs.installHidden; return typeof t === 'number' && Date.now() - t < 14 * 864e5; }
   function installCard(){
-    if (isInstalled() || prefs.installHidden || !(installPrompt || isIOS())) return '';
+    if (isInstalled() || installSnoozed() || !(installPrompt || isIOS())) return '';
     return '<div class="card install"><img src="icons/icon-192.png" alt="" width="48" height="48">' +
       '<div class="t"><b>Install the app</b><span>Open it full screen from your home screen, like any other app.</span></div>' +
       '<div class="acts"><button class="btn primary sm" id="installBtn" type="button">Install</button>' +
       '<button class="icon-btn" id="installHide" type="button" aria-label="Not now">' + I.x + '</button></div></div>';
   }
+  function showInstallHelp(){
+    if (installPrompt) {
+      installPrompt.prompt();
+      installPrompt.userChoice.then(function(){ installPrompt = null; route(); });
+      return;
+    }
+    var inApp = /FBAN|FBAV|Instagram|WhatsApp|Line\/|; wv\)/i.test(navigator.userAgent);
+    var steps = isIOS()
+      ? '<h2 style="font-size:1.1rem">Add to your Home Screen</h2>' +
+        '<ol class="steps"><li>Open this page in <b>Safari</b>.</li><li>Tap the <b>Share</b> button <span class="share-ic">' + svg('<path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 12v8h14v-8"/>') + '</span> at the bottom.</li>' +
+        '<li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. Then open <b>English Coach</b> from your Home Screen.</li></ol>'
+      : '<h2 style="font-size:1.1rem">Install English Coach</h2>' +
+        (inApp ? '<p class="notice">You are inside another app\'s browser (for example WhatsApp or Facebook). Tap its <b>&#8942;</b> menu and choose <b>Open in Chrome</b> first.</p>' : '') +
+        '<ol class="steps"><li>Open this page in <b>Chrome</b>: www.australianjeevitham.com/english-coach</li>' +
+        '<li>Tap Chrome\'s <b>&#8942;</b> menu (top right).</li>' +
+        '<li>Tap <b>Install app</b> or <b>Add to Home screen</b>, then <b>Install</b>.</li>' +
+        '<li>If you only see <b>Open in app</b>, it is already installed - look for <b>English Coach</b> on your home screen.</li></ol>';
+    var bg = document.createElement('div');
+    bg.className = 'sheet-bg';
+    bg.innerHTML = '<div class="sheet" role="dialog" aria-label="Install the app"><div class="grab"></div>' + steps +
+      '<div class="row"><button class="btn primary" type="button" data-a="close">Got it</button></div></div>';
+    document.body.appendChild(bg);
+    bg.onclick = function(e){ if (e.target === bg || e.target.dataset.a === 'close') bg.remove(); };
+  }
   function bindInstall(){
     var b = document.getElementById('installBtn');
     if (!b) return;
-    b.onclick = function(){
-      if (installPrompt) {
-        installPrompt.prompt();
-        installPrompt.userChoice.then(function(){ installPrompt = null; route(); });
-        return;
-      }
-      // iPhone and iPad: Safari has no install button, so show the steps.
-      var bg = document.createElement('div');
-      bg.className = 'sheet-bg';
-      bg.innerHTML = '<div class="sheet" role="dialog" aria-label="Install on iPhone"><div class="grab"></div>' +
-        '<h2 style="font-size:1.1rem">Add to your Home Screen</h2>' +
-        '<ol class="steps"><li>Tap the <b>Share</b> button <span class="share-ic">' + svg('<path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 12v8h14v-8"/>') + '</span> at the bottom of Safari.</li>' +
-        '<li>Scroll down and tap <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>. Then open <b>English Coach</b> from your Home Screen.</li></ol>' +
-        '<div class="row"><button class="btn primary" type="button" data-a="close">Got it</button></div></div>';
-      document.body.appendChild(bg);
-      bg.onclick = function(e){ if (e.target === bg || e.target.dataset.a === 'close') bg.remove(); };
-    };
-    document.getElementById('installHide').onclick = function(){ prefs.installHidden = true; savePrefs(); route(); };
+    b.onclick = showInstallHelp;
+    document.getElementById('installHide').onclick = function(){ prefs.installHidden = Date.now(); savePrefs(); route(); };
   }
 
   /* ---------- Progress (saved on this device) ---------- */
@@ -880,7 +899,7 @@
     var st = startStatus();
     var core = HELP_STEPS.filter(function(s){ return s.check !== 'installed' && s.check !== 'plan'; });
     if (prefs.startHidden || core.every(function(s){ return st[s.check]; })) return '';
-    var next = HELP_STEPS.findIndex(function(s){ return !st[s.check] && !(s.check === 'installed' && (prefs.installHidden || !(installPrompt || isIOS()))); });
+    var next = HELP_STEPS.findIndex(function(s){ return !st[s.check] && !(s.check === 'installed' && (installSnoozed() || !(installPrompt || isIOS()))); });
     var done = HELP_STEPS.filter(function(s){ return st[s.check]; }).length;
     return '<div class="card pad home-card start"><div class="chart-head"><b>Start here</b><span>' + done + ' of ' + HELP_STEPS.length + ' done</span></div>' +
       HELP_STEPS.map(function(s, i){ return stepRow(s, i, st[s.check], i === next); }).join('') +
@@ -2689,14 +2708,19 @@
         row('Lives in', pr.country) + row('Field', pr.role ? pr.field + ' · ' + pr.role : pr.field || pr.job) + row('Main goal', pr.goal) + row('Mother tongue', NATIVES[pr.native] || '') + row('Member since', pr.created) +
         '<div class="row" style="margin-top:12px;gap:8px"><a class="btn ghost sm" href="#/profile">' + I.pencil + 'Edit profile</a><a class="btn ghost sm" href="#/english">Change English</a></div></div>' : '') +
       (hasAccess() ? quotaHtml() : '') +
+      '<h2 class="set-title">Settings</h2>' + displayCard() +
       '<div class="list">' +
-        '<a class="card item" href="#/voice"><span class="t"><h2>Voice</h2><span class="sub">Choose the coach\'s voice</span></span><span class="chev">' + I.chev + '</span></a>' +
+        (isInstalled() ? '' : '<button class="card item" id="acctInstall" type="button"><span class="t"><h2>Install the app</h2><span class="sub">Put English Coach on your home screen, like any other app</span></span><span class="chev">' + I.chev + '</span></button>') +
+        '<a class="card item" href="#/voice"><span class="t"><h2>Voice</h2><span class="sub">Choose the coach\'s voice and hear each one</span></span><span class="chev">' + I.chev + '</span></a>' +
         '<a class="card item" href="#/privacy"><span class="t"><h2>Privacy policy</h2><span class="sub">What we collect and why</span></span><span class="chev">' + I.chev + '</span></a>' +
         '<a class="card item" href="#/terms"><span class="t"><h2>Terms of use</h2><span class="sub">The rules for using the app</span></span><span class="chev">' + I.chev + '</span></a>' +
       '</div>' +
       (me ? '<div class="acct-actions"><button class="btn" id="out" type="button">Sign out</button>' +
         '<button class="btn danger-link" id="del" type="button">Delete my account</button></div><p class="auth-msg" id="msg" role="status"></p>' : '')
     );
+    bindDisplay();
+    var ib = app.querySelector('#acctInstall');
+    if (ib) ib.onclick = showInstallHelp;
     if (!me) return;
     var msg = app.querySelector('#msg');
     app.querySelector('#out').onclick = signOut;
