@@ -4,7 +4,7 @@
 
 const HELP_STEPS = [
   { check: 'installed', title: 'Install the app on your phone',
-    text: '<b>Android:</b> tap <b>Install</b> on the Home screen card (or Chrome menu, then <b>Install app</b>). <b>iPhone:</b> open this page in <b>Safari</b>, tap <b>Share</b>, then <b>Add to Home Screen</b>. From now on, open it from the round English Coach icon.' },
+    text: 'Tap <b>Install the app</b> below (it is also in <b>My account</b>) and follow the steps. <b>Android:</b> Chrome menu, then <b>Install app</b>. <b>iPhone:</b> open this page in <b>Safari</b>, tap <b>Share</b>, then <b>Add to Home Screen</b>. From now on, open it from the round English Coach icon.' },
   { check: 'code', title: 'Create your account', href: '#/account', go: 'My account',
     text: 'Sign up with <b>Continue with Google</b> or your email and a password, and answer the four short questions about you. If you used email, tap the link we email you first. Tap <b>Allow</b> whenever your phone asks to use the microphone.' },
   { check: 'test', title: 'Choose your English and take the placement test', href: '#/exam', go: 'Your level',

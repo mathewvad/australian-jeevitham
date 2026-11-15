@@ -892,7 +892,9 @@
     return '<div class="step' + (done ? ' done' : '') + (isNext ? ' next' : '') + '">' +
       '<span class="tick">' + (done ? I.check : (i + 1)) + '</span>' +
       '<div class="t"><b class="st">' + esc(s.title) + '</b>' + (isNext || !done ? '<p>' + s.text + '</p>' : '') +
-      (isNext && s.href ? '<a class="btn primary sm" href="' + s.href + '">' + esc(s.go) + I.chev + '</a>' : '') + '</div></div>';
+      (isNext && s.href ? '<a class="btn primary sm" href="' + s.href + '">' + esc(s.go) + I.chev + '</a>' : '') +
+      // Not installed yet: the install step always has its own button (same help as My account).
+      (s.check === 'installed' && !done ? '<button class="btn primary sm help-install" type="button">Install the app' + I.chev + '</button>' : '') + '</div></div>';
   }
   // Shown on Home until the first steps are done: what to do first, and what comes next.
   function startCard(){
@@ -951,6 +953,7 @@
       '<p class="heard" style="margin-top:24px">Still stuck? Message Australian Jeevitham on Facebook or YouTube.</p>' +
       '<p class="heard" style="margin-top:8px"><a href="#/privacy">Privacy policy</a> · <a href="#/terms">Terms of use</a></p>'
     );
+    app.querySelectorAll('.help-install').forEach(function(b){ b.onclick = showInstallHelp; });
   }
 
   // Skill scores: practice from the last 14 days, falling back to the latest level test.
