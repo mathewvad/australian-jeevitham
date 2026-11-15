@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+# Firebase sign-in helper for the English Coach app - not a page for search results.
+Disallow: /__/
 
 Sitemap: https://www.australianjeevitham.com/sitemap.xml
