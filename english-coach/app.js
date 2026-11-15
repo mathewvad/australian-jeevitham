@@ -91,6 +91,7 @@
     mic: svg('<rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3.5"/>'),
     speaker: svg('<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>'),
     send: svg('<path d="m4 12 16-8-6 16-2.5-6.5z"/>'),
+    user: svg('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),
     keyboard: svg('<rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/>'),
     back: svg('<path d="m15 18-6-6 6-6"/>'),
     chev: svg('<path d="m9 18 6-6-6-6"/>'),
@@ -2358,7 +2359,7 @@
   // the AI server carries their Firebase ID token. Old access codes keep working during the changeover.
   var FIREBASE = {
     apiKey: 'AIzaSyCTcvbGukdITH6qMssXIV6vpCWpq8ZjSdo',
-    authDomain: 'australian-jeevitham.firebaseapp.com',
+    authDomain: 'www.australianjeevitham.com',   // sign-in helper hosted on our own site (/__/auth/), see SETUP
     projectId: 'australian-jeevitham',
     appId: '1:678810149486:web:0cabda21a0f085f84cfc7f'
   };
@@ -2653,6 +2654,15 @@
   function showLevelBadge(){
     var el = document.getElementById('brandSub'), lv = myLevelInfo();
     if (el) el.textContent = lv && me ? ENGLISHES[myEnglish()].short + ' · ' + levelById(lv.level).name : 'by Australian Jeevitham';
+    // Account button, always in the header: the learner's initial when signed in, otherwise "Sign in".
+    var ab = document.getElementById('acctBtn');
+    if (ab) {
+      var nm = me && profile && profile.name ? profile.name : '';
+      ab.href = me ? '#/account' : '#/signin';
+      ab.setAttribute('aria-label', me ? 'My account' : 'Sign in');
+      ab.title = me ? 'My account' : 'Sign in';
+      ab.innerHTML = nm ? '<span class="avatar sm">' + esc(nm.charAt(0).toUpperCase()) + '</span>' : I.user;
+    }
   }
   function signOut(){
     stopSpeech();

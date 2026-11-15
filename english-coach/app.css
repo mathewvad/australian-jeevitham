@@ -597,3 +597,13 @@ ul.tiplist.card{ margin-left:0; padding-left:34px; }
 .lock-card .btn{ width:100%; }
 .auth-form{ grid-template-columns:minmax(0, 1fr); }
 .auth-form select{ width:100%; min-width:0; text-overflow:ellipsis; }
+
+/* Account button in the header (v0.44) */
+.acct-btn .avatar.sm{ width:28px; height:28px; font-size:.82rem; }
+@media (max-width:380px){ .top-actions .icon-btn{ width:30px; } .brand img{ width:28px; height:28px; } .brand{ gap:8px; } }
+/* Narrow phones: the header's small subtitle shortens itself so all buttons fit */
+.top-row .brand{ min-width:0; flex:1 1 auto; }
+.top-row .brand-text{ min-width:0; }
+.top-row .brand-text small{ overflow:hidden; text-overflow:ellipsis; }
+.top-actions{ flex:none; }
+@media (max-width:380px){ .brand-text .ver{ display:none; } }
