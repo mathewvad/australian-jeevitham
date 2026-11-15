@@ -2539,7 +2539,9 @@
 
   // Sign in or create an account.
   function signinPage(){
-    if (me && me.emailVerified && profile && profile.uid === me.uid) { location.hash = '#/'; return; }
+    // Signed in (for example just back from Google): leave this page. Home then shows the right
+    // next step - confirm your email, 'Tell us about you' for a new learner, or Home itself.
+    if (me) { location.hash = '#/'; return; }
     var create = false;
     authShell(
       '<h1 class="title">English Coach</h1>' +
