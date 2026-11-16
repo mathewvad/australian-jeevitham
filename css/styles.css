@@ -810,6 +810,15 @@ footer .copyright{ margin-top:10px; color:var(--fg-muted); font-size:0.82rem; }
 .share-btn img{ width:20px; height:20px; object-fit:contain; display:block; }
 .share-btn.wa, .share-btn.tw{ background:#fff; }
 
+/* Top share row (every page, added November 2026) */
+.share-top{ margin-top:14px; gap:10px; }
+.share-top .share-btn{ width:44px; height:44px; background:#fff; }
+.share-btn[hidden]{ display:none; }
+.share-btn.native, .share-btn.copy{ background:#fff; color:var(--ink); border:0; padding:0; cursor:pointer; font:inherit; }
+.share-btn svg{ width:20px; height:20px; display:block; }
+.share-msg{ font-weight:600; font-size:0.85rem; color:var(--fg-muted); min-width:1px; }
+@media (max-width: 600px){ .share-top .share-label{ flex-basis:100%; } }
+
 /* ============================================================
    RESOURCES PAGE - icon-free layout, animated hero SVG,
    and category description copy (added August 2026)
