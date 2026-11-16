@@ -195,3 +195,33 @@
 
   var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
 })();
+
+/* Top share row: phone Share button + Copy link (added November 2026) */
+(function () {
+  var rows = document.querySelectorAll('.share-top');
+  if (!rows.length) return;
+  var canon = document.querySelector('link[rel="canonical"]');
+  var url = canon ? canon.href : location.href.split('#')[0];
+  var title = document.title;
+  Array.prototype.forEach.call(rows, function (row) {
+    var msg = row.querySelector('.share-msg');
+    var nb = row.querySelector('.share-btn.native');
+    var cb = row.querySelector('.share-btn.copy');
+    function say(t) { if (!msg) return; msg.textContent = t; setTimeout(function () { msg.textContent = ''; }, 2500); }
+    if (nb && navigator.share) {
+      nb.hidden = false;
+      nb.addEventListener('click', function () { navigator.share({ title: title, url: url }).catch(function () {}); });
+    }
+    if (cb) cb.addEventListener('click', function () {
+      function fallback() {
+        var t = document.createElement('textarea');
+        t.value = url; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+        document.body.appendChild(t); t.select();
+        try { document.execCommand('copy'); say('Link copied'); } catch (e) {}
+        document.body.removeChild(t);
+      }
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(function () { say('Link copied'); }, fallback);
+      else fallback();
+    });
+  });
+})();
