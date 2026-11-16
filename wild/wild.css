@@ -506,3 +506,15 @@ a.m-tile:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); }
 .m-guide ol, .m-guide ul{ margin:0 0 14px; padding-left:22px; }
 .m-guide li{ margin-bottom:8px; line-height:1.6; }
 .m-guide .tl-table-wrap{ margin:4px 0 14px; max-height:none; }
+
+/* Top share row (every page, added November 2026) */
+.share-row{ display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:16px; }
+.share-label{ font-weight:600; font-size:.9rem; color:var(--muted); }
+.share-btn{ width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:#fff; color:var(--navy); border:1.5px solid var(--line); box-shadow:var(--shadow); padding:0; cursor:pointer; font:inherit; text-decoration:none; transition:transform .18s ease, box-shadow .18s ease; }
+.share-btn:hover{ transform:translateY(-2px); box-shadow:var(--shadow-hover); }
+.share-btn[hidden]{ display:none; }
+.share-btn img, .share-btn svg{ width:20px; height:20px; object-fit:contain; display:block; }
+.share-msg{ font-weight:600; font-size:.85rem; color:var(--muted); min-width:1px; }
+@media (max-width: 600px){ .share-top .share-label{ flex-basis:100%; } }
+.t-hero .share-row{ position:relative; z-index:1; }
+.t-hero .share-label, .t-hero .share-msg{ color:#D3DDEB; }
