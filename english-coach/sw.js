@@ -2,23 +2,23 @@
 // the AI coach (a different website) always goes to the network. The Firebase sign-in scripts are
 // kept too, so returning users can open the app offline.
 // Bump VERSION whenever the app's files change, together with the ?v= numbers in index.html.
-const VERSION = 'v47';
+const VERSION = 'v48';
 const CACHE = 'english-coach-' + VERSION;
 const FILES = [
   './',
   'index.html',
-  'app.css?v=47',
-  'lessons.js?v=47',
-  'vocab.js?v=47',
-  'natives.js?v=47',
-  'uk.js?v=47',
-  'in.js?v=47',
-  'course.js?v=47',
-  'interview.js?v=47',
-  'ielts.js?v=47',
-  'oet.js?v=47',
-  'help.js?v=47',
-  'app.js?v=47',
+  'app.css?v=48',
+  'lessons.js?v=48',
+  'vocab.js?v=48',
+  'natives.js?v=48',
+  'uk.js?v=48',
+  'in.js?v=48',
+  'course.js?v=48',
+  'interview.js?v=48',
+  'ielts.js?v=48',
+  'oet.js?v=48',
+  'help.js?v=48',
+  'app.js?v=48',
   'manifest.webmanifest',
   'icons/icon-192.png',
   'icons/icon-512.png',

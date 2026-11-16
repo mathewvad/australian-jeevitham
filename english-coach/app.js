@@ -1016,6 +1016,15 @@
     return '<a class="card cta fix-cta" href="#/feedback"><span class="ic">' + I.send + '</span><span><b>Tell us what to fix</b><span>English Coach is in beta. Something wrong, confusing or missing? Tell us - every message is read.</span></span><span class="chev">' + I.chev + '</span></a>';
   }
 
+  // Learners who have their level but haven't talked yet: one big button straight into their first AI conversation.
+  function talkNudgeCard(){
+    if (!TALK_API || !hasAccess() || isGuest() || !myLevelInfo() || startStatus().talk) return '';
+    var s = talkScenes()[0];
+    return '<a class="card cta primary talk-cta" href="' + (s ? '#/talk/' + s.id : '#/talk') + '"><span class="ic">' + I.chat + '</span><span><b>Start your first conversation</b><span>' +
+      (s ? 'Talk with your AI coach: ' + esc(s.title) + (s.who ? ' with ' + esc(s.who) : '') + '. ' : 'Talk with your AI coach. ') +
+      'Speak or type for about 3 minutes - your coach shows a better way to say things.</span></span><span class="chev">' + I.chev + '</span></a>';
+  }
+
   function home(){
     setTab('home');
     refreshQuota();
@@ -1038,7 +1047,7 @@
       '<p class="lede">Speak confident ' + eng().name + ' for life and work in ' + eng().country + ', with a coach that listens and gives you feedback.</p>' +
       (!me && getCode() ? '<a class="card cta signin-cta" href="#/signin"><span class="ic">' + I.check + '</span><span><b>Create your account</b><span>Sign in with Google or email to get your level, the placement test and weekly exams. Access codes will stop working soon.</span></span><span class="chev">' + I.chev + '</span></a>' : '') +
       guestCta('Create your account', 'Unlock conversations with the AI coach, pronunciation scores, natural voices and level exams.') +
-      levelCard() + installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
+      levelCard() + talkNudgeCard() + installCard() + notice + startCard() + (hasAccess() ? quotaHtml() : '') +
       planCard() + skillsCard() + fixCard() +
       '<div class="stats">' +
         tile('Day streak', currentStreak(), currentStreak() === 1 ? 'day' : 'days', 'Practise daily to keep it') +
