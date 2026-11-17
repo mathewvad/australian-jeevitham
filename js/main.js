@@ -88,7 +88,7 @@
 
         obs.unobserve(entry.target);
       });
-    }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
 
     revealEls.forEach(function (el) { revealObserver.observe(el); });
 
