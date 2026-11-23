@@ -616,3 +616,9 @@ button.card.item{ width:100%; text-align:left; font:inherit; color:inherit; curs
 .set-card .set-chips:last-child{ margin-bottom:0; }
 .set-chips .chip{ font-size:.92rem; padding:8px 14px; }
 .set-chips .chip.on{ background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+
+/* v0.50: PTE speaking */
+.pte-chart{ display:block; width:100%; max-width:420px; height:auto; margin:4px auto 0; color:var(--text); }
+.pte-text{ font-size:1.05rem; line-height:1.7; margin-top:4px; }
+.pte-stage{ text-align:center; margin-top:12px; }
+.pte-stage .mic-row{ justify-content:center; }

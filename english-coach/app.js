@@ -1084,6 +1084,8 @@
         '<a class="card item" href="#/listen"><span class="num">' + I.speaker + '</span><span class="t"><h2>Listening: older patients</h2><span class="sub">' + eng().listenSub + (state.listenBest != null ? ' · best ' + state.listenBest + '%' : '') + '</span></span></a>' +
         '<a class="card item" href="#/fluency"><span class="num">' + I.mic + '</span><span class="t"><h2>1-minute speaking check' + lockPill() + '</h2><span class="sub">Pronunciation, grammar, vocabulary, pace, pauses and fillers in one report</span></span></a>' +
         (myEnglish() === 'in' ? '' : '<a class="card item" href="#/oet"><span class="num">' + I.check + '</span><span class="t"><h2>OET Speaking (Nursing)</h2><span class="sub">10 role-plays with a 3-minute prep and 5-minute talk, marked on all 9 criteria</span></span></a>') +
+        (myEnglish() === 'in' ? '' : '<a class="card item" href="#/osce"><span class="num">' + I.check + '</span><span class="t"><h2>Nurse OSCE practice' + lockPill() + '</h2><span class="sub">' + OSCE.stations.length + ' NMBA-style stations: safety, assessment, ISBAR, medicines - marked like the exam</span></span></a>') +
+        '<a class="card item" href="#/pte"><span class="num">' + I.check + '</span><span class="t"><h2>PTE Speaking' + lockPill() + '</h2><span class="sub">Read Aloud, Repeat Sentence, Describe Image, Re-tell Lecture and more, with scores out of 90</span></span></a>' +
         '<a class="card item" href="#/ielts"><span class="num">' + I.check + '</span><span class="t"><h2>IELTS Speaking</h2><span class="sub">Parts 1-3, cue cards with timers, full mock test, band scores on the 4 criteria</span></span></a>' +
         '<a class="card item" href="#/interview"><span class="num">' + I.chat + '</span><span class="t"><h2>Interview preparation</h2><span class="sub">20 healthcare interview questions, model answers and AI feedback</span></span></a>' +
         '<a class="card item" href="#/vocab"><span class="num">' + I.book + '</span><span class="t"><h2>Vocabulary</h2><span class="sub">' + curVocab().reduce(function(a, t){ return a + t.words.length; }, 0) + ' words from Beginner to Leadership: everyday life, work and healthcare</span></span></a>' +
@@ -1675,25 +1677,35 @@
     app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
   }
 
-  function oetCard(i){
-    var c = OET.cards[i];
-    if (!c) return oetHome();
+  // OET role-plays and OSCE stations share the card -> prepare -> talk -> mark flow.
+  var RP = {
+    oet: { cards: function(){ return OET.cards; }, home: '#/oet', name: 'OET Speaking', eyebrow: 'OET role-play card · Nurse', prep: 180, talk: 300, unit: 'role-play',
+      prepNote: 'Plan your opening, the questions you will ask and the key points. Then you start the conversation.',
+      start: 'You start: greet the patient and introduce yourself. No corrections until the end.', marking: 'The assessor is marking your role-play…' },
+    osce: { cards: function(){ return OSCE.stations; }, home: '#/osce', name: 'OSCE practice', eyebrow: 'OSCE station · Registered nurse', prep: 120, talk: 480, unit: 'station',
+      prepNote: 'Plan your safe opening (hand hygiene, introduction, ID check, allergies), the assessment and what you will do. Say every action out loud - the examiner gives you results when you check something.',
+      start: 'You start: hand hygiene, introduce yourself, check ID. Say what you are doing out loud. No feedback until the end.', marking: 'The examiner is marking your station…' }
+  };
+  function mmss(s){ return Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }
+  function oetCard(i, kind){
+    var K = RP[kind || 'oet'], c = K.cards()[i];
+    if (!c) return kind === 'osce' ? osceHome() : oetHome();
     setTab('learn');
-    var left = 180, timer = null;
+    var left = K.prep, timer = null;
     render(
-      '<a class="back" href="#/oet">' + I.back + 'OET Speaking</a>' +
-      '<span class="eyebrow">OET role-play card · Nurse</span>' +
+      '<a class="back" href="' + K.home + '">' + I.back + K.name + '</a>' +
+      '<span class="eyebrow">' + K.eyebrow + '</span>' +
       '<article class="card pad cue"><p class="q-prompt">' + esc(c.title) + '</p>' +
-        '<p><b>Setting:</b> ' + esc(c.setting) + '</p><p style="margin-top:6px"><b>Patient:</b> ' + esc(c.patient) + '</p>' +
+        '<p><b>Setting:</b> ' + esc(c.setting) + '</p><p style="margin-top:6px"><b>' + (c.who ? 'Situation' : 'Patient') + ':</b> ' + esc(c.patient) + '</p>' +
         '<p style="margin-top:10px"><b>Task:</b></p><ul class="tiplist">' + c.tasks.map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('') + '</ul></article>' +
-      '<article class="card pad" id="stage" style="margin-top:12px"><p><b>3 minutes to prepare.</b> Plan your opening, the questions you will ask and the key points. Then you start the conversation.</p>' +
-        '<div class="row" style="margin-top:12px"><button class="btn primary" id="prep">Start preparing (3:00)</button><button class="btn ghost" id="skip">Skip to the role-play</button></div></article>'
+      '<article class="card pad" id="stage" style="margin-top:12px"><p><b>' + (K.prep / 60) + ' minutes to prepare.</b> ' + K.prepNote + '</p>' +
+        '<div class="row" style="margin-top:12px"><button class="btn primary" id="prep">Start preparing (' + mmss(K.prep) + ')</button><button class="btn ghost" id="skip">Skip to the ' + K.unit + '</button></div></article>'
     );
-    function go(){ clearInterval(timer); oetRoleplay(i, (document.getElementById('notes') || {}).value || ''); }
+    function go(){ clearInterval(timer); oetRoleplay(i, (document.getElementById('notes') || {}).value || '', kind); }
     document.getElementById('skip').onclick = go;
     document.getElementById('prep').onclick = function(){
-      document.getElementById('stage').innerHTML = '<div class="timer big" id="ptimer">3:00</div><textarea id="notes" class="ref" rows="5" placeholder="Notes: opening, questions to ask, key points"></textarea>' +
-        '<div class="row" style="margin-top:10px"><button class="btn primary" id="ready">Start the role-play</button></div>';
+      document.getElementById('stage').innerHTML = '<div class="timer big" id="ptimer">' + mmss(K.prep) + '</div><textarea id="notes" class="ref" rows="5" placeholder="Notes: opening, questions to ask, key points"></textarea>' +
+        '<div class="row" style="margin-top:10px"><button class="btn primary" id="ready">Start the ' + K.unit + '</button></div>';
       document.getElementById('ready').onclick = go;
       timer = setInterval(function(){
         left--;
@@ -1706,18 +1718,20 @@
   }
 
   // The 5-minute role-play: the nurse speaks first; no corrections until the end (exam conditions).
-  function oetRoleplay(i, notes){
-    var c = OET.cards[i], turns = [], busy = false, rec = null, started = 0, secsLeft = 300, clock = null, finished = false;
+  function oetRoleplay(i, notes, kind){
+    kind = kind || 'oet';
+    var K = RP[kind], c = K.cards()[i], turns = [], busy = false, rec = null, started = 0, secsLeft = K.talk, clock = null, finished = false;
     var prons = [], useAzure = !az.off && !!TALK_API && hasAccess() && !!(navigator.mediaDevices && (window.AudioContext || window.webkitAudioContext));
+    function payload(extra){ var o = {}; o[kind] = Object.assign({ card: c.id, turns: turns }, extra); return JSON.stringify(o); }
     render(
       '<section class="chat-view">' +
         '<header class="chat-top">' +
-          '<a class="icon-btn" href="#/oet" aria-label="Leave the role-play">' + I.back + '</a>' +
-          '<span class="avatar">P</span><div class="who"><b>Patient</b><span>' + esc(c.title) + '</span></div>' +
-          '<span class="timer" id="clock">5:00</span>' +
+          '<a class="icon-btn" href="' + K.home + '" aria-label="Leave the ' + K.unit + '">' + I.back + '</a>' +
+          '<span class="avatar">' + (c.who ? 'Dr' : 'P') + '</span><div class="who"><b>' + esc(c.who || 'Patient') + '</b><span>' + esc(c.title) + '</span></div>' +
+          '<span class="timer" id="clock">' + mmss(K.talk) + '</span>' +
         '</header>' +
         '<div class="chat-scroll" id="scroll"><div class="chat-inner" id="chat" aria-live="polite">' +
-          '<div class="day-note">OET role-play · ' + esc(c.setting) + '. You start: greet the patient and introduce yourself. No corrections until the end.</div>' +
+          '<div class="day-note">' + (kind === 'osce' ? 'OSCE station' : 'OET role-play') + ' · ' + esc(c.setting) + '. ' + K.start + '</div>' +
           (notes ? '<div class="day-note notes-view" style="text-align:left">Your notes: ' + esc(notes) + '</div>' : '') +
         '</div></div>' +
         '<div class="composer"><div class="composer-inner">' +
@@ -1749,7 +1763,7 @@
       add('msg me', text);
       var dots = document.createElement('div'); dots.className = 'typing'; dots.innerHTML = '<i></i><i></i><i></i>'; chat.appendChild(dots); scroll.scrollTop = scroll.scrollHeight;
       busy = true; mic.classList.add('busy');
-      apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: JSON.stringify({ oet: { chat: true, card: c.id, turns: turns } }) })
+      apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() }, body: payload({ chat: true }) })
         .then(function(r){ return r.json(); })
         .then(function(d){
           dots.remove(); busy = false; mic.classList.remove('busy');
@@ -1794,21 +1808,21 @@
       finished = true; clearInterval(clock); if (rec) rec.stop();
       var secs = started ? (Date.now() - started) / 1000 : 0;
       document.body.classList.remove('in-chat');
-      render('<a class="back" href="#/oet">' + I.back + 'OET Speaking</a><article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div><p class="lede">The assessor is marking your role-play…</p></article>');
+      render('<a class="back" href="' + K.home + '">' + I.back + K.name + '</a><article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div><p class="lede">' + K.marking + '</p></article>');
       var tot = prons.reduce(function(s, x){ return s + x.s; }, 0);
       var pron = tot ? ['accuracy', 'fluency', 'prosody'].reduce(function(o, k){ o[k] = Math.round(prons.reduce(function(s, x){ return s + x.p[k] * x.s; }, 0) / tot); return o; }, {}) : null;
       function send(){
         apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
-          body: JSON.stringify({ oet: { grade: true, card: c.id, tasks: c.tasks, turns: turns, secs: secs, pron: pron } }) })
+          body: payload({ grade: true, tasks: c.tasks, secs: secs, pron: pron }) })
           .then(function(r){ return r.json(); })
           .then(function(d){
             if (d.error || d.total == null) throw new Error(d.error || 'ai');
-            state.oet = (state.oet || []).concat([{ date: new Date().toLocaleDateString('en-AU'), card: c.id, title: c.title, total: d.total, grade: d.grade }]).slice(-30);
+            state[kind] = (state[kind] || []).concat([{ date: new Date().toLocaleDateString('en-AU'), card: c.id, title: c.title, total: d.total, grade: d.grade }]).slice(-30);
             logDay({ speakSec: Math.round(secs / 2) }); turns.forEach(function(t){ if (t.role === 'nurse') addVocab(t.text); }); markActive(); save();
-            oetReport(c, d, pron, secs);
+            (kind === 'osce' ? osceReport : oetReport)(c, d, pron, secs);
           })
           .catch(function(){
-            render('<a class="back" href="#/oet">' + I.back + 'OET Speaking</a><article class="card pad"><p>Couldn\'t reach the assessor. Please check your internet and try again.</p><div class="row" style="margin-top:14px"><button class="btn primary" id="retry">Try again</button></div></article>');
+            render('<a class="back" href="' + K.home + '">' + I.back + K.name + '</a><article class="card pad"><p>Couldn\'t reach the ' + (kind === 'osce' ? 'examiner' : 'assessor') + '. Please check your internet and try again.</p><div class="row" style="margin-top:14px"><button class="btn primary" id="retry">Try again</button></div></article>');
             document.getElementById('retry').onclick = function(){ render('<article class="card pad done"><div class="typing" style="margin:10px auto"><i></i><i></i><i></i></div></article>'); send(); };
           });
       }
@@ -1838,6 +1852,295 @@
     if (sub === 'guide') return oetGuide();
     if (sub !== undefined && sub !== '' && !isNaN(+sub)) return oetCard(+sub);
     oetHome();
+  }
+
+  /* ---------- Nurse OSCE practice (NMBA) ---------- */
+  var OSCE_CRIT = [['safety', 'Safety'], ['assessment', 'Assessment'], ['communication', 'Communication'], ['reasoning', 'Clinical reasoning'], ['education', 'Education and evaluation']];
+  function osceHome(){
+    setTab('learn');
+    var hist = state.osce || [], last = hist[hist.length - 1];
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">Nurse OSCE practice · NMBA</span>' +
+      '<h1 class="title">Practise OSCE stations</h1>' +
+      '<p class="lede">Read the station card for 2 minutes, then care for the patient for 8 minutes - you start. Say every action out loud. You are marked on safety, assessment, communication, clinical reasoning and education.</p>' +
+      (last ? '<div class="card pad level-card mini"><div class="lv"><b>' + last.total + '/20</b><span>Latest (' + esc(last.grade) + ')</span></div><div class="lv"><b>' + Math.max.apply(null, hist.map(function(h){ return h.total; })) + '/20</b><span>Best score</span></div><div class="lv"><span>' + hist.length + ' station' + (hist.length === 1 ? '' : 's') + '<br>' + esc(last.date) + '</span></div></div>' : '') +
+      '<a class="card cta" href="#/osce/guide" style="margin-top:14px"><span class="ic">' + I.book + '</span><span><b>How the OSCE works</b><span>The exam, the five areas, a safe opening, ISBAR, common mistakes</span></span><span class="chev">' + I.chev + '</span></a>' +
+      '<h2 class="section-title">Stations</h2>' +
+      '<div class="list two">' + OSCE.stations.map(function(c, i){
+        var best = hist.filter(function(h){ return h.card === c.id; }).reduce(function(m, h){ return Math.max(m, h.total); }, -1);
+        return '<a class="card item" href="#/osce/' + i + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(c.title) + '</h2><span class="sub">' + esc(c.setting) + '</span>' +
+          (best >= 0 ? '<span class="meta"><span class="pill ' + (best >= 15 ? 'good' : best >= 11 ? 'warn' : 'bad') + '">Best ' + best + '/20</span></span>' : '') + '</span></a>';
+      }).join('') + '</div>' +
+      '<p class="muted" style="margin-top:14px;font-size:.85rem">Practice only - not the official exam. Check the NMBA candidate handbook for the current OSCE format.</p>'
+    );
+  }
+  function osceGuide(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/osce">' + I.back + 'OSCE practice</a>' +
+      '<span class="eyebrow">OSCE guide</span><h1 class="title">How the OSCE works</h1>' +
+      '<div class="faq" style="margin-top:16px">' + OSCE.guide.map(function(g, i){ return '<details class="card"' + (i === 0 ? ' open' : '') + '><summary>' + esc(g.t) + '</summary><div class="a">' + g.d + '</div></details>'; }).join('') + '</div>' +
+      '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/osce/0">Try a station' + I.chev + '</a></div>'
+    );
+  }
+  function osceReport(c, d, pron, secs){
+    render(
+      '<a class="back" href="#/osce">' + I.back + 'OSCE practice</a>' +
+      '<span class="eyebrow">OSCE station · ' + esc(c.title) + '</span>' +
+      '<article class="card pad level-card"><div class="lv"><b>' + d.total + '/20</b><span>Station score</span></div><div class="lv"><b>' + esc(d.grade) + '</b><span>' + (d.grade === 'Ready' ? 'Exam standard' : 'Not exam standard yet') + '</span></div><div class="lv"><b>' + d.safety.score + '/4</b><span>Safety</span></div></article>' +
+      (d.missed && d.missed.length ? '<h2 class="section-title">Safety steps you missed</h2><ul class="tiplist card pad">' + d.missed.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
+      '<article class="card pad"><div class="sbars">' + OSCE_CRIT.map(function(k){ return critBar(k[1], d[k[0]].score, 4); }).join('') + '</div>' +
+        OSCE_CRIT.map(function(k){ return '<p class="crit"><b>' + esc(k[1]) + ':</b> ' + esc(d[k[0]].comment) + '</p>'; }).join('') +
+        '<p class="crit"><b>Tasks on the card:</b> ' + esc(d.tasks) + '</p>' +
+        '<p class="heard" style="text-align:left">' + Math.round(secs / 60 * 10) / 10 + ' minutes' + (pron ? ' · pronunciation from your voice: accuracy ' + pron.accuracy + ', fluency ' + pron.fluency : '') + '</p></article>' +
+      '<h2 class="section-title">What worked</h2><ul class="tiplist good card pad">' + (d.strengths || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+      '<h2 class="section-title">To pass this station</h2><ul class="tiplist card pad">' + (d.fixes || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+      '<h2 class="section-title">Say it like an Australian RN</h2><div class="phrase-list">' + (d.better || []).map(function(b){
+        return '<div class="card phrase"><div><span>You said: “' + esc(b.said) + '”</span><b>' + esc(b.better) + '</b></div><button class="icon-btn" data-say="' + esc(b.better) + '" aria-label="Listen">' + I.speaker + '</button></div>';
+      }).join('') + '</div>' +
+      '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/osce">OSCE home' + I.chev + '</a><a class="btn ghost" href="#/osce/guide">Guide</a></div>'
+    );
+    app.querySelectorAll('[data-say]').forEach(function(b){ b.onclick = function(){ speak(b.dataset.say); }; });
+  }
+  function osce(sub){
+    if (sub === 'guide') return osceGuide();
+    if (sub !== undefined && sub !== '' && !isNaN(+sub)) return oetCard(+sub, 'osce');
+    osceHome();
+  }
+
+  /* ---------- PTE Academic speaking ---------- */
+  // Read Aloud, Repeat Sentence and Answer Short Question are scored here (speech scores and word
+  // matching - no AI action); Describe Image, Re-tell Lecture and Respond to a Situation use one AI mark.
+  var PTE_TASKS = [
+    { id: 'ra', name: 'Read Aloud', sub: 'Read a short text aloud: 30 s to prepare, 40 s to speak', prep: 30, max: 40 },
+    { id: 'rs', name: 'Repeat Sentence', sub: 'Hear a sentence once, then repeat it word for word', prep: 0, max: 15, audio: 'sentence' },
+    { id: 'di', name: 'Describe Image', sub: 'Describe a chart: 25 s to prepare, 40 s to speak', prep: 25, max: 40, ai: true },
+    { id: 'rl', name: 'Re-tell Lecture', sub: 'Hear a short lecture, then re-tell it in 40 s', prep: 0, max: 40, ai: true, audio: 'lecture' },
+    { id: 'asq', name: 'Answer Short Question', sub: 'Answer a quick question in one or a few words', prep: 0, max: 10, audio: 'question' },
+    { id: 'rts', name: 'Respond to a Situation', sub: 'Read a situation, then respond as you would in real life: 20 s to prepare, 40 s to speak', prep: 20, max: 40, ai: true }
+  ];
+  function pteTask(id){ return PTE_TASKS.find(function(t){ return t.id === id; }); }
+  function to5(v){ return v == null ? null : v >= 90 ? 5 : v >= 80 ? 4 : v >= 70 ? 3 : v >= 55 ? 2 : v >= 40 ? 1 : 0; }
+  // An estimated 10-90 item score from the traits that could be measured.
+  function pteScore(traits){
+    var got = 0, max = 0;
+    traits.forEach(function(t){ if (t[1] != null) { got += t[1]; max += t[2]; } });
+    return max ? Math.round(10 + got / max * 80) : 10;
+  }
+  function pteAvg(id){ var h = (state.pte || {})[id] || []; return h.length ? Math.round(h.reduce(function(a, b){ return a + b; }, 0) / h.length) : null; }
+  function pteHome(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/learn">' + I.back + 'Learn</a>' +
+      '<span class="eyebrow">PTE Academic</span>' +
+      '<h1 class="title">PTE speaking practice</h1>' +
+      '<p class="lede">Practise six PTE speaking tasks with the real timings. Each answer gets an estimated score out of 90 for content, fluency and pronunciation. Nurses: AHPRA now asks for a high speaking score, so practise a little every day.</p>' +
+      '<a class="card cta" href="#/pte/guide" style="margin-top:14px"><span class="ic">' + I.book + '</span><span><b>How PTE speaking works</b><span>The tasks, what nurses need, how it is marked, templates, golden rules</span></span><span class="chev">' + I.chev + '</span></a>' +
+      '<h2 class="section-title">Tasks</h2>' +
+      '<div class="list two">' + PTE_TASKS.map(function(t, i){
+        var avg = pteAvg(t.id);
+        return '<a class="card item" href="#/pte/' + t.id + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(t.name) + '</h2><span class="sub">' + esc(t.sub) + ' · ' + PTE[t.id].length + ' items</span>' +
+          (avg != null ? '<span class="meta"><span class="pill ' + (t.id === 'asq' ? (avg >= 80 ? 'good' : 'warn') : avg >= 76 ? 'good' : avg >= 60 ? 'warn' : 'bad') + '">' + (t.id === 'asq' ? avg + '% correct' : 'Average ' + avg) + '</span></span>' : '') + '</span></a>';
+      }).join('') + '</div>' +
+      '<p class="muted" style="margin-top:14px;font-size:.85rem">Scores are practice estimates, not official PTE scores. Summarise Group Discussion is coming later.</p>'
+    );
+  }
+  function pteGuide(){
+    setTab('learn');
+    render(
+      '<a class="back" href="#/pte">' + I.back + 'PTE speaking</a>' +
+      '<span class="eyebrow">PTE guide</span><h1 class="title">How PTE speaking works</h1>' +
+      '<div class="faq" style="margin-top:16px">' + PTE.guide.map(function(g, i){ return '<details class="card"' + (i === 0 ? ' open' : '') + '><summary>' + esc(g.t) + '</summary><div class="a">' + g.d + '</div></details>'; }).join('') + '</div>' +
+      '<div class="row" style="margin-top:18px"><a class="btn primary" href="#/pte/ra/0">Start with Read Aloud' + I.chev + '</a></div>'
+    );
+  }
+  function pteList(id){
+    var T = pteTask(id);
+    if (!T) return pteHome();
+    setTab('learn');
+    render(
+      '<a class="back" href="#/pte">' + I.back + 'PTE speaking</a>' +
+      '<span class="eyebrow">PTE speaking</span><h1 class="title">' + esc(T.name) + '</h1><p class="lede">' + esc(T.sub) + '.</p>' +
+      '<div class="list">' + PTE[id].map(function(it, i){
+        var title = typeof it === 'string' ? (T.audio ? T.audio.charAt(0).toUpperCase() + T.audio.slice(1) + ' ' + (i + 1) : it.split(' ').slice(0, 7).join(' ') + '…') : it.title || (T.audio ? 'Question ' + (i + 1) : '');
+        return '<a class="card item" href="#/pte/' + id + '/' + i + '"><span class="num">' + (i + 1) + '</span><span class="t"><h2>' + esc(title) + '</h2></span><span class="muted">' + I.chev + '</span></a>';
+      }).join('') + '</div>'
+    );
+  }
+  // A simple chart for Describe Image: bar, line or pie.
+  function pteChart(c){
+    var W = 340, H = 220, cols = ['#0F7C76', '#2B6CB0', '#D9822B', '#C2413A', '#6B5BA8'], s = '';
+    if (c.type === 'pie') {
+      var tot = c.values.reduce(function(a, b){ return a + b; }, 0), a0 = -Math.PI / 2;
+      c.values.forEach(function(v, i){
+        var a1 = a0 + v / tot * Math.PI * 2, big = a1 - a0 > Math.PI ? 1 : 0, cx = 100, cy = 110, r = 85;
+        s += '<path d="M' + cx + ' ' + cy + ' L' + (cx + r * Math.cos(a0)).toFixed(1) + ' ' + (cy + r * Math.sin(a0)).toFixed(1) + ' A' + r + ' ' + r + ' 0 ' + big + ' 1 ' + (cx + r * Math.cos(a1)).toFixed(1) + ' ' + (cy + r * Math.sin(a1)).toFixed(1) + 'Z" fill="' + cols[i % 5] + '"/>';
+        s += '<rect x="205" y="' + (40 + i * 28) + '" width="14" height="14" rx="3" fill="' + cols[i % 5] + '"/><text x="226" y="' + (52 + i * 28) + '" font-size="13" fill="currentColor">' + esc(c.labels[i]) + ' ' + v + c.unit + '</text>';
+        a0 = a1;
+      });
+    } else {
+      var max = Math.max.apply(null, c.values) * 1.15, x0 = 40, y0 = 185, w = W - x0 - 10, h = 160, n = c.values.length;
+      s += '<line x1="' + x0 + '" y1="' + y0 + '" x2="' + (W - 10) + '" y2="' + y0 + '" stroke="currentColor" opacity=".4"/><line x1="' + x0 + '" y1="20" x2="' + x0 + '" y2="' + y0 + '" stroke="currentColor" opacity=".4"/>';
+      var pts = c.values.map(function(v, i){ return [x0 + w * (i + 0.5) / n, y0 - v / max * h]; });
+      c.values.forEach(function(v, i){
+        var x = pts[i][0], y = pts[i][1];
+        if (c.type === 'bar') s += '<rect x="' + (x - w / n * 0.3).toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + (w / n * 0.6).toFixed(1) + '" height="' + (y0 - y).toFixed(1) + '" rx="3" fill="' + cols[0] + '"/>';
+        s += '<text x="' + x.toFixed(1) + '" y="' + (y - 6).toFixed(1) + '" font-size="12" text-anchor="middle" fill="currentColor">' + v + '</text>' +
+          '<text x="' + x.toFixed(1) + '" y="' + (y0 + 16) + '" font-size="12" text-anchor="middle" fill="currentColor">' + esc(c.labels[i]) + '</text>';
+      });
+      if (c.type === 'line') s += '<polyline fill="none" stroke="' + cols[1] + '" stroke-width="3" points="' + pts.map(function(p){ return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' ') + '"/>' +
+        pts.map(function(p){ return '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="4" fill="' + cols[1] + '"/>'; }).join('');
+    }
+    return '<p class="q-prompt" style="margin-bottom:6px">' + esc(c.title) + '</p><svg class="pte-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(c.about) + '">' + s + '</svg>';
+  }
+  function pteRun(id, idx){
+    var T = pteTask(id), list = T && PTE[id], item = list && list[idx];
+    if (!item) return T ? pteList(id) : pteHome();
+    setTab('learn');
+    var useAzure = !az.off && !!TALK_API && hasAccess() && !!(navigator.mediaDevices && (window.AudioContext || window.webkitAudioContext));
+    var ref = id === 'ra' || id === 'rs' ? item : null;
+    var audio = id === 'rs' ? item : id === 'rl' ? item.text : id === 'asq' ? item.q : null;
+    var shown = id === 'ra' ? '<p class="pte-text">' + esc(item) + '</p>' : id === 'di' ? pteChart(item) : id === 'rts' ? '<p class="q-prompt">' + esc(item.title) + '</p><p class="pte-text">' + esc(item.text) + '</p>' :
+      '<p>' + (id === 'rl' ? '<b>' + esc(item.title) + '.</b> ' : '') + 'Tap <b>Play</b> - the ' + T.audio + ' plays once, like the real test. Then tap the microphone and answer.</p><div class="row" style="margin-top:10px"><button class="btn primary" id="play" type="button">' + I.speaker + 'Play</button></div>';
+    render(
+      '<a class="back" href="#/pte/' + id + '">' + I.back + esc(T.name) + '</a>' +
+      '<span class="eyebrow">PTE · ' + esc(T.name) + ' · ' + (idx + 1) + ' of ' + list.length + '</span>' +
+      '<article class="card pad cue">' + shown + '</article>' +
+      '<article class="card pad pte-stage" id="stage"><div class="timer big" id="ptimer"></div><div class="mic-row">' + micButton('pmic') + '</div><div class="mic-label" id="plabel" style="text-align:center;margin-top:6px"></div>' +
+        (T.prep ? '<div class="row" style="justify-content:center;margin-top:10px"><button class="btn ghost sm" id="now" type="button">Start speaking now</button></div>' : '') + '</article>' +
+      '<div id="result"></div>' +
+      '<div class="row" style="margin-top:18px"><button class="btn ghost" id="again" type="button">Try again</button><a class="btn primary" href="#/pte/' + id + '/' + ((idx + 1) % list.length) + '">Next' + I.chev + '</a></div>'
+    );
+    var mic = document.getElementById('pmic'), label = document.getElementById('plabel'), tm = document.getElementById('ptimer'), out = document.getElementById('result');
+    var rec = null, timer = null, done = false, played = false;
+    document.getElementById('again').onclick = function(){ pteRun(id, idx); };
+    function countdown(secs, each, end){
+      clearInterval(timer);
+      var left = secs; tm.textContent = mmss(left); each && each(left);
+      timer = setInterval(function(){
+        if (!document.body.contains(tm)) return clearInterval(timer);
+        left--; tm.textContent = mmss(Math.max(0, left)); tm.classList.toggle('low', left <= 5);
+        if (left <= 0) { clearInterval(timer); end(); }
+      }, 1000);
+    }
+    if (T.prep) {
+      label.textContent = 'Prepare - recording starts automatically';
+      countdown(T.prep, null, startRec);
+      document.getElementById('now').onclick = startRec;
+    } else {
+      tm.textContent = mmss(T.max);
+      label.textContent = audio ? 'Play first, then tap the microphone' : 'Tap the microphone and speak';
+    }
+    var play = document.getElementById('play');
+    if (play) play.onclick = function(){
+      if (played) return;
+      played = true; play.disabled = true; play.innerHTML = I.speaker + 'Playing…';
+      stopSpeech();
+      (audio.match(/[^.!?]+[.!?]*/g) || [audio]).forEach(function(s, i){ speak(s.trim(), false, i > 0); });
+      label.textContent = 'When it finishes, tap the microphone and answer';
+    };
+    mic.onclick = function(){
+      if (done) return;
+      if (rec) return rec.stop();
+      if (audio && !played) { label.textContent = 'Tap Play first'; return; }
+      startRec();
+    };
+    function startRec(){
+      if (rec || done) return;
+      stopSpeech(); clearInterval(timer);
+      var nowBtn = document.getElementById('now'); if (nowBtn) nowBtn.remove();
+      mic.classList.add('live'); label.innerHTML = waveHtml() + 'Recording - speak now. Tap to finish.';
+      countdown(T.max, null, function(){ if (rec) rec.stop(); });
+      function stopUI(){ clearInterval(timer); mic.classList.remove('live'); mic.style.transform = ''; }
+      function nothing(){ rec = null; label.textContent = 'Didn\'t catch that - tap Try again. In the real test, start within 3 seconds.'; }
+      function fail(){ rec = null; stopUI(); mic.classList.remove('busy'); mic.innerHTML = I.mic; label.textContent = 'Couldn\'t score that - check your internet and tap Try again.'; }
+      if (useAzure) {
+        rec = recordWav({ splitSec: T.ai ? 50 : 0, pauseMs: 3000, waitMs: 4000, maxMs: T.max * 1000 + 500,
+          level: function(v){ mic.style.transform = 'scale(' + (1 + v * 0.18).toFixed(3) + ')'; },
+          error: function(name){ if (name === 'NotAllowedError') label.textContent = 'Microphone is blocked. Please allow it for this site.'; } });
+        rec.done.then(function(w){
+          rec = null; stopUI();
+          if (!w || (Array.isArray(w) && !w.length)) return nothing();
+          done = true; mic.classList.add('busy'); mic.innerHTML = I.spinner; label.textContent = 'Scoring your answer…';
+          return (ref ? scoreWav(w, ref).then(function(res){ return { text: res ? res.heard : '', az: res, secs: res ? res.secs : 0 }; })
+                      : scoreFree(Array.isArray(w) ? w : [w])).then(mark);
+        }).catch(fail);
+      } else if (SR) {
+        rec = listen({ pauseMs: 3000, continuous: T.max > 15, end: function(alts, secs){ rec = null; stopUI(); if (!alts[0]) return nothing(); done = true; mark({ text: alts[0], secs: secs }); } });
+      } else {
+        stopUI(); label.textContent = 'Speaking needs Chrome on Android or a computer.';
+      }
+    }
+    function bars(rows){ return '<div class="sbars">' + rows.filter(function(r){ return r[1] != null; }).map(function(r){ return critBar(r[0], r[1], r[2]); }).join('') + '</div>'; }
+    function keep(score){
+      state.pte = state.pte || {};
+      state.pte[id] = (state.pte[id] || []).concat([score]).slice(-20);
+      markActive(); save();
+    }
+    function mark(r){
+      mic.classList.remove('busy'); mic.innerHTML = I.mic; tm.textContent = '';
+      if (r.secs) logDay({ speakSec: Math.round(r.secs) });
+      addVocab(r.text || '');
+      if (id === 'asq') {
+        var said = ' ' + words(r.text || '').join(' ') + ' ';
+        var ok = item.a.some(function(a){ return said.indexOf(' ' + words(a).join(' ') + ' ') >= 0; });
+        keep(ok ? 100 : 0);
+        label.textContent = ok ? 'Correct!' : 'Not quite.';
+        out.innerHTML = '<article class="card pad"><p class="q-prompt">' + (ok ? '✓ Correct' : '✗ The answer is: ' + esc(item.a[0])) + '</p><p class="heard" style="text-align:left">Heard: “' + esc(r.text || '') + '”</p><p class="muted" style="margin-top:6px">Question: ' + esc(item.q) + '</p></article>';
+        return;
+      }
+      if (ref) {
+        var g = grade(ref, r.text || ''), az1 = r.az;
+        var content = id === 'rs' ? (g.score >= 99 ? 3 : g.score >= 50 ? 2 : g.score > 0 ? 1 : 0) : to5(g.score);
+        var flu = az1 ? to5(az1.fluency) : null, pro = az1 ? to5(az1.accuracy) : null;
+        var score = pteScore([['', content, id === 'rs' ? 3 : 5], ['', flu, 5], ['', pro, 5]]);
+        if (az1) logAzure(az1);
+        keep(score);
+        label.textContent = 'Done - see your score below';
+        out.innerHTML = '<article class="card pad level-card"><div class="lv"><b>' + score + '</b><span>Estimated score /90</span></div><div class="lv"><b>' + g.score + '%</b><span>Words said</span></div></article>' +
+          '<article class="card pad">' + bars([['Content', content, id === 'rs' ? 3 : 5], ['Oral fluency', flu, 5], ['Pronunciation', pro, 5]]) +
+            '<div class="words" style="margin-top:12px">' + g.words.map(function(x){ return '<span class="w ' + x.cls + '">' + esc(x.w) + '</span>'; }).join(' ') + '</div>' +
+            (az1 ? '' : '<p class="muted" style="margin-top:8px">Sign in on Chrome for fluency and pronunciation scores.</p>') + '</article>' +
+          (az1 ? '<h2 class="section-title">Your sounds</h2><article class="card pad" id="azbox"></article>' : '') +
+          (id === 'rs' ? '<p class="muted" style="margin-top:10px">The sentence was: “' + esc(item) + '”</p>' : '');
+        if (az1) renderAzure(document.getElementById('azbox'), az1);
+        return;
+      }
+      // Describe Image, Re-tell Lecture, Respond to a Situation: AI marks the content.
+      label.textContent = 'Marking your answer…'; mic.classList.add('busy'); mic.innerHTML = I.spinner;
+      var prompt = id === 'di' ? item.about : id === 'rl' ? item.text : item.text;
+      apiFetch(TALK_API, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Access-Code': getCode() },
+        body: JSON.stringify({ pte: { task: id, prompt: prompt, answer: r.text || '', secs: r.secs || 0, pron: r.pron || null } }) })
+        .then(function(x){ return x.json(); })
+        .then(function(d){
+          mic.classList.remove('busy'); mic.innerHTML = I.mic;
+          if (d.error || !d.content) throw new Error(d.error || 'ai');
+          var flu = r.pron ? to5(r.pron.fluency) : null, pro = r.pron ? to5(r.pron.accuracy) : null, c5 = Math.max(0, Math.min(5, d.content.score));
+          var score = pteScore([['', c5, 5], ['', flu, 5], ['', pro, 5]]);
+          keep(score);
+          label.textContent = 'Done - see your score below';
+          out.innerHTML = '<article class="card pad level-card"><div class="lv"><b>' + score + '</b><span>Estimated score /90</span></div><div class="lv"><b>' + Math.round(r.secs || 0) + ' s</b><span>Speaking time</span></div></article>' +
+            '<article class="card pad">' + bars([['Content', c5, 5], ['Oral fluency', flu, 5], ['Pronunciation', pro, 5]]) +
+              '<p class="crit"><b>Content:</b> ' + esc(d.content.comment) + '</p>' +
+              '<p class="heard" style="text-align:left">Heard: “' + esc(r.text || '') + '”</p></article>' +
+            '<h2 class="section-title">What worked</h2><ul class="tiplist good card pad">' + (d.strengths || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+            '<h2 class="section-title">To score higher</h2><ul class="tiplist card pad">' + (d.fixes || []).map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+            '<h2 class="section-title">A high-scoring answer</h2><div class="card phrase"><div><b>' + esc(d.model || '') + '</b></div><button class="icon-btn" id="model" aria-label="Listen">' + I.speaker + '</button></div>' +
+            (id === 'rl' ? '<details class="card" style="margin-top:10px"><summary>Read the lecture</summary><div class="a">' + esc(item.text) + '</div></details>' : '');
+          document.getElementById('model').onclick = function(){ (d.model.match(/[^.!?]+[.!?]*/g) || [d.model]).forEach(function(s, i){ speak(s.trim(), false, i > 0); }); };
+        })
+        .catch(function(e){
+          mic.classList.remove('busy'); mic.innerHTML = I.mic; done = false;
+          label.textContent = /daily_limit|busy_today/.test(String(e.message)) ? 'No AI actions left today - try again tomorrow.' : 'Couldn\'t mark that - check your internet and tap Try again.';
+        });
+    }
+  }
+  function pte(sub, idx){
+    if (sub === 'guide') return pteGuide();
+    if (sub && idx !== undefined && idx !== '' && !isNaN(+idx)) return pteRun(sub, +idx);
+    if (sub) return pteList(sub);
+    pteHome();
   }
 
   /* ---------- Interview preparation ---------- */
@@ -2416,7 +2719,7 @@
   function needsAccount(parts){
     var p = parts[0], s = parts[1] || '';
     return (p === 'talk' && !!s) || p === 'exam' || p === 'test' || p === 'fluency' ||
-      (p === 'oet' && s !== '' && !isNaN(+s)) || (p === 'ielts' && (s === 'mock' || (/^p[123]$/.test(s) && (parts[2] || '') !== '')));
+      (p === 'oet' && s !== '' && !isNaN(+s)) || (p === 'osce' && s !== '' && !isNaN(+s)) || (p === 'pte' && s !== '' && s !== 'guide' && (parts[2] || '') !== '') || (p === 'ielts' && (s === 'mock' || (/^p[123]$/.test(s) && (parts[2] || '') !== '')));
   }
   // Signed in with a confirmed email and a profile - or holding an old access code.
   function hasAccess(){ return !!(me && me.emailVerified && profile && profile.uid === me.uid) || (!me && !!getCode()); }
@@ -3304,6 +3607,8 @@
     else if (parts[0] === 'interview') interviewHome();
     else if (parts[0] === 'ielts') ielts(parts[1], parts[2]);
     else if (parts[0] === 'oet') oet(parts[1]);
+    else if (parts[0] === 'osce') osce(parts[1]);
+    else if (parts[0] === 'pte') pte(parts[1], parts[2]);
     else if (parts[0] === 'fluency') fluencyCheck();
     else if (parts[0] === 'listen') listening();
     else if (parts[0] === 'iq') interviewQ(parts[1], parseInt(parts[2], 10) || 0);
