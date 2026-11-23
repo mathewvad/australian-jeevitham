@@ -622,3 +622,8 @@ button.card.item{ width:100%; text-align:left; font:inherit; color:inherit; curs
 .pte-text{ font-size:1.05rem; line-height:1.7; margin-top:4px; }
 .pte-stage{ text-align:center; margin-top:12px; }
 .pte-stage .mic-row{ justify-content:center; }
+
+/* v0.51: next level exam card on Learn */
+.exam-cta{ margin-top:10px; }
+.exam-cta.ready{ border:1.5px solid var(--accent); }
+.exam-cta.ready .ic{ background:var(--accent-soft); color:var(--accent); }

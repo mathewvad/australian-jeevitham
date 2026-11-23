@@ -78,6 +78,20 @@
     return t > Date.now() ? new Date(t) : null;
   }
   function nextLevel(){ var i = LEVELS.findIndex(function(l){ return l.id === userLevel(); }); return i >= 0 && i < LEVELS.length - 1 ? LEVELS[i + 1] : null; }
+  // When the learner's next level exam is, for the card on Learn (Home's level card shows it too).
+  function examWhen(){
+    if (!myLevelInfo()) return { short: 'Take the placement test', title: 'Take the placement test', sub: 'About 10 minutes - it finds your level and starts your weekly exams', ready: true };
+    var nx = nextLevel(), d = nextExamDate();
+    if (!nx) return { short: 'Top level reached', title: 'You are at the top level', sub: 'Leadership is the highest level - keep practising to stay sharp' };
+    if (!d) return { short: 'Ready now', title: 'Your ' + nx.name + ' exam is ready', sub: 'Take it now - pass with 80% to move up', ready: true };
+    var days = Math.ceil((d.getTime() - Date.now()) / 864e5);
+    return { short: niceDate(d) + ' (in ' + days + ' day' + (days === 1 ? '' : 's') + ')', title: 'Next exam: ' + niceDate(d), sub: 'Your ' + nx.name + ' exam opens in ' + days + ' day' + (days === 1 ? '' : 's') + '. One exam every 7 days.' };
+  }
+  function examCard(){
+    if (isGuest() || !hasAccess()) return '';
+    var w = examWhen();
+    return '<a class="card cta exam-cta' + (w.ready ? ' ready' : '') + '" href="#/exam"><span class="ic">' + I.check + '</span><span><b>' + esc(w.title) + '</b><span>' + esc(w.sub) + '</span></span><span class="chev">' + I.chev + '</span></a>';
+  }
   function niceDate(d){ return d.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' }); }
 
   /* ---------- Icons (24px line icons) ---------- */
@@ -1079,6 +1093,7 @@
       (myLevelInfo() ? '<a class="card cta course-cta" href="#/course"><span class="ic">' + I.book + '</span><span><b>Your course · ' + esc(levelById(userLevel()).name) + '</b><span>' +
         (nextCourseUnit() ? 'Next lesson: ' + esc(nextCourseUnit().title) : courseUnits(userLevel()).length ? 'All ' + courseUnits(userLevel()).length + ' lessons done - take the level exam' : 'Practice for your level, step by step') +
         '</span></span><span class="chev">' + I.chev + '</span></a>' : '') +
+      examCard() +
       '<div class="list two">' +
         '<a class="card item" href="#/sounds"><span class="num">' + I.mic + '</span><span class="t"><h2>Sound drills</h2><span class="sub">V/W, TH, Z, F/P and more - every sound scored</span></span></a>' +
         '<a class="card item" href="#/listen"><span class="num">' + I.speaker + '</span><span class="t"><h2>Listening: older patients</h2><span class="sub">' + eng().listenSub + (state.listenBest != null ? ' · best ' + state.listenBest + '%' : '') + '</span></span></a>' +
